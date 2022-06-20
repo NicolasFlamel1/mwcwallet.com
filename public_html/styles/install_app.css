@@ -1,0 +1,165 @@
+@charset "UTF-8";
+
+
+section.installApp {
+	display: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: white;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+	min-width: 250px;
+	transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+	z-index: 9;
+}
+
+section.installApp.hide {
+	display: flex;
+	transform: translateY(100%);
+	box-shadow: none;
+}
+
+section.installApp.hide.noFocus {
+	visibility: hidden;
+}
+
+section.installApp * {
+	cursor: default !important;
+}
+
+section.installApp > div {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	padding: 1em 0;
+	align-items: center;
+}
+
+section.installApp > div > img {
+	height: 4em;
+	flex-shrink: 0;
+	margin-left: 1.5em;
+	-webkit-user-drag: none;
+	-moz-user-drag: none;
+	-o-user-drag: none;
+	-ms-user-drag: none;
+	user-drag: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+@media only screen and (max-width: 350px) {
+
+	section.installApp > div > img {
+		display: none;
+	}
+}
+
+section.installApp > div > p {
+	font-size: 11.7pt;
+	line-height: 1.5em;
+	color: rgb(12, 12, 13);
+	flex-grow: 1;
+	flex-shrink: 1;
+	padding: 0 1em;
+}
+
+@media only screen and (max-width: 350px) {
+
+	section.installApp > div > p {
+		padding: 0 1em 0 1.5em;
+		text-align: center;
+	}
+}
+
+section.installApp > div > button {
+	margin: 0 1.5em 0 0;
+	flex-shrink: 1;
+	background: rgba(12, 12, 13, 0.1);
+	font-size: 11pt;
+	border-radius: 2px;
+	border: 0;
+	cursor: pointer !important;
+	color: rgb(12, 12, 13);
+	font-weight: bold;
+	text-transform: uppercase;
+	line-height: unset;
+	white-space: normal;
+	font-family: Arial, sans-serif;
+	overflow: hidden;
+	line-height: 1.5em;
+	padding: 0.6em 1em 0.5em 1em;
+	
+}
+
+@media only screen and (any-hover: hover) {
+
+	section.installApp > div > button:hover {
+		background: rgba(12, 12, 13, 0.2);
+		color: rgb(12, 12, 13);
+	}
+}
+
+section.installApp > div > button:focus {
+	background: rgba(12, 12, 13, 0.2);
+	color: rgb(12, 12, 13);
+	box-shadow: none;
+}
+
+section.installApp > div > button:active {
+	background: rgba(12, 12, 13, 0.3);
+	color: rgb(12, 12, 13);
+}
+
+section.installApp > div > button > span {
+	min-height: auto;
+	white-space: normal;
+	cursor: pointer !important;
+}
+
+@media only screen and (max-width: 700px) and (any-hover: hover) {
+
+	section.installApp > div > button.remindMeLater:hover {
+		color: rgb(12, 12, 13, 0.45);
+	}
+}
+
+@media only screen and (max-width: 700px) {
+
+	section.installApp > div > button.remindMeLater {
+		margin: 0;
+		padding: 0.1em 0.2em;
+		background: transparent;
+		line-height: unset;
+		position: absolute;
+		top: 0;
+		right: 0;
+		color: rgb(12, 12, 13, 0.3);
+		font-size: 14pt;
+		font-family: "Font Awesome";
+		font-weight: bold;
+	}
+
+	section.installApp > div > button.remindMeLater:focus {
+		color: rgb(12, 12, 13, 0.45);
+	}
+
+	section.installApp > div > button.remindMeLater:active {
+		color: rgb(12, 12, 13, 0.6);
+	}
+
+	section.installApp > div > button.remindMeLater::before {
+		content: "\F00D";
+	}
+	
+	section.installApp > div > button.remindMeLater > span {
+		display: none;
+	}
+}

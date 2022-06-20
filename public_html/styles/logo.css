@@ -1,0 +1,73 @@
+@charset "UTF-8";
+
+
+main > div > div.logo {
+	position: absolute;
+	justify-content: start;
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+	height: 50%;
+	top: 0;
+	justify-content: center;
+	align-items: center;
+}
+
+main.logo > div > div.logo {
+	visibility: visible;
+	opacity: 1;
+	transition-delay: 0.15s;
+}
+
+main.logo > div > div.logo.normalTransitionSpeed {
+	transition-delay: 0s;
+	transition-duration: 0.15s;
+}
+
+@media only screen and (max-height: 500px) {
+
+	main > div > div.logo {
+		height: 40%;
+	}
+}
+
+@media only screen and (max-width: 300px) {
+
+	main > div > div.logo {
+		display: none;
+	}
+}
+
+@media only screen and (max-height: 400px) {
+
+	main > div > div.logo {
+		display: none;
+	}
+}
+
+main > div > div.logo.hide, main > div > div.logo.notLoaded {
+	display: flex;
+	visibility: hidden;
+	opacity: 0;
+}
+
+main.logo > div > div > div.logo {
+	display: block;
+	visibility: hidden;
+	opacity: 0;
+}
+
+main > div > div.logo > canvas {
+	width: calc(100vw - 4em);
+	height: calc(100vw - 4em);
+	max-width: 30em;
+	max-height: 30em;
+	touch-action: none;
+}
+
+@media only screen and (max-height: 900px) {
+	
+	main > div > div.logo > canvas {
+		max-height: 100%;
+	}
+}

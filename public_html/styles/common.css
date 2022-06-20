@@ -1,0 +1,227 @@
+@charset "UTF-8";
+
+
+.mwc {
+	font-family: MWC;
+}
+
+.grin {
+	font-family: GRIN;
+}
+
+.btc {
+	font-family: BTC;
+}
+
+.eth {
+	font-family: ETH;
+}
+
+.noTransition {
+	transition: none !important;
+}
+
+button {
+	line-height: 2em;
+	color: white;
+	border-radius: 0.4em;
+	margin: 0.4em 0;
+	font-size: 17pt;
+	border: 0.15em solid white;
+	outline: none;
+	padding: 0 1em;
+	background: #6000D5;
+	cursor: pointer;
+	font-family: "Open Sans", Arial, sans-serif;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+@media only screen and (any-hover: hover) {
+
+	button:hover {
+		background: #7B26D7;
+	}
+}
+
+button:focus {
+	background: #F4F4F4;
+	color: #9E00E7;
+	box-shadow: 0 0 2px #000000 inset;
+}
+
+button:active {
+	background: #924DDF;
+	color: #7419D9;
+	box-shadow: none;
+}
+
+button:disabled {
+	cursor: default;
+	background: #6000D5;	
+	color: white;
+	pointer-events: none;
+}
+
+button:disabled.loading {
+	cursor: wait;
+	background: #7B26D7;
+	border: 0.15em solid rgba(255, 255, 255, 0.5);
+}
+
+button > span {
+	overflow: hidden;
+	display: block;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	min-height: 2em;
+	visibility: visible;
+	opacity: 1;
+	transition: none;
+}
+
+button.clicked > span {
+	transition: opacity 0.05s ease-in-out, visibility 0.05s ease-in-out;
+}
+
+button:disabled > span {
+	transition: none;
+}
+
+button:disabled.loading > span {
+	visibility: hidden;
+	opacity: 0;
+}
+
+@keyframes growBig {
+
+	0% {
+		transform: scale(0.5);
+		opacity: 0.7;
+	}
+	
+	50% {
+		transform: scale(0.8);
+		opacity: 1;
+	}
+	
+	100% {
+		transform: scale(0.5);
+		opacity: 0.7;
+	}
+}
+
+button > span.dots {
+	display: block;
+	visibility: hidden;
+	opacity: 0;
+	text-overflow: clip;
+	overflow: visible;
+	font-family: "Font Awesome";
+	font-weight: bold;
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	transition: opacity 0.05s ease-in-out, visibility 0.05s ease-in-out;
+}
+
+button.clicked > span.dots {
+	transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
+}
+
+button:focus > span.dots {
+	transition: none;
+}
+
+button:disabled.loading > span.dots {
+	visibility: visible;
+	opacity: 1;
+	transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
+	display: flex;
+	justify-content: center;
+}
+
+button > span.dots > span {
+	display: inline-flex;
+	animation: growBig 0.8s linear infinite;
+	height: 100%;
+	align-items: center;
+}
+
+button > span.dots > span::before {
+	content: "\F111";
+	line-height: normal;
+}
+
+@keyframes growSmall {
+
+	0% {
+		transform: scale(0.8);
+		opacity: 1;
+	}
+	
+	50% {
+		transform: scale(0.5);
+		opacity: 0.7;
+	}
+	
+	100% {
+		transform: scale(0.8);
+		opacity: 1;
+	}
+}
+
+button > span.dots > span:nth-child(2) {
+	animation: growSmall 0.8s linear infinite;
+	padding: 0 0.5em;
+}
+
+select {
+	box-sizing: content-box;
+}
+
+select::-ms-expand {
+	display: none;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	margin: 0;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+	-webkit-appearance: textfield;
+	appearance: textfield;
+}
+
+input:disabled {
+	pointer-events: none;
+}
+
+a {
+	text-decoration: none;
+	color: #9E43D6;
+}
+
+a:focus {
+	background: #DBDBDB;
+}
+
+a[tabindex="-1"] {
+	pointer-events: none;
+}
+
+body.message > div > div > main *, body.tetris > div > div > main * {
+	-moz-user-select: none !important;
+	-webkit-user-select: none !important;
+	-o-user-select: none !important;
+	-ms-user-select: none !important;
+	user-select: none !important;
+}

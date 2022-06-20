@@ -1,0 +1,95 @@
+<?php
+
+	// Included files
+	require_once __DIR__ . "/backend/common.php";
+	require_once __DIR__ . "/backend/language.php";
+	require_once __DIR__ . "/backend/resources.php";
+	
+	
+	// Main function
+	
+	// Set content type header
+	header("Content-Type: application/manifest+json; charset=" . mb_internal_encoding());
+
+?>{
+	"name": "<?= escapeString(getTranslation('MWC Wallet')); ?>",
+	"short_name": "<?= escapeString(getTranslation('MWC Wallet')); ?>",
+	"description": "<?= escapeString(getTranslation('A MimbleWimble Coin wallet.')); ?>",
+	"background_color": "<?= escapeString(BACKGROUND_COLOR); ?>",
+	"theme_color": "<?= escapeString(THEME_COLOR); ?>",
+	"icons": [<?php
+	
+			// Go through all app icons
+			$firstMatch = TRUE;
+			foreach(APP_ICONS as $appIcon) {
+			
+				// Check if app icon parts are provided
+				if(count($appIcon) === count(APP_ICON_PARTS)) {
+				
+					// Check if app icon isn't platform dependant or the platform is applicable
+					if($appIcon[APP_ICON_PARTS["Mobile Only"]] === NULL || (array_key_exists("HTTP_USER_AGENT", $_SERVER) !== false && mb_strpos(mb_strtolower($_SERVER["HTTP_USER_AGENT"]), "mobile") !== false) === $appIcon[APP_ICON_PARTS["Mobile Only"]]) {
+			
+						// Display app icon
+						echo (($firstMatch === TRUE) ? "" : ",") . PHP_EOL . "\t\t{" . PHP_EOL;
+						echo "\t\t\t\"src\": \"" . escapeString(getResource($appIcon[APP_ICON_PARTS["File Path"]])) . "\"," . PHP_EOL;
+						echo "\t\t\t\"sizes\": \"" . escapeString($appIcon[APP_ICON_PARTS["X Dimension"]]) . "x" . escapeString($appIcon[APP_ICON_PARTS["Y Dimension"]]) . "\"," . PHP_EOL;
+						echo "\t\t\t\"type\": \"image/png\"," . PHP_EOL;
+						echo "\t\t\t\"purpose\": \"any\"" . PHP_EOL;
+						echo "\t\t}";
+						$firstMatch = FALSE;
+					}
+				}
+			}
+		?>
+		
+	],
+	"display": "standalone",
+	"categories": [
+		"finance"
+	],
+	"prefer_related_applications": false,
+	"lang": "<?= escapeString(getLanguage()); ?>",
+	"dir": "<?= escapeString(getConstant("Direction")); ?>",
+	"orientation": "any",
+	"start_url": "./",
+	"id": "./",
+	"scope": "./",
+	"serviceworker": {
+		"src": "<?= escapeString(getResource("./scripts/service_worker.js")); ?>",
+		"scope": "./"
+	},
+	"protocol_handlers": [
+		{
+			"protocol": "web+mwchttp",
+			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("MimbleWimble Coin"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Mainnet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
+		},
+		{
+			"protocol": "web+mwchttps",
+			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("MimbleWimble Coin"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Mainnet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
+		},
+		{
+			"protocol": "web+mwcfloonethttp",
+			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("MimbleWimble Coin"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Floonet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
+		},
+		{
+			"protocol": "web+mwcfloonethttps",
+			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("MimbleWimble Coin"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Floonet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
+		},
+		{
+			"protocol": "web+grinhttp",
+			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("Grin"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Mainnet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
+		},
+		{
+			"protocol": "web+grinhttps",
+			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("Grin"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Mainnet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
+		},
+		{
+			"protocol": "web+grintestnethttp",
+			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("Grin"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Testnet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
+		},
+		{
+			"protocol": "web+grintestnethttps",
+			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("Grin"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Testnet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
+		}
+	]
+}

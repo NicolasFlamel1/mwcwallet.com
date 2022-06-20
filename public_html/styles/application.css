@@ -1,0 +1,396 @@
+@charset "UTF-8";
+
+
+main > div > div > form {
+	display: none;
+	display: flex;
+	flex-direction: column;
+	height: 50%;
+	max-width: 100%;
+}
+
+@media only screen and (max-height: 500px) {
+
+	main > div > div > form {
+		height: 60%;
+	}
+}
+
+@media only screen and (max-width: 300px) {
+
+	main > div > div > form {
+		height: 100%;
+		justify-content: center;
+	}
+}
+
+@media only screen and (max-height: 400px) {
+
+	main > div > div > form {
+		height: 100%;
+		justify-content: center;
+	}
+}
+
+main > div > div > form, main > div > div > div.deleteAllWallets, main > div > div.unlocked > div {
+	visibility: visible;
+	opacity: 1;
+	transition: opacity 0.2s ease-in-out 0.05s, visibility 0.2s ease-in-out 0.05s;
+}
+
+main > div > div > form.hide, main > div > div > div.deleteAllWallets.hide, main > div > div.unlocked > div.hide {
+	display: flex;
+	visibility: hidden;
+	opacity: 0;
+	transition-duration: 0.15s;
+	transition-delay: 0s;
+}
+
+main.normalTransitionSpeed > div > div > form, main.normalTransitionSpeed > div > div > div.deleteAllWallets, main.normalTransitionSpeed > div > div.unlocked > div {
+	transition-duration: 0.15s;
+	transition-delay: 0s;
+}
+
+main > div > div > form > div {
+	display: flex;
+	position: relative;
+	align-items: center;
+	font-size: 17pt;
+}
+
+main > div > div.unlock > form > div {
+	margin-top: 1.5em;
+}
+
+@media only screen and (max-width: 300px) {
+
+	main > div > div.unlock > form > div {
+		margin-top: 0;
+	}
+}
+
+@media only screen and (max-height: 400px) {
+
+	main > div > div.unlock > form > div {
+		margin-top: 0;
+	}
+}
+
+main > div > div.unlock > form > div.status {
+	margin: 0;
+	grid-auto-flow: column;
+	column-gap: 0.9em;
+	justify-content: space-around;
+	padding: 0.4em 0.9em 0 0.9em;
+	display: none;
+}
+
+main > div > div.unlock.showStatus > form > div.status {
+	display: grid;
+}
+
+main > div > div.unlock > form > div.status > p {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+	overflow: hidden;
+}
+
+main > div > div.unlock > form > div.status > p::before {
+	content: "";
+	width: 0.85em;
+	height: 0.85em;
+	background: #CA2F2F;
+	border-radius: 90%;
+	font-size: 17pt;
+	border: 0.13em solid white;
+	flex-shrink: 0;
+	transition: background 0.15s ease-in-out;
+}
+
+main > div > div.unlock > form > div.status > p.warning::before {
+	background: #DED92C;
+}
+
+main > div > div.unlock > form > div.status > p.success::before {
+	background: #51C751;
+}
+
+main > div > div.unlock > form > div.status > p > span {
+	font-weight: bold;
+	color: white;
+	padding-left: 0.3em;
+	font-size: 15pt;
+	line-height: normal;
+	overflow: hidden;
+	display: block;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+main > div > div > form > div > span.show, main > div > div > form > div > span.capsLock {
+	position: absolute;
+	right: 0;
+	cursor: pointer;
+	border-radius: 0 0.4em 0.4em 0;
+	color: #CEA5F2;
+	font-family: "Open Sans", Arial, sans-serif;
+	font-size: 17pt;
+	height: 2.3em;
+	display: flex;
+	align-items: center;
+	padding: 0 2px 0 0;
+}
+
+main > div > div > form > div > span.show:focus, main > div > div > form > div > span.show:active {
+	color: white;
+}
+
+@media only screen and (any-hover: hover) {
+
+	main > div > div > form > div > span.show:hover {
+		color: white;
+	}
+}
+
+main > div > div > form > div > span.show[tabindex="-1"] {
+	cursor: default;
+	color: #CEA5F2;
+	pointer-events: none;
+}
+
+main > div > div > form > div > span.show::after, main > div > div > form > div > span.capsLock::after {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	font-size: 20pt;
+	content: "\F06E";
+	width: 1.9em;
+	text-align: center;
+	max-height: 100%;
+	display: inline-block;
+}
+
+main > div > div > form > div > span.show.conceal::after {
+	content: "\F070";
+}
+
+main > div > div > form > div > input {
+	text-align: center;
+	background: rgba(144, 63, 234, 0.77);
+	line-height: 2em;
+	border-radius: 0.4em;
+	margin: 0.4em 0;
+	padding: 0 2.2em;
+	border: 0.15em solid transparent;
+	font-family: "Open Sans", Arial, sans-serif;
+	text-overflow: ellipsis;
+	flex-grow: 1;
+	min-width: 0;
+	color: white;
+	font-size: 17pt;
+}
+
+main > div > div > form > div > input.notEmpty[type="password"], main > div > div > form > div > input[type="password"]:-webkit-autofill::first-line {
+	font-weight: bold;
+	font-family: monospace;
+	font-size: 17pt;
+}
+
+main > div > div > form > div > input[type="password"]:autofill::first-line {
+	font-weight: bold;
+	font-family: monospace;
+	font-size: 17pt;
+}
+
+@supports (-webkit-touch-callout: none) {
+
+	main > div > div > form > div > input.notEmpty[type="password"], main > div > div > form > div > input[type="password"]:-webkit-autofill::first-line {
+		font-family: password;
+	}
+
+	main > div > div > form > div > input[type="password"]:autofill::first-line {
+		font-family: password;
+	}
+}
+
+@media only screen and (any-hover: hover) {
+
+	main > div > div > form > div > input:hover, main > div > div > form > div > span.show:hover + input {
+		background: #934CE2;
+	}
+}
+
+main > div > div > form > div > input:disabled {
+	background: rgba(144, 63, 234, 0.77) !important;
+	cursor: default;
+}
+
+main > div > div > form > div > input::placeholder {
+	color: #CEA5F2;
+}
+
+main > div > div > form > div > input:focus {
+	border: 0.15em solid white;
+	outline: none;
+}
+
+main > div > div > form > div > input::selection {
+	background: rgba(255, 255, 255, 0.5);
+}
+
+main > div > div > form > div > span.capsLock {
+	right: auto;
+	left: 0;
+	pointer-events: none;
+	border-radius: 0.4em 0 0 0.4em;
+	display: none;
+	color: white;
+	padding: 0 0 0 2px;
+}
+
+body.capsLock main > div > div > form > div > input:focus + span.capsLock {
+	display: flex;
+}
+
+@supports (-webkit-touch-callout: none) {
+
+	main > div > div > form > div > span.capsLock {
+		display: none !important;
+	}
+}
+
+main > div > div > form > div > span.capsLock::after {
+	content: "\F0AA";
+}
+
+main > div > div > form > button:disabled {
+	pointer-events: auto;
+}
+
+main > div > div > form > button.clicked {
+	background: #7B26D7;
+}
+
+main > div > div > div.deleteAllWallets {
+	position: fixed;
+	bottom: 0;
+	top: 0;
+	right: 0;
+	left: 0;
+	display: flex;
+	justify-content: flex-end;
+	margin: 0.4em;
+	min-width: calc(250px - 0.8em);
+	min-height: calc(250px - 0.8em);
+	align-items: flex-end;
+	pointer-events: none;
+}
+
+main > div > div > div.deleteAllWallets.hide {
+	display: flex;
+}
+
+main > div > div > div.deleteAllWallets > button {
+	border-radius: 2em;
+	display: flex;
+	max-width: 2em;
+	min-width: 2em;
+	height: 2em;
+	transition: max-width 0.25s ease-out;
+	margin: 0;
+	padding: 0;
+	font-size: 22pt;
+	justify-content: center;
+	border-width: calc(0.15em * 17 / 22);
+	overflow: hidden;
+	padding-right: calc(2em - 0.15em * 17 / 22 * 2);
+	pointer-events: auto;
+}
+
+main > div > div > div.deleteAllWallets > button:focus {
+	max-width: 10em;
+	transition: max-width 0.35s ease-out;
+}
+
+@media only screen and (any-hover: hover) {
+
+	main > div > div > div.deleteAllWallets > button:hover {
+		max-width: 10em;
+		transition: max-width 0.35s ease-out;
+	}
+}
+
+main > div > div > div.deleteAllWallets > button:disabled {
+	max-width: 2em;
+	transition: max-width 0.25s ease-out;
+}
+
+main > div > div > div.deleteAllWallets > button.clicked {
+	max-width: 10em;
+	transition: max-width 0.35s ease-out;
+	background: #7B26D7;
+}
+
+main > div > div > div.deleteAllWallets > button::after {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	content: "\F1F8";
+	line-height: normal;
+	width: 1em;
+	margin: 0 calc((2em - 0.15em * 17 / 22 * 2 - 1em) / 2);
+	position: absolute;
+	right: 0;
+}
+
+main > div > div > div.deleteAllWallets > button > span {
+	text-overflow: clip;
+	min-height: unset;
+	line-height: normal;
+	font-size: 17pt;
+	position: relative;
+	left: 0.35em;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+	padding: 0 0.1em 0 0.2em;
+}
+
+main > div > div > div.deleteAllWallets > button > span.truncate {
+	text-overflow: ellipsis;
+}
+
+main > div > div > div.deleteAllWallets > button > span.alignLeft {
+	text-align: left;
+}
+
+main > div > div > div.deleteAllWallets > button:focus > span {
+	opacity: 1;
+	visibility: visible;
+	transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+}
+
+@media only screen and (any-hover: hover) {
+
+	main > div > div > div.deleteAllWallets > button:hover > span {
+		opacity: 1;
+		visibility: visible;
+		transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+	}
+}
+
+main > div > div > div.deleteAllWallets > button:focus > span {
+	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+main > div > div > div.deleteAllWallets > button:disabled > span {
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+main > div > div > div.deleteAllWallets > button.clicked > span {
+	opacity: 1;
+	visibility: visible;
+	transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+}

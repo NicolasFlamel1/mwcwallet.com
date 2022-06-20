@@ -1,0 +1,36 @@
+<?php
+
+	// Included files
+	require_once __DIR__ . "/../backend/common.php";
+	require_once __DIR__ . "/../backend/language.php";
+	
+	
+	// Main function
+	
+	// Get path
+	$path = $_SERVER["REQUEST_URI"];
+	
+	// Check if accessing 500 error page directly
+	if($path === "/errors/500.html" || startsWith($path, "/errors/500.html?") === TRUE) {
+	
+		// Require 404 error page
+		require __DIR__ . "/404.html";
+		
+		// Exit
+		exit();
+	}
+	
+	// Set error header
+	header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
+	header("Status: 500 Internal Server Error");
+
+	// Set title, title argument, error, error argument, and message
+	$title = getDefaultTranslation('MWC Wallet — Error %1$s');
+	$titleArgument = 500;
+	$error = getDefaultTranslation('Error %1$s');
+	$errorArgument = 500;
+	$message = getDefaultTranslation('Internal Server Error');
+	
+	// Require template
+	require __DIR__ . "/template.php";
+?>

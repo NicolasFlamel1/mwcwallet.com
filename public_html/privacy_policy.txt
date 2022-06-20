@@ -1,0 +1,16 @@
+This privacy policy describes how the MWC Wallet website, app, and extension use, share, and store personal information about its users. Please note that this privacy policy doesn't apply to information collected through third-party websites and services that you may interact with through the use of MWC Wallet's services.
+
+What Is Collected:
+MWC Wallet doesn't actively collect any personal information about its users.
+
+What Is Automatically Collected:
+MWC Wallet may automatically record certain information about how its users use its services in log files on its servers. This may include a user's IP address, device type, web browser type, operating system, the pages and features which they accessed, and the time which they accessed those pages and features. MWC Wallet may use this information to maintain the functionality of its services.
+
+What Is shared:
+MWC Wallet doesn't share any personal information about its users.
+
+How Data Is Stored:
+MWC Wallet uses local storage and similar technologies to store personal information locally on a user's machine. Some of this stored information is encrypted using a password provided by the user.
+
+What Cookies Are Used:
+MWC Wallet only uses cookies that are essential to its functionality. These cookies are used to optimize resource loading, set preferences, and maintain a session with MWC Wallet's services.

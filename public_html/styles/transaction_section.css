@@ -1,0 +1,61 @@
+@charset "UTF-8";
+
+
+main > div.unlocked > div > div > div.sections > div > div.transaction > div > div.transactionInformation, main > div.unlocked > div > div > div.sections > div > div.transaction > div > div.paymentProof {
+	flex-direction: column;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p {
+	padding-bottom: 0.6em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p.hide {
+	display: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p + p.currency {
+	margin-top: -1px;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p.currency span.contextMenu {
+	line-height: 1.4;
+	display: inline-block;
+	height: 1em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p:last-child {
+	padding-bottom: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.transaction > div > div span.contextMenu {
+	cursor: text;
+	-moz-user-select: text;
+	-webkit-user-select: text;
+	-o-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+	margin-right: auto;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p > span.rawData {
+	word-break: break-all;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p > span.copy {
+	padding: 0.4em;
+	margin: -0.4em 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: copy;
+	height: 1em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p > span.copy::after {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	content: "\F0C5";
+	font-size: 15.5pt;
+	position: relative;
+	top: 1px;
+}

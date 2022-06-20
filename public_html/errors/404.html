@@ -1,0 +1,26 @@
+<?php
+
+	// Included files
+	require_once __DIR__ . "/../backend/common.php";
+	require_once __DIR__ . "/../backend/language.php";
+	
+	
+	// Main function
+	
+	// Get path
+	$path = $_SERVER["REQUEST_URI"];
+	
+	// Set error header
+	header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+	header("Status: 404 Not Found");
+
+	// Set title, title argument, error, error argument, and message
+	$title = getDefaultTranslation('MWC Wallet — Error %1$s');
+	$titleArgument = 404;
+	$error = getDefaultTranslation('Error %1$s');
+	$errorArgument = 404;
+	$message = getDefaultTranslation('Not Found');
+	
+	// Require template
+	require __DIR__ . "/template.php";
+?>

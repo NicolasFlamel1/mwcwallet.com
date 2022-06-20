@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.versionInformation {
+	flex-direction: column;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.versionInformation > p {
+	padding-bottom: 0.6em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.versionInformation > p:last-child {
+	padding-bottom: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul {
+	padding: 0;
+	line-height: 1.35;
+	display: block;
+	margin: auto 0 auto 1.1em;
+	color: rgb(12, 12, 13);
+	font-size: 13pt;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul > li {
+	padding-bottom: 0.6em;
+	list-style-type: "•  ";
+}
+
+main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul > li:last-child {
+	padding-bottom: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.translationContributors, main > div.unlocked > div > div > div.sections > div > div.about > div > div.attributions {
+	flex-direction: column;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.translationContributors > p, main > div.unlocked > div > div > div.sections > div > div.about > div > div.attributions > p {
+	padding-bottom: 0.6em;
+}
+
+@media only screen and (max-width: 400px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul {
+		text-align: center;
+		flex-grow: 1;
+		list-style: inside;
+		margin: auto 0;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul > li {
+		list-style-type: "•";
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul > li > span {
+		padding-left: 0.55em;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.disclaimer > p {
+	text-transform: uppercase;
+}

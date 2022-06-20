@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+
+main > div.unlocked > div > div > div.sections > div > div.log > div > div.navigation {
+	border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+	margin-bottom: 0.6em;
+	padding-bottom: 0.5em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.log > div > div.messages {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: start;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.log > div > div.messages > p {
+	display: inline-block;
+	cursor: text;
+	-moz-user-select: text;
+	-webkit-user-select: text;
+	-o-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+	font-family: monospace;
+	font-size: 9.5pt;
+	line-height: 1.9em;
+	color: rgb(12, 12, 13);
+	padding: 0.3em 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.log > div > div.messages > p:first-child {
+	padding-top: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.log > div > div.messages > p:last-child {
+	padding-bottom: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.log > div > div.messages > p > span {
+	vertical-align: middle;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.log > div > div.messages > p > span.timestamp{
+	font-weight: bold;
+	color: #9A4CE2;
+	font-size: 10pt;
+}
+
+@media only screen and (max-width: 400px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.log > div > div.messages {
+		padding: 0;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div.log > div > div.messages::after {
+		height: 0;
+	}
+
+	main > div.unlocked > div > div > div.sections > div > div.log > div > div.messages > p {
+		text-align: left;
+	}
+}

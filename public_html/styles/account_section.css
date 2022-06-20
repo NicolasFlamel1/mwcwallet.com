@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+
+main > div.unlocked > div > div > div.sections > div > div.account > div > div > div {
+	flex-grow: 1;
+}
+
+@media only screen and (max-width: 300px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.account > div > div > div {
+		flex-grow: 0;
+	}
+}

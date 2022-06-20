@@ -1,0 +1,810 @@
+@charset "UTF-8";
+
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > h3.address {
+	margin-bottom: 0.2em;
+}
+
+@media only screen and (max-width: 400px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > h3.address {
+		margin-bottom: 0.3em;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address > svg {
+	max-width: 22em;
+	flex-grow: 1;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address > svg path {
+	fill: rgb(12, 12, 13);
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address > p > span.contextMenu {
+	cursor: text;
+	-moz-user-select: text;
+	-webkit-user-select: text;
+	-o-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+	word-break: break-all;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address > p {
+	text-align: center;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address.loading > p > span.contextMenu {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address > p > span.copy {
+	padding: 0.4em;
+	margin: -0.4em 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: copy;
+	height: 1em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address.loading > p > span.copy {
+	pointer-events: none;
+	cursor: default;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address > p > span.copy::after {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	content: "\F0C5";
+	font-size: 15.5pt;
+	position: relative;
+	top: 1px;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address > button {
+	margin-top: calc(0.7em * 12 / 15);
+}
+
+@media only screen and (max-width: 600px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address > button {
+		margin-top: calc(0.7em * 12 / 15.6);
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address > div.loading {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+	background: white;
+	pointer-events: none;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding-bottom: 1px;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address.loading > div.loading {
+	visibility: visible;
+	opacity: 1;
+	pointer-events: auto;
+	cursor: wait;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address > div.loading > div {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	margin: auto;
+	border: 0.7em solid #6F00D6;
+	border-bottom: 0.7em solid transparent;
+	border-right: 0.7em solid transparent;
+	border-radius: 50%;
+	width: 4em;
+	height: 4em;
+	animation: spin 1.3s linear infinite;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address.loading button {
+	pointer-events: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance {
+	flex-direction: column;
+	text-align: center;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > p {
+	padding-bottom: 0.6em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > p:last-of-type {
+	padding-bottom: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > p + p {
+	margin-top: -1px;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > p span.contextMenu {
+	line-height: 1.4;
+	display: inline-block;
+	height: 1em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > button {
+	margin-top: calc(0.7em * 12 / 15);
+}
+
+@media only screen and (max-width: 600px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > button {
+		margin-top: calc(0.7em * 12 / 15.6);
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance span.contextMenu {
+	cursor: text;
+	-moz-user-select: text;
+	-webkit-user-select: text;
+	-o-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+	margin-right: auto;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > div.syncStatus {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+	background: white;
+	pointer-events: none;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding-bottom: 1px;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance.syncing > div.syncStatus {
+	visibility: visible;
+	opacity: 1;
+	pointer-events: auto;
+	cursor: wait;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance.syncing span.contextMenu {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance.syncing button {
+	pointer-events: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > div.syncStatus > svg {
+	overflow: visible;
+	width: 4.7em;
+	height: 4.7em;
+	flex-shrink: 0;
+	transform: rotate(270deg);
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > div.syncStatus > svg > circle {
+	stroke: #6F00D6;
+	fill: none;
+	stroke-width: 0.9em;
+	transform-origin: 50% 50%;
+	stroke-dasharray: 101;
+	stroke-dashoffset: 202;
+	transition: stroke-dashoffset 0.25s linear;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > div.syncStatus > svg > circle.background {
+	stroke: #CCCCCC;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance.instant > div.syncStatus > svg > circle.foreground {
+	transition: none !important;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > div.syncStatus > p {
+	line-height: 1.35;
+	display: block;
+	margin: 1em 0 0 0;
+	color: rgb(12, 12, 13);
+	font-size: 13pt;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 100%;
+	text-align: center;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > div.syncStatus > p.syncingFailed {
+	display: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance.failed > div.syncStatus > p {
+	display: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance.failed > div.syncStatus > p.syncingFailed {
+	display: block;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > div.syncStatus > span {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-132%);
+	line-height: 1.35;
+	display: block;
+	margin: 0;
+	color: rgb(12, 12, 13);
+	font-size: 13pt;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 100%;
+	text-align: center;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions {
+	flex-direction: column;
+	margin-bottom: 0.5em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions.empty {
+	display: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions::before {
+	content: "";
+	position: absolute;
+	top: calc(-0.4em * 15 / 12);
+	bottom: -0.5em;
+	right: -1em;
+	left: -1em;
+	background-color: white;
+	opacity: 0;
+	transition: opacity 0.25s ease-in-out;
+	pointer-events: none;
+	z-index: 1;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions.loading::before {
+	opacity: 0.8;
+}
+
+@media only screen and (max-width: 400px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions::before {
+		top: calc(-0.9em * 15 / 12);
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button {
+	flex-direction: column;
+	align-items: flex-start;
+	margin: 0 0 calc(1em * 12 / 16) 0;
+	padding: 0 0.4em;
+	border: none;
+	border-radius: 0.2em;
+	font-size: 16pt;
+	visibility: visible;
+	opacity: 1;
+	transition: transform 0.1s ease-out, opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
+	overflow: hidden;
+	height: auto;
+	background-color: #6000D5;
+	font-weight: normal;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:last-child {
+	margin-bottom: 0;
+}
+
+@media only screen and (any-hover: hover) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:hover {
+		transform: scale(1.002);
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:focus {
+	box-shadow: none;
+	color: white;
+	transform: scale(1.002);
+}
+
+@media only screen and (max-width: 3500px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:focus {
+		transform: scale(1.003);
+	}
+}
+
+@media only screen and (max-width: 3500px) and (any-hover: hover) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:hover {
+		transform: scale(1.003);
+	}
+}
+
+@media only screen and (max-width: 2500px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:focus {
+		transform: scale(1.005);
+	}
+}
+
+@media only screen and (max-width: 2500px) and (any-hover: hover) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:hover {
+		transform: scale(1.005);
+	}
+}
+
+@media only screen and (max-width: 2100px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:focus {
+		transform: scale(1.007);
+	}
+}
+
+@media only screen and (max-width: 2100px) and (any-hover: hover) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:hover {
+		transform: scale(1.007);
+	}
+}
+
+@media only screen and (max-width: 1800px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:focus {
+		transform: scale(1.01);
+	}
+}
+
+@media only screen and (max-width: 1800px) and (any-hover: hover) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:hover {
+		transform: scale(1.01);
+	}
+}
+
+@media only screen and (max-width: 1000px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:focus {
+		transform: scale(1.015);
+	}
+}
+
+@media only screen and (max-width: 1000px) and (any-hover: hover) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:hover {
+		transform: scale(1.015);
+	}
+}
+
+@media only screen and (max-width: 700px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:focus {
+		transform: scale(1.02);
+	}
+}
+
+@media only screen and (max-width: 700px) and (any-hover: hover) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:hover {
+		transform: scale(1.02);
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:active {
+	color: white;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:disabled {
+	pointer-events: auto;
+	transform: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button.hide {
+	transform: none;
+	opacity: 0;
+	visibility: hidden;
+	display: flex;
+	pointer-events: none;
+	cursor: default;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span {
+	line-height: normal;
+	font-size: 15.5pt;
+	width: 100%;
+	display: grid;
+	column-gap: calc(1em * 13 / 15.5);
+	grid-auto-flow: column;
+	justify-content: space-between;
+	text-align: left;
+	padding-top: 0.1em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name {
+	max-width: calc(100% - 1.5em);
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.totals {
+	justify-content: left;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span > span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span:first-child {
+	display: flex;
+}
+
+@media only screen and (max-width: 400px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button {
+		margin-bottom: calc(1.125em * 12 / 16);
+	}
+}
+
+@media only screen and (max-width: 850px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name {
+		display: flex;
+		flex-direction: column;
+		height: auto;
+		max-width: 100%;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span:first-child {
+		max-width: calc(100% - 1.5em);
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span:nth-of-type(2) {
+		padding-top: 0.1em;
+	}
+}
+
+@media only screen and (max-width: 400px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.totals > span.value {
+		display: none;
+	}
+}
+
+@media only screen and (min-width: 601px) and (max-width: 800px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.totals > span.value {
+		display: none;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span > span {
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span > span.type {
+	padding: 0 0.4em;
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:disabled > span.name > span > span.type {
+	pointer-events: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button> span.name > span > span.type::before {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	content: "\F51E";
+	font-size: 15pt;
+	position: relative;
+	top: 1px;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button.received > span.name > span > span.type::before {
+	content: "\F3bE";
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button.sent > span.name > span > span.type::before {
+	content: "\F3bF";
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span.status {
+	position: absolute;
+	right: 0;
+	padding: 0.1em 0.4em 0.3em 0.4em;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	visibility: hidden;
+	opacity: 0;
+	font-size: 16pt;
+	transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:disabled > span.name > span.status {
+	pointer-events: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span.status::before {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	content: "\F058";
+	font-size: 15.5pt;
+	position: relative;
+	top: 1px;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button.confirmed > span.name > span.confirmed {
+	visibility: visible;
+	opacity: 1;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span.unconfirmed::before {
+	content: "\F1CE";
+	animation: spin 1.3s linear infinite;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button.unconfirmed > span.name > span.unconfirmed {
+	visibility: visible;
+	opacity: 1;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span.canceled::before {
+	content: "\F057";
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button.canceled > span.name > span.canceled {
+	visibility: visible;
+	opacity: 1;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span.expired::before {
+	content: "\F017";
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button.expired > span.name > span.expired {
+	visibility: visible;
+	opacity: 1;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span > span:first-child {
+	flex-shrink: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.id {
+	width: calc(100% + 0.4em);
+	position: relative;
+	right: 0.4em;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.4);
+	padding: 0.05em 0 0.05em 0.4em;
+	margin-top: 0.2em;
+	border-top: 1px solid rgba(192, 192, 192, 0.4);
+	font-size: 16pt;
+	column-gap: 0;
+	height: calc(1.5em * 17 / 16);
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.id > p {
+	overflow: hidden;
+	margin: 0;
+	font-family: monospace;
+	font-size: 13pt;
+	text-overflow: ellipsis;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.id > p:empty {
+	visibility: hidden;
+	opacity: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.id > span.copy {
+	padding: 0.3em 0.4em;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: copy;
+	pointer-events: auto;
+	width: 0.85em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button:disabled > span.id > span.copy {
+	pointer-events: none;
+	cursor: default;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.id > span.copy.clicked {
+	pointer-events: auto;
+	cursor: wait;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.id > span.copy::before {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	content: "\F0C5";
+	font-size: 15.5pt;
+	position: relative;
+	top: -1px;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.id > p:empty + span.copy {
+	visibility: hidden;
+	opacity: 0;
+	cursor: default;
+	pointer-events: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions + div {
+	transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
+	opacity: 0;
+	visibility: hidden;
+	height: 0;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions.empty + div {
+	opacity: 1;
+	visibility: visible;
+	height: auto;
+	margin: 0 0 0.5em 0;
+	overflow: visible;
+	text-align: center;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions.empty + div > p {
+	width: 100%;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions + div.hide {
+	opacity: 0;
+	visibility: hidden;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation {
+	margin-bottom: 0.5em;
+	justify-content: space-around;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: white;
+	opacity: 0;
+	transition: opacity 0.25s ease-in-out;
+	pointer-events: none;
+	z-index: 1;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions.loading ~ div.transactionsNavigation::before {
+	opacity: 0.8;
+}
+
+@media only screen and (max-width: 400px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation {
+		padding-bottom: calc(0.625em + 0.25em * 6 / 12);
+		margin-bottom: 1.125em;
+		justify-content: space-between;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button {
+	border: none;
+	background: transparent;
+	color: rgb(12,12,13);
+	flex-shrink: 0;
+	margin: 0 !important;
+	padding: 0.3em;
+	line-height: 1em;
+	border-radius: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button:focus {
+	box-shadow: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button.disabled {
+	cursor: default;
+	box-shadow: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button::before {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	content: "\F100";
+	font-size: 25pt;
+	position: relative;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button.previous::before {
+	content: "\F104";
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button.next::before {
+	content: "\F105";
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button.last::before {
+	content: "\F101";
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button:focus::before {
+	animation: moveBackAndForth 0.7s linear infinite;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button.first:focus::before, main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button.previous:focus::before {
+	animation-direction: reverse;
+}
+
+@media only screen and (any-hover: hover) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button:hover::before {
+		animation: moveBackAndForth 0.7s linear infinite;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button.first:hover::before, main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button.previous:hover::before {
+		animation-direction: reverse;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactionsNavigation > button.disabled::before {
+	animation: none;
+	opacity: 0.2;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.merge + div > button {
+	margin-right: auto;
+}
+
+@media only screen and (max-width: 400px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > div.syncStatus {
+		height: calc(100% - (1.125em + 0.25em * 6 / 12))
+	}
+}

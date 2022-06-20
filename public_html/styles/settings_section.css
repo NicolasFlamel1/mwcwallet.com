@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+
+main > div.unlocked > div > div > div.sections > div > div.settings > div > div.setting > div.value[data-type="number"] {
+	max-width: none;
+	flex-shrink: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.settings > div > div.setting > div.value[data-type="number"] > input {
+	width: calc(3.5em * 17 / 15 - 0.6em * 2);
+}
+
+@media only screen and (max-width: 600px) {
+
+	main > div.unlocked > div > div > div.sections > div > div.settings > div > div.setting > div.value[data-type="number"] {
+		flex-grow: 0;
+	}
+}

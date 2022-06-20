@@ -1,0 +1,278 @@
+@charset "UTF-8";
+
+
+main > div.language {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: auto;
+	width: auto;
+	max-width: 100%;
+	max-height: calc(100% - 0.4em);
+	z-index: 7;
+	visibility: visible;
+	opacity: 1;
+	transition: opacity 0.2s ease-in-out 0.05s, visibility 0.2s ease-in-out 0.05s;
+	margin: 0.4em;
+	min-width: calc(250px - 0.8em);
+	pointer-events: none;
+}
+
+main > div.language.normalTransitionSpeed {
+	transition-duration: 0.15s;
+	transition-delay: 0s;
+}
+
+main > div.language.hide {
+	display: flex;
+	visibility: hidden;
+	opacity: 0;
+}
+
+main > div.language.hide * {
+	pointer-events: none;
+}
+
+main > div.language > div {
+	display: block;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	margin: 0 0 0 auto;
+	pointer-events: none;
+	max-width: 100%;
+	transition: background 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	border-radius: 4px 4px 0 0;
+	width: auto;
+}
+
+main > div.language > div.shadow {
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+	background: rgb(66, 66, 66);
+}
+
+main > div.language > div * {
+	cursor: default !important;
+}
+
+main > div.language > div > select {
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 13.5pt;
+	font-family: Arial, sans-serif;
+	z-index: 8;
+	pointer-events: auto;
+	cursor: pointer !important;
+	display: none;
+	border-radius: 4px;
+	border: none;
+	padding: 0 0.3em 0 0;
+	margin: 0;
+	opacity: 0;
+}
+
+@media only screen and (any-hover: none) {
+
+	main > div.language > div > select {
+		display: block;
+	}
+}
+
+main > div.language > div > select > option {
+	background: rgb(66, 66, 66);
+	color: white;
+	font-size: 12.5pt;
+	font-weight: bold;
+	text-align: center;
+}
+
+@media only screen and (any-hover: hover) {
+
+	main > div.language > div > select > option:hover {
+		background-color: #515151;
+		color: white;
+	}
+}
+
+main > div.language > div > select > option:checked {
+	color: #A0A0A0;
+}
+
+main > div.language > div button {
+	border: none;
+	margin: 0;
+	border-radius: 4px;
+	background: transparent;
+	line-height: normal;
+	font-size: 13.5pt;
+	font-family: Arial, sans-serif;
+	font-weight: bold;
+	pointer-events: auto;
+	max-width: 100%;
+	padding: 0 0.3em 0 0;
+	cursor: pointer !important;
+}
+
+main > div.language > div button.clicked {
+	background: #515151;
+}
+
+@media only screen and (any-hover: hover) {
+
+	main > div.language > div > select:hover + button, main > div.language > div button:hover {
+		background: #515151;
+	}
+}
+
+main > div.language > div button:focus {
+	background: #515151;
+	color: white;
+	box-shadow: none;
+}
+
+main > div.language > div button:active {
+	background: #515151;
+	color: white;
+}
+
+main > div.language > div button:disabled {
+	cursor: default !important;
+	background: transparent;
+	color: white;
+}
+
+main > div.language > div button * {
+	cursor: pointer !important;
+}
+
+main > div.language > div button:disabled * {
+	cursor: default !important;
+}
+
+main > div.language > div > button.clicked {
+	background: #515151;
+}
+
+main > div.language > div > button {
+	min-width: 9em;
+}
+
+main > div.language > div > button.transition {
+	transition: background 0.15s ease-in-out;
+}
+
+@media only screen and (any-hover: none) {
+
+	main > div.language > div > button {
+		pointer-events: none;
+	}
+}
+
+main > div.language > div > button > span {
+	flex-grow: 1;
+	min-height: auto;
+	flex-shrink: 1;
+	display: flex;
+	padding: 0 0 0 0.15em;
+	justify-content: space-between;
+	align-items: center;
+}
+
+main > div.language > div > button > span.icon {
+	flex-shrink: 0;
+	justify-content: flex-end;
+	padding: 0 0.15em 0 0.3em;
+}
+
+main > div.language > div > button > span::after {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	content: "\F0D7";
+	font-size: 16pt;
+}
+
+main > div.language > div > button > span.icon::after {
+	content: "\F1AB";
+	font-size: 20pt;
+}
+
+main > div.language > div > button > span > span {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	text-align: left;
+	padding-right: 0.3em;
+}
+
+main > div.language > div > div {
+	max-width: 100%;
+	visibility: visible;
+	opacity: 1;
+	transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
+	display: block;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 0.4em 0;
+	max-height: none;
+	margin: 0;
+	pointer-events: auto;
+	scrollbar-width: thin;
+}
+
+main > div.language > div > div.hide {
+	display: block;
+	visibility: hidden;
+	opacity: 0;
+	pointer-events: none;
+}
+
+main > div.language > div > div.hide * {
+	pointer-events: none;
+}
+
+main > div.language > div > div > button {
+	height: 2em;
+	padding: 0 0.7em;
+	width: 100%;
+	justify-content: flex-start;
+	align-items: center;
+	border-radius: 0;
+	margin: 0;
+}
+
+main > div.language > div button:disabled {
+	cursor: default !important;
+	background: transparent;
+	opacity: 0.5;
+}
+
+main > div.language > div > div > button > span {
+	font-size: 13pt;
+	text-align: left;
+	min-height: auto;
+}
+
+main > div.language > div > div > button > img {
+	width: 1.5em;
+	height: auto;
+	margin-right: 0.5em;
+	-webkit-user-drag: none;
+	-moz-user-drag: none;
+	-o-user-drag: none;
+	-ms-user-drag: none;
+	user-drag: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+body.blockInput {
+	cursor: wait !important;
+}
+
+body.blockInput * {
+	pointer-events: none !important;
+}

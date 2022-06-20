@@ -1,0 +1,559 @@
+@charset "UTF-8";
+
+
+aside.message > div.camera {
+	max-width: none;
+}
+
+aside.message > div.camera > div {
+	max-width: none;
+	max-height: calc(100% - 4em);
+	width: auto;
+	flex-grow: 1;
+	height: 100%;
+}
+
+aside.message > div.camera > div > h2 {
+	margin-bottom: 0.2em;
+}
+
+aside.message > div.camera > div > p {
+	display: grid;
+	overflow: hidden;
+}
+
+aside.message > div.camera > div > p > span.text {
+	overflow: hidden;
+}
+
+aside.message > div.camera > div > p > span.text video {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+aside.message > div > div > p > span.text a {
+	color: #3600C9;
+	font-weight: bold;
+}
+
+aside.message > div > div > p > span.text a:focus {
+	color: #9E39FF;
+	background: transparent;
+}
+
+aside.message > div > div > p > span.text a[tabindex="-1"] {
+	cursor: default;
+	color: #3600C9;
+	pointer-events: none;
+}
+
+aside.message > div > div > p > span.text span.passphrase, aside.message > div > div > p > span.text span.message {
+	font-weight: bold;
+	font-family: monospace;
+	margin: 0;
+	padding: 0;
+	cursor: text;
+	-moz-user-select: text;
+	-webkit-user-select: text;
+	-o-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+	line-height: 1.5em;
+}
+
+aside.message > div > div > p > span.text span.input {
+	display: flex;
+	position: relative;
+	width: calc(100% - 6px);
+	max-width: 25em;
+	align-items: center;
+	font-size: 17pt;
+	margin: 0 auto;
+}
+
+aside.message > div > div > p > span.text span.input > span.show, aside.message > div > div > p > span.text span.input > span.capsLock {
+	position: absolute;
+	right: 0;
+	cursor: pointer;
+	border-radius: 0 0.4em 0.4em 0;
+	color: #E2CCF7;
+	font-family: "Open Sans", Arial, sans-serif;
+	height: 2.3em;
+	display: flex;
+	align-items: center;
+	padding: 0 2px 0 0;
+}
+
+aside.message > div > div > p > span.text span.input > span.show:focus, aside.message > div > div > p > span.text span.input > span.show:active {
+	color: #9E39FF;
+}
+
+@media only screen and (any-hover: hover) {
+
+	aside.message > div > div > p > span.text span.input > span.show:hover {
+		color: #9E39FF;
+	}
+}
+
+aside.message > div > div > p > span.text span.input > span.show[tabindex="-1"] {
+	cursor: default;
+	color: #E2CCF7;
+	pointer-events: none;
+}
+
+aside.message > div > div > p > span.text span.input > span.show::after, aside.message > div > div > p > span.text span.input > span.capsLock::after {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	font-size: 20pt;
+	content: "\F06E";
+	width: 1.9em;
+	text-align: center;
+	max-height: 100%;
+	display: inline-block;
+}
+
+aside.message > div > div > p > span.text span.input > span.show.conceal::after {
+	content: "\F070";
+}
+
+aside.message > div > div > p > span.text span.input > span.capsLock {
+	right: auto;
+	left: 0;
+	pointer-events: none;
+	border-radius: 0.4em 0 0 0.4em;
+	display: none;
+	color: #9E39FF;
+	padding: 0 0 0 2px;
+}
+
+body.capsLock aside.message > div > div > p > span.text span.input > input:focus ~ span.capsLock {
+	display: flex;
+}
+
+@supports (-webkit-touch-callout: none) {
+
+	aside.message > div > div > p > span.text span.input > span.capsLock {
+		display: none !important;
+	}
+}
+
+aside.message > div > div > p > span.text span.input > span.capsLock::after {
+	content: "\F0AA";
+}
+
+aside.message > div > div > p > span.text span.input > input {
+	text-align: center;
+	background: white;
+	line-height: 2em;
+	border-radius: 0.4em;
+	margin: 0;
+	padding: 0 2.2em;
+	border: 0.15em solid #E2CCF7;
+	font-family: "Open Sans", Arial, sans-serif;
+	text-overflow: ellipsis;
+	flex-grow: 1;
+	min-width: 0;
+	color: #3600C9;
+}
+
+aside.message > div > div > p > span.text span.input > input.notEmpty[type="password"], aside.message > div > div > p > span.text span.input > input[type="password"]:-webkit-autofill::first-line {
+	font-weight: bold;
+	font-family: monospace;
+}
+
+aside.message > div > div > p > span.text span.input > input[type="password"]:autofill::first-line {
+	font-weight: bold;
+	font-family: monospace;
+}
+
+@supports (-webkit-touch-callout: none) {
+
+	aside.message > div > div > p > span.text span.input > input.notEmpty[type="password"], aside.message > div > div > p > span.text span.input > input[type="password"]:-webkit-autofill::first-line {
+		font-family: password;
+	}
+
+	aside.message > div > div > p > span.text span.input > input[type="password"]:autofill::first-line {
+		font-family: password;
+	}
+}
+
+@media only screen and (any-hover: hover) {
+
+	aside.message > div > div > p > span.text span.input > input:hover, aside.message > div > div > p > span.text span.input > span.show:hover + input {
+		border: 0.15em solid #CA99FB;
+	}
+
+	aside.message > div > div > p > span.text span.input > span.show:hover + input:focus {
+		border: 0.15em solid #9E39FF;
+	}
+}
+
+aside.message > div > div > p > span.text span.input > input:disabled {
+	cursor: default;
+}
+
+aside.message > div > div > p > span.text span.input > input::placeholder {
+	color: #9A7FE4;
+}
+
+aside.message > div > div > p > span.text span.input > input:focus {
+	border: 0.15em solid #9E39FF;
+	outline: none;
+}
+
+@media only screen and (max-width: 600px) {
+
+	aside.message > div > div > p > span.text span.input {
+		font-size: 16pt;
+	}
+	
+	aside.message > div > div > p > span.text span.input > span.show::after, aside.message > div > div > p > span.text span.input > span.capsLock::after {
+		font-size: 18pt;
+	}
+}
+
+@media only screen and (max-height: 400px) {
+
+	aside.message > div > div > p > span.text span.input {
+		font-size: 16pt;
+	}
+	
+	aside.message > div > div > p > span.text span.input > span.show::after, aside.message > div > div > p > span.text span.input > span.capsLock::after {
+		font-size: 18pt;
+	}
+}
+
+@media only screen and (max-width: 500px) {
+
+	aside.message > div > div > p > span.text span.input {
+		font-size: 15pt;
+	}
+	
+	aside.message > div > div > p > span.text span.input > span.show::after, aside.message > div > div > p > span.text span.input > span.capsLock::after {
+		font-size: 17pt;
+	}
+}
+
+aside.message > div > div > p > span.text span.radio {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+aside.message > div > div > p > span.text span.radio + span.radio {
+	margin-top: 0.5em;
+}
+
+aside.message > div > div > p > span.text span.radio input[type="radio"] {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	margin: 0;
+	width: 1.15em;
+	height: 1.15em;
+	border: 2px solid #3600C9;
+	border-radius: 50%;
+	position: relative;
+	cursor: pointer;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+aside.message > div > div > p > span.text span.radio input[type="radio"]:disabled {
+	cursor: default;
+}
+
+aside.message > div > div > p > span.text span.radio input[type="radio"]::before {
+	content: "";
+	width: 0.6em;
+	height: 0.6em;
+	border-radius: 50%;
+	background-color: #3600C9;
+	display: none;
+	flex-shrink: 0;
+}
+
+aside.message > div > div > p > span.text span.radio input[type="radio"]:focus::before {
+	background-color: #9E39FF;
+}
+
+aside.message > div > div > p > span.text span.radio input[type="radio"]:checked::before {
+	display: block;
+}
+
+aside.message > div > div > p > span.text span.radio input[type="radio"] + label {
+	padding-left: 0.5em;
+	cursor: pointer;
+}
+
+aside.message > div > div > p > span.text span.radio input[type="radio"]:disabled + label {
+	cursor: default;
+}
+
+aside.message > div > div > p > span > ul {
+	list-style-position: inside;
+	margin: 0;
+	display: inline-block;
+	padding: 0px 2em;
+}
+
+aside.message > div > div > p > span > ul > li {
+	padding-bottom: 0.3em;
+	list-style-type: "•";
+}
+
+@media only screen and (max-width: 500px) {
+
+	aside.message > div > div > p > span > ul > li {
+		padding-bottom: 0.4em;
+	}
+}
+
+aside.message > div > div > p > span > ul > li:last-child {
+	padding-bottom: 0;
+}
+
+aside.message > div > div > p > span > ul > li > span {
+	padding-left: 0.5em;
+}
+
+aside.message > div > div > p > span.text span.result {
+	display: flex;
+	max-width: 11em;
+	max-height: 11em;
+	width: 50vw;
+	height: 50vw;
+	min-width: calc(250px * 0.5);
+	min-height: calc(250px * 0.5);
+	margin: auto;
+	align-items: center;
+	justify-content: center;
+}
+
+@media only screen and (max-height: 750px) {
+
+	aside.message > div > div > p > span.text span.result {
+		max-width: 9em;
+		max-height: 9em;
+	}
+}
+
+@media only screen and (max-height: 650px) {
+
+	aside.message > div > div > p > span.text span.result {
+		max-width: 6em;
+		max-height: 6em;
+	}
+}
+
+@media only screen and (max-height: 400px) {
+
+	aside.message > div > div > p > span.text span.result {
+		max-width: 4em;
+		max-height: 4em;
+		width: 30vw;
+		height: 30vw;
+		min-width: calc(250px * 0.3);
+		min-height: calc(250px * 0.3);
+	}
+}
+
+aside.message > div > div > p > span.text span.result > svg {
+	width: calc(100% / 1.1);
+	height: calc(100% / 1.1);
+	border-radius: 90%;
+}
+
+@keyframes resultScale {
+	0%, 100% {
+		transform: scale(1);
+	}
+	
+	50% {
+		transform: scale(1.1);
+	}
+}
+
+aside.message > div > div > p > span.text span.result.success > svg, aside.message > div > div > p > span.text span.result.failure > svg {
+	animation: resultScale 0.3s ease-in-out 0.9s both;
+}
+
+@keyframes resultLoading {
+	100% {
+		stroke-dashoffset: 202;
+	}
+}
+
+@keyframes resultSpin {
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+aside.message > div > div > p > span.text span.result > svg > circle {
+	stroke: #E2CCF7;
+	fill: none;
+	stroke-dasharray: 101;
+	stroke-width: 5;
+	transform-origin: 50% 50%;
+	animation: resultLoading 3.6s linear infinite, resultSpin 1s linear infinite;
+	transition: opacity 0.2s ease-in-out;
+}
+
+aside.message > div > div > p > span.text span.result.change > svg > circle.loading {
+	opacity: 0;
+}
+
+aside.message > div > div > p > span.text span.result.instant > svg > circle.loading {
+	stroke: none;
+}
+
+aside.message > div > div > p > span.text span.result > svg > circle.background {
+	stroke: none;
+	animation: none;
+	stroke-width: 0;
+	animation: none;
+	opacity: 0;
+}
+
+aside.message > div > div > p > span.text span.result.instant > svg > circle.background {
+	transition: none;
+}
+
+@keyframes resultStroke {
+	100% {
+		stroke-dashoffset: 0;
+	}
+}
+
+@keyframes resultFill {
+	100% {
+		stroke-width: 100%;
+	}
+}
+
+aside.message > div > div > p > span.text span.result.success > svg > circle.background, aside.message > div > div > p > span.text span.result.failure > svg > circle.background {
+	stroke: #51C751;
+	opacity: 1;
+	stroke-dasharray: 101;
+	stroke-dashoffset: 101;
+	stroke-width: 5;
+	animation: resultStroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards, resultFill 0.4s ease-in-out 0.4s forwards;
+}
+
+aside.message > div > div > p > span.text span.result.failure > svg > circle.background {
+	stroke: #CA2F2F;
+}
+
+aside.message > div > div > p > span.text span.result > svg > path {
+	stroke: white;
+	fill: none;
+	stroke-dasharray: 101;
+	stroke-dashoffset: 101;
+	stroke-width: 6;
+}
+
+aside.message > div > div > p > span.text span.result.success > svg > path.checkMark, aside.message > div > div > p > span.text span.result.failure > svg > path.cross {
+	animation: resultStroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+aside.message > div > div > p > span.text span.copy {
+	padding: 0.4em;
+	margin: -0.4em 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: copy;
+	height: 1em;
+	transition: opacity 0.1s ease-in-out;
+}
+
+aside.message > div > div > p > span.text span.copy.clicked {
+	opacity: 0.6;
+}
+
+aside.message > div > div > p > span.text span.copy::after {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	content: "\F0C5";
+	position: relative;
+	top: 1px;
+	font-size: 16.5pt;
+}
+
+@media only screen and (max-width: 600px) {
+
+	aside.message > div > div > p > span.text span.copy::after {
+		font-size: 15.5pt;
+	}
+}
+
+@media only screen and (max-height: 400px) {
+
+	aside.message > div > div > p > span.text span.copy::after {
+		font-size: 15.5pt;
+	}
+}
+
+@media only screen and (max-width: 500px) {
+
+	aside.message > div > div > p > span.text span.copy::after {
+		font-size: 14.5pt;
+	}
+}
+
+aside.message.noButtons > div > div > div > button {
+	display: block;
+	visibility: hidden;
+	margin: 0;
+	height: 2em;
+	padding: 0;
+}
+
+aside.message.oneButton > div > div > div > button:nth-child(2) {
+	display: none;
+}
+
+@media only screen and (any-hover: hover) {
+
+	aside.message > div > div > div > button:hover {
+		background: #CEA1E3;
+	}
+}
+
+aside.message > div > div > div > button:focus {
+	background: #9115DE;
+	color: white;
+	border: 0.15em solid #9115DE;
+}
+
+aside.message > div > div > div > button:active {
+	background: #8600C0;
+	border: 0.15em solid #8600C0;
+}
+
+aside.message > div > div > div > button:disabled {
+	background: white;
+	color: #3600C9;
+}
+
+aside.message > div > div > div > button.focus {
+	background: #9115DE;
+	color: white;
+	border: 0.15em solid #9115DE;
+}
+
+aside.message > div > div > div > button:disabled.loading {
+	background: #CEA1E3;
+	border: 0.15em solid #3600C9;
+	color: #3600C9;
+}
+
+aside.message > div > div > p > span.text *::selection {
+	background: #CC9AFB;
+	color: white;
+}

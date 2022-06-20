@@ -1,0 +1,36 @@
+<?php
+
+	// Included files
+	require_once __DIR__ . "/../backend/common.php";
+	require_once __DIR__ . "/../backend/language.php";
+	
+	
+	// Main function
+	
+	// Get path
+	$path = $_SERVER["REQUEST_URI"];
+	
+	// Check if accessing 401 error page directly
+	if($path === "/errors/401.html" || startsWith($path, "/errors/401.html?") === TRUE) {
+	
+		// Require 404 error page
+		require __DIR__ . "/404.html";
+		
+		// Exit
+		exit();
+	}
+	
+	// Set error header
+	header($_SERVER["SERVER_PROTOCOL"] . " 401 Unauthorized");
+	header("Status: 401 Unauthorized");
+
+	// Set title, title argument, error, error argument, and message
+	$title = getDefaultTranslation('MWC Wallet — Error %1$s');
+	$titleArgument = 401;
+	$error = getDefaultTranslation('Error %1$s');
+	$errorArgument = 401;
+	$message = getDefaultTranslation('Unauthorized');
+	
+	// Require template
+	require __DIR__ . "/template.php";
+?>

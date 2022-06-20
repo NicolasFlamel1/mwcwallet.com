@@ -1,0 +1,746 @@
+<?php
+
+	// Included files
+	require_once __DIR__ . "/../backend/common.php";
+	require_once __DIR__ . "/../backend/resources.php";
+	
+	
+	// Main function
+	
+	// Set content type header
+	header("Content-Type: text/css; charset=" . mb_internal_encoding());
+
+?>@charset "UTF-8";
+
+
+main > div.unlocked > div > div > div.sections > div > div {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	visibility: visible;
+	opacity: 1;
+	transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	overflow: hidden;
+	overflow-y: auto;
+	scrollbar-width: thin;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.hide {
+	visibility: hidden;
+	opacity: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.hide * {
+	pointer-events: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div {
+	margin: 0 1em;
+	width: calc(100% - 2em);
+}
+
+
+main > div.unlocked > div > div > div.sections > div > div > div > div {
+	width: 100%;
+	display: flex;
+	align-items: stretch;
+	justify-content: space-between;
+	margin: 0 0 1em 0;
+	position: relative;
+	font-size: 12pt;
+	word-break: break-word;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.navigation {
+	margin: 0.6em 0 -0.17em 0;
+	display: grid;
+	grid-auto-flow: column;
+	align-items: center;
+	grid-template-columns: auto 1fr auto;
+}
+
+main > div.unlocked.minimal > div > div > div.sections > div > div > div > div.navigation {
+	grid-template-columns: 1fr;
+	border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+	margin-bottom: 0.6em;
+	padding-bottom: 0.5em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > button {
+	border: none;
+	background: transparent;
+	color: rgb(12,12,13);
+	flex-shrink: 0;
+	margin: 0 0 0 -0.5em;
+	padding: 0.3em;
+	line-height: 1em;
+	border-radius: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > button:focus {
+	box-shadow: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > button.hide {
+	display: flex;
+	visibility: hidden;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > button.forward {
+	margin: 0 -0.5em 0 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > button::before {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	content: "\F104";
+	font-size: 29pt;
+	position: relative;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > button.forward::before {
+	content: "\F105";
+}
+
+main > div.unlocked.minimal > div > div > div.sections > div > div > div > div.navigation > button {
+	display: none;
+}
+
+@keyframes moveBackAndForth {
+		
+	0% {
+		left: 0;
+	}
+
+	25% {
+		left: 1px;
+	}
+	
+	75% {
+		left: -1px;
+	}
+	
+	100% {
+		left: 0;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > button:focus::before {
+	animation: moveBackAndForth 0.7s linear infinite;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > button.back:focus::before {
+	animation-direction: reverse;
+}
+
+@media only screen and (any-hover: hover) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > button:hover::before {
+		animation: moveBackAndForth 0.7s linear infinite;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > button.back:hover::before {
+		animation-direction: reverse;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > button.disabled::before {
+	animation: none;
+}
+
+@media only screen and (max-width: 600px) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > button::before {
+		font-size: 33pt;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > h2 {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	line-height: normal;
+	text-align: center;
+	color: rgb(12, 12, 13);
+	margin: 0;
+	flex-grow: 1;
+	flex-shrink: 1;
+	padding: 0 0.3em;
+}
+
+main > div.unlocked.minimal > div > div > div.sections > div > div > div > div.navigation > h2 {
+	padding: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > h3 {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	width: 100%;
+	margin: 0.6em 0 0.4em 0;
+	line-height: normal;
+	color: rgb(12, 12, 13);
+	font-size: 15pt;
+	border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+	padding-bottom: 0.2em;
+}
+
+main > div.unlocked.minimal > div > div > div.sections > div > div > div > div.navigation + h3 {
+	display: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > p {
+	line-height: 1.35;
+	display: block;
+	margin: auto 0;
+	color: rgb(12, 12, 13);
+	font-size: 13pt;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > p.overflow {
+	width: auto !important;
+	min-width: 0 !important;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > span.dots {
+	flex-grow: 1;
+	font-size: 6pt;
+	display: block;
+	height: 1em;
+	background-image: url(".<?= escapeString(getResource("./images/circle.svg")); ?>");
+	background-size: 2em 1em;
+	margin: auto 1em;
+	opacity: 0.2;
+	background-repeat: space;
+	position: relative;
+	top: 1px;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > span.dots.hide {
+	visibility: hidden;
+}
+
+@media only screen and (max-width: 400px) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > h3 {
+		text-align: center;
+		padding-bottom: 0.6em;
+		padding-top: 0.1em;
+		margin: 0.6em 0 0.9em 0;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div {
+		padding-bottom: calc(1.125em + 0.25em * 6 / 12);
+		margin-bottom: 1.125em;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div.navigation {
+		padding: 0;
+		margin: 0.6em 0 -0.17em 0;
+	}
+	
+	main > div.unlocked.minimal > div > div > div.sections > div > div > div > div.navigation {
+		margin-bottom: calc(0.9em * 15 / 12);
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div.merge {
+		padding-bottom: 0;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div::after {
+		content: "";
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+		font-size: 6pt;
+		display: block;
+		height: 0.25em;
+		background: black;
+		opacity: 0.2;
+		border-radius: 0.25em;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div.merge::after {
+		content: none;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div.navigation::after {
+		content: none;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > p {
+		text-align: center;
+		flex-grow: 1;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > span.dots {
+		visibility: hidden;
+		flex-grow: 0;
+		margin: auto 0.5em;
+		width: 0;
+		font-size: 12pt;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value {
+	display: flex;
+	margin: auto 0;
+	position: relative;
+	max-width: 50%;
+	flex-shrink: 1;
+	flex-grow: 0;
+}
+
+@media only screen and (min-width: 1200px) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value {
+		max-width: 18em;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value[data-type="text"], main > div.unlocked > div > div > div.sections > div > div > div > div > div.value[data-type="url"] {
+		width: 100%;
+		max-width: 30em;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value[data-type="select"] {
+		max-width: 30em;	
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value[data-type="boolean"] {
+	max-width: none;
+	flex-shrink: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > button {
+	margin: 0;
+	padding: 0.4em;
+	border-radius: 1em;
+	width: 3.5em;
+	height: 1.5em;
+	background: #CA2F2F;
+	border: 1px solid rgb(12, 12, 13);
+	opacity: 0.85;
+	box-shadow: 0px 2px 5px #941F1F inset;
+	transition: background 0.2s linear, box-shadow 0.2s linear;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > button.enabled {
+	background: #51C751;
+	box-shadow: 0px 2px 5px #358A35 inset;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.disabled > div.value > button {
+	pointer-events: none;
+	opacity: 0.4;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > button > span {
+	min-height: auto;
+	position: absolute;
+	left: 56%;
+	width: 44%;
+	height: 110%;
+	background: white;
+	border-radius: 90%;
+	border: 1px solid rgb(12, 12, 13);
+	box-shadow: 0 0 2px rgb(12, 12, 13) inset;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: visible;
+	transition: left 0.2s linear;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > button.noTransition > span {
+	transition: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > button.enabled > span {
+	left: -1%;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > button:focus > span::after, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > button.clicked > span::after {
+	content: "";
+	border: 2px solid rgb(101, 101, 101);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	border-radius: 90%;
+}
+
+@media only screen and (max-width: 600px) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > button {
+		width: 3.8em;
+		height: 1.6em;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > button > span {
+		left: 57%;
+		width: 43%;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select {
+	margin: 0;
+	padding: 0 0.6em;
+	line-height: calc(1.5em * 17 / 15);
+	border: none;
+	color: rgb(12, 12, 13);
+	text-align: center;
+	font-size: 15pt;
+	border-radius: calc(1em * 17 / 15);
+	text-overflow: ellipsis;
+	background: white;
+	overflow: hidden;
+	width: 100%;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input {
+	padding: 0 2em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input[type="number"] {
+	padding: 0 0.6em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input.notEmpty[type="password"], main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input[type="password"]:-webkit-autofill::first-line {
+	font-weight: bold;
+	font-family: monospace;
+	font-size: 15pt;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input[type="password"]:autofill::first-line {
+	font-weight: bold;
+	font-family: monospace;
+	font-size: 15pt;
+}
+
+@supports (-webkit-touch-callout: none) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input.notEmpty[type="password"], main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input[type="password"]:-webkit-autofill::first-line {
+		font-family: password;
+	}
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input[type="password"]:autofill::first-line {
+		font-family: password;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value[data-type="boolean"] > input {
+	width: calc(3.5em * 17 / 15 - 0.6em * 2);
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select {
+	background-image: url(".<?= escapeString(getResource("./images/down_arrow.svg")); ?>");
+	background-repeat: no-repeat;
+	background-position: calc(100% - 0.5em) center;
+	background-size: 0.9em;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	cursor: pointer;
+	text-align-last: center;
+	padding: 0 1.7em 0 0.6em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select:focus-visible {
+	color: rgb(12, 12, 13) !important;
+}
+
+main > div.unlocked.minimal > div > div > div.sections > div > div > div > div > div.value > select {
+	min-width: 7em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select > option {
+	background: white;
+	color: rgb(12, 12, 13);
+	font-size: smaller;
+}
+
+@media only screen and (any-hover: hover) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select > option:hover {
+		background-color: #E7E7E7;
+		color: black;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select > option:checked {
+	color: #A0A0A0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input::selection {
+	background: transparent;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input:focus::selection {
+	background: rgba(12, 12, 13, 0.15);
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input:disabled, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select:disabled {
+	background: transparent;
+	opacity: 1;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select:disabled {
+	background-image: url(".<?= escapeString(getResource("./images/down_arrow.svg")); ?>");
+	background-repeat: no-repeat;
+	background-position: calc(100% - 0.5em) center;
+	background-size: 0.9em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.disabled > div.value > input, main > div.unlocked > div > div > div.sections > div > div > div > div.disabled > div.value > select, main > div.unlocked > div > div > div.sections > div > div > div > div.disabled > div.value > input + span, main > div.unlocked > div > div > div.sections > div > div > div > div.disabled > div.value > select + span {
+	pointer-events: none;
+	opacity: 0.4;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input + span, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select + span {
+	font-size: 15pt;
+	position: absolute;
+	width: calc(100% - 2px);
+	min-width: calc(3.5em * 17 / 15 - 2px);
+	top: 0;
+	bottom: 0;
+	border: 1px solid rgba(12, 12, 13, 0.85);
+	box-shadow: 0px 2px 3px rgba(154, 154, 154, 0.6) inset;
+	border-radius: calc(1em * 17 / 15);
+	pointer-events: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.error > div.value > input + span {
+	border: 1px solid rgba(202, 47, 47);
+	box-shadow: 0px 2px 3px rgba(202, 47, 47, 0.6) inset;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.disabled > div.value > input + span, main > div.unlocked > div > div > div.sections > div > div > div > div.disabled > div.value > select + span {
+	border: 1px solid rgba(12, 12, 13, 0.85);
+	box-shadow: 0px 2px 3px rgba(154, 154, 154, 0.6) inset;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input:focus + span::after, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select:focus + span::after, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input.clicked + span::after, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select.clicked + span::after {
+	content: "";
+	border: 2px solid rgb(101, 101, 101);
+	opacity: 0.4;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	border-radius: 1em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.error > div.value > input:focus + span::after, main > div.unlocked > div > div > div.sections > div > div > div > div.error > div.value > input.clicked + span::after {
+	border: 2px solid rgb(202, 47, 47);
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.disabled > div.value > input:focus + span::after, main > div.unlocked > div > div > div.sections > div > div > div > div.disabled > div.value > select:focus + span::after, main > div.unlocked > div > div > div.sections > div > div > div > div.disabled > div.value > input.clicked + span::after, main > div.unlocked > div > div > div.sections > div > div > div > div.disabled > div.value > select.clicked + span::after {
+	border: 2px solid rgb(101, 101, 101);
+}
+
+@media only screen and (max-width: 600px) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select {
+		font-size: 15.6pt;
+		border-radius: calc(1em * 17 / 15.6);
+		line-height: calc(1.6em * 17 / 15.6);
+		min-width: calc(3.8em * 17 / 15.6 - 0.6em * 2);
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input {
+		min-width: calc(3.8em * 17 / 15.6 - 2em * 2);
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input[type="number"] {
+		min-width: calc(3.8em * 17 / 15.6 - 0.6em * 2);
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input[type="password"], main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input[type="password"]:-webkit-autofill::first-line, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input[type="password"]:autofill::first-line {
+		font-size: 15.6pt;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input + span, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select + span {
+		font-size: 15.6pt;
+		min-width: calc(3.8em * 17 / 15.6 - 0.6em * 2 - 2px);
+		border-radius: calc(1em * 17 / 15.6);
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input + span {
+		min-width: calc(3.8em * 17 / 15.6 - 2em * 2 - 2px);
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input[type="number"] + span {
+		min-width: calc(3.8em * 17 / 15.6 - 0.6em * 2 - 2px);
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value {
+		flex-grow: 1;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value[data-type="boolean"] {
+		flex-grow: 0;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select {
+		min-width: calc(3.8em * 17 / 15.6 - 0.6em - 1.7em) !important;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select + span {
+		min-width: calc(3.8em * 17 / 15.6 - 0.6em - 1.7em - 2px);
+	}
+}
+
+@media only screen and (max-width: 300px) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value {
+		flex-grow: 0;
+		max-width: none;
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input {
+		padding: 0 0.6em;
+		min-width: auto;
+		width: calc(3.8em * 17 / 15.6 - 0.6em * 2);
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input + span {
+		min-width: calc(3.8em * 17 / 15.6 - 0.6em * 2 - 2px);
+	}
+	
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select {
+		width: calc(3.8em * 17 / 15.6 - 0.6em - 1.7em);
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.show, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.capsLock {
+	position: absolute;
+	right: 0;
+	cursor: pointer;
+	border-radius: 0 calc(1em * 17 / 15.6) calc(1em * 17 / 15.6) 0;
+	color: #CCCCCC;
+	font-family: "Open Sans", Arial, sans-serif;
+	height: calc(1.5em * 17 / 15 - 1px);
+	display: flex;
+	align-items: center;
+	font-size: 15pt;
+	padding: 1px 2px 0 0;
+}
+
+@media only screen and (max-width: 600px) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.show, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.capsLock {
+		height: calc(1.6em * 17 / 15.6 - 1px);
+		font-size: 15.6pt;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.show:focus, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.show:active {
+	color: rgb(12, 12, 13);
+}
+
+@media only screen and (any-hover: hover) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.show:hover {
+		color: rgb(12, 12, 13);
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.show[tabindex="-1"] {
+	cursor: default;
+	color: #CCCCCC;
+	pointer-events: none;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.show::after, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.capsLock::after {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	font-size: 17pt;
+	content: "\F06E";
+	width: 1.7em;
+	text-align: center;
+	max-height: 100%;
+	display: inline-block;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.show.conceal::after {
+	content: "\F070";
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.capsLock {
+	right: auto;
+	left: 0;
+	pointer-events: none;
+	border-radius: calc(1em * 17 / 15.6) 0 0 calc(1em * 17 / 15.6);
+	display: none;
+	color: rgb(12, 12, 13);
+	padding: 1px 0 0 2px;
+}
+
+body.capsLock main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input:focus ~ span.capsLock {
+	display: flex;
+}
+
+@supports (-webkit-touch-callout: none) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.capsLock {
+		display: none !important;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.capsLock::after {
+	content: "\F0AA";
+}
+
+@media only screen and (max-width: 300px) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.show, main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.capsLock {
+		display: none !important;
+	}
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div:not(.navigation) > button {
+	margin: 0 auto;
+	max-width: 100%;
+	padding: 0.4em 1em;
+	border-radius: calc(1em * 17 / 15);
+	height: calc(1.5em * 17 / 15);
+	border: none;
+	font-size: 15pt;
+	font-weight: bold;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div.merge + div > button {
+	margin-right: 0;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div:not(.navigation) > button.clicked {
+	background: #7B26D7;
+}
+
+main > div.unlocked > div > div > div.sections > div > div > div > div:not(.navigation) > button > span {
+	min-height: auto;
+	min-width: 3.5em;
+}
+
+@media only screen and (max-width: 600px) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div:not(.navigation) > button {
+		height: calc(1.6em * 17 / 15.6);
+		font-size: 15.6pt;
+		border-radius: calc(1em * 17 / 15.6);
+	}
+}
+
+@media only screen and (max-width: 400px) {
+
+	main > div.unlocked > div > div > div.sections > div > div > div > div.merge + div > button {
+		margin-right: auto;
+	}
+}

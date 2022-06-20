@@ -1,0 +1,63 @@
+<?php
+
+	// Included files
+	require_once __DIR__ . "/../backend/language.php";
+	
+	
+	// Constants
+	
+	// Seconds before refresh
+	const SECONDS_BEFORE_REFRESH = 5;
+	
+	// Check if referer doesn't exist
+	if(array_key_exists("HTTP_REFERER", $_SERVER) === FALSE) {
+	
+		// Require 404 error page
+		require __DIR__ . "/404.html";
+		
+		// Exit
+		exit();
+	}
+	
+	
+	// Main function
+	
+	// Parse referer as a URL
+	$url = parse_url($_SERVER["HTTP_REFERER"]);
+	
+	// Check if referer is invalid or from a different origin
+	if($url === FALSE || array_key_exists("host", $url) === FALSE || $url["host"] !== $_SERVER["SERVER_NAME"]) {
+	
+		// Require 404 error page
+		require __DIR__ . "/404.html";
+		
+		// Exit
+		exit();
+	}
+	
+	// Check if referer is the service worker
+	if($_SERVER["HTTP_REFERER"] === "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . $_SERVER["SERVER_NAME"] . "/scripts/service_worker.js") {
+	
+		// Set referer to the initial page
+		$_SERVER["HTTP_REFERER"] = "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . $_SERVER["SERVER_NAME"] . "/";
+	}
+	
+	// Set refresh header
+	header("Refresh: " . strval(SECONDS_BEFORE_REFRESH) . "; URL=" . $_SERVER["HTTP_REFERER"]);
+
+	// Set title, title argument, error, error argument, and message
+	$title = getDefaultTranslation('MWC Wallet — Error');
+	$titleArgument = "";
+	$error = getDefaultTranslation('Error');
+	$errorArgument = "";
+	$message = getDefaultTranslation('An error has occurred. This site will automatically reload in a few seconds.');
+	
+	// Set hide URL
+	$hideUrl = TRUE;
+	
+	// Set is generic error
+	$isGenericError = TRUE; 
+	
+	// Require template
+	require __DIR__ . "/template.php";
+?>

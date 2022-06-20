@@ -1,0 +1,93 @@
+<?php
+
+	// Included files
+	require_once __DIR__ . "/../backend/common.php";
+	require_once __DIR__ . "/../backend/language.php";
+	
+
+	// Constants
+	
+	// Time conversions
+	const SECONDS_IN_A_MINUTE = 60;
+	
+	// Retry after seconds
+	const RETRY_AFTER_SECONDS = 10 * SECONDS_IN_A_MINUTE;
+	
+	
+	// Main function
+	
+	// Get path
+	$path = $_SERVER["REQUEST_URI"];
+	
+	// Check if referer does exists
+	if(array_key_exists("HTTP_REFERER", $_SERVER) === TRUE) {
+	
+		// Parse referer as a URL
+		$url = parse_url($_SERVER["HTTP_REFERER"]);
+		
+		// Check if referer is invalid or from a different origin
+		if($url === FALSE || array_key_exists("host", $url) === FALSE || $url["host"] !== $_SERVER["SERVER_NAME"]) {
+		
+			// Check if accessing 503 error page directly
+			if($path === "/errors/503.html" || startsWith($path, "/errors/503.html?") === TRUE) {
+			
+				// Require 404 error page
+				require __DIR__ . "/404.html";
+				
+				// Exit
+				exit();
+			}
+		}
+		
+		// Otherwise
+		else {
+		
+			// Set hide URL
+			$hideUrl = TRUE;
+		}
+	}
+	
+	// Otherwise
+	else {
+	
+		// Check if accessing 503 error page directly
+		if($path === "/errors/503.html" || startsWith($path, "/errors/503.html?") === TRUE) {
+		
+			// Require 404 error page
+			require __DIR__ . "/404.html";
+			
+			// Exit
+			exit();
+		}
+	}
+	
+	// Check if referer is the service worker
+	if(array_key_exists("HTTP_REFERER", $_SERVER) === TRUE && $_SERVER["HTTP_REFERER"] === "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . $_SERVER["SERVER_NAME"] . "/scripts/service_worker.js") {
+	
+		// Set referer to the initial page
+		$_SERVER["HTTP_REFERER"] = "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . $_SERVER["SERVER_NAME"] . "/";
+	}
+	
+	// Set error header
+	header($_SERVER["SERVER_PROTOCOL"] . " 503 Service Temporarily Unavailable");
+	header("Status: 503 Service Temporarily Unavailable");
+	
+	// Set retry after header
+	header("Retry-After: " . gmdate("D, d M Y H:i:s T", time() + RETRY_AFTER_SECONDS));
+	
+	// Set refresh header
+	header("Refresh: " . strval(RETRY_AFTER_SECONDS) . "; URL=" . ((isset($hideUrl) === TRUE) ? $_SERVER["HTTP_REFERER"] : ("http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]) . $_SERVER["REQUEST_URI"])));
+	
+	// Set title, title argument, error, error argument, and message
+	$title = getDefaultTranslation('MWC Wallet — Maintenance');
+	$titleArgument = "";
+	$error = getDefaultTranslation('Maintenance');
+	$errorArgument = "";
+	$message = getDefaultTranslation('This site is currently down for maintenance.');
+	
+	// Set is maintenance error
+	$isMaintenanceError = TRUE; 
+	
+	// Require template
+	require __DIR__ . "/template.php";
+?>

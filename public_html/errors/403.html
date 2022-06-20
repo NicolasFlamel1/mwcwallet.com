@@ -1,0 +1,36 @@
+<?php
+
+	// Included files
+	require_once __DIR__ . "/../backend/common.php";
+	require_once __DIR__ . "/../backend/language.php";
+	
+	
+	// Main function
+	
+	// Get path
+	$path = $_SERVER["REQUEST_URI"];
+	
+	// Check if accessing 403 error page directly
+	if($path === "/errors/403.html" || startsWith($path, "/errors/403.html?") === TRUE) {
+	
+		// Require 404 error page
+		require __DIR__ . "/404.html";
+		
+		// Exit
+		exit();
+	}
+	
+	// Set error header
+	header($_SERVER["SERVER_PROTOCOL"] . " 403 Forbidden");
+	header("Status: 403 Forbidden");
+
+	// Set title, title argument, error, error argument, and message
+	$title = getDefaultTranslation('MWC Wallet — Error %1$s');
+	$titleArgument = 403;
+	$error = getDefaultTranslation('Error %1$s');
+	$errorArgument = 403;
+	$message = getDefaultTranslation('Forbidden');
+	
+	// Require template
+	require __DIR__ . "/template.php";
+?>
