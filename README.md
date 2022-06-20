@@ -1,7 +1,7 @@
 # mwcwallet.com
 
 ### Description
-Source code for the MimbleWimble Coin web wallet, [https://mwcwallet.com](https://mwcwallet.com).
+Source code for the MimbleWimble Coin web wallet, [mwcwallet.com](https://mwcwallet.com).
 
 ### Develop
 This site can be ran from a local machine for development purposes. To do that, this repo's files are intended to reside at `/srv/mwcwallet.com`, but can be located anywhere as long as the `root` directive in the `nginx.conf` file correctly reflects the `public_html` folder's current location.
