@@ -6,7 +6,7 @@
 	const VERSION_NUMBER = "1.1.8";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "20 Jun 2022 01:47:00 UTC";
+	const VERSION_RELEASE_DATE = "24 Jun 2022 22:29:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
@@ -23,7 +23,7 @@
 	const REQUIRE_ACCESS_CODE = FALSE;
 
 	// Copyright year
-	const COPYRIGHT_YEAR = 2020;
+	const COPYRIGHT_YEAR = 2022;
 	
 	// Date year string
 	const DATE_YEAR_STRING = "Y";
