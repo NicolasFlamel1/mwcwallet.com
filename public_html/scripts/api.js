@@ -5339,7 +5339,7 @@ class Api {
 		}
 		
 		// Get fee
-		getFee(wallet, amount = Api.MAXIMUM_AMOUNT, baseFee = Api.DEFAULT_BASE_FEE, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
+		getFee(wallet, amount = Api.ALL_AMOUNT, baseFee = Api.DEFAULT_BASE_FEE, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
 		
 			// Set self
 			var self = this;
@@ -5351,7 +5351,7 @@ class Api {
 				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 				
 					// Check if amount is invalid
-					if(amount !== Api.MAXIMUM_AMOUNT && amount.isLessThan(Slate.MINIMUM_AMOUNT) === true) {
+					if(amount !== Api.ALL_AMOUNT && amount.isLessThan(Slate.MINIMUM_AMOUNT) === true) {
 					
 						// Reject error
 						reject(Language.getDefaultTranslation('The amount is invalid.'));
@@ -5382,8 +5382,8 @@ class Api {
 								// Check if cancel didn't occur
 								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 							
-									// Check if amount is the maximum amount
-									if(amount === Api.MAXIMUM_AMOUNT) {
+									// Check if amount is all amount
+									if(amount === Api.ALL_AMOUNT) {
 									
 										// Return get all wallet's received released transactions
 										return self.transactions.getWalletsReceivedReleasedTransactions(wallet.getKeyPath(), Database.GET_ALL_RESULTS, Database.GET_ALL_RESULTS).then(function(transactions) {
@@ -11715,10 +11715,10 @@ class Api {
 			return Api.SEND_UNCONFIRMED_AMOUNT_INDEX + 1;
 		}
 		
-		// Maximum amount
-		static get MAXIMUM_AMOUNT() {
+		// All amount
+		static get ALL_AMOUNT() {
 		
-			// Return maximum amount
+			// Return all amount
 			return null;
 		}
 		

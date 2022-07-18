@@ -3,17 +3,15 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "1.1.8";
+	const VERSION_NUMBER = "1.1.9";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "24 Jun 2022 22:29:00 UTC";
+	const VERSION_RELEASE_DATE = "18 Jul 2022 23:32:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Aesthetic changes to favicon.",
-		"Chrome extension now uses WASM instead of asm.js.",
-		"Fixed issue where unlocking wallets would fail if the extension was opened for the first time with the API.",
-		"Changed Max Amount button's text to All."
+		"Updated Secp256k1-zkp WASM Wrapper dependency.",
+		"Fixed text for failure when sending all."
 	];
 	
 	// Maintenance start time

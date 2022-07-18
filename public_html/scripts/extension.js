@@ -191,7 +191,7 @@ class Extension {
 										"Selection Direction": Section.NO_VALUE
 									},
 									
-									// Max amount
+									// All
 									{
 										"Tag": "BUTTON",
 										"Focused": false,

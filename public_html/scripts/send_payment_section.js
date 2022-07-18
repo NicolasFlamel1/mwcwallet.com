@@ -863,8 +863,8 @@ class SendPaymentSection extends Section {
 				}
 			});
 			
-			// Max amount button click event
-			this.getDisplay().find("button.maxAmount").on("click", function() {
+			// All button click event
+			this.getDisplay().find("button.all").on("click", function() {
 			
 				// Get button
 				var button = $(this);
@@ -887,11 +887,11 @@ class SendPaymentSection extends Section {
 				// Set that button is loading
 				button.addClass("loading");
 				
-				// Show max amount error
-				var showMaxAmountError = function(error) {
+				// Show all error
+				var showAllError = function(error) {
 				
 					// Show message and allow showing messages
-					self.getMessage().show(Language.getDefaultTranslation('Max Amount Error'), Message.createText(error), false, function() {
+					self.getMessage().show(Language.getDefaultTranslation('All Error'), Message.createText(error), false, function() {
 					
 						// Hide loading
 						self.getApplication().hideLoading();
@@ -922,8 +922,8 @@ class SendPaymentSection extends Section {
 				// Check if base fee can be changed and base fee doesn't exist
 				if(self.allowChangingBaseFee === true && self.getDisplay().find("input.baseFee").val()["length"] === 0) {
 				
-					// Show max amount error
-					showMaxAmountError(Language.getDefaultTranslation('Base fee is empty.'));
+					// Show all error
+					showAllError(Language.getDefaultTranslation('Base fee is empty.'));
 				}
 				
 				// Otherwise
@@ -942,8 +942,8 @@ class SendPaymentSection extends Section {
 					// Catch errors
 					catch(error) {
 					
-						// Show max amount error
-						showMaxAmountError(error);
+						// Show all error
+						showAllError(error);
 					
 						// Return
 						return;
@@ -952,8 +952,8 @@ class SendPaymentSection extends Section {
 					// Prevent automatic lock
 					self.getAutomaticLock().prevent();
 					
-					// Get fee for the maximum amount with the base fee
-					self.getWallets().getFee(wallet.getKeyPath(), Api.MAXIMUM_AMOUNT, baseFee).then(function(fee) {
+					// Get fee for all amount with the base fee
+					self.getWallets().getFee(wallet.getKeyPath(), Api.ALL_AMOUNT, baseFee).then(function(fee) {
 					
 						// Set timeout
 						setTimeout(function() {
@@ -996,7 +996,7 @@ class SendPaymentSection extends Section {
 								self.getMessage().allow();
 							}
 						
-						}, SendPaymentSection.MAX_AMOUNT_RESULT_DELAY_MILLISECONDS);
+						}, SendPaymentSection.ALL_RESULT_DELAY_MILLISECONDS);
 						
 					// Catch errors
 					}).catch(function(error) {
@@ -1007,8 +1007,8 @@ class SendPaymentSection extends Section {
 						// Check if automatic lock isn't locking
 						if(self.getAutomaticLock().isLocking() === false) {
 					
-							// Show max amount error
-							showMaxAmountError(error);
+							// Show all error
+							showAllError(error);
 						}
 					});
 				}
@@ -2552,10 +2552,10 @@ class SendPaymentSection extends Section {
 			return null;
 		}
 		
-		// Max amount result delay milliseconds
-		static get MAX_AMOUNT_RESULT_DELAY_MILLISECONDS() {
+		// All result delay milliseconds
+		static get ALL_RESULT_DELAY_MILLISECONDS() {
 		
-			// Return max amount result delay milliseconds
+			// Return all result delay milliseconds
 			return 300;
 		}
 		

@@ -2783,7 +2783,7 @@ class Wallets {
 		}
 		
 		// Get fee
-		getFee(keyPath, amount = Api.MAXIMUM_AMOUNT, baseFee = Api.DEFAULT_BASE_FEE, cancelOccurred = Common.NO_CANCEL_OCCURRED, walletsExclusiveTransactionsLockObtained = false) {
+		getFee(keyPath, amount = Api.ALL_AMOUNT, baseFee = Api.DEFAULT_BASE_FEE, cancelOccurred = Common.NO_CANCEL_OCCURRED, walletsExclusiveTransactionsLockObtained = false) {
 		
 			// Set self
 			var self = this;

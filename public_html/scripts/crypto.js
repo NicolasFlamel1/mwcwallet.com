@@ -658,11 +658,11 @@ class Crypto {
 			return 32;
 		}
 		
-		// Maximum proof length
-		static get MAXIMUM_PROOF_LENGTH() {
+		// Proof length
+		static get PROOF_LENGTH() {
 		
-			// Return maximum proof length
-			return 5134;
+			// Return proof length
+			return 675;
 		}
 		
 		// Zero blinding factor

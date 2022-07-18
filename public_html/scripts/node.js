@@ -926,7 +926,7 @@ class Node {
 									return false;
 								
 								// Check if output's proof is invalid
-								if("proof" in output === false || Common.isHexString(output["proof"]) === false || Common.hexStringLength(output["proof"]) > Crypto.MAXIMUM_PROOF_LENGTH)
+								if("proof" in output === false || Common.isHexString(output["proof"]) === false || Common.hexStringLength(output["proof"]) !== Crypto.PROOF_LENGTH)
 								
 									// Return false
 									return false;
@@ -1155,7 +1155,7 @@ class Node {
 					function(proof, index) {
 					
 						// Check if proof is valid
-						return Common.isHexString(proof) === true && Common.hexStringLength(proof) <= Crypto.MAXIMUM_PROOF_LENGTH;
+						return Common.isHexString(proof) === true && Common.hexStringLength(proof) === Crypto.PROOF_LENGTH;
 					}
 				
 				]).then(function(values) {

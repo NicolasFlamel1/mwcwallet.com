@@ -296,7 +296,7 @@ class SlateOutput {
 					this.commit = Common.fromHexString(serializedSlateOutput["commit"]);
 					
 					// Check if serialized slate output's proof isn't supported
-					if("proof" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["proof"]) === false || Common.hexStringLength(serializedSlateOutput["proof"]) > Crypto.MAXIMUM_PROOF_LENGTH) {
+					if("proof" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["proof"]) === false || Common.hexStringLength(serializedSlateOutput["proof"]) !== Crypto.PROOF_LENGTH) {
 					
 						// Throw error
 						throw "Unsupported output.";
@@ -324,7 +324,7 @@ class SlateOutput {
 						var proofLength = bitReader.getBits(SlateOutput.COMPACT_PROOF_LENGTH_LENGTH);
 						
 						// Check if serialized slate output's proof length isn't supported
-						if(proofLength > Crypto.MAXIMUM_PROOF_LENGTH) {
+						if(proofLength !== Crypto.PROOF_LENGTH) {
 						
 							// Throw error
 							throw "Unsupported output.";
@@ -368,7 +368,7 @@ class SlateOutput {
 					this.commit = Common.fromHexString(serializedSlateOutput["c"]);
 					
 					// Check if serialized slate output's proof isn't supported
-					if("p" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["p"]) === false || Common.hexStringLength(serializedSlateOutput["p"]) > Crypto.MAXIMUM_PROOF_LENGTH) {
+					if("p" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["p"]) === false || Common.hexStringLength(serializedSlateOutput["p"]) !== Crypto.PROOF_LENGTH) {
 					
 						// Throw error
 						throw "Unsupported output.";
