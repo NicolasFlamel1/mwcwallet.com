@@ -6,12 +6,14 @@
 	const VERSION_NUMBER = "1.1.9";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "18 Jul 2022 23:32:00 UTC";
+	const VERSION_RELEASE_DATE = "28 Jul 2022 23:32:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
 		"Updated Secp256k1-zkp WASM Wrapper dependency.",
-		"Fixed text for failure when sending all."
+		"Fixed text for failure when sending all.",
+		"Fixed creating transactions with non-existent but expected returned amounts.",
+		"Fixed incorrectly detecting unsorted slate inputs, outputs, and kernels as sorted."
 	];
 	
 	// Maintenance start time

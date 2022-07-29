@@ -5507,7 +5507,7 @@ class Api {
 													}
 													
 													// Check if total amount is enough to cover the amount and fee
-													if(totalAmount.isGreaterThanOrEqualTo(amount.plus(fee)) === true) {
+													if((returnedAmount.isZero() === true && totalAmount.equalTo(amount.plus(fee)) === true) || (returnedAmount.isZero() === false && totalAmount.isGreaterThan(amount.plus(fee)) === true)) {
 													
 														// Check if fee is invalid
 														if(fee.isLessThan(Slate.MINIMUM_FEE) === true || fee.isGreaterThan(Slate.MAXIMUM_FEE) === true) {
