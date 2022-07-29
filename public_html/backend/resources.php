@@ -519,13 +519,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 19,
+			"Version" => 20,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 86,
+			"Version" => 87,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -537,7 +537,7 @@
 			"Checksum" => "fgXcToDtI6wmtS0RjZW5pbWUYkBBkENvqM+gtInk+grrPOQxx37PqgMCyjDm5JTlC3fMvdWSeNrWv1T1CZ0a3g=="
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 17,
+			"Version" => 18,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -638,11 +638,11 @@
 			"Minified" => FALSE,
 			"Checksum" => "kVINxDNBZFLQHjbDfaG+9lw2OkAlwe+YGGMcrRqDYz1mB70+y5ri3qbM/Y/a4XnR9xXMwJt78jcsqJ2lM363CA=="
 		],
-		"./scripts/secp256k1-zkp-0.0.2.js" => [
+		"./scripts/secp256k1-zkp-0.0.3.js" => [
 			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "bCalJRFc2bSyK9tVWJPtKBN5Kkqnh4mKpXak57E8Fn/82n/vHXmto1EhCEkvS2Wa+hqyeY/ScyT0zb9eB8qu1w=="
+			"Checksum" => "3YfI8364lUm5C7NvTQdAbnObQVBOboFUGs3XEkaGF53r9He5qqPtWuWCUiv2BobOuXajWnKKgNpFBRZ7rr7vUg=="
 		],
 		"./scripts/SMAZ-0.0.1.js" => [
 			"Version" => 4,
@@ -746,7 +746,7 @@
 			"Minified" => FALSE,
 			"Checksum" => "EoulZ5HItxMWQkKXi7cfSGP0OYg6ntQi/0uFuvQfnOrTb4z8+LwWTO9D/thL0rPxsevbtQK4BCBe47f4W6cIXA=="
 		],
-		"./scripts/secp256k1-zkp-0.0.2.wasm" => [
+		"./scripts/secp256k1-zkp-0.0.3.wasm" => [
 			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,

@@ -126,18 +126,18 @@ tar -xf "./js1.4.4.tar.gz"
 mv "./qrcode-generator-js1.4.4/js/qrcode.js" "./qrcode-generator-1.4.4.js"
 rm -rf "./js1.4.4.tar.gz" "./qrcode-generator-js1.4.4"
 
-# How to build /public_html/scripts/secp256k1-zkp-0.0.2.js
-wget "https://github.com/NicolasFlamel1/Secp256k1-zkp-WASM-Wrapper/releases/download/v0.0.1/Secp256k1-zkp-0.0.2.zip"
-unzip "./Secp256k1-zkp-0.0.2.zip"
-sed -i 's/"secp256k1-zkp.wasm"/"." + getResource(".\/scripts\/secp256k1-zkp-0.0.2.wasm")/g' "./wasm/secp256k1-zkp.js"
-mv "./wasm/secp256k1-zkp.js" "./secp256k1-zkp-0.0.2.js"
-rm -rf "./Secp256k1-zkp-0.0.2.zip" "./wasm" "./asm.js"
+# How to build /public_html/scripts/secp256k1-zkp-0.0.3.js
+wget "https://github.com/NicolasFlamel1/Secp256k1-zkp-WASM-Wrapper/releases/download/v0.0.1/Secp256k1-zkp-0.0.3.zip"
+unzip "./Secp256k1-zkp-0.0.3.zip"
+sed -i 's/"secp256k1-zkp.wasm"/"." + getResource(".\/scripts\/secp256k1-zkp-0.0.3.wasm")/g' "./wasm/secp256k1-zkp.js"
+mv "./wasm/secp256k1-zkp.js" "./secp256k1-zkp-0.0.3.js"
+rm -rf "./Secp256k1-zkp-0.0.3.zip" "./wasm" "./asm.js"
 
-# How to build /public_html/scripts/secp256k1-zkp-0.0.2.wasm
-wget "https://github.com/NicolasFlamel1/Secp256k1-zkp-WASM-Wrapper/releases/download/v0.0.1/Secp256k1-zkp-0.0.2.zip"
-unzip "./Secp256k1-zkp-0.0.2.zip"
-mv "./wasm/secp256k1-zkp.wasm" "./secp256k1-zkp-0.0.2.wasm"
-rm -rf "./Secp256k1-zkp-0.0.2.zip" "./wasm" "./asm.js"
+# How to build /public_html/scripts/secp256k1-zkp-0.0.3.wasm
+wget "https://github.com/NicolasFlamel1/Secp256k1-zkp-WASM-Wrapper/releases/download/v0.0.1/Secp256k1-zkp-0.0.3.zip"
+unzip "./Secp256k1-zkp-0.0.3.zip"
+mv "./wasm/secp256k1-zkp.wasm" "./secp256k1-zkp-0.0.3.wasm"
+rm -rf "./Secp256k1-zkp-0.0.3.zip" "./wasm" "./asm.js"
 
 # How to build /public_html/scripts/SMAZ-0.0.1.js
 wget "https://github.com/NicolasFlamel1/SMAZ-WASM-Wrapper/releases/download/v0.0.1/SMAZ-0.0.1.zip"
