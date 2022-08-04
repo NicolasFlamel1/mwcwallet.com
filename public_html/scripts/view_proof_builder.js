@@ -169,7 +169,7 @@ class ViewProofBuilder extends ProofBuilder {
 					if(switchType === Crypto.SWITCH_TYPE_NONE || switchType === Crypto.SWITCH_TYPE_REGULAR) {
 					
 						// Get depth from message
-						var depth = Math.min(message[NewProofBuilder.MESSAGE_DEPTH_INDEX], Identifier.MAX_DEPTH);
+						var depth = message[NewProofBuilder.MESSAGE_DEPTH_INDEX];
 						
 						// Try
 						try {
