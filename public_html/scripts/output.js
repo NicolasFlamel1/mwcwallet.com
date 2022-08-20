@@ -197,7 +197,7 @@ class Output {
 			this.height = height;
 			
 			// Set maturity height
-			this.maturityHeight = (this.isCoinbase() === true) ? this.getHeight().plus(Consensus.COINBASE_MATURITY) : this.getHeight();
+			this.maturityHeight = (this.isCoinbase() === true) ? this.getHeight().plus(Consensus.COINBASE_MATURITY - 1) : this.getHeight();
 		}
 		
 		// Get commit

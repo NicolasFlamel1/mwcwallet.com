@@ -169,7 +169,7 @@ class SlateParticipant {
 							}
 							
 							// Check if compressed message is too long
-							if(compressedMessage["length"] >= Math.pow(2, Slate.ParticipantCOMPACT_COMPRESSED_MESSAGE_LENGTH_LENGTH)) {
+							if(compressedMessage["length"] >= Math.pow(2, SlateParticipant.COMPACT_COMPRESSED_MESSAGE_LENGTH_LENGTH)) {
 							
 								// Throw error
 								throw "Compressed message is too long.";

@@ -9,7 +9,7 @@ function(smaz) {
 
 var a;a||(a=typeof smaz !== 'undefined' ? smaz : {});var g=Object.assign,h,l;a.ready=new Promise(function(b,c){h=b;l=c});var m=g({},a),n="";"undefined"!==typeof document&&document.currentScript&&(n=document.currentScript.src);_scriptDir&&(n=_scriptDir);0!==n.indexOf("blob:")?n=n.substr(0,n.replace(/[?#].*/,"").lastIndexOf("/")+1):n="";var p=a.printErr||console.warn.bind(console);g(a,m);m=null;var q;a.wasmBinary&&(q=a.wasmBinary);var noExitRuntime=a.noExitRuntime||!0;
 "object"!==typeof WebAssembly&&r("no native wasm support detected");var t,u=!1,v,w;function x(){var b=t.buffer;v=b;a.HEAP8=new Int8Array(b);a.HEAP16=new Int16Array(b);a.HEAP32=new Int32Array(b);a.HEAPU8=w=new Uint8Array(b);a.HEAPU16=new Uint16Array(b);a.HEAPU32=new Uint32Array(b);a.HEAPF32=new Float32Array(b);a.HEAPF64=new Float64Array(b)}var y,z=[],A=[],B=[];function C(){var b=a.preRun.shift();z.unshift(b)}var D=0,E=null,F=null;a.preloadedImages={};a.preloadedAudios={};
-function r(b){if(a.onAbort)a.onAbort(b);b="Aborted("+b+")";p(b);u=!0;b=new WebAssembly.RuntimeError(b+". Build with -s ASSERTIONS=1 for more info.");l(b);throw b;}function G(){return H.startsWith("data:application/octet-stream;base64,")}var H;H="." + getResource("./scripts/SMAZ-0.0.1.wasm");if(!G()){var I=H;H=a.locateFile?a.locateFile(I,n):n+I}function J(){var b=H;try{if(b==H&&q)return new Uint8Array(q);throw"both async and sync fetching of the wasm failed";}catch(c){r(c)}}
+function r(b){if(a.onAbort)a.onAbort(b);b="Aborted("+b+")";p(b);u=!0;b=new WebAssembly.RuntimeError(b+". Build with -s ASSERTIONS=1 for more info.");l(b);throw b;}function G(){return H.startsWith("data:application/octet-stream;base64,")}var H;H="." + getResource("./scripts/SMAZ-0.0.3.wasm");if(!G()){var I=H;H=a.locateFile?a.locateFile(I,n):n+I}function J(){var b=H;try{if(b==H&&q)return new Uint8Array(q);throw"both async and sync fetching of the wasm failed";}catch(c){r(c)}}
 function K(){return q||"function"!==typeof fetch?Promise.resolve().then(function(){return J()}):fetch(H,{credentials:"same-origin"}).then(function(b){if(!b.ok)throw"failed to load wasm binary file at '"+H+"'";return b.arrayBuffer()}).catch(function(){return J()})}function L(b){for(;0<b.length;){var c=b.shift();if("function"==typeof c)c(a);else{var f=c.m;"number"===typeof f?void 0===c.l?y.get(f)():y.get(f)(c.l):f(void 0===c.l?null:c.l)}}}
 var M={a:function(b){var c=w.length;b>>>=0;if(2147483648<b)return!1;for(var f=1;4>=f;f*=2){var e=c*(1+.2/f);e=Math.min(e,b+100663296);e=Math.max(b,e);0<e%65536&&(e+=65536-e%65536);a:{try{t.grow(Math.min(2147483648,e)-v.byteLength+65535>>>16);x();var d=1;break a}catch(k){}d=void 0}if(d)return!0}return!1}};
 (function(){function b(d){a.asm=d.exports;t=a.asm.b;x();y=a.asm.k;A.unshift(a.asm.c);D--;a.monitorRunDependencies&&a.monitorRunDependencies(D);0==D&&(null!==E&&(clearInterval(E),E=null),F&&(d=F,F=null,d()))}function c(d){b(d.instance)}function f(d){return K().then(function(k){return WebAssembly.instantiate(k,e)}).then(function(k){return k}).then(d,function(k){p("failed to asynchronously prepare wasm: "+k);r(k)})}var e={a:M};D++;a.monitorRunDependencies&&a.monitorRunDependencies(D);if(a.instantiateWasm)try{return a.instantiateWasm(e,
@@ -82,6 +82,12 @@ class Smaz {
 		// Compress
 		static compress(input) {
 		
+			// Check if instance doesn't exist
+			if(typeof Smaz.instance === "undefined")
+			
+				// Set instance
+				Smaz.instance = smaz();
+		
 			// Check if instance is invalid
 			if(Smaz.instance === Smaz.INVALID)
 			
@@ -145,6 +151,12 @@ class Smaz {
 		
 		// Decompress
 		static decompress(input) {
+		
+			// Check if instance doesn't exist
+			if(typeof Smaz.instance === "undefined")
+			
+				// Set instance
+				Smaz.instance = smaz();
 		
 			// Check if instance is invalid
 			if(Smaz.instance === Smaz.INVALID)

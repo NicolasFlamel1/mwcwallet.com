@@ -1981,7 +1981,7 @@ class Unlocked {
 												self.automaticLock.prevent();
 											
 												// Show message immediately
-												self.message.show(Language.getDefaultTranslation('Hardware Wallet'), Message.createPendingResult() + Message.createLineBreak() + Message.createText(Language.getDefaultTranslation('Approve exporting the root public key on that hardware wallet.')), true, function() {
+												self.message.show(Language.getDefaultTranslation('Hardware Wallet'), Message.createPendingResult() + Message.createLineBreak() + Message.createText(Language.getDefaultTranslation('Approve exporting the root public key for the account at index %1$s on that hardware wallet.'), [HardwareWallet.ACCOUNT.toFixed()]), true, function() {
 												
 													// Check if not canceled
 													if(canceled === false) {

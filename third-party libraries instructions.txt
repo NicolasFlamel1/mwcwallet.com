@@ -139,18 +139,18 @@ unzip "./Secp256k1-zkp-0.0.3.zip"
 mv "./wasm/secp256k1-zkp.wasm" "./secp256k1-zkp-0.0.3.wasm"
 rm -rf "./Secp256k1-zkp-0.0.3.zip" "./wasm" "./asm.js"
 
-# How to build /public_html/scripts/SMAZ-0.0.1.js
-wget "https://github.com/NicolasFlamel1/SMAZ-WASM-Wrapper/releases/download/v0.0.1/SMAZ-0.0.1.zip"
-unzip "./SMAZ-0.0.1.zip"
-sed -i 's/"SMAZ.wasm"/"." + getResource(".\/scripts\/SMAZ-0.0.1.wasm")/g' "./wasm/SMAZ.js"
-mv "./wasm/SMAZ.js" "./SMAZ-0.0.1.js"
-rm -rf "./SMAZ-0.0.1.zip" "./wasm" "./asm.js"
+# How to build /public_html/scripts/SMAZ-0.0.3.js
+wget "https://github.com/NicolasFlamel1/SMAZ-WASM-Wrapper/releases/download/v0.0.3/SMAZ-0.0.3.zip"
+unzip "./SMAZ-0.0.3.zip"
+sed -i 's/"SMAZ.wasm"/"." + getResource(".\/scripts\/SMAZ-0.0.3.wasm")/g' "./wasm/SMAZ.js"
+mv "./wasm/SMAZ.js" "./SMAZ-0.0.3.js"
+rm -rf "./SMAZ-0.0.3.zip" "./wasm" "./asm.js"
 
-# How to build /public_html/scripts/SMAZ-0.0.1.wasm
-wget "https://github.com/NicolasFlamel1/SMAZ-WASM-Wrapper/releases/download/v0.0.1/SMAZ-0.0.1.zip"
-unzip "./SMAZ-0.0.1.zip"
-mv "./wasm/SMAZ.wasm" "./SMAZ-0.0.1.wasm"
-rm -rf "./SMAZ-0.0.1.zip" "./wasm" "./asm.js"
+# How to build /public_html/scripts/SMAZ-0.0.3.wasm
+wget "https://github.com/NicolasFlamel1/SMAZ-WASM-Wrapper/releases/download/v0.0.3/SMAZ-0.0.3.zip"
+unzip "./SMAZ-0.0.3.zip"
+mv "./wasm/SMAZ.wasm" "./SMAZ-0.0.3.wasm"
+rm -rf "./SMAZ-0.0.3.zip" "./wasm" "./asm.js"
 
 # How to build /public_html/scripts/X25519-0.0.1.js
 wget "https://github.com/NicolasFlamel1/X25519-WASM-Wrapper/releases/download/v0.0.1/X25519-0.0.1.zip"

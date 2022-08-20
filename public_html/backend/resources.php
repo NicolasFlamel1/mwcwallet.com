@@ -309,10 +309,10 @@
 			"Checksum" => "AaYCKtIK3CfkZgJL+KjqGHbvK+urVTVK0Wagvfi9MQcrVy95oT6vmwR0lkjIA1gO89vuQ15jrW4vjLyLjUihfA=="
 		],
 		"./scripts/wallets.js" => [
-			"Version" => 34,
+			"Version" => 35,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "gOw7BfSB5CTYIcpyDhgPMzd+0OnYpSbHurjYQJLvgjO4nOod45PYoPpBJght//enKCzOnHLYVLrjYfO1Jrdfzg=="
+			"Checksum" => "jrYY7E5SMWNJDOgMp6j14hjPa2sx4TVRgQMbA0+z9r9CGQbLus33N+KeGm+kokfBRgOJUqwI/OCiEDnFm8btPA=="
 		],
 		"./scripts/application.js" => [
 			"Version" => 24,
@@ -507,10 +507,10 @@
 			"Checksum" => "6qjP3tmxx7jHapVLdSKc75Ft2N8HxhiYFm5QAUSC57X3YpuEZNp43BGjp5ybPn034EiJEB9cHMhj9wqIgvHHVQ=="
 		],
 		"./scripts/output.js" => [
-			"Version" => 6,
+			"Version" => 7,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "8Ajlz3FYKZVq8M+YfQqTpjEoiw7ERxTFvy4px/k9WDFw4dFd6Ys92+TlCDzW04MSGbxstR1x0Hhgcm622QVqiQ=="
+			"Checksum" => "r43n7oS2l0qrnvVx/k0IHaM7lYGpiWJt8DzwnOgPXd4f/1iaM5KS/7psstERQjY/5bWRzWKO2XjwG/U1cZw6Rw=="
 		],
 		"./scripts/output_information.js" => [
 			"Version" => 4,
@@ -519,13 +519,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 22,
+			"Version" => 23,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 88,
+			"Version" => 89,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -537,7 +537,7 @@
 			"Checksum" => "fgXcToDtI6wmtS0RjZW5pbWUYkBBkENvqM+gtInk+grrPOQxx37PqgMCyjDm5JTlC3fMvdWSeNrWv1T1CZ0a3g=="
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 18,
+			"Version" => 19,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -644,11 +644,11 @@
 			"Minified" => FALSE,
 			"Checksum" => "3YfI8364lUm5C7NvTQdAbnObQVBOboFUGs3XEkaGF53r9He5qqPtWuWCUiv2BobOuXajWnKKgNpFBRZ7rr7vUg=="
 		],
-		"./scripts/SMAZ-0.0.1.js" => [
-			"Version" => 4,
+		"./scripts/SMAZ-0.0.3.js" => [
+			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "Fb7V9l7B3W6wq9oRowQdfAbuagYj3pzfDFa9SSD80X0lx81dhLcpwc8R/mwzYoVU2aEsL9Y7J+6PBV/4C0YKNw=="
+			"Checksum" => "bcc/5ztSOv90IQcJk/xg1LLP1LTWReLYxSiBZMDVcYoyLOFIOHTAFZJieATCNazBaABbOQSHVFSDDMNDily8FQ=="
 		],
 		"./scripts/Ed25519-0.0.1.js" => [
 			"Version" => 4,
@@ -752,8 +752,8 @@
 			"Minified" => FALSE,
 			"Checksum" => "a9Yv0F79X5TDlLSRPHFR7ajRFdgarp1F461QWteHZ+l27fIFeh1tlI8MfGv9Ly2jRkRnrCiNlrdAoIv2tEDlJw=="
 		],
-		"./scripts/SMAZ-0.0.1.wasm" => [
-			"Version" => 4,
+		"./scripts/SMAZ-0.0.3.wasm" => [
+			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => "fHyF5qwRP6bBet/r6o5lNrumMA8qLJiOeTLi5aSmfR3DJuKNqm3mAagEofFcQSezKcbAJ3At4P4tF9sNd9+5LA=="
@@ -855,10 +855,10 @@
 			"Checksum" => "PPLe4RrJ+gWV8sLSDZMYccP0yR4L2z6PUloWKYSUW2emuKvHZ4fJp7Zs7dkKRhpgrOApTc9yduG0o4yNZ+fYmg=="
 		],
 		"./scripts/unlocked.js" => [
-			"Version" => 29,
+			"Version" => 30,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "bWgOfIDl1LFQP/0qW1yV9ZYBp7mXlJbuzWkxXdcKQRz5Jyr56nbgElSB9Lo63QJUV9G13KQxOeEP6/E8nqL5KA=="
+			"Checksum" => "DoO8C7yQZwBc0g3uNxHCnGzA4lP61y0L3gePYSNZ+zTv246JJioijrJCnEwkfy0PyizWBEsEpioUUIu5Dh+WoA=="
 		],
 		"./scripts/uuid.js" => [
 			"Version" => 4,
@@ -873,16 +873,16 @@
 			"Checksum" => "OA4SbseOEmVcPnIky32I8ZUCfD16z7CnRpym1AVwXWvHwF/EG2E8E4LnsM32YpMCiTM2due3JCbxDtJITdFcwg=="
 		],
 		"./scripts/slate.js" => [
-			"Version" => 61,
+			"Version" => 62,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "4PJyK+6CmFXMBhHwGKopcgZmIufp4XSt3Ljk5nlWVo8DsbVfoospgmRbmO8dfWMBP+rAqsnCH40si6QHXixGMQ=="
+			"Checksum" => "u05IfQIhe35hUglna7eQU1c6bvxmwhzv/btr5IGZz9wqBfQfd0CEHyZQbfXh0TMOq9iimAvzfzdH0jFkvwovWw=="
 		],
 		"./scripts/slate_participant.js" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "Cg45PZCwg5T6yG3DWLI0vY8y/DA3qqzYA6PEgc4lHsenGzZHrEupp83uvXsqsFtd2pI+3PH5jwJr3m7oxU9QwQ=="
+			"Checksum" => "EG3acIlcAEMV2LLS9JxaHsZ2gwD/C25iWt/qPLo80oOLOmvYtYR5U1nxjQo/K3EjuGZdM1L6Wd/KVBlgm0X7cA=="
 		],
 		"./scripts/slate_input.js" => [
 			"Version" => 4,

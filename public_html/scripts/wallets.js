@@ -6343,10 +6343,10 @@ class Wallets {
 																																					var newSpendableHeight = output["block_height"].plus(spentTransaction.getRequiredNumberOfConfirmations().minus(1));
 																																					
 																																					// Check if maturity height is greater than the new spendable height
-																																					if(output["block_height"].plus((spentTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY : 0).isGreaterThan(newSpendableHeight) === true) {
+																																					if(output["block_height"].plus((spentTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0).isGreaterThan(newSpendableHeight) === true) {
 																																					
 																																						// Set the new spendable height to the maturity height
-																																						newSpendableHeight = output["block_height"].plus((spentTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY : 0);
+																																						newSpendableHeight = output["block_height"].plus((spentTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0);
 																																					}
 																																					
 																																					// Check if spent transaction's lock height exists and if it added to the number of confirmation is greater than the new spendable height
@@ -7048,10 +7048,10 @@ class Wallets {
 																																							var newSpendableHeight = output["block_height"].plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1));
 																																							
 																																							// Check if maturity height is greater than the new spendable height
-																																							if(output["block_height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY : 0).isGreaterThan(newSpendableHeight) === true) {
+																																							if(output["block_height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0).isGreaterThan(newSpendableHeight) === true) {
 																																							
 																																								// Set the new spendable height to the maturity height
-																																								newSpendableHeight = output["block_height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY : 0);
+																																								newSpendableHeight = output["block_height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0);
 																																							}
 																																							
 																																							// Check if pending transaction's lock height exists and if it added to the number of confirmation is greater than the new spendable height
@@ -7447,10 +7447,10 @@ class Wallets {
 																																											var newSpendableHeight = kernel["height"].plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1));
 																																											
 																																											// Check if maturity height is greater than the new spendable height
-																																											if(kernel["height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY : 0).isGreaterThan(newSpendableHeight) === true) {
+																																											if(kernel["height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0).isGreaterThan(newSpendableHeight) === true) {
 																																											
 																																												// Set the new spendable height to the maturity height
-																																												newSpendableHeight = kernel["height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY : 0);
+																																												newSpendableHeight = kernel["height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0);
 																																											}
 																																											
 																																											// Check if pending transaction's lock height exists and if it added to the number of confirmation is greater than the new spendable height

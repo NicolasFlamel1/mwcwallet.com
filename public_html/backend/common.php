@@ -10,10 +10,12 @@
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Updated Secp256k1-zkp WASM Wrapper dependency.",
+		"Updated Secp256k1-zkp and SMAZ WASM Wrapper dependencies.",
 		"Fixed text for failure when sending all.",
 		"Fixed creating transactions with non-existent but expected returned amounts.",
-		"Fixed incorrectly detecting unsorted slate inputs, outputs, and kernels as sorted."
+		"Fixed incorrectly detecting unsorted slate inputs, outputs, and kernels as sorted.",
+		"Added account index number to the text that is used when exporting the root public key from a hardware wallet.",
+		"Fixed issue where coinbase rewards would be spendable one block later than expected."
 	];
 	
 	// Maintenance start time
