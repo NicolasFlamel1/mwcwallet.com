@@ -679,17 +679,38 @@ class Crypto {
 			return (new Uint8Array(Crypto.SECP256K1_SECRET_KEY_LENGTH)).fill(0);
 		}
 		
-		// ED25519 public key length
-		static get ED25519_PUBLIC_KEY_LENGTH() {
+		// Ed25519 secret key length
+		static get ED25519_SECRET_KEY_LENGTH() {
 		
-			// Return ed25519 public key length
+			// Return Ed25519 secret key length
 			return 32;
 		}
 		
-		// ED25519 signature length
+		// Ed25519 public key length
+		static get ED25519_PUBLIC_KEY_LENGTH() {
+		
+			// Return Ed25519 public key length
+			return 32;
+		}
+		
+		// X25519 secret key length
+		static get X25519_SECRET_KEY_LENGTH() {
+		
+			// Return X25519 secret key length
+			return 32;
+		}
+		
+		// X25519 public key length
+		static get X25519_PUBLIC_KEY_LENGTH() {
+		
+			// Return X25519 public key length
+			return 32;
+		}
+		
+		// Ed25519 signature length
 		static get ED25519_SIGNATURE_LENGTH() {
 		
-			// Return ed25519 signature length
+			// Return Ed25519 signature length
 			return 64;
 		}
 		

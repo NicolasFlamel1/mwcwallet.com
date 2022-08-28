@@ -1856,7 +1856,7 @@ class Slate {
 				return false;
 			
 			// Check if heights aren't equal
-			if((this.getHeight() === Slate.UNKNOWN_HEIGHT && slate.getHeight() !== Slate.UNKNOWN_HEIGHT) || (this.getHeight() !== Slate.UNKNOWN_HEIGHT && slate.getHeight() === Slate.UNKNOWN_HEIGHT) || (this.getHeight() !== Slate.NO_HEIGHT && this.getHeight().isEqualTo(slate.getHeight()) === false))
+			if((this.getHeight() === Slate.UNKNOWN_HEIGHT && slate.getHeight() !== Slate.UNKNOWN_HEIGHT) || (this.getHeight() !== Slate.UNKNOWN_HEIGHT && slate.getHeight() === Slate.UNKNOWN_HEIGHT) || (this.getHeight() !== Slate.UNKNOWN_HEIGHT && this.getHeight().isEqualTo(slate.getHeight()) === false))
 			
 				// Return false
 				return false;

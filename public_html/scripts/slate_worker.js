@@ -16,10 +16,10 @@
 
 // Import scripts
 importScripts(".<?= escapeString(getResource("./scripts/BLAKE2b-0.0.1.js")); ?>");
-importScripts(".<?= escapeString(getResource("./scripts/Ed25519-0.0.1.js")); ?>");
+importScripts(".<?= escapeString(getResource("./scripts/Ed25519-0.0.2.js")); ?>");
 importScripts(".<?= escapeString(getResource("./scripts/js-sha3-0.8.0.js")); ?>");
 importScripts(".<?= escapeString(getResource("./scripts/js-sha256-0.9.0.js")); ?>");
-importScripts(".<?= escapeString(getResource("./scripts/secp256k1-zkp-0.0.3.js")); ?>");
+importScripts(".<?= escapeString(getResource("./scripts/secp256k1-zkp-0.0.4.js")); ?>");
 importScripts(".<?= escapeString(getResource("./scripts/SMAZ-0.0.3.js")); ?>");
 importScripts(".<?= escapeString(getResource("./scripts/hi-base32-0.5.1.js")); ?>");
 importScripts(".<?= escapeString(getResource("./scripts/bech32-2.0.0.js")); ?>");

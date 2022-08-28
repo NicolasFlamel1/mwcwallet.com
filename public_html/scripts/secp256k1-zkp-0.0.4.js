@@ -9,12 +9,12 @@ function(secp256k1Zkp) {
 
 var a;a||(a=typeof secp256k1Zkp !== 'undefined' ? secp256k1Zkp : {});var l=Object.assign,m,p;a.ready=new Promise(function(b,c){m=b;p=c});var r=l({},a),u="";"undefined"!==typeof document&&document.currentScript&&(u=document.currentScript.src);_scriptDir&&(u=_scriptDir);0!==u.indexOf("blob:")?u=u.substr(0,u.replace(/[?#].*/,"").lastIndexOf("/")+1):u="";var v=a.print||console.log.bind(console),w=a.printErr||console.warn.bind(console);l(a,r);r=null;var x;a.wasmBinary&&(x=a.wasmBinary);
 var noExitRuntime=a.noExitRuntime||!0;"object"!==typeof WebAssembly&&y("no native wasm support detected");var z,A=!1,B="undefined"!==typeof TextDecoder?new TextDecoder("utf8"):void 0,C,D,E;function I(){var b=z.buffer;C=b;a.HEAP8=new Int8Array(b);a.HEAP16=new Int16Array(b);a.HEAP32=E=new Int32Array(b);a.HEAPU8=D=new Uint8Array(b);a.HEAPU16=new Uint16Array(b);a.HEAPU32=new Uint32Array(b);a.HEAPF32=new Float32Array(b);a.HEAPF64=new Float64Array(b)}var J,K=[],L=[],M=[];
-function N(){var b=a.preRun.shift();K.unshift(b)}var O=0,P=null,Q=null;a.preloadedImages={};a.preloadedAudios={};function y(b){if(a.onAbort)a.onAbort(b);b="Aborted("+b+")";w(b);A=!0;b=new WebAssembly.RuntimeError(b+". Build with -s ASSERTIONS=1 for more info.");p(b);throw b;}function R(){return S.startsWith("data:application/octet-stream;base64,")}var S;S="." + getResource("./scripts/secp256k1-zkp-0.0.3.wasm");if(!R()){var T=S;S=a.locateFile?a.locateFile(T,u):u+T}
+function N(){var b=a.preRun.shift();K.unshift(b)}var O=0,P=null,Q=null;a.preloadedImages={};a.preloadedAudios={};function y(b){if(a.onAbort)a.onAbort(b);b="Aborted("+b+")";w(b);A=!0;b=new WebAssembly.RuntimeError(b+". Build with -s ASSERTIONS=1 for more info.");p(b);throw b;}function R(){return S.startsWith("data:application/octet-stream;base64,")}var S;S="." + getResource("./scripts/secp256k1-zkp-0.0.4.wasm");if(!R()){var T=S;S=a.locateFile?a.locateFile(T,u):u+T}
 function U(){var b=S;try{if(b==S&&x)return new Uint8Array(x);throw"both async and sync fetching of the wasm failed";}catch(c){y(c)}}function aa(){return x||"function"!==typeof fetch?Promise.resolve().then(function(){return U()}):fetch(S,{credentials:"same-origin"}).then(function(b){if(!b.ok)throw"failed to load wasm binary file at '"+S+"'";return b.arrayBuffer()}).catch(function(){return U()})}
-function V(b){for(;0<b.length;){var c=b.shift();if("function"==typeof c)c(a);else{var g=c.aa;"number"===typeof g?void 0===c.$?J.get(g)():J.get(g)(c.$):g(void 0===c.$?null:c.$)}}}
+function V(b){for(;0<b.length;){var c=b.shift();if("function"==typeof c)c(a);else{var g=c.da;"number"===typeof g?void 0===c.ca?J.get(g)():J.get(g)(c.ca):g(void 0===c.ca?null:c.ca)}}}
 var ba=[null,[],[]],da={a:function(){y("")},b:function(b){var c=D.length;b>>>=0;if(2147483648<b)return!1;for(var g=1;4>=g;g*=2){var e=c*(1+.2/g);e=Math.min(e,b+100663296);e=Math.max(b,e);0<e%65536&&(e+=65536-e%65536);a:{try{z.grow(Math.min(2147483648,e)-C.byteLength+65535>>>16);I();var d=1;break a}catch(k){}d=void 0}if(d)return!0}return!1},e:function(){return 0},c:function(){},d:function(b,c,g,e){for(var d=0,k=0;k<g;k++){var ca=E[c>>2],W=E[c+4>>2];c+=8;for(var F=0;F<W;F++){var f=D[ca+F],G=ba[b];if(0===
 f||10===f){f=G;for(var n=0,q=n+NaN,t=n;f[t]&&!(t>=q);)++t;if(16<t-n&&f.subarray&&B)f=B.decode(f.subarray(n,t));else{for(q="";n<t;){var h=f[n++];if(h&128){var H=f[n++]&63;if(192==(h&224))q+=String.fromCharCode((h&31)<<6|H);else{var X=f[n++]&63;h=224==(h&240)?(h&15)<<12|H<<6|X:(h&7)<<18|H<<12|X<<6|f[n++]&63;65536>h?q+=String.fromCharCode(h):(h-=65536,q+=String.fromCharCode(55296|h>>10,56320|h&1023))}}else q+=String.fromCharCode(h)}f=q}(1===b?v:w)(f);G.length=0}else G.push(f)}d+=W}E[e>>2]=d;return 0}};
-(function(){function b(d){a.asm=d.exports;z=a.asm.f;I();J=a.asm._;L.unshift(a.asm.g);O--;a.monitorRunDependencies&&a.monitorRunDependencies(O);0==O&&(null!==P&&(clearInterval(P),P=null),Q&&(d=Q,Q=null,d()))}function c(d){b(d.instance)}function g(d){return aa().then(function(k){return WebAssembly.instantiate(k,e)}).then(function(k){return k}).then(d,function(k){w("failed to asynchronously prepare wasm: "+k);y(k)})}var e={a:da};O++;a.monitorRunDependencies&&a.monitorRunDependencies(O);if(a.instantiateWasm)try{return a.instantiateWasm(e,
+(function(){function b(d){a.asm=d.exports;z=a.asm.f;I();J=a.asm.ba;L.unshift(a.asm.g);O--;a.monitorRunDependencies&&a.monitorRunDependencies(O);0==O&&(null!==P&&(clearInterval(P),P=null),Q&&(d=Q,Q=null,d()))}function c(d){b(d.instance)}function g(d){return aa().then(function(k){return WebAssembly.instantiate(k,e)}).then(function(k){return k}).then(d,function(k){w("failed to asynchronously prepare wasm: "+k);y(k)})}var e={a:da};O++;a.monitorRunDependencies&&a.monitorRunDependencies(O);if(a.instantiateWasm)try{return a.instantiateWasm(e,
 b)}catch(d){return w("Module.instantiateWasm callback failed with error: "+d),!1}(function(){return x||"function"!==typeof WebAssembly.instantiateStreaming||R()||"function"!==typeof fetch?g(c):fetch(S,{credentials:"same-origin"}).then(function(d){return WebAssembly.instantiateStreaming(d,e).then(c,function(k){w("wasm streaming compile failed: "+k);w("falling back to ArrayBuffer instantiation");return g(c)})})})().catch(p);return{}})();
 a.___wasm_call_ctors=function(){return(a.___wasm_call_ctors=a.asm.g).apply(null,arguments)};a._initialize=function(){return(a._initialize=a.asm.h).apply(null,arguments)};a._uninitialize=function(){return(a._uninitialize=a.asm.i).apply(null,arguments)};a._blindSize=function(){return(a._blindSize=a.asm.j).apply(null,arguments)};a._blindSwitch=function(){return(a._blindSwitch=a.asm.k).apply(null,arguments)};a._blindSum=function(){return(a._blindSum=a.asm.l).apply(null,arguments)};
 a._isValidSecretKey=function(){return(a._isValidSecretKey=a.asm.m).apply(null,arguments)};a._isValidPublicKey=function(){return(a._isValidPublicKey=a.asm.n).apply(null,arguments)};a._isValidCommit=function(){return(a._isValidCommit=a.asm.o).apply(null,arguments)};a._isValidSingleSignerSignature=function(){return(a._isValidSingleSignerSignature=a.asm.p).apply(null,arguments)};a._bulletproofProofSize=function(){return(a._bulletproofProofSize=a.asm.q).apply(null,arguments)};
@@ -23,9 +23,9 @@ a._publicKeySize=function(){return(a._publicKeySize=a.asm.w).apply(null,argument
 a._secretKeySize=function(){return(a._secretKeySize=a.asm.B).apply(null,arguments)};a._secretKeyTweakAdd=function(){return(a._secretKeyTweakAdd=a.asm.C).apply(null,arguments)};a._publicKeyTweakAdd=function(){return(a._publicKeyTweakAdd=a.asm.D).apply(null,arguments)};a._secretKeyTweakMultiply=function(){return(a._secretKeyTweakMultiply=a.asm.E).apply(null,arguments)};a._publicKeyTweakMultiply=function(){return(a._publicKeyTweakMultiply=a.asm.F).apply(null,arguments)};
 a._sharedSecretKeyFromSecretKeyAndPublicKey=function(){return(a._sharedSecretKeyFromSecretKeyAndPublicKey=a.asm.G).apply(null,arguments)};a._commitSize=function(){return(a._commitSize=a.asm.H).apply(null,arguments)};a._pedersenCommit=function(){return(a._pedersenCommit=a.asm.I).apply(null,arguments)};a._pedersenCommitSum=function(){return(a._pedersenCommitSum=a.asm.J).apply(null,arguments)};a._pedersenCommitToPublicKey=function(){return(a._pedersenCommitToPublicKey=a.asm.K).apply(null,arguments)};
 a._publicKeyToPedersenCommit=function(){return(a._publicKeyToPedersenCommit=a.asm.L).apply(null,arguments)};a._singleSignerSignatureSize=function(){return(a._singleSignerSignatureSize=a.asm.M).apply(null,arguments)};a._seedSize=function(){return(a._seedSize=a.asm.N).apply(null,arguments)};a._createSingleSignerSignature=function(){return(a._createSingleSignerSignature=a.asm.O).apply(null,arguments)};a._addSingleSignerSignatures=function(){return(a._addSingleSignerSignatures=a.asm.P).apply(null,arguments)};
-a._verifySingleSignerSignature=function(){return(a._verifySingleSignerSignature=a.asm.Q).apply(null,arguments)};a._singleSignerSignatureFromData=function(){return(a._singleSignerSignatureFromData=a.asm.R).apply(null,arguments)};a._combinePublicKeys=function(){return(a._combinePublicKeys=a.asm.S).apply(null,arguments)};a._nonceSize=function(){return(a._nonceSize=a.asm.T).apply(null,arguments)};a._createSecretNonce=function(){return(a._createSecretNonce=a.asm.U).apply(null,arguments)};
-a._maximumMessageHashSignatureSize=function(){return(a._maximumMessageHashSignatureSize=a.asm.V).apply(null,arguments)};a._createMessageHashSignature=function(){return(a._createMessageHashSignature=a.asm.W).apply(null,arguments)};a._verifyMessageHashSignature=function(){return(a._verifyMessageHashSignature=a.asm.X).apply(null,arguments)};a._free=function(){return(a._free=a.asm.Y).apply(null,arguments)};a._malloc=function(){return(a._malloc=a.asm.Z).apply(null,arguments)};var Y;
-Q=function ea(){Y||Z();Y||(Q=ea)};
+a._verifySingleSignerSignature=function(){return(a._verifySingleSignerSignature=a.asm.Q).apply(null,arguments)};a._singleSignerSignatureFromData=function(){return(a._singleSignerSignatureFromData=a.asm.R).apply(null,arguments)};a._uncompactSingleSignerSignatureSize=function(){return(a._uncompactSingleSignerSignatureSize=a.asm.S).apply(null,arguments)};a._compactSingleSignerSignature=function(){return(a._compactSingleSignerSignature=a.asm.T).apply(null,arguments)};
+a._uncompactSingleSignerSignature=function(){return(a._uncompactSingleSignerSignature=a.asm.U).apply(null,arguments)};a._combinePublicKeys=function(){return(a._combinePublicKeys=a.asm.V).apply(null,arguments)};a._nonceSize=function(){return(a._nonceSize=a.asm.W).apply(null,arguments)};a._createSecretNonce=function(){return(a._createSecretNonce=a.asm.X).apply(null,arguments)};a._maximumMessageHashSignatureSize=function(){return(a._maximumMessageHashSignatureSize=a.asm.Y).apply(null,arguments)};
+a._createMessageHashSignature=function(){return(a._createMessageHashSignature=a.asm.Z).apply(null,arguments)};a._verifyMessageHashSignature=function(){return(a._verifyMessageHashSignature=a.asm._).apply(null,arguments)};a._free=function(){return(a._free=a.asm.$).apply(null,arguments)};a._malloc=function(){return(a._malloc=a.asm.aa).apply(null,arguments)};var Y;Q=function ea(){Y||Z();Y||(Q=ea)};
 function Z(){function b(){if(!Y&&(Y=!0,a.calledRun=!0,!A)){V(L);m(a);if(a.onRuntimeInitialized)a.onRuntimeInitialized();if(a.postRun)for("function"==typeof a.postRun&&(a.postRun=[a.postRun]);a.postRun.length;){var c=a.postRun.shift();M.unshift(c)}V(M)}}if(!(0<O)){if(a.preRun)for("function"==typeof a.preRun&&(a.preRun=[a.preRun]);a.preRun.length;)N();V(K);0<O||(a.setStatus?(a.setStatus("Running..."),setTimeout(function(){setTimeout(function(){a.setStatus("")},1);b()},1)):b())}}a.run=Z;
 if(a.preInit)for("function"==typeof a.preInit&&(a.preInit=[a.preInit]);0<a.preInit.length;)a.preInit.pop()();Z();
 
@@ -2081,6 +2081,128 @@ class Secp256k1Zkp {
 			
 			// Return signature
 			return signature;
+		}
+		
+		// Compact single-signer signature
+		static compactSingleSignerSignature(signature) {
+		
+			// Check if instance doesn't exist
+			if(typeof Secp256k1Zkp.instance === "undefined") {
+			
+				// Set instance
+				Secp256k1Zkp.instance = secp256k1Zkp();
+				
+				// Check if initializing failed
+				if(Secp256k1Zkp.instance._initialize() === Secp256k1Zkp.C_FALSE)
+				
+					// Set instance to invalid
+					Secp256k1Zkp.instance = Secp256k1Zkp.INVALID;
+			}
+		
+			// Check if instance is invalid
+			if(Secp256k1Zkp.instance === Secp256k1Zkp.INVALID)
+			
+				// Return operation failed
+				return Secp256k1Zkp.OPERATION_FAILED;
+			
+			// Initialize result to size of single-signer signature
+			var result = new Uint8Array(Secp256k1Zkp.instance._singleSignerSignatureSize());
+			
+			// Allocate and fill memory
+			var resultBuffer = Secp256k1Zkp.instance._malloc(signature["length"] * signature["BYTES_PER_ELEMENT"]);
+			
+			var signatureBuffer = Secp256k1Zkp.instance._malloc(signature["length"] * signature["BYTES_PER_ELEMENT"]);
+			Secp256k1Zkp.instance["HEAPU8"].set(signature, signatureBuffer / signature["BYTES_PER_ELEMENT"]);
+			
+			// Check if compacting single-signer signature failed
+			if(Secp256k1Zkp.instance._compactSingleSignerSignature(resultBuffer, signatureBuffer, signature["length"] * signature["BYTES_PER_ELEMENT"]) === Secp256k1Zkp.C_FALSE) {
+			
+				// Clear memory
+				Secp256k1Zkp.instance["HEAPU8"].fill(0, resultBuffer / result["BYTES_PER_ELEMENT"], resultBuffer / result["BYTES_PER_ELEMENT"] + result["length"]);
+				Secp256k1Zkp.instance["HEAPU8"].fill(0, signatureBuffer / signature["BYTES_PER_ELEMENT"], signatureBuffer / signature["BYTES_PER_ELEMENT"] + signature["length"]);
+				
+				// Free memory
+				Secp256k1Zkp.instance._free(resultBuffer);
+				Secp256k1Zkp.instance._free(signatureBuffer);
+			
+				// Return operation failed
+				return Secp256k1Zkp.OPERATION_FAILED;
+			}
+			
+			// Get result
+			result = new Uint8Array(Secp256k1Zkp.instance["HEAPU8"].subarray(resultBuffer, resultBuffer + result["length"]));
+			
+			// Clear memory
+			Secp256k1Zkp.instance["HEAPU8"].fill(0, resultBuffer / result["BYTES_PER_ELEMENT"], resultBuffer / result["BYTES_PER_ELEMENT"] + result["length"]);
+			Secp256k1Zkp.instance["HEAPU8"].fill(0, signatureBuffer / signature["BYTES_PER_ELEMENT"], signatureBuffer / signature["BYTES_PER_ELEMENT"] + signature["length"]);
+			
+			// Free memory
+			Secp256k1Zkp.instance._free(resultBuffer);
+			Secp256k1Zkp.instance._free(signatureBuffer);
+			
+			// Return result
+			return result;
+		}
+		
+		// Uncompact single-signer signature
+		static uncompactSingleSignerSignature(signature) {
+		
+			// Check if instance doesn't exist
+			if(typeof Secp256k1Zkp.instance === "undefined") {
+			
+				// Set instance
+				Secp256k1Zkp.instance = secp256k1Zkp();
+				
+				// Check if initializing failed
+				if(Secp256k1Zkp.instance._initialize() === Secp256k1Zkp.C_FALSE)
+				
+					// Set instance to invalid
+					Secp256k1Zkp.instance = Secp256k1Zkp.INVALID;
+			}
+		
+			// Check if instance is invalid
+			if(Secp256k1Zkp.instance === Secp256k1Zkp.INVALID)
+			
+				// Return operation failed
+				return Secp256k1Zkp.OPERATION_FAILED;
+			
+			// Initialize result to size of uncompact single-signer signature
+			var result = new Uint8Array(Secp256k1Zkp.instance._uncompactSingleSignerSignatureSize());
+			
+			// Allocate and fill memory
+			var resultBuffer = Secp256k1Zkp.instance._malloc(signature["length"] * signature["BYTES_PER_ELEMENT"]);
+			
+			var signatureBuffer = Secp256k1Zkp.instance._malloc(signature["length"] * signature["BYTES_PER_ELEMENT"]);
+			Secp256k1Zkp.instance["HEAPU8"].set(signature, signatureBuffer / signature["BYTES_PER_ELEMENT"]);
+			
+			// Check if uncompacting single-signer signature failed
+			if(Secp256k1Zkp.instance._uncompactSingleSignerSignature(resultBuffer, signatureBuffer, signature["length"] * signature["BYTES_PER_ELEMENT"]) === Secp256k1Zkp.C_FALSE) {
+			
+				// Clear memory
+				Secp256k1Zkp.instance["HEAPU8"].fill(0, resultBuffer / result["BYTES_PER_ELEMENT"], resultBuffer / result["BYTES_PER_ELEMENT"] + result["length"]);
+				Secp256k1Zkp.instance["HEAPU8"].fill(0, signatureBuffer / signature["BYTES_PER_ELEMENT"], signatureBuffer / signature["BYTES_PER_ELEMENT"] + signature["length"]);
+				
+				// Free memory
+				Secp256k1Zkp.instance._free(resultBuffer);
+				Secp256k1Zkp.instance._free(signatureBuffer);
+			
+				// Return operation failed
+				return Secp256k1Zkp.OPERATION_FAILED;
+			}
+			
+			// Get result
+			result = new Uint8Array(Secp256k1Zkp.instance["HEAPU8"].subarray(resultBuffer, resultBuffer + result["length"]));
+			
+			// Clear memory
+			Secp256k1Zkp.instance["HEAPU8"].fill(0, resultBuffer / result["BYTES_PER_ELEMENT"], resultBuffer / result["BYTES_PER_ELEMENT"] + result["length"]);
+			Secp256k1Zkp.instance["HEAPU8"].fill(0, signatureBuffer / signature["BYTES_PER_ELEMENT"], signatureBuffer / signature["BYTES_PER_ELEMENT"] + signature["length"]);
+			
+			// Free memory
+			Secp256k1Zkp.instance._free(resultBuffer);
+			Secp256k1Zkp.instance._free(signatureBuffer);
+			
+			// Return result
+			return result;
 		}
 		
 		// Combine public keys

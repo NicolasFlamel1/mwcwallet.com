@@ -1889,7 +1889,7 @@ class Application {
 												self.showResetSettings().then(function() {
 										
 													// Initialize dependencies
-													self.initializeDependencies().then(function() {
+													self.initializeDependencies().then(function() {											
 													
 														// Initialize extension
 														self.initializeExtension().then(function() {

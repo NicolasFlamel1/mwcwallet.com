@@ -10,7 +10,7 @@
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Updated Secp256k1-zkp and SMAZ WASM Wrapper dependencies.",
+		"Updated dependencies.",
 		"Fixed text for failure when sending all.",
 		"Fixed creating transactions with non-existent but expected returned amounts.",
 		"Fixed incorrectly detecting unsorted slate inputs, outputs, and kernels as sorted.",
