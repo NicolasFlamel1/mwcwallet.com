@@ -759,36 +759,74 @@ class Api {
 																// Check if a Slatepack is provided
 																if(typeof serializedSlateOrSlatepack === "string") {
 																
-																	// Get Slatepack
-																	var slatepack = serializedSlateOrSlatepack;
+																	// Check wallet type
+																	switch(Consensus.getWalletType()) {
 																	
-																	// Check if Slatepack is encrypted
-																	if(Slatepack.isEncryptedSlatepack(slatepack) === true) {
+																		// MWC wallet
+																		case Consensus.MWC_WALLET_TYPE:
 																
-																		// Check if wallet isn't a hardware wallet
-																		if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
-																	
-																			// Return getting wallet's Tor secret key
-																			return wallet.getAddressKey(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX).then(function(secretKey) {
+																			// Get Slatepack
+																			var slatepack = serializedSlateOrSlatepack;
 																			
-																				// Check if cancel didn't occur
-																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																				
-																					// Return decoding the Slatepack
-																					return Slatepack.decodeSlatepack(slatepack, secretKey).then(function(slate) {
+																			// Check if Slatepack is encrypted
+																			if(Slatepack.isEncryptedSlatepack(slatepack) === true) {
+																		
+																				// Check if wallet isn't a hardware wallet
+																				if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
+																			
+																					// Return getting wallet's Tor secret key
+																					return wallet.getAddressKey(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX).then(function(secretKey) {
 																					
-																						// Securely clear secret key
-																						secretKey.fill(0);
-																						
 																						// Check if cancel didn't occur
 																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																						
-																							// Resolve the slate
-																							resolve(slate);
+																							// Return decoding the Slatepack
+																							return Slatepack.decodeSlatepack(slatepack, secretKey).then(function(slate) {
+																							
+																								// Securely clear secret key
+																								secretKey.fill(0);
+																								
+																								// Check if cancel didn't occur
+																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																								
+																									// Resolve the slate
+																									resolve(slate);
+																								}
+																								
+																								// Otherwise
+																								else {
+																								
+																									// Reject JSON-RPC internal error error response
+																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																								}
+																							
+																							// Catch errors
+																							}).catch(function(error) {
+																							
+																								// Securely clear secret key
+																								secretKey.fill(0);
+																								
+																								// Check if cancel didn't occur
+																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																								
+																									// Reject JSON-RPC invalid parameters error response
+																									reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																								}
+																								
+																								// Otherwise
+																								else {
+																								
+																									// Reject JSON-RPC internal error error response
+																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																								}
+																							});
 																						}
 																						
 																						// Otherwise
 																						else {
+																						
+																							// Securely clear secret key
+																							secretKey.fill(0);
 																						
 																							// Reject JSON-RPC internal error error response
 																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
@@ -797,274 +835,255 @@ class Api {
 																					// Catch errors
 																					}).catch(function(error) {
 																					
-																						// Securely clear secret key
-																						secretKey.fill(0);
-																						
-																						// Check if cancel didn't occur
-																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																						
-																							// Reject JSON-RPC invalid parameters error response
-																							reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
-																						}
-																						
-																						// Otherwise
-																						else {
-																						
-																							// Reject JSON-RPC internal error error response
-																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																						}
+																						// Reject JSON-RPC internal error error response
+																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																					});
 																				}
 																				
 																				// Otherwise
 																				else {
 																				
-																					// Securely clear secret key
-																					secretKey.fill(0);
-																				
-																					// Reject JSON-RPC internal error error response
-																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																				}
-																			
-																			// Catch errors
-																			}).catch(function(error) {
-																			
-																				// Reject JSON-RPC internal error error response
-																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																			});
-																		}
-																		
-																		// Otherwise
-																		else {
-																		
-																			// Return waiting for wallet's hardware wallet to connect
-																			return self.wallets.waitForHardwareWalletToConnect(wallet.getKeyPath(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Connect the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Connect the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, false, cancelOccurred).then(function() {
-																			
-																				// Check if cancel didn't occur
-																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																		
-																					// Check if hardware wallet is connected
-																					if(wallet.isHardwareConnected() === true) {
+																					// Return waiting for wallet's hardware wallet to connect
+																					return self.wallets.waitForHardwareWalletToConnect(wallet.getKeyPath(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Connect the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Connect the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, false, cancelOccurred).then(function() {
 																					
-																						// Return decoding the Slatepack
-																						return Slatepack.decodeSlatepack(slatepack, wallet.getHardwareWallet(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, false, cancelOccurred).then(function(slate) {
-																						
-																							// Check if cancel didn't occur
-																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																						
-																								// Resolve the slate
-																								resolve(slate);
-																							}
+																						// Check if cancel didn't occur
+																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																				
+																							// Check if hardware wallet is connected
+																							if(wallet.isHardwareConnected() === true) {
 																							
-																							// Otherwise
-																							else {
-																							
-																								// Reject JSON-RPC internal error error response
-																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																							}
-																							
-																						// Catch errors
-																						}).catch(function(error) {
-																						
-																							// Check if cancel didn't occur
-																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																						
-																								// Check if hardware wallet was disconnected
-																								if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																								// Return decoding the Slatepack
+																								return Slatepack.decodeSlatepack(slatepack, wallet.getHardwareWallet(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, false, cancelOccurred).then(function(slate) {
 																								
-																									// Check if wallet's hardware wallet is connected
-																									if(wallet.isHardwareConnected() === true) {
+																									// Check if cancel didn't occur
+																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																								
-																										// Wallet's hardware wallet disconnect event
-																										$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																									
-																											// Return decoding the Slatepack
-																											return decodeSlate(slatepack).then(function(slate) {
-																											
-																												// Check if cancel didn't occur
-																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																											
-																													// Resolve slate
-																													resolve(slate);
-																												}
-																												
-																												// Otherwise
-																												else {
-																												
-																													// Reject JSON-RPC internal error error response
-																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																												}
-																											
-																											// Catch errors
-																											}).catch(function(error) {
-																											
-																												// Check if cancel didn't occur
-																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																											
-																													// Reject error
-																													reject(error);
-																												}
-																												
-																												// Otherwise
-																												else {
-																												
-																													// Reject JSON-RPC internal error error response
-																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																												}
-																											});
-																										});
+																										// Resolve the slate
+																										resolve(slate);
 																									}
 																									
 																									// Otherwise
 																									else {
 																									
-																										// Return decoding the Slatepack
-																										return decodeSlate(slatepack).then(function(slate) {
-																										
-																											// Check if cancel didn't occur
-																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																										
-																												// Resolve slate
-																												resolve(slate);
-																											}
-																											
-																											// Otherwise
-																											else {
-																											
-																												// Reject JSON-RPC internal error error response
-																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																											}
-																										
-																										// Catch errors
-																										}).catch(function(error) {
-																										
-																											// Check if cancel didn't occur
-																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																										
-																												// Reject error
-																												reject(error);
-																											}
-																											
-																											// Otherwise
-																											else {
-																											
-																												// Reject JSON-RPC internal error error response
-																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																											}
-																										});
+																										// Reject JSON-RPC internal error error response
+																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																									}
-																								}
+																									
+																								// Catch errors
+																								}).catch(function(error) {
 																								
-																								// Otherwise
-																								else {
-																							
-																									// Reject JSON-RPC invalid parameters error response
-																									reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
-																								}
+																									// Check if cancel didn't occur
+																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																								
+																										// Check if hardware wallet was disconnected
+																										if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																										
+																											// Check if wallet's hardware wallet is connected
+																											if(wallet.isHardwareConnected() === true) {
+																										
+																												// Wallet's hardware wallet disconnect event
+																												$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																											
+																													// Return decoding the Slatepack
+																													return decodeSlate(slatepack).then(function(slate) {
+																													
+																														// Check if cancel didn't occur
+																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																													
+																															// Resolve slate
+																															resolve(slate);
+																														}
+																														
+																														// Otherwise
+																														else {
+																														
+																															// Reject JSON-RPC internal error error response
+																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																														}
+																													
+																													// Catch errors
+																													}).catch(function(error) {
+																													
+																														// Check if cancel didn't occur
+																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																													
+																															// Reject error
+																															reject(error);
+																														}
+																														
+																														// Otherwise
+																														else {
+																														
+																															// Reject JSON-RPC internal error error response
+																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																														}
+																													});
+																												});
+																											}
+																											
+																											// Otherwise
+																											else {
+																											
+																												// Return decoding the Slatepack
+																												return decodeSlate(slatepack).then(function(slate) {
+																												
+																													// Check if cancel didn't occur
+																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																												
+																														// Resolve slate
+																														resolve(slate);
+																													}
+																													
+																													// Otherwise
+																													else {
+																													
+																														// Reject JSON-RPC internal error error response
+																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																													}
+																												
+																												// Catch errors
+																												}).catch(function(error) {
+																												
+																													// Check if cancel didn't occur
+																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																												
+																														// Reject error
+																														reject(error);
+																													}
+																													
+																													// Otherwise
+																													else {
+																													
+																														// Reject JSON-RPC internal error error response
+																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																													}
+																												});
+																											}
+																										}
+																										
+																										// Otherwise
+																										else {
+																									
+																											// Reject JSON-RPC invalid parameters error response
+																											reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																										}
+																									}
+																									
+																									// Otherwise
+																									else {
+																									
+																										// Reject JSON-RPC internal error error response
+																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																									}
+																								});
 																							}
 																							
 																							// Otherwise
 																							else {
 																							
-																								// Reject JSON-RPC internal error error response
-																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																								// Return decoding the Slatepack
+																								return decodeSlate(slatepack).then(function(slate) {
+																								
+																									// Check if cancel didn't occur
+																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																								
+																										// Resolve slate
+																										resolve(slate);
+																									}
+																									
+																									// Otherwise
+																									else {
+																									
+																										// Reject JSON-RPC internal error error response
+																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																									}
+																								
+																								// Catch errors
+																								}).catch(function(error) {
+																								
+																									// Check if cancel didn't occur
+																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																								
+																										// Reject error
+																										reject(error);
+																									}
+																									
+																									// Otherwise
+																									else {
+																									
+																										// Reject JSON-RPC internal error error response
+																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																									}
+																								});
 																							}
-																						});
+																						}
+																													
+																						// Otherwise
+																						else {
+																						
+																							// Reject JSON-RPC internal error error response
+																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																						}
+																						
+																					// Catch errors
+																					}).catch(function(error) {
+																					
+																						// Reject JSON-RPC internal error error response
+																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																					});
+																				}
+																			}
+																			
+																			// Otherwise
+																			else {
+																			
+																				// Return decoding the Slatepack
+																				return Slatepack.decodeSlatepack(slatepack).then(function(slate) {
+																				
+																					// Check if cancel didn't occur
+																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																					
+																						// Resolve the slate
+																						resolve(slate);
 																					}
 																					
 																					// Otherwise
 																					else {
 																					
-																						// Return decoding the Slatepack
-																						return decodeSlate(slatepack).then(function(slate) {
-																						
-																							// Check if cancel didn't occur
-																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																						
-																								// Resolve slate
-																								resolve(slate);
-																							}
-																							
-																							// Otherwise
-																							else {
-																							
-																								// Reject JSON-RPC internal error error response
-																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																							}
-																						
-																						// Catch errors
-																						}).catch(function(error) {
-																						
-																							// Check if cancel didn't occur
-																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																						
-																								// Reject error
-																								reject(error);
-																							}
-																							
-																							// Otherwise
-																							else {
-																							
-																								// Reject JSON-RPC internal error error response
-																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																							}
-																						});
+																						// Reject JSON-RPC internal error error response
+																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																					}
-																				}
-																											
-																				// Otherwise
-																				else {
 																				
-																					// Reject JSON-RPC internal error error response
-																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																				}
+																				// Catch errors
+																				}).catch(function(error) {
 																				
-																			// Catch errors
-																			}).catch(function(error) {
+																					// Check if cancel didn't occur
+																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																					
+																						// Reject JSON-RPC invalid parameters error response
+																						reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																					}
+																					
+																					// Otherwise
+																					else {
+																					
+																						// Reject JSON-RPC internal error error response
+																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																					}
+																				});
+																			}
 																			
-																				// Reject JSON-RPC internal error error response
-																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																			});
-																		}
-																	}
-																	
-																	// Otherwise
-																	else {
-																	
-																		// Return decoding the Slatepack
-																		return Slatepack.decodeSlatepack(slatepack).then(function(slate) {
+																			// Break
+																			break;
+																			
+																		// GRIN wallet
+																		case Consensus.GRIN_WALLET_TYPE:
 																		
-																			// Check if cancel didn't occur
-																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																			// Reject JSON-RPC internal error error response
+																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																			
-																				// Resolve the slate
-																				resolve(slate);
-																			}
-																			
-																			// Otherwise
-																			else {
-																			
-																				// Reject JSON-RPC internal error error response
-																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																			}
-																		
-																		// Catch errors
-																		}).catch(function(error) {
-																		
-																			// Check if cancel didn't occur
-																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																			
-																				// Reject JSON-RPC invalid parameters error response
-																				reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
-																			}
-																			
-																			// Otherwise
-																			else {
-																			
-																				// Reject JSON-RPC internal error error response
-																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																			}
-																		});
+																			// Break
+																			break;
 																	}
 																}
 																

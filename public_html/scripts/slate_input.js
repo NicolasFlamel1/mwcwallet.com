@@ -224,14 +224,14 @@ class SlateInput {
 				case Slate.VERSION_FOUR.toFixed():
 				
 					// Check if serialized slate input's features isn't supported
-					if("f" in serializedSlateInput === true && serializedSlateInput["f"] !== SlateInput.PLAIN_FEATURES && serializedSlateInput["f"] !== SlateInput.COINBASE_FEATURES) {
+					if("f" in serializedSlateInput === true && ((Common.isNumberString(serializedSlateInput["f"]) === false && serializedSlateInput["f"] instanceof BigNumber === false) || ((new BigNumber(serializedSlateInput["f"])).isEqualTo(SlateInput.PLAIN_FEATURES) === false && (new BigNumber(serializedSlateInput["f"])).isEqualTo(SlateInput.COINBASE_FEATURES) === false))) {
 					
 						// Throw error
 						throw "Unsupported input.";
 					}
 					
 					// Set features to serialized slate input's features
-					this.features = ("f" in serializedSlateInput === true) ? serializedSlateInput["f"] : SlateInput.PLAIN_FEATURES;
+					this.features = ("f" in serializedSlateInput === true) ? (new BigNumber(serializedSlateInput["f"])).toNumber() : SlateInput.PLAIN_FEATURES;
 				
 					// Check if serialized slate input's commit isn't supported
 					if("c" in serializedSlateInput === false || Common.isHexString(serializedSlateInput["c"]) === false || Common.hexStringLength(serializedSlateInput["c"]) !== Crypto.COMMIT_LENGTH) {

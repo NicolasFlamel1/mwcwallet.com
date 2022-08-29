@@ -348,14 +348,14 @@ class SlateOutput {
 				case Slate.VERSION_FOUR.toFixed():
 				
 					// Check if serialized slate output's features isn't supported
-					if("f" in serializedSlateOutput === true && serializedSlateOutput["f"] !== SlateOutput.PLAIN_FEATURES) {
+					if("f" in serializedSlateOutput === true && ((Common.isNumberString(serializedSlateOutput["f"]) === false && serializedSlateOutput["f"] instanceof BigNumber === false) || (new BigNumber(serializedSlateOutput["f"])).isEqualTo(SlateOutput.PLAIN_FEATURES) === false)) {
 					
 						// Throw error
 						throw "Unsupported output.";
 					}
 					
 					// Set features to serialized slate output's features
-					this.features = ("f" in serializedSlateOutput === true) ? serializedSlateOutput["f"] : SlateOutput.PLAIN_FEATURES;
+					this.features = ("f" in serializedSlateOutput === true) ? (new BigNumber(serializedSlateOutput["f"])).toNumber() : SlateOutput.PLAIN_FEATURES;
 				
 					// Check if serialized slate output's commit isn't supported
 					if("c" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["c"]) === false || Common.hexStringLength(serializedSlateOutput["c"]) !== Crypto.COMMIT_LENGTH) {

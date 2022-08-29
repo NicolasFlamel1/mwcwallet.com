@@ -6,7 +6,7 @@
 	const VERSION_NUMBER = "1.1.9";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "28 Jul 2022 23:32:00 UTC";
+	const VERSION_RELEASE_DATE = "29 Aug 2022 01:08:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
@@ -15,7 +15,8 @@
 		"Fixed creating transactions with non-existent but expected returned amounts.",
 		"Fixed incorrectly detecting unsorted slate inputs, outputs, and kernels as sorted.",
 		"Added account index number to the text that is used when exporting the root public key from a hardware wallet.",
-		"Fixed issue where coinbase rewards would be spendable one block later than expected."
+		"Fixed issue where coinbase rewards would be spendable one block later than expected.",
+		"Fixed correctly parsing V4 slates."
 	];
 	
 	// Maintenance start time

@@ -3537,12 +3537,16 @@ class Slate {
 							}
 							
 							// Go through all serialized slate's outputs
+							var outputs = [];
 							do {
 							
 								// Append serialized slate's output to outputs
-								this.addOutputs([new SlateOutput(bitReader, this)], false);
+								outputs.push(new SlateOutput(bitReader, this));
 							
 							} while(bitReader.getBits(Slate.COMPACT_BOOLEAN_LENGTH) === Slate.COMPACT_BOOLEAN_TRUE);
+							
+							// Add outputs
+							this.addOutputs(outputs, false);
 							
 							// Go through all serialized slate's kernels
 							do {
@@ -3776,10 +3780,17 @@ class Slate {
 					this.blockHeaderVersion = new BigNumber(serializedSlate["ver"].split(Slate.VERSION_SEPARATOR)[1]);
 					
 					// Check if serialzed slate contains features
-					if("feat" in serializedSlate === true)
+					if("feat" in serializedSlate === true) {
+					
+						// Check if serialized slate's features isn't supported
+						if((Common.isNumberString(serializedSlate["feat"]) === false && serializedSlate["feat"] instanceof BigNumber === false) || (new BigNumber(serializedSlate["feat"])).isGreaterThan(Number.MAX_SAFE_INTEGER) === true) {
+						
+							// Throw error
+							throw "Unsupported slate.";
+						}
 					
 						// Check serialized slate's features
-						switch(serializedSlate["feat"]) {
+						switch((new BigNumber(serializedSlate["feat"])).toNumber()) {
 						
 							// Plain features
 							case SlateKernel.PLAIN_FEATURES:
@@ -3808,6 +3819,7 @@ class Slate {
 							
 								// Throw error
 								throw "Unsupported slate.";
+						}
 					}
 					
 					// Otherwise
@@ -4049,7 +4061,7 @@ class Slate {
 						}
 						
 						// Add inputs
-						this.addInputs(inputs, false);
+						this.addInputs(inputs, false, outputs["length"]);
 						
 						// Add outputs
 						this.addOutputs(outputs, false);
