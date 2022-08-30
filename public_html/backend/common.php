@@ -3,21 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "1.1.9";
+	const VERSION_NUMBER = "1.1.10";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "30 Aug 2022 02:31:00 UTC";
+	const VERSION_RELEASE_DATE = "30 Aug 2022 11:39:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Updated dependencies.",
-		"Fixed text for failure when sending all.",
-		"Fixed creating transactions with non-existent but expected returned amounts.",
-		"Fixed incorrectly detecting unsorted slate inputs, outputs, and kernels as sorted.",
-		"Added account index number to the text that is used when exporting the root public key from a hardware wallet.",
-		"Fixed issue where coinbase rewards would be spendable one block later than expected.",
-		"Fixed correctly parsing V4 slates.",
-		"Added kernel features to the text that is displayed when approving finalizing a transaction with a hardware wallet."
+		"Fixed parsing Slatepacks."
 	];
 	
 	// Maintenance start time

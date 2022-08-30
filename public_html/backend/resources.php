@@ -264,7 +264,7 @@
 			"Version" => 0,
 			"Cache" => FALSE,
 			"Minified" => FALSE,
-			"Checksum" => NULL
+			"Checksum" => "oOBBQN7VKeqm/bM2XAeLww8AXTXKudmYJy5K9aQSOIDGsKylOTbjc8OkNy4EMkEIdykjPWtMfr76/q6ug8SCrA=="
 		],
 		"./favicon.ico" => [
 			"Version" => 0,
@@ -525,7 +525,7 @@
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 95,
+			"Version" => 96,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -873,10 +873,10 @@
 			"Checksum" => "OA4SbseOEmVcPnIky32I8ZUCfD16z7CnRpym1AVwXWvHwF/EG2E8E4LnsM32YpMCiTM2due3JCbxDtJITdFcwg=="
 		],
 		"./scripts/slate.js" => [
-			"Version" => 78,
+			"Version" => 79,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "1c8ivtRWg4nIc9gj27KMiPiR4GsLoOCqLAlOkhTClwrrw8H0udRNzABqoRw4OjgfkqBVwF7Y6N7Me9VqYNEmxw=="
+			"Checksum" => "AFk+1kN+IaNZZVaEeIgsyiLLG700iy9XQqS/hflXdtgddiqYi7Bkdx2XA/qtQ7IJWANyKrT/JQH4U5ihg5X8qQ=="
 		],
 		"./scripts/slate_participant.js" => [
 			"Version" => 5,
