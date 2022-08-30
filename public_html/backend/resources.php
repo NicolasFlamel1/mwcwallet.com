@@ -429,10 +429,10 @@
 			"Checksum" => "f3cKvK8jETY8cLfiwhF5sX8Fg+bewgl4EkTx4g9Rmm4BM4sB4BUhcTjmf+G5VULLS5vEoNNze5AMOIyV0cRcQQ=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 30,
+			"Version" => 37,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "eIBjfu9ymkxzlqlwFImuWXU8ssnc103yWuY2CUIw7LGVupsKbPIVSD3jiDkvAU1/WNSGHg6I4tl1G3ogJrvoHA=="
+			"Checksum" => "4oMzwsJnmuyhGZWO4PGlfiIXK3B6Kfpgfx/5+Ag8vzLYSzKodYJmTUd2hYYpH6PaaxiiCHxbrOEpohN2HMfkGA=="
 		],
 		"./scripts/LedgerJS_Browser-0.0.1.js" => [
 			"Version" => 13,
@@ -519,13 +519,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 25,
+			"Version" => 29,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 91,
+			"Version" => 95,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -537,7 +537,7 @@
 			"Checksum" => "fgXcToDtI6wmtS0RjZW5pbWUYkBBkENvqM+gtInk+grrPOQxx37PqgMCyjDm5JTlC3fMvdWSeNrWv1T1CZ0a3g=="
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 21,
+			"Version" => 25,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -819,10 +819,10 @@
 			"Checksum" => "R2fpCns623zBUEZkccL1zCaqF/72q46LibJM01MMFXpmZ1IJI6aOI6PTPBsg8MKwnfrpJdKozYOLJkwPJ0sTVg=="
 		],
 		"./scripts/send_payment_section.js" => [
-			"Version" => 9,
+			"Version" => 13,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "v+iq9el1Urg/7QQY0BvhglF07V27WmhY3/Xt09sZT0xKHa/qSJYzD0ePWmmuCBcVXrPIfvAKoG/TwrlWzIuCPQ=="
+			"Checksum" => "OG6uom/eeKhs+Z1Z6KcvRvAlR9WciO/RDOjE1OBB6lETO08iFox2d0/KGJ096Bsqy4fTvnjmdPgwFugnr20wsg=="
 		],
 		"./scripts/log_section.js" => [
 			"Version" => 4,
@@ -873,10 +873,10 @@
 			"Checksum" => "OA4SbseOEmVcPnIky32I8ZUCfD16z7CnRpym1AVwXWvHwF/EG2E8E4LnsM32YpMCiTM2due3JCbxDtJITdFcwg=="
 		],
 		"./scripts/slate.js" => [
-			"Version" => 64,
+			"Version" => 78,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "yiIztKCU957WJSCUsHYR8f6cDw+jq2MKjoSKBqI7Far5f+CUrB413rhR16lpYgW8jZtRQEZcpsIeF+bQrWcTvQ=="
+			"Checksum" => "1c8ivtRWg4nIc9gj27KMiPiR4GsLoOCqLAlOkhTClwrrw8H0udRNzABqoRw4OjgfkqBVwF7Y6N7Me9VqYNEmxw=="
 		],
 		"./scripts/slate_participant.js" => [
 			"Version" => 5,

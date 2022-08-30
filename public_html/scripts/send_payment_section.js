@@ -1578,8 +1578,9 @@ class SendPaymentSection extends Section {
 																								// API finalize transaction message
 																								case Api.FINALIZE_TRANSACTION_MESSAGE:
 																								
-																									// Get address from the message data
-																									var receiverAddress = messageData;
+																									// Get address and kernel features from the message data
+																									var receiverAddress = messageData[Api.FINALIZE_TRANSACTION_MESSAGE_RECEIVER_ADDRESS_INDEX];
+																									var kernelFeatures = messageData[Api.FINALIZE_TRANSACTION_MESSAGE_KERNEL_FEATURES_INDEX];
 																									
 																									// Check if receiver address doesn't exist
 																									if(receiverAddress === Slate.NO_RECEIVER_ADDRESS) {
@@ -1598,7 +1599,7 @@ class SendPaymentSection extends Section {
 																										else {
 																								
 																											// Set text
-																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Approve finalizing sending the transaction on the hardware wallet for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Approve finalizing sending the transaction on the hardware wallet for %1$y to continue sending the payment.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, and that there\'s no payment proof address displayed.'), [
+																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Approve finalizing sending the transaction on the hardware wallet for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Approve finalizing sending the transaction on the hardware wallet for %1$y to continue sending the payment.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$y, and that there\'s no payment proof address displayed.'), [
 																											
 																												[
 																
@@ -1616,7 +1617,11 @@ class SendPaymentSection extends Section {
 																													
 																													// Currency
 																													Consensus.CURRENCY_NAME
-																												]
+																												],
+																												
+																												// Kernel features
+																												kernelFeatures
+																												
 																											]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can\'t guarantee that this payment is going to the intended recipient since this transaction doesn\'t contain a payment proof.')) + "</b>";
 																											
 																											// Set second button
@@ -1641,7 +1646,7 @@ class SendPaymentSection extends Section {
 																										else {
 																									
 																											// Set text
-																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Approve finalizing sending the transaction on the hardware wallet for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Approve finalizing sending the transaction on the hardware wallet for %1$y to continue sending the payment.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, and the proof address displayed matches the following payment proof address.'), [
+																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Approve finalizing sending the transaction on the hardware wallet for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Approve finalizing sending the transaction on the hardware wallet for %1$y to continue sending the payment.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$y, and the proof address displayed matches the following payment proof address.'), [
 																											
 																												[
 																
@@ -1659,7 +1664,10 @@ class SendPaymentSection extends Section {
 																													
 																													// Currency
 																													Consensus.CURRENCY_NAME
-																												]
+																												],
+																												
+																												// Kernel features
+																												kernelFeatures
 																												
 																											]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(receiverAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can guarantee that this payment is going to the intended recipient by having the recipient confirm that this payment proof address is their payment proof address.')) + "</b>";
 																											

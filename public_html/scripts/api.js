@@ -5526,7 +5526,7 @@ class Api {
 													}
 													
 													// Check if total amount is enough to cover the amount and fee
-													if((returnedAmount.isZero() === true && totalAmount.equalTo(amount.plus(fee)) === true) || (returnedAmount.isZero() === false && totalAmount.isGreaterThan(amount.plus(fee)) === true)) {
+													if((returnedAmount.isZero() === true && totalAmount.isEqualTo(amount.plus(fee)) === true) || (returnedAmount.isZero() === false && totalAmount.isGreaterThan(amount.plus(fee)) === true)) {
 													
 														// Check if fee is invalid
 														if(fee.isLessThan(Slate.MINIMUM_FEE) === true || fee.isGreaterThan(Slate.MAXIMUM_FEE) === true) {
@@ -9409,7 +9409,7 @@ class Api {
 																																						self.message.disable();
 																																					
 																																						// Return replace message
-																																						return self.message.replace(Api.FINALIZE_TRANSACTION_MESSAGE, slateResponse.getReceiverAddress()).then(function(replaceResult) {
+																																						return self.message.replace(Api.FINALIZE_TRANSACTION_MESSAGE, [slateResponse.getReceiverAddress(), slateResponse.getDisplayKernelFeatures()]).then(function(replaceResult) {
 																																						
 																																							// Check if cancel didn't occur
 																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -9859,7 +9859,7 @@ class Api {
 																																																self.message.disable();
 																																															
 																																																// Return replace message
-																																																return self.message.replace(Api.FINALIZE_TRANSACTION_MESSAGE, slateResponse.getReceiverAddress()).then(function(replaceResult) {
+																																																return self.message.replace(Api.FINALIZE_TRANSACTION_MESSAGE, [slateResponse.getReceiverAddress(), slateResponse.getDisplayKernelFeatures()]).then(function(replaceResult) {
 																																																
 																																																	// Check if cancel didn't occur
 																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -11780,6 +11780,20 @@ class Api {
 		
 			// Return finalize transaction message
 			return "ApiFinalizeTransactionMessage";
+		}
+		
+		// Finalize transaction message receiver address index
+		static get FINALIZE_TRANSACTION_MESSAGE_RECEIVER_ADDRESS_INDEX() {
+		
+			// Return finalize transaction message receiver address index
+			return 0;
+		}
+		
+		// Finalize transaction message kernel features index
+		static get FINALIZE_TRANSACTION_MESSAGE_KERNEL_FEATURES_INDEX() {
+		
+			// Return finalize transaction message kernel features index
+			return Api.FINALIZE_TRANSACTION_MESSAGE_RECEIVER_ADDRESS_INDEX + 1;
 		}
 	
 	// Private
