@@ -525,7 +525,7 @@
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 96,
+			"Version" => 97,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -873,10 +873,10 @@
 			"Checksum" => "OA4SbseOEmVcPnIky32I8ZUCfD16z7CnRpym1AVwXWvHwF/EG2E8E4LnsM32YpMCiTM2due3JCbxDtJITdFcwg=="
 		],
 		"./scripts/slate.js" => [
-			"Version" => 79,
+			"Version" => 80,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "AFk+1kN+IaNZZVaEeIgsyiLLG700iy9XQqS/hflXdtgddiqYi7Bkdx2XA/qtQ7IJWANyKrT/JQH4U5ihg5X8qQ=="
+			"Checksum" => "APTtYg0AvSRq1sE+hOl1tfFuj/hdP8pcweVOwxazABDZxnn8QSUKun8WMyUv3FMbHgVbLuFbUkgp7UT6F19zSQ=="
 		],
 		"./scripts/slate_participant.js" => [
 			"Version" => 5,

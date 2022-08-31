@@ -3,14 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "1.1.10";
+	const VERSION_NUMBER = "1.1.11";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "30 Aug 2022 11:39:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed parsing Slatepacks."
+		"Fixed sending V2 slates to the official MWC wallet."
 	];
 	
 	// Maintenance start time
