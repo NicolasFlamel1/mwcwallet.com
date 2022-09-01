@@ -10,7 +10,8 @@
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed sending V2 slates to the official MWC wallet."
+		"Fixed sending V2 slates to the official MWC wallet.",
+		"Updated icon."
 	];
 	
 	// Maintenance start time
