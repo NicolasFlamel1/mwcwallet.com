@@ -6,7 +6,7 @@
 	const VERSION_NUMBER = "1.1.11";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "30 Aug 2022 11:39:00 UTC";
+	const VERSION_RELEASE_DATE = "01 Sep 2022 00:55:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
