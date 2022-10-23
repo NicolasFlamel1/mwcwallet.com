@@ -3,15 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "1.1.11";
+	const VERSION_NUMBER = "1.1.12";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "01 Sep 2022 00:55:00 UTC";
+	const VERSION_RELEASE_DATE = "22 Oct 2022 00:55:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed sending V2 slates to the official MWC wallet.",
-		"Updated icon."
+		"Updated dependencies."
 	];
 	
 	// Maintenance start time

@@ -1015,7 +1015,7 @@ class Slate {
 				// Fill offset with random values
 				crypto.getRandomValues(this.offset);
 				
-			} while(Secp256k1Zkp.isValidSecretKey(this.getOffset()) === false);
+			} while(Secp256k1Zkp.isValidSecretKey(this.getOffset()) !== true);
 		}
 		
 		// Apply offset
@@ -1034,7 +1034,7 @@ class Slate {
 					var secretKey = secretKeyOrHardwareWallet;
 				
 					// Check if secret key isn't a valid secret key
-					if(Secp256k1Zkp.isValidSecretKey(secretKey) === false) {
+					if(Secp256k1Zkp.isValidSecretKey(secretKey) !== true) {
 					
 						// Reject error
 						reject("Secret key isn't a valid secret key.");
@@ -1062,7 +1062,7 @@ class Slate {
 						}
 						
 						// Otherwise check if blind offset isn't a valid secret key
-						else if(Secp256k1Zkp.isValidSecretKey(blindOffset) === false) {
+						else if(Secp256k1Zkp.isValidSecretKey(blindOffset) !== true) {
 						
 							// Securely clear blind offset
 							blindOffset.fill(0);
@@ -1122,7 +1122,7 @@ class Slate {
 			}
 			
 			// Otherwise check if the result isn't a valid secret key
-			else if(Secp256k1Zkp.isValidSecretKey(this.getOffset()) === false) {
+			else if(Secp256k1Zkp.isValidSecretKey(this.getOffset()) !== true) {
 			
 				// Return false
 				return false;
@@ -1592,7 +1592,7 @@ class Slate {
 									}
 									
 									// Check if final signature doesn't verify the slate
-									if(Secp256k1Zkp.verifySingleSignerSignature(finalSignature, messageToSign, Secp256k1Zkp.NO_PUBLIC_NONCE, publicBlindExcessSum, publicBlindExcessSum, true) === false) {
+									if(Secp256k1Zkp.verifySingleSignerSignature(finalSignature, messageToSign, Secp256k1Zkp.NO_PUBLIC_NONCE, publicBlindExcessSum, publicBlindExcessSum, true) !== true) {
 									
 										// Restore sender participant's old partial signature
 										senderParticipant.setPartialSignature(oldPartialSignature);
@@ -3247,7 +3247,7 @@ class Slate {
 					}
 					
 					// Check if transaction's offset isn't supported
-					if("offset" in serializedSlate["tx"] === false || Common.isHexString(serializedSlate["tx"]["offset"]) === false || Common.hexStringLength(serializedSlate["tx"]["offset"]) !== Crypto.BLINDING_FACTOR_LENGTH || Secp256k1Zkp.isValidSecretKey(Common.fromHexString(serializedSlate["tx"]["offset"])) === false) {
+					if("offset" in serializedSlate["tx"] === false || Common.isHexString(serializedSlate["tx"]["offset"]) === false || Common.hexStringLength(serializedSlate["tx"]["offset"]) !== Crypto.BLINDING_FACTOR_LENGTH || Secp256k1Zkp.isValidSecretKey(Common.fromHexString(serializedSlate["tx"]["offset"])) !== true) {
 					
 						// Throw error
 						throw "Unsupported slate.";
@@ -3568,7 +3568,7 @@ class Slate {
 							this.offset = bitReader.getBytes(Crypto.BLINDING_FACTOR_LENGTH);
 							
 							// Check if serialized slate's offset isn't supported
-							if(Secp256k1Zkp.isValidSecretKey(this.getOffset()) === false) {
+							if(Secp256k1Zkp.isValidSecretKey(this.getOffset()) !== true) {
 							
 								// Throw error
 								throw "Unsupported slate.";
@@ -4125,7 +4125,7 @@ class Slate {
 						this.fee = ("fee" in serializedSlate === true) ? new BigNumber(serializedSlate["fee"]) : initialSendSlate.getFee();
 					
 						// Check if serialized slate's offset isn't supported
-						if("off" in serializedSlate === false || Common.isHexString(serializedSlate["off"]) === false || Common.hexStringLength(serializedSlate["off"]) !== Crypto.BLINDING_FACTOR_LENGTH || Secp256k1Zkp.isValidSecretKey(Common.fromHexString(serializedSlate["off"])) === false) {
+						if("off" in serializedSlate === false || Common.isHexString(serializedSlate["off"]) === false || Common.hexStringLength(serializedSlate["off"]) !== Crypto.BLINDING_FACTOR_LENGTH || Secp256k1Zkp.isValidSecretKey(Common.fromHexString(serializedSlate["off"])) !== true) {
 						
 							// Throw error
 							throw "Unsupported slate.";
@@ -4357,7 +4357,7 @@ class Slate {
 				if(participant.isComplete() === true) {
 				
 					// Check if partial signature doesn't verify the message
-					if(Secp256k1Zkp.verifySingleSignerSignature(participant.getPartialSignature(), messageToSign, publicNonceSum, participant.getPublicBlindExcess(), publicBlindExcessSum, true) === false) {
+					if(Secp256k1Zkp.verifySingleSignerSignature(participant.getPartialSignature(), messageToSign, publicNonceSum, participant.getPublicBlindExcess(), publicBlindExcessSum, true) !== true) {
 					
 						// Return false
 						return false;
@@ -4414,7 +4414,7 @@ class Slate {
 									var receiverAddressPublicKey = Mqs.mqsAddressToPublicKey(this.getReceiverAddress(), isMainnet);
 									
 									// Check if receiver signature doesn't verify the message hash
-									if(Secp256k1Zkp.verifyMessageHashSignature(this.getReceiverSignature(), messageHash, receiverAddressPublicKey) === false) {
+									if(Secp256k1Zkp.verifyMessageHashSignature(this.getReceiverSignature(), messageHash, receiverAddressPublicKey) !== true) {
 									
 										// Return false
 										return false;
@@ -4430,7 +4430,7 @@ class Slate {
 									var receiverAddressPublicKey = Tor.torAddressToPublicKey(this.getReceiverAddress());
 								
 									// Check if receiver signature doesn't verify the message
-									if(Ed25519.verify(message, this.getReceiverSignature(), receiverAddressPublicKey) === false) {
+									if(Ed25519.verify(message, this.getReceiverSignature(), receiverAddressPublicKey) !== true) {
 									
 										// Return false
 										return false;
@@ -4456,7 +4456,7 @@ class Slate {
 									var receiverAddressPublicKey = Slatepack.slatepackAddressToPublicKey(this.getReceiverAddress());
 								
 									// Check if receiver signature doesn't verify the message
-									if(Ed25519.verify(message, this.getReceiverSignature(), receiverAddressPublicKey) === false) {
+									if(Ed25519.verify(message, this.getReceiverSignature(), receiverAddressPublicKey) !== true) {
 									
 										// Return false
 										return false;

@@ -625,26 +625,6 @@ class Transaction {
 			this.keyPath = keyPath;
 		}
 		
-		// Get display fee
-		getDisplayFee() {
-		
-			// Check wallet type
-			switch(Consensus.getWalletType()) {
-			
-				// MWC wallet
-				case Consensus.MWC_WALLET_TYPE:
-				
-					// Return display fee
-					return this.getFee();
-				
-				// GRIN wallet
-				case Consensus.GRIN_WALLET_TYPE:
-		
-					// Return display fee
-					return this.getFee().modulo(Slate.MAXIMUM_FEE + 1);
-			}
-		}
-		
 		// Unused commit
 		static get UNUSED_COMMIT() {
 		

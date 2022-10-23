@@ -2066,6 +2066,8 @@ class Api {
 																																											// Check if wallet's hardware wallet is connected
 																																											if(wallet.isHardwareConnected() === true) {
 																																											
+																																												// TODO display message to confirm receiving transaction on device
+																																											
 																																												// Save slate's receiver signature
 																																												var oldReceiverSignature = slate.getReceiverSignature();
 																																									

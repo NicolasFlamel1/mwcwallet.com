@@ -1293,7 +1293,7 @@
 	
 	</script>
 	
-	<script src=".<?= encodeString(getResource("./scripts/jQuery-3.6.0.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/jQuery-3.6.0.js")); ?>" type="application/javascript" charset="UTF-8"></script>
+	<script src=".<?= encodeString(getResource("./scripts/jQuery-3.6.1.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/jQuery-3.6.1.js")); ?>" type="application/javascript" charset="UTF-8"></script>
 	<script src=".<?= encodeString(getResource("./scripts/common.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/common.js")); ?>" type="application/javascript" charset="UTF-8"></script>
 	<script src=".<?= encodeString(getResource("./scripts/consensus.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/consensus.js")); ?>" type="application/javascript" charset="UTF-8"></script>
 	<script src=".<?= encodeString(getResource("./scripts/language.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/language.js")); ?>" type="application/javascript" charset="UTF-8"></script>

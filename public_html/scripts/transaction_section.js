@@ -1008,7 +1008,7 @@ class TransactionSection extends Section {
 					[
 				
 						// Amount
-						this.transaction.getDisplayFee().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
+						this.transaction.getFee().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 						
 						// Currency
 						Consensus.CURRENCY_NAME

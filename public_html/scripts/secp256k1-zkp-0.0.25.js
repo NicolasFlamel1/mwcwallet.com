@@ -7,26 +7,26 @@ function(secp256k1Zkp) {
   secp256k1Zkp = secp256k1Zkp || {};
 
 
-var a;a||(a=typeof secp256k1Zkp !== 'undefined' ? secp256k1Zkp : {});var l=Object.assign,m,p;a.ready=new Promise(function(b,c){m=b;p=c});var r=l({},a),u="";"undefined"!==typeof document&&document.currentScript&&(u=document.currentScript.src);_scriptDir&&(u=_scriptDir);0!==u.indexOf("blob:")?u=u.substr(0,u.replace(/[?#].*/,"").lastIndexOf("/")+1):u="";var v=a.print||console.log.bind(console),w=a.printErr||console.warn.bind(console);l(a,r);r=null;var x;a.wasmBinary&&(x=a.wasmBinary);
-var noExitRuntime=a.noExitRuntime||!0;"object"!==typeof WebAssembly&&y("no native wasm support detected");var z,A=!1,B="undefined"!==typeof TextDecoder?new TextDecoder("utf8"):void 0,C,D,E;function I(){var b=z.buffer;C=b;a.HEAP8=new Int8Array(b);a.HEAP16=new Int16Array(b);a.HEAP32=E=new Int32Array(b);a.HEAPU8=D=new Uint8Array(b);a.HEAPU16=new Uint16Array(b);a.HEAPU32=new Uint32Array(b);a.HEAPF32=new Float32Array(b);a.HEAPF64=new Float64Array(b)}var J,K=[],L=[],M=[];
-function N(){var b=a.preRun.shift();K.unshift(b)}var O=0,P=null,Q=null;a.preloadedImages={};a.preloadedAudios={};function y(b){if(a.onAbort)a.onAbort(b);b="Aborted("+b+")";w(b);A=!0;b=new WebAssembly.RuntimeError(b+". Build with -s ASSERTIONS=1 for more info.");p(b);throw b;}function R(){return S.startsWith("data:application/octet-stream;base64,")}var S;S="." + getResource("./scripts/secp256k1-zkp-0.0.4.wasm");if(!R()){var T=S;S=a.locateFile?a.locateFile(T,u):u+T}
-function U(){var b=S;try{if(b==S&&x)return new Uint8Array(x);throw"both async and sync fetching of the wasm failed";}catch(c){y(c)}}function aa(){return x||"function"!==typeof fetch?Promise.resolve().then(function(){return U()}):fetch(S,{credentials:"same-origin"}).then(function(b){if(!b.ok)throw"failed to load wasm binary file at '"+S+"'";return b.arrayBuffer()}).catch(function(){return U()})}
-function V(b){for(;0<b.length;){var c=b.shift();if("function"==typeof c)c(a);else{var g=c.da;"number"===typeof g?void 0===c.ca?J.get(g)():J.get(g)(c.ca):g(void 0===c.ca?null:c.ca)}}}
-var ba=[null,[],[]],da={a:function(){y("")},b:function(b){var c=D.length;b>>>=0;if(2147483648<b)return!1;for(var g=1;4>=g;g*=2){var e=c*(1+.2/g);e=Math.min(e,b+100663296);e=Math.max(b,e);0<e%65536&&(e+=65536-e%65536);a:{try{z.grow(Math.min(2147483648,e)-C.byteLength+65535>>>16);I();var d=1;break a}catch(k){}d=void 0}if(d)return!0}return!1},e:function(){return 0},c:function(){},d:function(b,c,g,e){for(var d=0,k=0;k<g;k++){var ca=E[c>>2],W=E[c+4>>2];c+=8;for(var F=0;F<W;F++){var f=D[ca+F],G=ba[b];if(0===
-f||10===f){f=G;for(var n=0,q=n+NaN,t=n;f[t]&&!(t>=q);)++t;if(16<t-n&&f.subarray&&B)f=B.decode(f.subarray(n,t));else{for(q="";n<t;){var h=f[n++];if(h&128){var H=f[n++]&63;if(192==(h&224))q+=String.fromCharCode((h&31)<<6|H);else{var X=f[n++]&63;h=224==(h&240)?(h&15)<<12|H<<6|X:(h&7)<<18|H<<12|X<<6|f[n++]&63;65536>h?q+=String.fromCharCode(h):(h-=65536,q+=String.fromCharCode(55296|h>>10,56320|h&1023))}}else q+=String.fromCharCode(h)}f=q}(1===b?v:w)(f);G.length=0}else G.push(f)}d+=W}E[e>>2]=d;return 0}};
-(function(){function b(d){a.asm=d.exports;z=a.asm.f;I();J=a.asm.ba;L.unshift(a.asm.g);O--;a.monitorRunDependencies&&a.monitorRunDependencies(O);0==O&&(null!==P&&(clearInterval(P),P=null),Q&&(d=Q,Q=null,d()))}function c(d){b(d.instance)}function g(d){return aa().then(function(k){return WebAssembly.instantiate(k,e)}).then(function(k){return k}).then(d,function(k){w("failed to asynchronously prepare wasm: "+k);y(k)})}var e={a:da};O++;a.monitorRunDependencies&&a.monitorRunDependencies(O);if(a.instantiateWasm)try{return a.instantiateWasm(e,
-b)}catch(d){return w("Module.instantiateWasm callback failed with error: "+d),!1}(function(){return x||"function"!==typeof WebAssembly.instantiateStreaming||R()||"function"!==typeof fetch?g(c):fetch(S,{credentials:"same-origin"}).then(function(d){return WebAssembly.instantiateStreaming(d,e).then(c,function(k){w("wasm streaming compile failed: "+k);w("falling back to ArrayBuffer instantiation");return g(c)})})})().catch(p);return{}})();
-a.___wasm_call_ctors=function(){return(a.___wasm_call_ctors=a.asm.g).apply(null,arguments)};a._initialize=function(){return(a._initialize=a.asm.h).apply(null,arguments)};a._uninitialize=function(){return(a._uninitialize=a.asm.i).apply(null,arguments)};a._blindSize=function(){return(a._blindSize=a.asm.j).apply(null,arguments)};a._blindSwitch=function(){return(a._blindSwitch=a.asm.k).apply(null,arguments)};a._blindSum=function(){return(a._blindSum=a.asm.l).apply(null,arguments)};
-a._isValidSecretKey=function(){return(a._isValidSecretKey=a.asm.m).apply(null,arguments)};a._isValidPublicKey=function(){return(a._isValidPublicKey=a.asm.n).apply(null,arguments)};a._isValidCommit=function(){return(a._isValidCommit=a.asm.o).apply(null,arguments)};a._isValidSingleSignerSignature=function(){return(a._isValidSingleSignerSignature=a.asm.p).apply(null,arguments)};a._bulletproofProofSize=function(){return(a._bulletproofProofSize=a.asm.q).apply(null,arguments)};
-a._createBulletproof=function(){return(a._createBulletproof=a.asm.r).apply(null,arguments)};a._createBulletproofBlindless=function(){return(a._createBulletproofBlindless=a.asm.s).apply(null,arguments)};a._bulletproofMessageSize=function(){return(a._bulletproofMessageSize=a.asm.t).apply(null,arguments)};a._rewindBulletproof=function(){return(a._rewindBulletproof=a.asm.u).apply(null,arguments)};a._verifyBulletproof=function(){return(a._verifyBulletproof=a.asm.v).apply(null,arguments)};
-a._publicKeySize=function(){return(a._publicKeySize=a.asm.w).apply(null,arguments)};a._publicKeyFromSecretKey=function(){return(a._publicKeyFromSecretKey=a.asm.x).apply(null,arguments)};a._publicKeyFromData=function(){return(a._publicKeyFromData=a.asm.y).apply(null,arguments)};a._uncompressedPublicKeySize=function(){return(a._uncompressedPublicKeySize=a.asm.z).apply(null,arguments)};a._uncompressPublicKey=function(){return(a._uncompressPublicKey=a.asm.A).apply(null,arguments)};
-a._secretKeySize=function(){return(a._secretKeySize=a.asm.B).apply(null,arguments)};a._secretKeyTweakAdd=function(){return(a._secretKeyTweakAdd=a.asm.C).apply(null,arguments)};a._publicKeyTweakAdd=function(){return(a._publicKeyTweakAdd=a.asm.D).apply(null,arguments)};a._secretKeyTweakMultiply=function(){return(a._secretKeyTweakMultiply=a.asm.E).apply(null,arguments)};a._publicKeyTweakMultiply=function(){return(a._publicKeyTweakMultiply=a.asm.F).apply(null,arguments)};
+var a;a||(a=typeof secp256k1Zkp !== 'undefined' ? secp256k1Zkp : {});var k,l;a.ready=new Promise(function(b,d){k=b;l=d});var p=Object.assign({},a),r="";"undefined"!=typeof document&&document.currentScript&&(r=document.currentScript.src);_scriptDir&&(r=_scriptDir);0!==r.indexOf("blob:")?r=r.substr(0,r.replace(/[?#].*/,"").lastIndexOf("/")+1):r="";var u=a.print||console.log.bind(console),v=a.printErr||console.warn.bind(console);Object.assign(a,p);p=null;var w;a.wasmBinary&&(w=a.wasmBinary);
+var noExitRuntime=a.noExitRuntime||!0;"object"!=typeof WebAssembly&&x("no native wasm support detected");var y,z=!1,A="undefined"!=typeof TextDecoder?new TextDecoder("utf8"):void 0,B,C,D;function H(){var b=y.buffer;B=b;a.HEAP8=new Int8Array(b);a.HEAP16=new Int16Array(b);a.HEAP32=new Int32Array(b);a.HEAPU8=C=new Uint8Array(b);a.HEAPU16=new Uint16Array(b);a.HEAPU32=D=new Uint32Array(b);a.HEAPF32=new Float32Array(b);a.HEAPF64=new Float64Array(b)}var I=[],J=[],K=[];
+function L(){var b=a.preRun.shift();I.unshift(b)}var M=0,N=null,O=null;function x(b){if(a.onAbort)a.onAbort(b);b="Aborted("+b+")";v(b);z=!0;b=new WebAssembly.RuntimeError(b+". Build with -sASSERTIONS for more info.");l(b);throw b;}function P(){return Q.startsWith("data:application/octet-stream;base64,")}var Q;Q="." + getResource("./scripts/secp256k1-zkp-0.0.25.wasm");if(!P()){var R=Q;Q=a.locateFile?a.locateFile(R,r):r+R}
+function S(){var b=Q;try{if(b==Q&&w)return new Uint8Array(w);throw"both async and sync fetching of the wasm failed";}catch(d){x(d)}}function W(){return w||"function"!=typeof fetch?Promise.resolve().then(function(){return S()}):fetch(Q,{credentials:"same-origin"}).then(function(b){if(!b.ok)throw"failed to load wasm binary file at '"+Q+"'";return b.arrayBuffer()}).catch(function(){return S()})}function X(b){for(;0<b.length;)b.shift()(a)}
+var aa=[null,[],[]],ba={a:function(){x("")},b:function(b){var d=C.length;b>>>=0;if(2147483648<b)return!1;for(var n=1;4>=n;n*=2){var h=d*(1+.2/n);h=Math.min(h,b+100663296);var c=Math;h=Math.max(b,h);c=c.min.call(c,2147483648,h+(65536-h%65536)%65536);a:{try{y.grow(c-B.byteLength+65535>>>16);H();var e=1;break a}catch(T){}e=void 0}if(e)return!0}return!1},e:function(){return 52},c:function(){return 70},d:function(b,d,n,h){for(var c=0,e=0;e<n;e++){var T=D[d>>2],U=D[d+4>>2];d+=8;for(var E=0;E<U;E++){var f=
+C[T+E],F=aa[b];if(0===f||10===f){f=F;for(var m=0,q=m+NaN,t=m;f[t]&&!(t>=q);)++t;if(16<t-m&&f.buffer&&A)f=A.decode(f.subarray(m,t));else{for(q="";m<t;){var g=f[m++];if(g&128){var G=f[m++]&63;if(192==(g&224))q+=String.fromCharCode((g&31)<<6|G);else{var V=f[m++]&63;g=224==(g&240)?(g&15)<<12|G<<6|V:(g&7)<<18|G<<12|V<<6|f[m++]&63;65536>g?q+=String.fromCharCode(g):(g-=65536,q+=String.fromCharCode(55296|g>>10,56320|g&1023))}}else q+=String.fromCharCode(g)}f=q}(1===b?u:v)(f);F.length=0}else F.push(f)}c+=
+U}D[h>>2]=c;return 0}};
+(function(){function b(c){a.asm=c.exports;y=a.asm.f;H();J.unshift(a.asm.g);M--;a.monitorRunDependencies&&a.monitorRunDependencies(M);0==M&&(null!==N&&(clearInterval(N),N=null),O&&(c=O,O=null,c()))}function d(c){b(c.instance)}function n(c){return W().then(function(e){return WebAssembly.instantiate(e,h)}).then(function(e){return e}).then(c,function(e){v("failed to asynchronously prepare wasm: "+e);x(e)})}var h={a:ba};M++;a.monitorRunDependencies&&a.monitorRunDependencies(M);if(a.instantiateWasm)try{return a.instantiateWasm(h,b)}catch(c){return v("Module.instantiateWasm callback failed with error: "+
+c),!1}(function(){return w||"function"!=typeof WebAssembly.instantiateStreaming||P()||"function"!=typeof fetch?n(d):fetch(Q,{credentials:"same-origin"}).then(function(c){return WebAssembly.instantiateStreaming(c,h).then(d,function(e){v("wasm streaming compile failed: "+e);v("falling back to ArrayBuffer instantiation");return n(d)})})})().catch(l);return{}})();a.___wasm_call_ctors=function(){return(a.___wasm_call_ctors=a.asm.g).apply(null,arguments)};
+a._initialize=function(){return(a._initialize=a.asm.h).apply(null,arguments)};a._uninitialize=function(){return(a._uninitialize=a.asm.i).apply(null,arguments)};a._blindSize=function(){return(a._blindSize=a.asm.j).apply(null,arguments)};a._blindSwitch=function(){return(a._blindSwitch=a.asm.k).apply(null,arguments)};a._blindSum=function(){return(a._blindSum=a.asm.l).apply(null,arguments)};a._isValidSecretKey=function(){return(a._isValidSecretKey=a.asm.m).apply(null,arguments)};
+a._isValidPublicKey=function(){return(a._isValidPublicKey=a.asm.n).apply(null,arguments)};a._isValidCommit=function(){return(a._isValidCommit=a.asm.o).apply(null,arguments)};a._isValidSingleSignerSignature=function(){return(a._isValidSingleSignerSignature=a.asm.p).apply(null,arguments)};a._bulletproofProofSize=function(){return(a._bulletproofProofSize=a.asm.q).apply(null,arguments)};a._createBulletproof=function(){return(a._createBulletproof=a.asm.r).apply(null,arguments)};
+a._createBulletproofBlindless=function(){return(a._createBulletproofBlindless=a.asm.s).apply(null,arguments)};a._bulletproofMessageSize=function(){return(a._bulletproofMessageSize=a.asm.t).apply(null,arguments)};a._rewindBulletproof=function(){return(a._rewindBulletproof=a.asm.u).apply(null,arguments)};a._verifyBulletproof=function(){return(a._verifyBulletproof=a.asm.v).apply(null,arguments)};a._publicKeySize=function(){return(a._publicKeySize=a.asm.w).apply(null,arguments)};
+a._publicKeyFromSecretKey=function(){return(a._publicKeyFromSecretKey=a.asm.x).apply(null,arguments)};a._publicKeyFromData=function(){return(a._publicKeyFromData=a.asm.y).apply(null,arguments)};a._uncompressedPublicKeySize=function(){return(a._uncompressedPublicKeySize=a.asm.z).apply(null,arguments)};a._uncompressPublicKey=function(){return(a._uncompressPublicKey=a.asm.A).apply(null,arguments)};a._secretKeySize=function(){return(a._secretKeySize=a.asm.B).apply(null,arguments)};
+a._secretKeyTweakAdd=function(){return(a._secretKeyTweakAdd=a.asm.C).apply(null,arguments)};a._publicKeyTweakAdd=function(){return(a._publicKeyTweakAdd=a.asm.D).apply(null,arguments)};a._secretKeyTweakMultiply=function(){return(a._secretKeyTweakMultiply=a.asm.E).apply(null,arguments)};a._publicKeyTweakMultiply=function(){return(a._publicKeyTweakMultiply=a.asm.F).apply(null,arguments)};
 a._sharedSecretKeyFromSecretKeyAndPublicKey=function(){return(a._sharedSecretKeyFromSecretKeyAndPublicKey=a.asm.G).apply(null,arguments)};a._commitSize=function(){return(a._commitSize=a.asm.H).apply(null,arguments)};a._pedersenCommit=function(){return(a._pedersenCommit=a.asm.I).apply(null,arguments)};a._pedersenCommitSum=function(){return(a._pedersenCommitSum=a.asm.J).apply(null,arguments)};a._pedersenCommitToPublicKey=function(){return(a._pedersenCommitToPublicKey=a.asm.K).apply(null,arguments)};
 a._publicKeyToPedersenCommit=function(){return(a._publicKeyToPedersenCommit=a.asm.L).apply(null,arguments)};a._singleSignerSignatureSize=function(){return(a._singleSignerSignatureSize=a.asm.M).apply(null,arguments)};a._seedSize=function(){return(a._seedSize=a.asm.N).apply(null,arguments)};a._createSingleSignerSignature=function(){return(a._createSingleSignerSignature=a.asm.O).apply(null,arguments)};a._addSingleSignerSignatures=function(){return(a._addSingleSignerSignatures=a.asm.P).apply(null,arguments)};
 a._verifySingleSignerSignature=function(){return(a._verifySingleSignerSignature=a.asm.Q).apply(null,arguments)};a._singleSignerSignatureFromData=function(){return(a._singleSignerSignatureFromData=a.asm.R).apply(null,arguments)};a._uncompactSingleSignerSignatureSize=function(){return(a._uncompactSingleSignerSignatureSize=a.asm.S).apply(null,arguments)};a._compactSingleSignerSignature=function(){return(a._compactSingleSignerSignature=a.asm.T).apply(null,arguments)};
 a._uncompactSingleSignerSignature=function(){return(a._uncompactSingleSignerSignature=a.asm.U).apply(null,arguments)};a._combinePublicKeys=function(){return(a._combinePublicKeys=a.asm.V).apply(null,arguments)};a._nonceSize=function(){return(a._nonceSize=a.asm.W).apply(null,arguments)};a._createSecretNonce=function(){return(a._createSecretNonce=a.asm.X).apply(null,arguments)};a._maximumMessageHashSignatureSize=function(){return(a._maximumMessageHashSignatureSize=a.asm.Y).apply(null,arguments)};
-a._createMessageHashSignature=function(){return(a._createMessageHashSignature=a.asm.Z).apply(null,arguments)};a._verifyMessageHashSignature=function(){return(a._verifyMessageHashSignature=a.asm._).apply(null,arguments)};a._free=function(){return(a._free=a.asm.$).apply(null,arguments)};a._malloc=function(){return(a._malloc=a.asm.aa).apply(null,arguments)};var Y;Q=function ea(){Y||Z();Y||(Q=ea)};
-function Z(){function b(){if(!Y&&(Y=!0,a.calledRun=!0,!A)){V(L);m(a);if(a.onRuntimeInitialized)a.onRuntimeInitialized();if(a.postRun)for("function"==typeof a.postRun&&(a.postRun=[a.postRun]);a.postRun.length;){var c=a.postRun.shift();M.unshift(c)}V(M)}}if(!(0<O)){if(a.preRun)for("function"==typeof a.preRun&&(a.preRun=[a.preRun]);a.preRun.length;)N();V(K);0<O||(a.setStatus?(a.setStatus("Running..."),setTimeout(function(){setTimeout(function(){a.setStatus("")},1);b()},1)):b())}}a.run=Z;
+a._createMessageHashSignature=function(){return(a._createMessageHashSignature=a.asm.Z).apply(null,arguments)};a._verifyMessageHashSignature=function(){return(a._verifyMessageHashSignature=a.asm._).apply(null,arguments)};a._free=function(){return(a._free=a.asm.$).apply(null,arguments)};a._malloc=function(){return(a._malloc=a.asm.aa).apply(null,arguments)};var Y;O=function ca(){Y||Z();Y||(O=ca)};
+function Z(){function b(){if(!Y&&(Y=!0,a.calledRun=!0,!z)){X(J);k(a);if(a.onRuntimeInitialized)a.onRuntimeInitialized();if(a.postRun)for("function"==typeof a.postRun&&(a.postRun=[a.postRun]);a.postRun.length;){var d=a.postRun.shift();K.unshift(d)}X(K)}}if(!(0<M)){if(a.preRun)for("function"==typeof a.preRun&&(a.preRun=[a.preRun]);a.preRun.length;)L();X(I);0<M||(a.setStatus?(a.setStatus("Running..."),setTimeout(function(){setTimeout(function(){a.setStatus("")},1);b()},1)):b())}}
 if(a.preInit)for("function"==typeof a.preInit&&(a.preInit=[a.preInit]);0<a.preInit.length;)a.preInit.pop()();Z();
 
 
@@ -1088,6 +1088,8 @@ class Secp256k1Zkp {
 			var result = new Uint8Array(Secp256k1Zkp.instance._secretKeySize());
 			
 			// Allocate and fill memory
+			var resultBuffer = Secp256k1Zkp.instance._malloc(result["length"] * result["BYTES_PER_ELEMENT"]);
+			
 			var secretKeyBuffer = Secp256k1Zkp.instance._malloc(secretKey["length"] * secretKey["BYTES_PER_ELEMENT"]);
 			Secp256k1Zkp.instance["HEAPU8"].set(secretKey, secretKeyBuffer / secretKey["BYTES_PER_ELEMENT"]);
 			
@@ -1095,13 +1097,15 @@ class Secp256k1Zkp {
 			Secp256k1Zkp.instance["HEAPU8"].set(tweak, tweakBuffer / tweak["BYTES_PER_ELEMENT"]);
 			
 			// Check if performing secret key tweak add failed
-			if(Secp256k1Zkp.instance._secretKeyTweakAdd(secretKeyBuffer, secretKey["length"] * secretKey["BYTES_PER_ELEMENT"], tweakBuffer, tweak["length"] * tweak["BYTES_PER_ELEMENT"]) === Secp256k1Zkp.C_FALSE) {
+			if(Secp256k1Zkp.instance._secretKeyTweakAdd(resultBuffer, secretKeyBuffer, secretKey["length"] * secretKey["BYTES_PER_ELEMENT"], tweakBuffer, tweak["length"] * tweak["BYTES_PER_ELEMENT"]) === Secp256k1Zkp.C_FALSE) {
 			
 				// Clear memory
+				Secp256k1Zkp.instance["HEAPU8"].fill(0, resultBuffer / result["BYTES_PER_ELEMENT"], resultBuffer / result["BYTES_PER_ELEMENT"] + result["length"]);
 				Secp256k1Zkp.instance["HEAPU8"].fill(0, secretKeyBuffer / secretKey["BYTES_PER_ELEMENT"], secretKeyBuffer / secretKey["BYTES_PER_ELEMENT"] + secretKey["length"]);
 				Secp256k1Zkp.instance["HEAPU8"].fill(0, tweakBuffer / tweak["BYTES_PER_ELEMENT"], tweakBuffer / tweak["BYTES_PER_ELEMENT"] + tweak["length"]);
 				
 				// Free memory
+				Secp256k1Zkp.instance._free(resultBuffer);
 				Secp256k1Zkp.instance._free(secretKeyBuffer);
 				Secp256k1Zkp.instance._free(tweakBuffer);
 			
@@ -1110,13 +1114,15 @@ class Secp256k1Zkp {
 			}
 			
 			// Get result
-			result = new Uint8Array(Secp256k1Zkp.instance["HEAPU8"].subarray(secretKeyBuffer, secretKeyBuffer + result["length"]));
+			result = new Uint8Array(Secp256k1Zkp.instance["HEAPU8"].subarray(resultBuffer, resultBuffer + result["length"]));
 			
 			// Clear memory
+			Secp256k1Zkp.instance["HEAPU8"].fill(0, resultBuffer / result["BYTES_PER_ELEMENT"], resultBuffer / result["BYTES_PER_ELEMENT"] + result["length"]);
 			Secp256k1Zkp.instance["HEAPU8"].fill(0, secretKeyBuffer / secretKey["BYTES_PER_ELEMENT"], secretKeyBuffer / secretKey["BYTES_PER_ELEMENT"] + secretKey["length"]);
 			Secp256k1Zkp.instance["HEAPU8"].fill(0, tweakBuffer / tweak["BYTES_PER_ELEMENT"], tweakBuffer / tweak["BYTES_PER_ELEMENT"] + tweak["length"]);
 			
 			// Free memory
+			Secp256k1Zkp.instance._free(resultBuffer);
 			Secp256k1Zkp.instance._free(secretKeyBuffer);
 			Secp256k1Zkp.instance._free(tweakBuffer);
 			
@@ -1150,6 +1156,8 @@ class Secp256k1Zkp {
 			var result = new Uint8Array(Secp256k1Zkp.instance._publicKeySize());
 			
 			// Allocate and fill memory
+			var resultBuffer = Secp256k1Zkp.instance._malloc(result["length"] * result["BYTES_PER_ELEMENT"]);
+			
 			var publicKeyBuffer = Secp256k1Zkp.instance._malloc(publicKey["length"] * publicKey["BYTES_PER_ELEMENT"]);
 			Secp256k1Zkp.instance["HEAPU8"].set(publicKey, publicKeyBuffer / publicKey["BYTES_PER_ELEMENT"]);
 			
@@ -1157,13 +1165,15 @@ class Secp256k1Zkp {
 			Secp256k1Zkp.instance["HEAPU8"].set(tweak, tweakBuffer / tweak["BYTES_PER_ELEMENT"]);
 			
 			// Check if performing public key tweak add failed
-			if(Secp256k1Zkp.instance._publicKeyTweakAdd(publicKeyBuffer, publicKey["length"] * publicKey["BYTES_PER_ELEMENT"], tweakBuffer, tweak["length"] * tweak["BYTES_PER_ELEMENT"]) === Secp256k1Zkp.C_FALSE) {
+			if(Secp256k1Zkp.instance._publicKeyTweakAdd(resultBuffer, publicKeyBuffer, publicKey["length"] * publicKey["BYTES_PER_ELEMENT"], tweakBuffer, tweak["length"] * tweak["BYTES_PER_ELEMENT"]) === Secp256k1Zkp.C_FALSE) {
 			
 				// Clear memory
+				Secp256k1Zkp.instance["HEAPU8"].fill(0, resultBuffer / result["BYTES_PER_ELEMENT"], resultBuffer / result["BYTES_PER_ELEMENT"] + result["length"]);
 				Secp256k1Zkp.instance["HEAPU8"].fill(0, publicKeyBuffer / publicKey["BYTES_PER_ELEMENT"], publicKeyBuffer / publicKey["BYTES_PER_ELEMENT"] + publicKey["length"]);
 				Secp256k1Zkp.instance["HEAPU8"].fill(0, tweakBuffer / tweak["BYTES_PER_ELEMENT"], tweakBuffer / tweak["BYTES_PER_ELEMENT"] + tweak["length"]);
 				
 				// Free memory
+				Secp256k1Zkp.instance._free(resultBuffer);
 				Secp256k1Zkp.instance._free(publicKeyBuffer);
 				Secp256k1Zkp.instance._free(tweakBuffer);
 			
@@ -1172,13 +1182,15 @@ class Secp256k1Zkp {
 			}
 			
 			// Get result
-			result = new Uint8Array(Secp256k1Zkp.instance["HEAPU8"].subarray(publicKeyBuffer, publicKeyBuffer + result["length"]));
+			result = new Uint8Array(Secp256k1Zkp.instance["HEAPU8"].subarray(resultBuffer, resultBuffer + result["length"]));
 			
 			// Clear memory
+			Secp256k1Zkp.instance["HEAPU8"].fill(0, resultBuffer / result["BYTES_PER_ELEMENT"], resultBuffer / result["BYTES_PER_ELEMENT"] + result["length"]);
 			Secp256k1Zkp.instance["HEAPU8"].fill(0, publicKeyBuffer / publicKey["BYTES_PER_ELEMENT"], publicKeyBuffer / publicKey["BYTES_PER_ELEMENT"] + publicKey["length"]);
 			Secp256k1Zkp.instance["HEAPU8"].fill(0, tweakBuffer / tweak["BYTES_PER_ELEMENT"], tweakBuffer / tweak["BYTES_PER_ELEMENT"] + tweak["length"]);
 			
 			// Free memory
+			Secp256k1Zkp.instance._free(resultBuffer);
 			Secp256k1Zkp.instance._free(publicKeyBuffer);
 			Secp256k1Zkp.instance._free(tweakBuffer);
 			
@@ -1212,6 +1224,8 @@ class Secp256k1Zkp {
 			var result = new Uint8Array(Secp256k1Zkp.instance._secretKeySize());
 			
 			// Allocate and fill memory
+			var resultBuffer = Secp256k1Zkp.instance._malloc(result["length"] * result["BYTES_PER_ELEMENT"]);
+			
 			var secretKeyBuffer = Secp256k1Zkp.instance._malloc(secretKey["length"] * secretKey["BYTES_PER_ELEMENT"]);
 			Secp256k1Zkp.instance["HEAPU8"].set(secretKey, secretKeyBuffer / secretKey["BYTES_PER_ELEMENT"]);
 			
@@ -1219,13 +1233,15 @@ class Secp256k1Zkp {
 			Secp256k1Zkp.instance["HEAPU8"].set(tweak, tweakBuffer / tweak["BYTES_PER_ELEMENT"]);
 			
 			// Check if performing secret key tweak multiply failed
-			if(Secp256k1Zkp.instance._secretKeyTweakMultiply(secretKeyBuffer, secretKey["length"] * secretKey["BYTES_PER_ELEMENT"], tweakBuffer, tweak["length"] * tweak["BYTES_PER_ELEMENT"]) === Secp256k1Zkp.C_FALSE) {
+			if(Secp256k1Zkp.instance._secretKeyTweakMultiply(resultBuffer, secretKeyBuffer, secretKey["length"] * secretKey["BYTES_PER_ELEMENT"], tweakBuffer, tweak["length"] * tweak["BYTES_PER_ELEMENT"]) === Secp256k1Zkp.C_FALSE) {
 			
 				// Clear memory
+				Secp256k1Zkp.instance["HEAPU8"].fill(0, resultBuffer / result["BYTES_PER_ELEMENT"], resultBuffer / result["BYTES_PER_ELEMENT"] + result["length"]);
 				Secp256k1Zkp.instance["HEAPU8"].fill(0, secretKeyBuffer / secretKey["BYTES_PER_ELEMENT"], secretKeyBuffer / secretKey["BYTES_PER_ELEMENT"] + secretKey["length"]);
 				Secp256k1Zkp.instance["HEAPU8"].fill(0, tweakBuffer / tweak["BYTES_PER_ELEMENT"], tweakBuffer / tweak["BYTES_PER_ELEMENT"] + tweak["length"]);
 				
 				// Free memory
+				Secp256k1Zkp.instance._free(resultBuffer);
 				Secp256k1Zkp.instance._free(secretKeyBuffer);
 				Secp256k1Zkp.instance._free(tweakBuffer);
 			
@@ -1234,13 +1250,15 @@ class Secp256k1Zkp {
 			}
 			
 			// Get result
-			result = new Uint8Array(Secp256k1Zkp.instance["HEAPU8"].subarray(secretKeyBuffer, secretKeyBuffer + result["length"]));
+			result = new Uint8Array(Secp256k1Zkp.instance["HEAPU8"].subarray(resultBuffer, resultBuffer + result["length"]));
 			
 			// Clear memory
+			Secp256k1Zkp.instance["HEAPU8"].fill(0, resultBuffer / result["BYTES_PER_ELEMENT"], resultBuffer / result["BYTES_PER_ELEMENT"] + result["length"]);
 			Secp256k1Zkp.instance["HEAPU8"].fill(0, secretKeyBuffer / secretKey["BYTES_PER_ELEMENT"], secretKeyBuffer / secretKey["BYTES_PER_ELEMENT"] + secretKey["length"]);
 			Secp256k1Zkp.instance["HEAPU8"].fill(0, tweakBuffer / tweak["BYTES_PER_ELEMENT"], tweakBuffer / tweak["BYTES_PER_ELEMENT"] + tweak["length"]);
 			
 			// Free memory
+			Secp256k1Zkp.instance._free(resultBuffer);
 			Secp256k1Zkp.instance._free(secretKeyBuffer);
 			Secp256k1Zkp.instance._free(tweakBuffer);
 			
@@ -1274,6 +1292,8 @@ class Secp256k1Zkp {
 			var result = new Uint8Array(Secp256k1Zkp.instance._publicKeySize());
 			
 			// Allocate and fill memory
+			var resultBuffer = Secp256k1Zkp.instance._malloc(result["length"] * result["BYTES_PER_ELEMENT"]);
+			
 			var publicKeyBuffer = Secp256k1Zkp.instance._malloc(publicKey["length"] * publicKey["BYTES_PER_ELEMENT"]);
 			Secp256k1Zkp.instance["HEAPU8"].set(publicKey, publicKeyBuffer / publicKey["BYTES_PER_ELEMENT"]);
 			
@@ -1281,13 +1301,15 @@ class Secp256k1Zkp {
 			Secp256k1Zkp.instance["HEAPU8"].set(tweak, tweakBuffer / tweak["BYTES_PER_ELEMENT"]);
 			
 			// Check if performing public key tweak multiply failed
-			if(Secp256k1Zkp.instance._publicKeyTweakMultiply(publicKeyBuffer, publicKey["length"] * publicKey["BYTES_PER_ELEMENT"], tweakBuffer, tweak["length"] * tweak["BYTES_PER_ELEMENT"]) === Secp256k1Zkp.C_FALSE) {
+			if(Secp256k1Zkp.instance._publicKeyTweakMultiply(resultBuffer, publicKeyBuffer, publicKey["length"] * publicKey["BYTES_PER_ELEMENT"], tweakBuffer, tweak["length"] * tweak["BYTES_PER_ELEMENT"]) === Secp256k1Zkp.C_FALSE) {
 			
 				// Clear memory
+				Secp256k1Zkp.instance["HEAPU8"].fill(0, resultBuffer / result["BYTES_PER_ELEMENT"], resultBuffer / result["BYTES_PER_ELEMENT"] + result["length"]);
 				Secp256k1Zkp.instance["HEAPU8"].fill(0, publicKeyBuffer / publicKey["BYTES_PER_ELEMENT"], publicKeyBuffer / publicKey["BYTES_PER_ELEMENT"] + publicKey["length"]);
 				Secp256k1Zkp.instance["HEAPU8"].fill(0, tweakBuffer / tweak["BYTES_PER_ELEMENT"], tweakBuffer / tweak["BYTES_PER_ELEMENT"] + tweak["length"]);
 				
 				// Free memory
+				Secp256k1Zkp.instance._free(resultBuffer);
 				Secp256k1Zkp.instance._free(publicKeyBuffer);
 				Secp256k1Zkp.instance._free(tweakBuffer);
 			
@@ -1296,13 +1318,15 @@ class Secp256k1Zkp {
 			}
 			
 			// Get result
-			result = new Uint8Array(Secp256k1Zkp.instance["HEAPU8"].subarray(publicKeyBuffer, publicKeyBuffer + result["length"]));
+			result = new Uint8Array(Secp256k1Zkp.instance["HEAPU8"].subarray(resultBuffer, resultBuffer + result["length"]));
 			
 			// Clear memory
+			Secp256k1Zkp.instance["HEAPU8"].fill(0, resultBuffer / result["BYTES_PER_ELEMENT"], resultBuffer / result["BYTES_PER_ELEMENT"] + result["length"]);
 			Secp256k1Zkp.instance["HEAPU8"].fill(0, publicKeyBuffer / publicKey["BYTES_PER_ELEMENT"], publicKeyBuffer / publicKey["BYTES_PER_ELEMENT"] + publicKey["length"]);
 			Secp256k1Zkp.instance["HEAPU8"].fill(0, tweakBuffer / tweak["BYTES_PER_ELEMENT"], tweakBuffer / tweak["BYTES_PER_ELEMENT"] + tweak["length"]);
 			
 			// Free memory
+			Secp256k1Zkp.instance._free(resultBuffer);
 			Secp256k1Zkp.instance._free(publicKeyBuffer);
 			Secp256k1Zkp.instance._free(tweakBuffer);
 			
@@ -1751,7 +1775,7 @@ class Secp256k1Zkp {
 			var seedBuffer = Secp256k1Zkp.instance._malloc(seed["length"] * seed["BYTES_PER_ELEMENT"]);
 			Secp256k1Zkp.instance["HEAPU8"].set(seed, seedBuffer / seed["BYTES_PER_ELEMENT"]);
 			
-			// Check if creating signle-signer signature failed
+			// Check if creating single-signer signature failed
 			if(Secp256k1Zkp.instance._createSingleSignerSignature(signatureBuffer, messageBuffer, message["length"] * message["BYTES_PER_ELEMENT"], secretKeyBuffer, secretKey["length"] * secretKey["BYTES_PER_ELEMENT"], (secretNonce !== Secp256k1Zkp.NO_SECRET_NONCE) ? secretNonceBuffer : Secp256k1Zkp.C_NULL, (secretNonce !== Secp256k1Zkp.NO_SECRET_NONCE) ? secretNonce["length"] * secretNonce["BYTES_PER_ELEMENT"] : 0, publicKeyBuffer, publicKey["length"] * publicKey["BYTES_PER_ELEMENT"], (publicNonce !== Secp256k1Zkp.NO_PUBLIC_NONCE) ? publicNonceBuffer : Secp256k1Zkp.C_NULL, (publicNonce !== Secp256k1Zkp.NO_PUBLIC_NONCE) ? publicNonce["length"] * publicNonce["BYTES_PER_ELEMENT"] : 0, (publicNonceTotal !== Secp256k1Zkp.NO_PUBLIC_NONCE_TOTAL) ? publicNonceTotalBuffer : Secp256k1Zkp.C_NULL, (publicNonceTotal !== Secp256k1Zkp.NO_PUBLIC_NONCE_TOTAL) ? publicNonceTotal["length"] * publicNonceTotal["BYTES_PER_ELEMENT"] : 0, seedBuffer, seed["length"] * seed["BYTES_PER_ELEMENT"]) === Secp256k1Zkp.C_FALSE) {
 			
 				// Clear memory
@@ -1971,7 +1995,7 @@ class Secp256k1Zkp {
 			var publicKeyTotalBuffer = Secp256k1Zkp.instance._malloc(publicKeyTotal["length"] * publicKeyTotal["BYTES_PER_ELEMENT"]);
 			Secp256k1Zkp.instance["HEAPU8"].set(publicKeyTotal, publicKeyTotalBuffer / publicKeyTotal["BYTES_PER_ELEMENT"]);
 			
-			// Check if signle-signer signature isn't verified
+			// Check if single-signer signature isn't verified
 			if(Secp256k1Zkp.instance._verifySingleSignerSignature(signatureBuffer, signature["length"] * signature["BYTES_PER_ELEMENT"], messageBuffer, message["length"] * message["BYTES_PER_ELEMENT"], (publicNonce !== Secp256k1Zkp.NO_PUBLIC_NONCE) ? publicNonceBuffer : Secp256k1Zkp.C_NULL, (publicNonce !== Secp256k1Zkp.NO_PUBLIC_NONCE) ? publicNonce["length"] * publicNonce["BYTES_PER_ELEMENT"] : 0, publicKeyBuffer, publicKey["length"] * publicKey["BYTES_PER_ELEMENT"], publicKeyTotalBuffer, publicKeyTotal["length"] * publicKeyTotal["BYTES_PER_ELEMENT"], Secp256k1Zkp.booleanToCBoolean(isPartial)) === Secp256k1Zkp.C_FALSE) {
 			
 				// Clear memory

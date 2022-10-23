@@ -1195,10 +1195,18 @@ class Wallet {
 			return new Promise(function(resolve, reject) {
 		
 				// Check if wallet isn't open
-				if(self.isOpen() === false)
+				if(self.isOpen() === false) {
 				
 					// Reject error
 					reject("Wallet closed.");
+				}
+				
+				// Otherwise check if wallet is a hardware wallet
+				else if(self.getHardwareType() !== Wallet.NO_HARDWARE_TYPE) {
+				
+					// Reject error
+					reject("Building coinbase isn't supported for a hardware wallet.");
+				}
 				
 				// Otherwise
 				else {
@@ -1859,7 +1867,7 @@ class Wallet {
 								}
 							
 								// Check if sum isn't a valid secret key
-								if(Secp256k1Zkp.isValidSecretKey(sum) === false) {
+								if(Secp256k1Zkp.isValidSecretKey(sum) !== true) {
 								
 									// Securely clear sum
 									sum.fill(0);
