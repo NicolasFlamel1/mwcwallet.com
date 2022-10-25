@@ -3938,6 +3938,87 @@ class Wallets {
 			});
 		}
 		
+		// Wait for hardware wallet to approve
+		waitForHardwareWalletToApprove(keyPath, text, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
+		
+			// Set self
+			var self = this;
+		
+			// Return promise
+			return new Promise(function(resolve, reject) {
+		
+				// Otherwise check if wallet doesn't exist
+				if(self.walletExists(keyPath) === false) {
+				
+					// Reject error
+					reject("Wallet doesn\'t exist.");
+				}
+				
+				// Otherwise
+				else {
+				
+					// Get wallet
+					var wallet = self.wallets[keyPath];
+					
+					// Check if wallet isn't open(
+					if(wallet.isOpen() === false) {
+					
+						// Reject error
+						reject("Wallet isn't open.");
+					}
+					
+					// Otherwise check if wallet isn't a hardware wallet
+					else if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
+					
+						// Reject error
+						reject("Wallet isn't a hardware wallet.");
+					}
+					
+					// Otherwise check if the wallet's hardware wallet isn't connected
+					else if(wallet.isHardwareConnected() === false) {
+					
+						// Reject hardware wallet disconnected error
+						reject(HardwareWallet.DISCONNECTED_ERROR);
+					}
+					
+					// Otherwise
+					else {
+					
+						// Return application showing hardware wallet pending message
+						return self.application.showHardwareWalletPendingMessage(wallet.getHardwareWallet(), text, cancelOccurred).then(function(canceled) {
+						
+							// Resolve canceled
+							resolve(canceled);
+						
+						// Catch errors
+						}).catch(function(error) {
+						
+							// Reject error
+							reject(error);
+						});
+					}
+				}
+			});
+		}
+		
+		// Hardware wallet done approving
+		hardwareWalletDoneApproving() {
+		
+			// Set self
+			var self = this;
+			
+			// Return promise
+			return new Promise(function(resolve, reject) {
+		
+				// Return setting that application hardware wallet pending message is done
+				return self.application.hardwareWalletPendingMessageDone().then(function() {
+				
+					// Resolve
+					resolve();
+				});
+			});
+		}
+		
 		// Obtain exclusive hardware lock
 		obtainExclusiveHardwareLock() {
 		

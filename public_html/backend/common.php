@@ -6,11 +6,12 @@
 	const VERSION_NUMBER = "1.1.12";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "22 Oct 2022 00:55:00 UTC";
+	const VERSION_RELEASE_DATE = "25 Oct 2022 00:49:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Updated dependencies."
+		"Updated dependencies.",
+		"Added support for v3.2.0 of the Ledger hardware wallet app."
 	];
 	
 	// Maintenance start time

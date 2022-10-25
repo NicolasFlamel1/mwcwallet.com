@@ -3218,8 +3218,8 @@ class Application {
 											// Return showing message immediately and allow showing messages
 											return self.message.show(Language.getDefaultTranslation('Hardware Wallet Disconnected'), Message.createPendingResult() + Message.createLineBreak() + Message.createText(Language.getDefaultTranslation('Connecting to a hardware wallet.')), true, function() {
 											
-												// Message show application event
-												$(self.message).one(Message.SHOW_EVENT + ".application", function() {
+												// Message show application hardware wallet connect event
+												$(self.message).one(Message.SHOW_EVENT + ".applicationHardwareWalletConnect", function() {
 												
 													// Create hardware wallet
 													var hardwareWallet = new HardwareWallet(self);
@@ -3406,8 +3406,8 @@ class Application {
 											
 											}, Language.getDefaultTranslation('Back'), Message.NO_BUTTON, true, (allowUnlock === true) ? Message.VISIBLE_STATE_UNLOCK | Message.VISIBLE_STATE_UNLOCKED : Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
 											
-												// Turn off message show application event
-												$(self.message).off(Message.SHOW_EVENT + ".application");
+												// Turn off message show application hardware wallet connect event
+												$(self.message).off(Message.SHOW_EVENT + ".applicationHardwareWalletConnect");
 												
 												// Set canceled
 												canceled = true;
@@ -4065,6 +4065,194 @@ class Application {
 					// Reject canceled error
 					reject(Common.CANCELED_ERROR);
 				}
+			});
+		}
+		
+		// Show hardware wallet pending message
+		showHardwareWalletPendingMessage(hardwareWallet, text, cancelOccurred = Common.NO_CANCEL_OCCURRED, recursivelyShown = false, rootCanceled) {
+		
+			// Set self
+			var self = this;
+			
+			// Return promise
+			return new Promise(function(resolve, reject) {
+			
+				// Check if cancel didn't occur or recursively shown
+				if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) || recursivelyShown === true) {
+				
+					// Initialize canceled
+					var canceled = {
+					
+						// Value
+						"Value": false
+					};
+				
+					// Return showing message and do it immediately if recursively shown
+					return self.message.show(Language.getDefaultTranslation('Hardware Wallet Approval Requested'), text, recursivelyShown === true, function() {
+					
+						// Check if cancel didn't occur or recursively shown
+						if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) || recursivelyShown === true) {
+					
+							// Check if hardware wallet is connected
+							if(hardwareWallet.isConnected() === true) {
+							
+								// Save focus and blur
+								self.focus.save(true);
+								
+								// Check if unlock display is shown
+								if(self.isUnlockDisplayShown() === true)
+								
+									// Disable tabbing to everything in unlock display and disable everything in unlock display
+									self.unlockDisplay.find("*").disableTab().disable();
+								
+								// Otherwise check if unlocked display is shown
+								else if(self.isUnlockedDisplayShown() === true)
+								
+									// Disable unlocked
+									self.unlocked.disable();
+								
+								// Message replace application hardware wallet approve event
+								$(self.message).on(Message.REPLACE_EVENT + ".applicationHardwareWalletApprove", function(event, messageType, messageData) {
+								
+									// Check if message type is hardware wallet unlock message
+									if(messageType === Application.HARDWARE_WALLET_UNLOCK_MESSAGE) {
+									
+										// Turn off message replace application hardware wallet approve event
+										$(self.message).off(Message.REPLACE_EVENT + ".applicationHardwareWalletApprove");
+										
+										// Show hardware wallet pending message and catch errors
+										self.showHardwareWalletPendingMessage(hardwareWallet, text, cancelOccurred, true, (recursivelyShown === true) ? rootCanceled : canceled).catch(function(error) {
+										
+											// Replace message
+											self.message.replace(Application.HARDWARE_WALLET_DISCONNECT_MESSAGE);
+										});
+									}
+								});
+								
+								// Message show application hardware wallet approve event
+								$(self.message).one(Message.SHOW_EVENT + ".applicationHardwareWalletApprove", function() {
+								
+									// Resolve canceled
+									resolve(function() {
+									
+										// Return if canceled
+										return canceled["Value"] === true;
+									});
+								});
+							}
+							
+							// Otherwise
+							else {
+							
+								// Reject hardware wallet disconnected error
+								reject(HardwareWallet.DISCONNECTED_ERROR);
+							
+								// Return false
+								return false;
+							}
+						}
+						
+						// Otherwise
+						else {
+						
+							// Return false
+							return false;
+						}
+					
+					}, Language.getDefaultTranslation('Cancel'), Message.NO_BUTTON, recursivelyShown === true, Message.VISIBLE_STATE_UNLOCK | Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+					
+						// Turn off message show application hardware wallet approve event
+						$(self.message).off(Message.SHOW_EVENT + ".applicationHardwareWalletApprove");
+						
+						// Check if message was displayed
+						if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
+						
+							// Turn off message replace application hardware wallet approve event
+							$(self.message).off(Message.REPLACE_EVENT + ".applicationHardwareWalletApprove");
+							
+							// Check if recursively shown
+							if(recursivelyShown === true) {
+							
+								// Set root canceled
+								rootCanceled["Value"] = true;
+							}
+							
+							// Otherwise
+							else {
+						
+								// Set canceled
+								canceled["Value"] = true;
+							}
+							
+							// Check if unlock display is shown
+							if(self.isUnlockDisplayShown() === true)
+							
+								// Enable tabbing to everything in unlock display and enable everything in unlock display
+								self.unlockDisplay.find("*").enableTab().enable();
+					
+							// Otherwise check if unlocked display is shown
+							else if(self.isUnlockedDisplayShown() === true)
+							
+								// Enable unlocked
+								self.unlocked.enable();
+							
+							// Restore focus and don't blur
+							self.focus.restore(false);
+							
+							// Hide message
+							self.message.hide();
+						}
+						
+						// Reject canceled error
+						reject(Common.CANCELED_ERROR);
+					});
+				}
+				
+				// Otherwise
+				else {
+				
+					// Reject canceled error
+					reject(Common.CANCELED_ERROR);
+				}
+			});
+		}
+		
+		// Hardware wallet pending message done
+		hardwareWalletPendingMessageDone() {
+		
+			// Turn off message replace application hardware wallet approve event
+			$(this.message).off(Message.REPLACE_EVENT + ".applicationHardwareWalletApprove");
+		
+			// Hide loading
+			this.hideLoading();
+		
+			// Set self
+			var self = this;
+		
+			// Return promise
+			return new Promise(function(resolve, reject) {
+		
+				// Check if unlock display is shown
+				if(self.isUnlockDisplayShown() === true)
+				
+					// Enable tabbing to everything in unlock display and enable everything in unlock display
+					self.unlockDisplay.find("*").enableTab().enable();
+		
+				// Otherwise check if unlocked display is shown
+				else if(self.isUnlockedDisplayShown() === true)
+				
+					// Enable unlocked
+					self.unlocked.enable();
+				
+				// Restore focus and don't blur
+				self.focus.restore(false);
+				
+				// Return hiding message
+				return self.message.hide().then(function() {
+				
+					// Resolve
+					resolve();
+				});
 			});
 		}
 		
@@ -5507,8 +5695,8 @@ class Application {
 			// Set self
 			var self = this;
 			
-			// Message show application event
-			$(this.message).on(Message.SHOW_EVENT + ".application", function() {
+			// Message show application show display event
+			$(this.message).on(Message.SHOW_EVENT + ".applicationShowDisplay", function() {
 			
 				// Check display to show
 				switch(displayToShow) {
@@ -5602,8 +5790,8 @@ class Application {
 				// Set timeout
 				setTimeout(function() {
 				
-					// Turn off message show application event
-					$(self.message).off(Message.SHOW_EVENT + ".application");
+					// Turn off message show application show display event
+					$(self.message).off(Message.SHOW_EVENT + ".applicationShowDisplay");
 					
 					// Turn off message before show application event
 					$(self.message).off(Message.BEFORE_SHOW_EVENT + ".application");
