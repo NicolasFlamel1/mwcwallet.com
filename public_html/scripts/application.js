@@ -4069,7 +4069,7 @@ class Application {
 		}
 		
 		// Show hardware wallet pending message
-		showHardwareWalletPendingMessage(hardwareWallet, text, cancelOccurred = Common.NO_CANCEL_OCCURRED, recursivelyShown = false, rootCanceled) {
+		showHardwareWalletPendingMessage(hardwareWallet, text, cancelOccurred = Common.NO_CANCEL_OCCURRED, recursivelyShown = false, rootCanceled = undefined) {
 		
 			// Set self
 			var self = this;
@@ -4086,6 +4086,9 @@ class Application {
 						// Value
 						"Value": false
 					};
+					
+					// Initialize sleep disabled
+					var sleepDisabled = false;
 				
 					// Return showing message and do it immediately if recursively shown
 					return self.message.show(Language.getDefaultTranslation('Hardware Wallet Approval Requested'), text, recursivelyShown === true, function() {
@@ -4110,6 +4113,14 @@ class Application {
 								
 									// Disable unlocked
 									self.unlocked.disable();
+								
+								// Keep device awake and catch errors
+								self.wakeLock.preventLock().catch(function(error) {
+								
+								});
+								
+								// Set sleep disabled
+								sleepDisabled = true;
 								
 								// Message replace application hardware wallet approve event
 								$(self.message).on(Message.REPLACE_EVENT + ".applicationHardwareWalletApprove", function(event, messageType, messageData) {
@@ -4184,31 +4195,86 @@ class Application {
 								canceled["Value"] = true;
 							}
 							
-							// Check if unlock display is shown
-							if(self.isUnlockDisplayShown() === true)
+							// Otherwise check if sleep is disabled
+							if(sleepDisabled === true) {
 							
-								// Enable tabbing to everything in unlock display and enable everything in unlock display
-								self.unlockDisplay.find("*").enableTab().enable();
-					
-							// Otherwise check if unlocked display is shown
-							else if(self.isUnlockedDisplayShown() === true)
+								// Allow device to sleep and catch errors
+								self.wakeLock.allowLock().catch(function(error) {
+									
+								// Finally
+								}).finally(function() {
+								
+									// Check if unlock display is shown
+									if(self.isUnlockDisplayShown() === true)
+									
+										// Enable tabbing to everything in unlock display and enable everything in unlock display
+										self.unlockDisplay.find("*").enableTab().enable();
 							
-								// Enable unlocked
-								self.unlocked.enable();
+									// Otherwise check if unlocked display is shown
+									else if(self.isUnlockedDisplayShown() === true)
+									
+										// Enable unlocked
+										self.unlocked.enable();
+									
+									// Restore focus and don't blur
+									self.focus.restore(false);
+									
+									// Hide message
+									self.message.hide().then(function() {
+									
+										// Replace message
+										self.message.replace(Application.HARDWARE_WALLET_DISCONNECT_MESSAGE);
+									});
+								});
+							}
 							
-							// Restore focus and don't blur
-							self.focus.restore(false);
+							// Otherwise
+							else {
 							
-							// Hide message
-							self.message.hide().then(function() {
+								// Check if unlock display is shown
+								if(self.isUnlockDisplayShown() === true)
+								
+									// Enable tabbing to everything in unlock display and enable everything in unlock display
+									self.unlockDisplay.find("*").enableTab().enable();
+						
+								// Otherwise check if unlocked display is shown
+								else if(self.isUnlockedDisplayShown() === true)
+								
+									// Enable unlocked
+									self.unlocked.enable();
+								
+								// Restore focus and don't blur
+								self.focus.restore(false);
+								
+								// Hide message
+								self.message.hide().then(function() {
+								
+									// Replace message
+									self.message.replace(Application.HARDWARE_WALLET_DISCONNECT_MESSAGE);
+								});
+							}
+						}
+						
+						// Otherwise check if sleep is disabled
+						else if(sleepDisabled === true) {
+						
+							// Allow device to sleep and catch errors
+							self.wakeLock.allowLock().catch(function(error) {
+								
+							// Finally
+							}).finally(function() {
 							
-								// Replace message
-								self.message.replace(Application.HARDWARE_WALLET_DISCONNECT_MESSAGE);
+								// Reject canceled error
+								reject(Common.CANCELED_ERROR);
 							});
 						}
 						
-						// Reject canceled error
-						reject(Common.CANCELED_ERROR);
+						// Otherwise
+						else {
+						
+							// Reject canceled error
+							reject(Common.CANCELED_ERROR);
+						}
 					});
 				}
 				
