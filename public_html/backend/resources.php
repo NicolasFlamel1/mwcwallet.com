@@ -315,10 +315,10 @@
 			"Checksum" => "Cdfb/vPPmDTMIvjGs5W7L9D1nYcRUUm3hropwVduRmvifYL3+inZM+mnIeaX9hKNx/pvSfsMaQaRkUKKSlpfqg=="
 		],
 		"./scripts/application.js" => [
-			"Version" => 27,
+			"Version" => 28,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "feAh/h+qYoW1UA0VbSRpZ/Fvt0L2A94/5n7Hm5Qx/X/gkxiOkba8BqAxyRI8ANp52e9MWmrBNQy8PGmVgYVGQg=="
+			"Checksum" => "aPksnJEqz9OEZui0Nh3a0trMUpFoHG8KMucr22ZH1slBL6h6fA47GZmZ6eQucD0C19vPXC0NEEB6r2RCFmtl2Q=="
 		],
 		"./scripts/automatic_lock.js" => [
 			"Version" => 5,
@@ -387,10 +387,10 @@
 			"Checksum" => "0f7+6FygrMsB8eCvWjaAkSumRnR+A4vNaJNT8hioKK1V0KIrg5zP6f3lY84EXFkMnr2Rwv5PcJ8OPgOx7/ffmw=="
 		],
 		"./scripts/wallet.js" => [
-			"Version" => 9,
+			"Version" => 11,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "jd3+cM4+xpCK1JMJNo3LqLyB5BbqdpqwD9Bub5fCqnqcFpmPr6hkGd9/JQStDMHWED2mJbGBZMxO4bS9QjMhhg=="
+			"Checksum" => "KvL6K4lIkmwNkwKlsHRPnQWwOEHN7dw8oO83fhRmD1K5UKVHg6hY1rf2+d5n9O0Z3lQ4TWMbtK2aascauTEvHQ=="
 		],
 		"./scripts/consensus.js" => [
 			"Version" => 12,
@@ -429,10 +429,10 @@
 			"Checksum" => "f3cKvK8jETY8cLfiwhF5sX8Fg+bewgl4EkTx4g9Rmm4BM4sB4BUhcTjmf+G5VULLS5vEoNNze5AMOIyV0cRcQQ=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 39,
+			"Version" => 44,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "Xl6+Wbh7FGL/RTRrOp/9BBSyYUh3E/uvznmN2dNl8n6ZGxjHUtlFhZC+f8tKyQBj6hmSRTrw0OUo5jEopoMe8w=="
+			"Checksum" => "wlxyOB5PZ8KbIeYydlQ4UKq2g7HcGZMCR7nKFj2WsC5qEWm4w1bdT17xkf0uqY9xlNmfkvxNSDGzbcKvHmR6dw=="
 		],
 		"./scripts/LedgerJS_Browser-0.0.1.js" => [
 			"Version" => 13,
@@ -591,10 +591,10 @@
 			"Checksum" => "53JqNBE9WxJ27yw3uyHCWE0kQ9DIxa9BMuY+JoTxImkqaxPD24y+FN3KNqL7johYZm/G5UQalzUJ/AvI7RBx2w=="
 		],
 		"./scripts/json_rpc.js" => [
-			"Version" => 8,
+			"Version" => 10,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "/L1ieV/lzddAHlG0jPigfswzs4CEJw8GpIlfYunFDqZEJ2ucAJvczI7uI2nw4ARGblJBmJG18ZKXsXnfPvFVKQ=="
+			"Checksum" => "ewSnCcrrO6n9Z2Md45oCvOYBnbJ6wFgINJFBmTESaOkl2ioj/pkOnJchzGcKg7Bq/1BOoodarA8El0Zrhuv6pw=="
 		],
 		"./scripts/tor.js" => [
 			"Version" => 5,

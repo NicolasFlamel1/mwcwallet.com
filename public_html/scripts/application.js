@@ -4200,7 +4200,11 @@ class Application {
 							self.focus.restore(false);
 							
 							// Hide message
-							self.message.hide();
+							self.message.hide().then(function() {
+							
+								// Replace message
+								self.message.replace(Application.HARDWARE_WALLET_DISCONNECT_MESSAGE);
+							});
 						}
 						
 						// Reject canceled error

@@ -56,8 +56,8 @@ class JsonRpc {
 								// Catch errors
 								}).catch(function(error) {
 								
-									// Check if at the last attempt or the error's response had an ok, bad request, unauthorized, forbidden, not found, unsupported media type, or payload too large status
-									if(i === Math.max(numberOfAttempts, (Array.isArray(urlOrUrls) === true) ? urlOrUrls["length"] : [urlOrUrls]["length"]) - 1 || error === Common.HTTP_OK_STATUS || error === Common.HTTP_BAD_REQUEST_STATUS || error === Common.HTTP_UNAUTHORIZED_STATUS || error === Common.HTTP_FORBIDDEN_STATUS || error === Common.HTTP_NOT_FOUND_STATUS || error === Common.HTTP_UNSUPPORTED_MEDIA_TYPE_STATUS || error === Common.HTTP_PAYLOAD_TOO_LARGE_STATUS) {
+									// Check if at the last attempt, the error's response had an ok, bad request, unauthorized, forbidden, not found, unsupported media type, or payload too large status, or the response is a JSON-RPC error
+									if(i === Math.max(numberOfAttempts, (Array.isArray(urlOrUrls) === true) ? urlOrUrls["length"] : [urlOrUrls]["length"]) - 1 || error === Common.HTTP_OK_STATUS || error === Common.HTTP_BAD_REQUEST_STATUS || error === Common.HTTP_UNAUTHORIZED_STATUS || error === Common.HTTP_FORBIDDEN_STATUS || error === Common.HTTP_NOT_FOUND_STATUS || error === Common.HTTP_UNSUPPORTED_MEDIA_TYPE_STATUS || error === Common.HTTP_PAYLOAD_TOO_LARGE_STATUS || Object.isObject(error) === true) {
 									
 										// Reject error
 										reject(error);
@@ -150,8 +150,8 @@ class JsonRpc {
 								// Catch errors
 								}).catch(function(error) {
 								
-									// Check if at the last attempt or the error's response had an ok, bad request, unauthorized, forbidden, not found, unsupported media type, or payload too large status
-									if(i === Math.max(numberOfAttempts, (Array.isArray(urlOrUrls) === true) ? urlOrUrls["length"] : [urlOrUrls]["length"]) - 1 || error === Common.HTTP_OK_STATUS || error === Common.HTTP_BAD_REQUEST_STATUS || error === Common.HTTP_UNAUTHORIZED_STATUS || error === Common.HTTP_FORBIDDEN_STATUS || error === Common.HTTP_NOT_FOUND_STATUS || error === Common.HTTP_UNSUPPORTED_MEDIA_TYPE_STATUS || error === Common.HTTP_PAYLOAD_TOO_LARGE_STATUS) {
+									// Check if at the last attempt, the error's response had an ok, bad request, unauthorized, forbidden, not found, unsupported media type, or payload too large status, or the response is a JSON-RPC error
+									if(i === Math.max(numberOfAttempts, (Array.isArray(urlOrUrls) === true) ? urlOrUrls["length"] : [urlOrUrls]["length"]) - 1 || error === Common.HTTP_OK_STATUS || error === Common.HTTP_BAD_REQUEST_STATUS || error === Common.HTTP_UNAUTHORIZED_STATUS || error === Common.HTTP_FORBIDDEN_STATUS || error === Common.HTTP_NOT_FOUND_STATUS || error === Common.HTTP_UNSUPPORTED_MEDIA_TYPE_STATUS || error === Common.HTTP_PAYLOAD_TOO_LARGE_STATUS || Object.isObject(error) === true) {
 									
 										// Reject error
 										reject(error);
