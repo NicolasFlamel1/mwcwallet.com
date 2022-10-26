@@ -3,15 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "1.1.12";
+	const VERSION_NUMBER = "1.1.13";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "26 Oct 2022 00:09:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Updated dependencies.",
-		"Added support for the Ledger hardware wallet app v3.2.0."
+		"Fixed detecting when a Ledger Nano S Plus hardware wallet with firmware v1.0.4 is locked."
 	];
 	
 	// Maintenance start time

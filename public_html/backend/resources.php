@@ -441,10 +441,10 @@
 			"Checksum" => "jl++6VkJwNIMfadu0Z9UjM1BIbjPsY00UtJu68t71Z/qTaqH0y+k4D/su9WUKu2Res4OKSMpwJSlgIZ5QbTxhg=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 18,
+			"Version" => 20,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "Mu3C2dbqiHzJRHFqHMLCC4XrdwhCORjxNCSg3u4H+bXknF1rFZ9Ga9HSnGY8n7GllguaflgBUWRiVHIcR+aVCw=="
+			"Checksum" => "rVBPAx4PTM/NPprN0dvCf0CzijnWv6ZMzrXtusWqC1lFZMLNxTLLbXIMT64WvQjIFIYh6Bp0z9o+TAJ73ZFDYw=="
 		],
 		"./scripts/proof_builder.js" => [
 			"Version" => 5,
@@ -1281,10 +1281,10 @@
 			"Checksum" => "+iLOox399ALnS2ocTTcoR8TeLA911Bq1xoTAcINCUU40rxukwsiTQUbPLWxukc4VqPRhUlbTiTLie5fVPL64+Q=="
 		],
 		"./styles/wallet_section.css" => [
-			"Version" => 8,
+			"Version" => 9,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "AW5Wzx5UtXVpIxxzwGNFwOrQ4tUrm+rwMd6RTtDxNmxTXxrX6Ben97fRbMuuGdpGr+LE2B5pSLjz54F4GgBTiA=="
+			"Checksum" => "EyICm3EVTVoUfvkdrs8IZaIgrPe9hdjZCYGxYHYLpv2j/vCBFh+1i4yjPZ0l6dxky+N1lgjYKdIMsCGt1Tr7KQ=="
 		],
 		"./styles/send_payment_section.css" => [
 			"Version" => 4,

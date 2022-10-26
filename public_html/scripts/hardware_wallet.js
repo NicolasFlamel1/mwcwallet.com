@@ -3256,7 +3256,7 @@ class HardwareWallet {
 					}).catch(function(error) {
 					
 						// Check if the hardware wallet is locked and not set to fail on lock
-						if(typeof error === "object" && error !== null && "statusCode" in error === true && error["statusCode"] === HardwareWallet.DEVICE_LOCKED_RESPONSE_STATUS && failOnLock === false) {
+						if(typeof error === "object" && error !== null && "statusCode" in error === true && (error["statusCode"] === HardwareWallet.DEVICE_LOCKED_RESPONSE_STATUS || error["statusCode"] === HardwareWallet.OPERATING_SYSTEM_LOCKED_RESPONSE_STATUS) && failOnLock === false) {
 						
 							// Set locked
 							self.locked = true;
@@ -3334,7 +3334,7 @@ class HardwareWallet {
 												}).catch(function(error) {
 												
 													// Check if the hardware wallet is locked and not set to fail on lock
-													if(typeof error === "object" && error !== null && "statusCode" in error === true && error["statusCode"] === HardwareWallet.DEVICE_LOCKED_RESPONSE_STATUS && failOnLock === false) {
+													if(typeof error === "object" && error !== null && "statusCode" in error === true && (error["statusCode"] === HardwareWallet.DEVICE_LOCKED_RESPONSE_STATUS || error["statusCode"] === HardwareWallet.OPERATING_SYSTEM_LOCKED_RESPONSE_STATUS) && failOnLock === false) {
 													
 														// Return resend
 														return resend().then(function(response) {
@@ -3860,6 +3860,13 @@ class HardwareWallet {
 		
 			// Return success response status
 			return 0x9000;
+		}
+		
+		// Operating system locked response status
+		static get OPERATING_SYSTEM_LOCKED_RESPONSE_STATUS() {
+		
+			// Return operating system locked response status
+			return 0x5515;
 		}
 		
 		// Seed cookie length

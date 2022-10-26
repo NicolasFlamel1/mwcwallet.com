@@ -449,10 +449,10 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.tr
 
 main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span {
 	line-height: normal;
-	font-size: 15.5pt;
+	font-size: 15pt;
 	width: 100%;
 	display: grid;
-	column-gap: calc(1em * 13 / 15.5);
+	column-gap: calc(1em * 13 / 15);
 	grid-auto-flow: column;
 	justify-content: space-between;
 	text-align: left;
@@ -535,7 +535,7 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.tr
 	font-family: "Font Awesome";
 	font-weight: bold;
 	content: "\F51E";
-	font-size: 15pt;
+	font-size: 14pt;
 	position: relative;
 	top: 1px;
 }
@@ -569,9 +569,7 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.tr
 	font-family: "Font Awesome";
 	font-weight: bold;
 	content: "\F058";
-	font-size: 15.5pt;
-	position: relative;
-	top: 1px;
+	font-size: 15pt;
 }
 
 main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button.confirmed > span.name > span.confirmed {
