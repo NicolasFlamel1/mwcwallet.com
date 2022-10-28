@@ -1041,10 +1041,10 @@
 			"Checksum" => "6Nia7Q+boUiVXSx5EK1zK2mU/90zzklSv5romPkxD4ki0vEhrqBT2S66d4ZfqnjiBvMLIdix5TeCc/GEN1Rgwg=="
 		],
 		"./images/app_icons/app_icon-114x114.png" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => FALSE,
 			"Minified" => FALSE,
-			"Checksum" => "ERloWcoV1xJ7Z191mG1Mh58qsWr/59gPxD0j7lsWllTDi7M10aD/+MUoMS2hmqPUBJDNJYAra951bo7VFLaaAQ=="
+			"Checksum" => "U+JR1ScLTBa55D4kSeItOYDBPD0iVCrEmlWNAfl4n/yEsp7lEQtRpMOaPNtUcKGL54nKduAkjN1dh4lv/j0ERQ=="
 		],
 		"./images/touch_icons/touch_icon-180x180.png" => [
 			"Version" => 6,
