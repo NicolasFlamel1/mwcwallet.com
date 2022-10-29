@@ -797,7 +797,7 @@
 	<meta class="translatable" name="application-name" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta class="translatable" name="msapplication-tooltip" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta name="msapplication-starturl" content="<?= "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]); ?>">
-	<meta class="translatable" name="description" data-text="<?= encodeString(getDefaultTranslation('A MimbleWimble Coin wallet.')); ?>" content="<?= encodeString(getTranslation('A MimbleWimble Coin wallet.')); ?>">
+	<meta class="translatable" name="description" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin with your web browser.')); ?>" content="<?= encodeString(getTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin with your web browser.')); ?>">
 	<meta class="translatable" name="author" data-text="<?= encodeString(getDefaultTranslation('Nicolas Flamel')); ?>" content="<?= encodeString(getTranslation('Nicolas Flamel')); ?>">
 	<link rel="schema.dcterms" href="http://purl.org/dc/terms/">
 	<meta class="translatable" name="dcterms.rightsHolder" data-text="<?= encodeString(getDefaultTranslation('Nicolas Flamel')); ?>" content="<?= encodeString(getTranslation('Nicolas Flamel')); ?>">

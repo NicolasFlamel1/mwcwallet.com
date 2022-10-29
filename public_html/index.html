@@ -14,6 +14,9 @@
 	// Year
 	$year = getYear();
 	
+	// Is crawler
+	$isCrawler = array_key_exists("HTTP_USER_AGENT", $_SERVER) === TRUE && mb_stristr($_SERVER["HTTP_USER_AGENT"], "googlebot") !== FALSE;
+	
 	
 	// Main function
 	
@@ -364,31 +367,62 @@
 				// Check if a loading error occurred
 				if(loadingErrorOccurred === true) {
 				
-					// Set header message
-					var headerMessage = "<?= escapeString(getTranslation('Loading Error')); ?>";
+					<?php
 					
-					// Set header text
-					var headerText = "<?= escapeString(getDefaultTranslation('Loading Error')); ?>";
+						// Check if crawler
+						if($isCrawler === TRUE) {
+					?>
 					
-					// Check if is an app
-					if(isApp() === true) {
-					
+						// Set header message
+						var headerMessage = "<?= escapeString(getTranslation('MWC Wallet')); ?>";
+						
+						// Set header text
+						var headerText = "<?= escapeString(getDefaultTranslation('MWC Wallet')); ?>";
+						
 						// Set text message
-						var textMessage = "<?= escapeString(getTranslation('Failed to load resources. Restart this app to try again.')); ?>";
+						var textMessage = "<?= escapeString(getTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin with your web browser.')); ?>";
 						
 						// Set text text
-						var textText = "<?= escapeString(getDefaultTranslation('Failed to load resources. Restart this app to try again.')); ?>";
-					}
-					
-					// Otherwise
-					else  {
-					
-						// Set text message
-						var textMessage = "<?= escapeString(getTranslation('Failed to load resources. Refresh this site to try again.')); ?>";
+						var textText = "<?= escapeString(getDefaultTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin with your web browser.')); ?>";
 						
-						// Set text text
-						var textText = "<?= escapeString(getDefaultTranslation('Failed to load resources. Refresh this site to try again.')); ?>";
-					}
+					<?php
+					
+						}
+						
+						// Otherwise
+						else {
+					?>
+					
+						// Set header message
+						var headerMessage = "<?= escapeString(getTranslation('Loading Error')); ?>";
+						
+						// Set header text
+						var headerText = "<?= escapeString(getDefaultTranslation('Loading Error')); ?>";
+						
+						// Check if is an app
+						if(isApp() === true) {
+						
+							// Set text message
+							var textMessage = "<?= escapeString(getTranslation('Failed to load resources. Restart this app to try again.')); ?>";
+							
+							// Set text text
+							var textText = "<?= escapeString(getDefaultTranslation('Failed to load resources. Restart this app to try again.')); ?>";
+						}
+						
+						// Otherwise
+						else  {
+						
+							// Set text message
+							var textMessage = "<?= escapeString(getTranslation('Failed to load resources. Refresh this site to try again.')); ?>";
+							
+							// Set text text
+							var textText = "<?= escapeString(getDefaultTranslation('Failed to load resources. Refresh this site to try again.')); ?>";
+						}
+						
+					<?php
+					
+						}
+					?>
 				}
 			
 				// Otherwise check if a script error occurred
@@ -1285,7 +1319,7 @@
 	<meta class="translatable" name="application-name" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta class="translatable" name="msapplication-tooltip" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta name="msapplication-starturl" content="<?= "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]); ?>">
-	<meta class="translatable" name="description" data-text="<?= encodeString(getDefaultTranslation('A MimbleWimble Coin wallet.')); ?>" content="<?= encodeString(getTranslation('A MimbleWimble Coin wallet.')); ?>">
+	<meta class="translatable" name="description" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin with your web browser.')); ?>" content="<?= encodeString(getTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin with your web browser.')); ?>">
 	<meta class="translatable" name="author" data-text="<?= encodeString(getDefaultTranslation('Nicolas Flamel')); ?>" content="<?= encodeString(getTranslation('Nicolas Flamel')); ?>">
 	<link rel="schema.dcterms" href="http://purl.org/dc/terms/">
 	<meta class="translatable" name="dcterms.rightsHolder" data-text="<?= encodeString(getDefaultTranslation('Nicolas Flamel')); ?>" content="<?= encodeString(getTranslation('Nicolas Flamel')); ?>">
