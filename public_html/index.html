@@ -1345,20 +1345,24 @@
 		// Display theme color
 		echo "<meta name=\"theme-color\" content=\"" . encodeString(THEME_COLOR) . "\">";
 		
-		// Go through all touch icons
-		foreach(TOUCH_ICONS as $touchIcon) {
+		// Check if not crawler
+		if($isCrawler === FALSE) {
 		
-			// Check if touch icon's parts aren't provided
-			if(count($touchIcon) !== count(TOUCH_ICON_PARTS))
-		
-				// Display touch icon
-				echo "<link rel=\"apple-touch-icon\" href=\"" . encodeString(getResource($touchIcon[0])) . "\">";
+			// Go through all touch icons
+			foreach(TOUCH_ICONS as $touchIcon) {
 			
-			// Otherwise
-			else
-		
-				// Display touch icon
-				echo "<link rel=\"apple-touch-icon\" sizes=\"" . encodeString($touchIcon[TOUCH_ICON_PARTS["X Dimension"]]) . "x" . encodeString($touchIcon[TOUCH_ICON_PARTS["Y Dimension"]]) . "\" href=\"" . encodeString(getResource($touchIcon[TOUCH_ICON_PARTS["File Path"]])) . "\">";
+				// Check if touch icon's parts aren't provided
+				if(count($touchIcon) !== count(TOUCH_ICON_PARTS))
+			
+					// Display touch icon
+					echo "<link rel=\"apple-touch-icon\" href=\"" . encodeString(getResource($touchIcon[0])) . "\">";
+				
+				// Otherwise
+				else
+			
+					// Display touch icon
+					echo "<link rel=\"apple-touch-icon\" sizes=\"" . encodeString($touchIcon[TOUCH_ICON_PARTS["X Dimension"]]) . "x" . encodeString($touchIcon[TOUCH_ICON_PARTS["Y Dimension"]]) . "\" href=\"" . encodeString(getResource($touchIcon[TOUCH_ICON_PARTS["File Path"]])) . "\">";
+			}
 		}
 		
 		// Go through all favicons
