@@ -7556,6 +7556,9 @@ class Api {
 														// GRIN wallet
 														case Consensus.GRIN_WALLET_TYPE:
 														
+															// Initialize error occurred
+															var errorOccurred = false;
+														
 															// Try
 															try {
 															
@@ -7566,16 +7569,56 @@ class Api {
 															// Catch errors
 															catch(error) {
 															
-																// Resolve no proof address
-																resolve(Api.NO_PROOF_ADDRESS);
-																
-																// Return
-																return;
+																// Set error occurred
+																errorOccurred = true;
 															}
 															
-															// Resolve the receiver's public key as a Slatepack address
-															resolve(Slatepack.publicKeyToSlatepackAddress(receiverPublicKey));
+															// Check if an error didn't occur
+															if(errorOccurred === false) {
 														
+																// Resolve the receiver's public key as a Slatepack address
+																resolve(Slatepack.publicKeyToSlatepackAddress(receiverPublicKey));
+															}
+															
+															// Otherwise
+															else {
+															
+																// Return getting proof address
+																return self.getProofAddress(receiverUrl, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, cancelOccurred).then(function(receiverAddress) {
+																
+																	// Check if cancel didn't occur
+																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																	
+																		// Resolve receiver address
+																		resolve(receiverAddress);
+																	}
+																	
+																	// Otherwise
+																	else {
+																	
+																		// Reject canceled error
+																		reject(Common.CANCELED_ERROR);
+																	}
+																	
+																// Catch errors
+																}).catch(function(error) {
+																
+																	// Check if cancel didn't occur
+																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																	
+																		// Reject error
+																		reject(error);
+																	}
+																	
+																	// Otherwise
+																	else {
+																	
+																		// Reject canceled error
+																		reject(Common.CANCELED_ERROR);
+																	}
+																});
+															}
+															
 															// Break
 															break;
 													}

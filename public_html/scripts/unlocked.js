@@ -1716,7 +1716,7 @@ class Unlocked {
 							}
 							
 							// Create a wallet
-							self.wallets.create(Wallet.NO_NAME, Consensus.getWalletType(), Consensus.getNetworkType(), (self.node.connectionFailed() === true) ? Wallet.STATUS_ERROR : Wallet.STATUS_SYNCING, Wallet.NO_HARDWARE_WALLET, mnemonicWords.join(" "), useBip39, bip39Salt, true, new BigNumber(Consensus.FIRST_BLOCK_HEIGHT)).then(function(wallet) {
+							self.wallets.create(Wallet.NO_NAME, Consensus.getWalletType(), Consensus.getNetworkType(), (self.node.connectionFailed() === true) ? Wallet.STATUS_ERROR : Wallet.STATUS_SYNCING, Wallet.NO_HARDWARE_WALLET, mnemonicWords.join(" "), useBip39, bip39Salt, true, new BigNumber((useBip39 === true) ? Consensus.HARDWARE_WALLET_STARTING_HEIGHT : Consensus.FIRST_BLOCK_HEIGHT)).then(function(wallet) {
 							
 								// Set timeout
 								setTimeout(function() {
@@ -2023,7 +2023,7 @@ class Unlocked {
 																		self.automaticLock.prevent();
 																	
 																		// Create a wallet
-																		self.wallets.create(Wallet.NO_NAME, Consensus.getWalletType(), Consensus.getNetworkType(), (self.node.connectionFailed() === true) ? Wallet.STATUS_ERROR : Wallet.STATUS_SYNCING, hardwareWallet, Wallet.NO_PASSPHRASE, false, Wallet.NO_BIP39_SALT, true, new BigNumber(Consensus.FIRST_BLOCK_HEIGHT)).then(function(wallet) {
+																		self.wallets.create(Wallet.NO_NAME, Consensus.getWalletType(), Consensus.getNetworkType(), (self.node.connectionFailed() === true) ? Wallet.STATUS_ERROR : Wallet.STATUS_SYNCING, hardwareWallet, Wallet.NO_PASSPHRASE, false, Wallet.NO_BIP39_SALT, true, new BigNumber(Consensus.HARDWARE_WALLET_STARTING_HEIGHT)).then(function(wallet) {
 																			
 																			// Log message
 																			Log.logMessage(Language.getDefaultTranslation('Created hardware wallet Wallet %1$s.'), [

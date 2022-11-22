@@ -2533,7 +2533,7 @@ class Wallets {
 						return {
 						
 							// New synced height value
-							[Wallets.NEW_SYNCED_HEIGHT_VALUE]: new BigNumber(Consensus.FIRST_BLOCK_HEIGHT)
+							[Wallets.NEW_SYNCED_HEIGHT_VALUE]: new BigNumber((wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) ? Consensus.FIRST_BLOCK_HEIGHT : Consensus.HARDWARE_WALLET_STARTING_HEIGHT)
 						};
 						
 					}, databaseTransaction).then(function() {
@@ -2542,7 +2542,7 @@ class Wallets {
 						return Database.commitTransaction(databaseTransaction).then(function() {
 						
 							// Set wallet's synced height to the first block height
-							wallet.setSyncedHeight(new BigNumber(Consensus.FIRST_BLOCK_HEIGHT));
+							wallet.setSyncedHeight(new BigNumber((wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) ? Consensus.FIRST_BLOCK_HEIGHT : Consensus.HARDWARE_WALLET_STARTING_HEIGHT));
 						
 							// Clear wallet's last sync index
 							wallet.setLastSyncIndex(Wallet.NO_SYNC_INDEX);
