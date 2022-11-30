@@ -3,14 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "1.1.14";
+	const VERSION_NUMBER = "1.1.15";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "22 Nov 2022 02:03:00 UTC";
+	const VERSION_RELEASE_DATE = "30 Nov 2022 02:38:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Hardware wallets will now sync from a height right before hardware wallet support was available to the public to reduce syncing times."
+		"Requires using the newest version of the hardware wallet apps."
 	];
 	
 	// Maintenance start time
