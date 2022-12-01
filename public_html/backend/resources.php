@@ -309,10 +309,10 @@
 			"Checksum" => "AaYCKtIK3CfkZgJL+KjqGHbvK+urVTVK0Wagvfi9MQcrVy95oT6vmwR0lkjIA1gO89vuQ15jrW4vjLyLjUihfA=="
 		],
 		"./scripts/wallets.js" => [
-			"Version" => 37,
+			"Version" => 38,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "Iq/5WFSq5yjw0J9ntTmJiHitakrsQhGkPOivj+QiKgGqHzbWlUqxh6FcZZjH1BZ/QEN7a/dLyVW9g5GGybqRjQ=="
+			"Checksum" => "PlZn25ve/kA09GnqRXlxs7FwtMPwt1gNMasAI/h6cohhMqxDHu0WjrNmnt6rQCZgxXd0xpHir0fjBFYegdx0EQ=="
 		],
 		"./scripts/application.js" => [
 			"Version" => 29,

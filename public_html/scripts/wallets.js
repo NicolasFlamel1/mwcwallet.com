@@ -5154,6 +5154,16 @@ class Wallets {
 																								// Check if output information exists
 																								if(outputInformation !== Output.NO_INFORMATION) {
 																								
+																									// Check if wallet is a hardware wallet and the output has an incompatible switch type
+																									if(wallet.getHardwareType() !== Wallet.NO_HARDWARE_TYPE && outputInformation.getSwitchType() === Crypto.SWITCH_TYPE_NONE) {
+																									
+																										// Resolve
+																										resolve();
+																										
+																										// Return
+																										return;
+																									}
+																									
 																									// Get output information's identifier height
 																									var identifierHeight = outputInformation.getIdentifier().getHeight();
 																								
