@@ -6,11 +6,11 @@
 	const VERSION_NUMBER = "1.1.15";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "30 Nov 2022 02:38:00 UTC";
+	const VERSION_RELEASE_DATE = "20 Dec 2022 10:00:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Requires using the newest version of the hardware wallet apps."
+		"Adds support for version 5.0.0 of the hardware wallet apps."
 	];
 	
 	// Maintenance start time

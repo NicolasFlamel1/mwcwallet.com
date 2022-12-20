@@ -781,7 +781,7 @@ class SettingsSection extends Section {
 				button.addClass("clicked");
 				
 				// Show message
-				self.getMessage().show(Language.getDefaultTranslation('Reset Settings'), Message.createText(Language.getDefaultTranslation('Are you sure you want to reset the settings to their default values?')) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Resetting the settings wont affect your wallets or your password.')) + "</b>", false, function() {
+				self.getMessage().show(Language.getDefaultTranslation('Reset Settings'), Message.createText(Language.getDefaultTranslation('Are you sure you want to reset the settings to their default values?')) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Resetting the settings won\'t affect your wallets or your password.')) + "</b>", false, function() {
 				
 					// Save focus and blur
 					self.getFocus().save(true);

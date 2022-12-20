@@ -5363,7 +5363,7 @@ class Application {
 				if(self.resetSettings === true && "Request" in urlParameters === false) {
 				
 					// Show message and allow showing messages
-					self.message.show(Language.getDefaultTranslation('Reset Settings'), Message.createText(Language.getDefaultTranslation('Are you sure you want to reset the settings to their default values?')) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Resetting the settings wont affect your wallets or your password.')) + "</b>", false, function() {
+					self.message.show(Language.getDefaultTranslation('Reset Settings'), Message.createText(Language.getDefaultTranslation('Are you sure you want to reset the settings to their default values?')) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Resetting the settings won\'t affect your wallets or your password.')) + "</b>", false, function() {
 					
 						// Hide loading
 						self.hideLoading();

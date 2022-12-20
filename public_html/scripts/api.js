@@ -2535,7 +2535,7 @@ class Api {
 																																			if(wallet.isHardwareConnected() === true) {
 																																
 																																				// Return starting transaction for the output amount with the wallet's hardware wallet
-																																				return wallet.getHardwareWallet().startTransaction(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX, output[Wallet.OUTPUT_AMOUNT_INDEX], new BigNumber(0), slate.getFee(), slate.getSenderAddress(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, false, cancelOccurred).then(function() {
+																																				return wallet.getHardwareWallet().startTransaction(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX, output[Wallet.OUTPUT_AMOUNT_INDEX], new BigNumber(0), slate.getFee(), HardwareWallet.NO_SECRET_NONCE_INDEX, slate.getSenderAddress(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, false, cancelOccurred).then(function() {
 																																				
 																																					// Check if cancel didn't occur
 																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -2641,7 +2641,7 @@ class Api {
 																																													var oldReceiverSignature = slate.getReceiverSignature();
 																																										
 																																													// Return adding participant to slate
-																																													return slate.addParticipant(wallet.getHardwareWallet(), Slate.NO_ENCRYPTED_SECRET_NONCE, SlateParticipant.NO_MESSAGE, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, false, cancelOccurred).then(function() {
+																																													return slate.addParticipant(wallet.getHardwareWallet(), Slate.NO_SECRET_NONCE, SlateParticipant.NO_MESSAGE, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, false, cancelOccurred).then(function() {
 																																													
 																																														// Check if cancel didn't occur
 																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -3105,7 +3105,7 @@ class Api {
 																																														var oldReceiverSignature = slate.getReceiverSignature();
 																																											
 																																														// Return adding participant to slate
-																																														return slate.addParticipant(wallet.getHardwareWallet(), Slate.NO_ENCRYPTED_SECRET_NONCE, SlateParticipant.NO_MESSAGE, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, true, function() {
+																																														return slate.addParticipant(wallet.getHardwareWallet(), Slate.NO_SECRET_NONCE, SlateParticipant.NO_MESSAGE, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, true, function() {
 																							
 																																															// Return if message was canceled
 																																															return canceled() === true;
@@ -9026,8 +9026,8 @@ class Api {
 																										// Initialize secret nonce
 																										var secretNonce;
 																										
-																										// Initialize encrypted secret nonce
-																										var encryptedSecretNonce;
+																										// Initialize secret nonce index
+																										var secretNonceIndex;
 																										
 																										// Add slate participant
 																										var addSlateParticipant = function() {
@@ -9204,7 +9204,7 @@ class Api {
 																																if(wallet.isHardwareConnected() === true) {
 																														
 																																	// Return starting transaction for the output amount and total amount with the wallet's hardware wallet
-																																	return wallet.getHardwareWallet().startTransaction(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX, (returnedAmount.isZero() === false) ? output[Wallet.OUTPUT_AMOUNT_INDEX] : new BigNumber(0), totalAmount.minus(fee), fee, receiverAddress, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function() {
+																																	return wallet.getHardwareWallet().startTransaction(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX, (returnedAmount.isZero() === false) ? output[Wallet.OUTPUT_AMOUNT_INDEX] : new BigNumber(0), totalAmount.minus(fee), fee, HardwareWallet.NO_SECRET_NONCE_INDEX, receiverAddress, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function() {
 																																	
 																																		// Check if cancel didn't occur
 																																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -9429,7 +9429,7 @@ class Api {
 																																					if(wallet.isHardwareConnected() === true) {
 																																					
 																																						// Return applying offset to slate
-																																						return slate.applyOffset(wallet.getHardwareWallet(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function() {
+																																						return slate.applyOffset(wallet.getHardwareWallet(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function(transactionSecretNonceIndex) {
 																																						
 																																							// Check if cancel didn't occur
 																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -9437,11 +9437,14 @@ class Api {
 																																								// Check if wallet's hardware wallet is connected
 																																								if(wallet.isHardwareConnected() === true) {
 																																								
+																																									// Set secret nonce index
+																																									secretNonceIndex = transactionSecretNonceIndex;
+																																								
 																																									// Save slate's receiver signature
 																																									var oldReceiverSignature = slate.getReceiverSignature();
 																																				
 																																									// Return adding participant to slate
-																																									return slate.addParticipant(wallet.getHardwareWallet(), Slate.NO_ENCRYPTED_SECRET_NONCE, message, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function() {
+																																									return slate.addParticipant(wallet.getHardwareWallet(), Slate.NO_SECRET_NONCE, message, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function() {
 																																									
 																																										// Check if cancel didn't occur
 																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -9449,333 +9452,49 @@ class Api {
 																																											// Check if wallet's hardware wallet is connected
 																																											if(wallet.isHardwareConnected() === true) {
 																																											
-																																												// Return getting the transaction encrypted secret nonce with the wallet's hardware wallet
-																																												return wallet.getHardwareWallet().getTransactionEncryptedSecretNonce((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function(transactionEncryptedSecretNonce) {
+																																												// Return completing transaction with the wallet's hardware wallet
+																																												return wallet.getHardwareWallet().completeTransaction().then(function() {
 																																												
 																																													// Check if cancel didn't occur
 																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																												
-																																														// Check if wallet's hardware wallet is connected
-																																														if(wallet.isHardwareConnected() === true) {
-																																												
-																																															// Set encrypted secret nonce
-																																															encryptedSecretNonce = transactionEncryptedSecretNonce;
-																																														
-																																															// Return completing transaction with the wallet's hardware wallet
-																																															return wallet.getHardwareWallet().completeTransaction().then(function() {
-																																															
-																																																// Check if cancel didn't occur
-																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																															
-																																																	// Resolve
-																																																	resolve();
-																																																}
-																																																
-																																																// Otherwise
-																																																else {
-																																																
-																																																	// Reject canceled error
-																																																	reject(Common.CANCELED_ERROR);
-																																																}
-																																																
-																																															// Catch errors
-																																															}).catch(function(error) {
-																																															
-																																																// Check if cancel didn't occur
-																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																															
-																																																	// Check if canceled
-																																																	if(error === Common.CANCELED_ERROR) {
-																																																	
-																																																		// Reject error
-																																																		reject(error);
-																																																	}
-																																																	
-																																																	// Otherwise
-																																																	else {
-																																																
-																																																		// Reject error
-																																																		reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
-																																																	}
-																																																}
-																																																
-																																																// Otherwise
-																																																else {
-																																																
-																																																	// Reject canceled error
-																																																	reject(Common.CANCELED_ERROR);
-																																																}
-																																															});
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Remove participant from slate
-																																															slate.getParticipants().pop();
-																																															
-																																															// Restore slate's old receiver signature
-																																															slate.setReceiverSignature(oldReceiverSignature);
-																																															
-																																															// Return adding a slate participant
-																																															return addSlateParticipant().then(function() {
-																																															
-																																																// Check if cancel didn't occur
-																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																															
-																																																	// Resolve
-																																																	resolve();
-																																																}
-																																																
-																																																// Otherwise
-																																																else {
-																																																
-																																																	// Reject canceled error
-																																																	reject(Common.CANCELED_ERROR);
-																																																}
-																																															
-																																															// Catch errors
-																																															}).catch(function(error) {
-																																															
-																																																// Check if cancel didn't occur
-																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																															
-																																																	// Reject error
-																																																	reject(error);
-																																																}
-																																																
-																																																// Otherwise
-																																																else {
-																																																
-																																																	// Reject canceled error
-																																																	reject(Common.CANCELED_ERROR);
-																																																}
-																																															});
-																																														}
+																																														// Resolve
+																																														resolve();
 																																													}
 																																													
 																																													// Otherwise
 																																													else {
 																																													
-																																														// Check if wallet's hardware wallet is connected
-																																														if(wallet.isHardwareConnected() === true) {
-																																													
-																																															// Return canceling transaction with the wallet's hardware wallet and catch errors
-																																															return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
-																																															
-																																															// Finally
-																																															}).finally(function() {
-																																														
-																																																// Reject canceled error
-																																																reject(Common.CANCELED_ERROR);
-																																															});
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Reject canceled error
-																																															reject(Common.CANCELED_ERROR);
-																																														}
+																																														// Reject canceled error
+																																														reject(Common.CANCELED_ERROR);
 																																													}
-																																												
+																																													
 																																												// Catch errors
 																																												}).catch(function(error) {
 																																												
-																																													// Remove participant from slate
-																																													slate.getParticipants().pop();
-																																													
-																																													// Restore slate's old receiver signature
-																																													slate.setReceiverSignature(oldReceiverSignature);
+																																													// Check if cancel didn't occur
+																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																												
-																																													// Check if wallet's hardware wallet is connected
-																																													if(wallet.isHardwareConnected() === true) {
-																																												
-																																														// Return canceling transaction with the wallet's hardware wallet and catch errors
-																																														return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
+																																														// Check if canceled
+																																														if(error === Common.CANCELED_ERROR) {
 																																														
-																																														// Finally
-																																														}).finally(function() {
+																																															// Reject error
+																																															reject(error);
+																																														}
+																																														
+																																														// Otherwise
+																																														else {
 																																													
-																																															// Check if cancel didn't occur
-																																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																														
-																																																// Check if hardware wallet was disconnected
-																																																if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																																
-																																																	// Check if wallet's hardware wallet is connected
-																																																	if(wallet.isHardwareConnected() === true) {
-																																																
-																																																		// Wallet's hardware wallet disconnect event
-																																																		$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																																																	
-																																																			// Return adding a slate participant
-																																																			return addSlateParticipant().then(function() {
-																																																			
-																																																				// Check if cancel didn't occur
-																																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																			
-																																																					// Resolve
-																																																					resolve();
-																																																				}
-																																																				
-																																																				// Otherwise
-																																																				else {
-																																																				
-																																																					// Reject canceled error
-																																																					reject(Common.CANCELED_ERROR);
-																																																				}
-																																																			
-																																																			// Catch errors
-																																																			}).catch(function(error) {
-																																																			
-																																																				// Check if cancel didn't occur
-																																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																			
-																																																					// Reject error
-																																																					reject(error);
-																																																				}
-																																																				
-																																																				// Otherwise
-																																																				else {
-																																																				
-																																																					// Reject canceled error
-																																																					reject(Common.CANCELED_ERROR);
-																																																				}
-																																																			});
-																																																		});
-																																																	}
-																																																	
-																																																	// Otherwise
-																																																	else {
-																																																	
-																																																		// Return adding a slate participant
-																																																		return addSlateParticipant().then(function() {
-																																																		
-																																																			// Check if cancel didn't occur
-																																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																		
-																																																				// Resolve
-																																																				resolve();
-																																																			}
-																																																			
-																																																			// Otherwise
-																																																			else {
-																																																			
-																																																				// Reject canceled error
-																																																				reject(Common.CANCELED_ERROR);
-																																																			}
-																																																		
-																																																		// Catch errors
-																																																		}).catch(function(error) {
-																																																		
-																																																			// Check if cancel didn't occur
-																																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																		
-																																																				// Reject error
-																																																				reject(error);
-																																																			}
-																																																			
-																																																			// Otherwise
-																																																			else {
-																																																			
-																																																				// Reject canceled error
-																																																				reject(Common.CANCELED_ERROR);
-																																																			}
-																																																		});
-																																																	}
-																																																}
-																																																
-																																																// Otherwise check if canceled
-																																																else if(error === Common.CANCELED_ERROR) {
-																																																
-																																																	// Reject error
-																																																	reject(error);
-																																																}
-																																																
-																																																// Otherwise
-																																																else {
-																																															
-																																																	// Reject error
-																																																	reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
-																																																}
-																																															}
-																																															
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Reject canceled error
-																																																reject(Common.CANCELED_ERROR);
-																																															}
-																																														});
+																																															// Reject error
+																																															reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																																														}
 																																													}
 																																													
 																																													// Otherwise
 																																													else {
 																																													
-																																														// Check if cancel didn't occur
-																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																													
-																																															// Check if hardware wallet was disconnected
-																																															if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																																
-																																																// Return adding a slate participant
-																																																return addSlateParticipant().then(function() {
-																																																
-																																																	// Check if cancel didn't occur
-																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																
-																																																		// Resolve
-																																																		resolve();
-																																																	}
-																																																	
-																																																	// Otherwise
-																																																	else {
-																																																	
-																																																		// Reject canceled error
-																																																		reject(Common.CANCELED_ERROR);
-																																																	}
-																																																
-																																																// Catch errors
-																																																}).catch(function(error) {
-																																																
-																																																	// Check if cancel didn't occur
-																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																
-																																																		// Reject error
-																																																		reject(error);
-																																																	}
-																																																	
-																																																	// Otherwise
-																																																	else {
-																																																	
-																																																		// Reject canceled error
-																																																		reject(Common.CANCELED_ERROR);
-																																																	}
-																																																});
-																																															}
-																																															
-																																															// Otherwise check if canceled
-																																															else if(error === Common.CANCELED_ERROR) {
-																																															
-																																																// Reject error
-																																																reject(error);
-																																															}
-																																															
-																																															// Otherwise
-																																															else {
-																																														
-																																																// Reject error
-																																																reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
-																																															}
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Reject canceled error
-																																															reject(Common.CANCELED_ERROR);
-																																														}
+																																														// Reject canceled error
+																																														reject(Common.CANCELED_ERROR);
 																																													}
 																																												});
 																																											}
@@ -11055,7 +10774,7 @@ class Api {
 																																				if(wallet.isHardwareConnected() === true) {
 																																		
 																																					// Return starting transaction for the output amount and total amount with the wallet's hardware wallet
-																																					return wallet.getHardwareWallet().startTransaction(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX, (returnedAmount.isZero() === false) ? output[Wallet.OUTPUT_AMOUNT_INDEX] : new BigNumber(0), totalAmount.minus(fee), fee, receiverAddress, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function() {
+																																					return wallet.getHardwareWallet().startTransaction(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX, (returnedAmount.isZero() === false) ? output[Wallet.OUTPUT_AMOUNT_INDEX] : new BigNumber(0), totalAmount.minus(fee), fee, secretNonceIndex, receiverAddress, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function() {
 																																					
 																																						// Check if cancel didn't occur
 																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -11357,7 +11076,7 @@ class Api {
 																																														if(wallet.isHardwareConnected() === true) {
 																																													
 																																															// Return finalizing the slate response
-																																															return slateResponse.finalize(wallet.getHardwareWallet(), encryptedSecretNonce, baseFee, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, true, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function() {
+																																															return slateResponse.finalize(wallet.getHardwareWallet(), Slate.NO_SECRET_NONCE, baseFee, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, true, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function() {
 																																															
 																																																// Check if cancel didn't occur
 																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {

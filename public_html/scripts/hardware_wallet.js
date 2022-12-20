@@ -2121,7 +2121,7 @@ class HardwareWallet {
 		}
 		
 		// Start transaction
-		startTransaction(index, output, input, fee, address = HardwareWallet.NO_ADDRESS, text = HardwareWallet.NO_TEXT, textArguments = [], allowUnlock = false, preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
+		startTransaction(index, output, input, fee, secretNonceIndex = HardwareWallet.NO_SECRET_NONCE_INDEX, address = HardwareWallet.NO_ADDRESS, text = HardwareWallet.NO_TEXT, textArguments = [], allowUnlock = false, preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
 		
 			// Set self
 			var self = this;
@@ -2155,6 +2155,9 @@ class HardwareWallet {
 								
 								// Fee
 								Buffer.from(fee.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64)),
+								
+								// Secret nonce index
+								Buffer.from(new Uint8Array([secretNonceIndex])),
 								
 								// Address
 								Buffer.from((address !== HardwareWallet.NO_ADDRESS) ? address : [])
@@ -2390,10 +2393,13 @@ class HardwareWallet {
 						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_APPLY_OFFSET_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from(offset), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 						
 							// Check if response is valid
-							if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === 0) {
+							if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH <= 1) {
 							
-								// Resolve
-								resolve();
+								// Get secret nonce index from response
+								var secretNonceIndex = (response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === 1) ? response[0] : HardwareWallet.NO_SECRET_NONCE_INDEX;
+							
+								// Resolve secret nonce index
+								resolve(secretNonceIndex);
 							}
 							
 							// Otherwise
@@ -2514,123 +2520,6 @@ class HardwareWallet {
 							
 								// Resolve public nonce
 								resolve(publicNonce);
-							}
-							
-							// Otherwise
-							else {
-							
-								// Reject
-								reject();
-							}
-						
-						// Catch errors
-						}).catch(function(error) {
-						
-							// Reject error
-							reject(error);
-						});
-					}
-					
-					// Otherwise
-					else {
-					
-						// Reject disconnected error
-						reject(HardwareWallet.DISCONNECTED_ERROR);
-					}
-				}
-				
-				// Otherwise
-				else {
-				
-					// Reject
-					reject();
-				}
-			});
-		}
-		
-		// Get transaction encrypted secret nonce
-		getTransactionEncryptedSecretNonce(text = HardwareWallet.NO_TEXT, textArguments = [], allowUnlock = false, preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
-		
-			// Set self
-			var self = this;
-		
-			// Return promise
-			return new Promise(function(resolve, reject) {
-			
-				// Check if exclusive lock is locked
-				if(self.exclusiveLockObtained === true) {
-			
-					// Check if connected
-					if(self.isConnected() === true) {
-					
-						// Return requesting getting the transaction encrypted secret nonce from the hardware wallet
-						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_GET_ENCRYPTED_SECRET_NONCE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_DATA, text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
-						
-							// Check if response is valid
-							if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH > 0) {
-							
-								// Get encrypted secret nonce from response
-								var encryptedSecretNonce = response.subarray(0, response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH);
-							
-								// Resolve encrypted secret nonce
-								resolve(encryptedSecretNonce);
-							}
-							
-							// Otherwise
-							else {
-							
-								// Reject
-								reject();
-							}
-						
-						// Catch errors
-						}).catch(function(error) {
-						
-							// Reject error
-							reject(error);
-						});
-					}
-					
-					// Otherwise
-					else {
-					
-						// Reject disconnected error
-						reject(HardwareWallet.DISCONNECTED_ERROR);
-					}
-				}
-				
-				// Otherwise
-				else {
-				
-					// Reject
-					reject();
-				}
-			});
-		}
-		
-		// Set transaction encrypted secret nonce
-		setTransactionEncryptedSecretNonce(encryptedSecretNonce, text = HardwareWallet.NO_TEXT, textArguments = [], allowUnlock = false, preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
-		
-			// Set self
-			var self = this;
-		
-			// Return promise
-			return new Promise(function(resolve, reject) {
-			
-				// Check if exclusive lock is locked
-				if(self.exclusiveLockObtained === true) {
-			
-					// Check if connected
-					if(self.isConnected() === true) {
-					
-						// Return requesting setting the transaction encrypted secret nonce on the hardware wallet
-						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_SET_ENCRYPTED_SECRET_NONCE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from(encryptedSecretNonce), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
-						
-							// Check if response is valid
-							if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === 0) {
-							
-								// Resolve
-								resolve();
 							}
 							
 							// Otherwise
@@ -3156,6 +3045,13 @@ class HardwareWallet {
 			// Return Bluetooth connection type
 			return HardwareWallet.USB_CONNECTION_TYPE + 1;
 		}
+		
+		// No secret nonce index
+		static get NO_SECRET_NONCE_INDEX() {
+		
+			// Return no secret nonce index
+			return 0;
+		}
 	
 	// Private
 	
@@ -3593,7 +3489,7 @@ class HardwareWallet {
 		static get MINIMUM_COMPATIBLE_APPLICATION_VERSION() {
 		
 			// Return minimum compatible application version
-			return "4.0.0";
+			return "5.0.0";
 		}
 		
 		// Built-in request class
@@ -3743,25 +3639,11 @@ class HardwareWallet {
 			return HardwareWallet.REQUEST_CONTINUE_TRANSACTION_APPLY_OFFSET_INSTRUCTION + 1;
 		}
 		
-		// Request continue transaction get encrypted secret nonce instruction
-		static get REQUEST_CONTINUE_TRANSACTION_GET_ENCRYPTED_SECRET_NONCE_INSTRUCTION() {
-		
-			// Return request continue transaction get public nonce instruction
-			return HardwareWallet.REQUEST_CONTINUE_TRANSACTION_GET_PUBLIC_KEY_INSTRUCTION + 1;
-		}
-		
-		// Request continue transaction set encrypted secret nonce instruction
-		static get REQUEST_CONTINUE_TRANSACTION_SET_ENCRYPTED_SECRET_NONCE_INSTRUCTION() {
-		
-			// Return request continue transaction set public nonce instruction
-			return HardwareWallet.REQUEST_CONTINUE_TRANSACTION_GET_ENCRYPTED_SECRET_NONCE_INSTRUCTION + 1;
-		}
-		
 		// Request continue transaction get public nonce instruction
 		static get REQUEST_CONTINUE_TRANSACTION_GET_PUBLIC_NONCE_INSTRUCTION() {
 
 			// Return request continue transaction get public nonce instruction
-			return HardwareWallet.REQUEST_CONTINUE_TRANSACTION_SET_ENCRYPTED_SECRET_NONCE_INSTRUCTION + 1;
+			return HardwareWallet.REQUEST_CONTINUE_TRANSACTION_GET_PUBLIC_KEY_INSTRUCTION + 1;
 		}
 		
 		// Request continue transaction get message signature instruction
