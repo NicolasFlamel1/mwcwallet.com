@@ -2423,8 +2423,8 @@
 		
 		// Main function
 		
-		// Check if history is supported
-		if(typeof history === "object" && history !== null) {
+		// Check if history is supported and not loading from file
+		if(typeof history === "object" && history !== null && window["location"]["protocol"] !== "file:") {
 		
 			// Change displayed URL to remove query string
 			history.replaceState(NO_STATE, document["title"], "/");
