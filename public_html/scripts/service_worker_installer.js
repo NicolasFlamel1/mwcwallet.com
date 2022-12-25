@@ -22,7 +22,7 @@ class ServiceWorkerInstaller {
 			this.allowUpdates = false;
 			
 			// Check if not an extension and not loading from file
-			if(Common.isExtension() === false && window["location"]["protocol"] !== "file:") {
+			if(Common.isExtension() === false && location["protocol"] !== "file:") {
 		
 				// Check if service workers are supported
 				if(typeof navigator === "object" && navigator !== null && "serviceWorker" in navigator === true) {

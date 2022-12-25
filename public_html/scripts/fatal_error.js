@@ -56,8 +56,8 @@ class FatalError {
 				// Prevent extension from interrupting on close
 				Extension.preventInterruptOnClose();
 				
-				// Check if not an extension
-				if(Common.isExtension() === false) {
+				// Check if not an extension and not loading from file
+				if(Common.isExtension() === false && location["protocol"] !== "file:") {
 				
 					// Go to error page
 					location.replace("http" + ((location["protocol"] === Common.HTTPS_PROTOCOL) ? "s" : "") + "://" + location["hostname"] + FatalError.ERROR_PAGE_URL);

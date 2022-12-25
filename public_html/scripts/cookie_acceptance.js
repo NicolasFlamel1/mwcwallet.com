@@ -86,8 +86,8 @@ class CookieAcceptance {
 				// Set can show
 				this.canShow = true;
 				
-				// Check if not an app or extension
-				if(Common.isApp() === false && Common.isExtension() === false) {
+				// Check if not an app or extension and not loading from file
+				if(Common.isApp() === false && Common.isExtension() === false && location["protocol"] !== "file:") {
 		
 					// Get cookie acceptance message acknowledged
 					var cookieAcceptanceMessageAcknowledged = localStorage.getItem(CookieAcceptance.COOKIE_ACCEPTANCE_MESSAGE_ACKNOWLEDGED_LOCAL_STORAGE_NAME);
