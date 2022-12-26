@@ -41,8 +41,8 @@ class Version {
 				// Get current version
 				var currentVersion = localStorage.getItem(Version.CURRENT_VERSION_LOCAL_STORAGE_NAME);
 				
-				// Check if no previous version exists
-				if(currentVersion === Common.INVALID_LOCAL_STORAGE_ITEM) {
+				// Check if no previous version exists, not an extension, and not loading from file
+				if(currentVersion === Common.INVALID_LOCAL_STORAGE_ITEM && Common.isExtension() === false && location["protocol"] !== "file:") {
 				
 					// Try
 					try {
@@ -65,8 +65,8 @@ class Version {
 					resolve();
 				}
 				
-				// Otherwise check if version changed
-				else if(currentVersion !== self.version) {
+				// Otherwise check if no previous version exists and is an extension or loading from file or version changed
+				else if((currentVersion === Common.INVALID_LOCAL_STORAGE_ITEM && (Common.isExtension() === true || location["protocol"] === "file:")) || currentVersion !== self.version) {
 				
 					// Check if there's version changes to show
 					if(VERSION_CHANGES["length"] !== 0) {
