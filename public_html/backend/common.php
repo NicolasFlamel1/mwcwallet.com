@@ -10,7 +10,8 @@
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Changes to make site work as a standalone HTML file."
+		"Changes to make this site work as a standalone HTML file.",
+		"Fixes version changes not being displayed when the browser extension version of this service is updated."
 	];
 	
 	// Maintenance start time
