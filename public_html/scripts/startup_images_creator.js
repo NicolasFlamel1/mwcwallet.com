@@ -12,8 +12,8 @@ class StartupImagesCreator {
 		// Initialize
 		static initialize() {
 		
-			// Check if device pixel ratio is supported and not loading from file
-			if(typeof devicePixelRatio === "number" && location["protocol"] !== "file:") {
+			// Check if device pixel ratio is supported
+			if(typeof devicePixelRatio === "number") {
 		
 				// Create image
 				var image = new Image();

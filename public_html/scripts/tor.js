@@ -114,8 +114,8 @@ class Tor {
 		// Is Onion Service
 		static isOnionService() {
 		
-			// Check if is extension
-			if(Common.isExtension() === true) {
+			// Check if is extension or loading from file
+			if(Common.isExtension() === true || location["protocol"] === "file:") {
 			
 				// Return false
 				return false;
