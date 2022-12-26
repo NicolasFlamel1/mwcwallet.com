@@ -5100,8 +5100,8 @@ class Application {
 				// Get if third-party cookies message has been shown
 				var thirdPartyCookiesMessageShown = localStorage.getItem(Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_LOCAL_STORAGE_NAME);
 				
-				// Check if third-party cookies message hasn't been shown and is an extension
-				if((thirdPartyCookiesMessageShown === Common.INVALID_LOCAL_STORAGE_ITEM || thirdPartyCookiesMessageShown !== Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_TRUE_VALUE) && Common.isExtension() === true) {
+				// Check if third-party cookies message hasn't been shown and is an extension or loading from a file
+				if((thirdPartyCookiesMessageShown === Common.INVALID_LOCAL_STORAGE_ITEM || thirdPartyCookiesMessageShown !== Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_TRUE_VALUE) && (Common.isExtension() === true || location["protocol"] === "file:")) {
 				
 					// Check if browser is Safari
 					if(typeof navigator === "object" && navigator !== null && navigator["userAgent"].toLowerCase().indexOf("safari") !== Common.INDEX_NOT_FOUND && navigator["userAgent"].toLowerCase().indexOf("chrome") === Common.INDEX_NOT_FOUND) {
@@ -5142,8 +5142,22 @@ class Application {
 							}
 						});
 						
+						// Check if is an extesnion
+						if(Common.isExtension() === true) {
+						
+							// Set message
+							var message = Message.createText(Language.getDefaultTranslation('This extension won\'t function correctly if your browser is configured to block third-party cookies. Make sure that your browser is configured to allow third-party cookies before continuing.'));
+						}
+						
+						// Otherwise
+						else {
+						
+							// Set message
+							var message = Message.createText(Language.getDefaultTranslation('This site won\'t function correctly if your browser is configured to block third-party cookies. Make sure that your browser is configured to allow third-party cookies before continuing.'));
+						}
+						
 						// Show message and allow showing messages
-						self.message.show(Language.getDefaultTranslation('Third-Party Cookies Information'), Message.createText(Language.getDefaultTranslation('This extension won\'t function correctly if your browser is configured to block third-party cookies. Make sure that your browser is configured to allow third-party cookies before continuing.')), false, function() {
+						self.message.show(Language.getDefaultTranslation('Third-Party Cookies Information'), message, false, function() {
 						
 							// Hide loading
 							self.hideLoading();
