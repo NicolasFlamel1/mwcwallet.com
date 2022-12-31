@@ -2555,7 +2555,7 @@ class HardwareWallet {
 		}
 		
 		// Get transaction message signature
-		getTransactionMessageSignature(message, publicKey, text = HardwareWallet.NO_TEXT, textArguments = [], allowUnlock = false, preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
+		getTransactionMessageSignature(message, text = HardwareWallet.NO_TEXT, textArguments = [], allowUnlock = false, preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
 		
 			// Set self
 			var self = this;
@@ -2570,15 +2570,7 @@ class HardwareWallet {
 					if(self.isConnected() === true) {
 					
 						// Return requesting getting the transaction message signature from the hardware wallet
-						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_GET_MESSAGE_SIGNATURE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.concat([
-								
-							// Public key
-							Buffer.from(publicKey),
-							
-							// Message
-							Buffer.from((new TextEncoder()).encode(message))
-							
-						]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
+						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_GET_MESSAGE_SIGNATURE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from((new TextEncoder()).encode(message)), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 						
 							// Check if response is valid
 							if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === Crypto.SINGLE_SIGNER_SIGNATURE_LENGTH) {
@@ -3489,7 +3481,7 @@ class HardwareWallet {
 		static get MINIMUM_COMPATIBLE_APPLICATION_VERSION() {
 		
 			// Return minimum compatible application version
-			return "5.0.0";
+			return "6.0.0";
 		}
 		
 		// Built-in request class

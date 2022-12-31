@@ -1260,7 +1260,7 @@ class Slate {
 									var hardwareWallet = secretKeyOrHardwareWallet;
 									
 									// Return getting the transaction message signature with the hardware wallet
-									return hardwareWallet.getTransactionMessageSignature(message, publicBlindExcess, hardwareWalletLockedText, hardwareWalletLockedTextArguments, allowUnlock, preventMessages, cancelOccurred).then(function(messageSignature) {
+									return hardwareWallet.getTransactionMessageSignature(message, hardwareWalletLockedText, hardwareWalletLockedTextArguments, allowUnlock, preventMessages, cancelOccurred).then(function(messageSignature) {
 									
 										// Resolve message signature
 										resolve(messageSignature);
