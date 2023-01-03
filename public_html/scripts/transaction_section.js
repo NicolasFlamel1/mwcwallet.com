@@ -853,7 +853,7 @@ class TransactionSection extends Section {
 			else if(this.transaction.getStatus() === Transaction.UNKNOWN_STATUS) {
 			
 				// Add status to transaction information display
-				transactionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Status: %1$x'), [(this.transaction.getAmountReleased() === false) ? Language.getDefaultTranslation('Unconfirmed') :  Language.getDefaultTranslation('Confirmed')]));
+				transactionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Status: %1$x'), [(this.transaction.getAmountReleased() === false) ? Language.getDefaultTranslation('Unconfirmed') : Language.getDefaultTranslation('Confirmed')]));
 				
 				// Check if transaction's amount was released
 				if(this.transaction.getAmountReleased() === true) {
@@ -898,7 +898,7 @@ class TransactionSection extends Section {
 				else {
 			
 					// Add status to transaction information display
-					transactionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Status: %1$x'), [(this.transaction.getStatus() === Transaction.STATUS_UNCONFIRMED) ? Language.getDefaultTranslation('Unconfirmed') :  Language.getDefaultTranslation('Confirmed')]));
+					transactionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Status: %1$x'), [(this.transaction.getStatus() === Transaction.STATUS_UNCONFIRMED) ? Language.getDefaultTranslation('Unconfirmed') : Language.getDefaultTranslation('Confirmed')]));
 				}
 				
 				// Check if transaction's status isn't unconfirmed

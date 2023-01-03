@@ -418,7 +418,7 @@ class ServiceWorkerInstaller {
 			if(lastUpdateTimestamp === Common.INVALID_LOCAL_STORAGE_ITEM || parseInt(lastUpdateTimestamp, Common.DECIMAL_NUMBER_BASE) <= Common.getCurrentTimestamp() - ServiceWorkerInstaller.UPDATE_EXPIRATION_SECONDS) {
 			
 				// Try
-				try {	
+				try {
 			
 					// Save last update timestamp in local storage
 					localStorage.setItem(ServiceWorkerInstaller.SERVICE_WORKER_LAST_UPDATE_TIMESTAMP_LOCAL_STORAGE_NAME, Common.getCurrentTimestamp().toFixed());

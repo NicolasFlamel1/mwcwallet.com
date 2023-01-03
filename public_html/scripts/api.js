@@ -4441,7 +4441,7 @@ class Api {
 																															
 																																// Reject JSON-RPC internal error error response
 																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																															}	
+																															}
 																														});
 																													};
 																													
@@ -9138,7 +9138,7 @@ class Api {
 																																	
 																																		// Reject canceled error
 																																		reject(Common.CANCELED_ERROR);
-																																	}	
+																																	}
 																																
 																																// Catch errors
 																																}).catch(function(error) {
@@ -9170,7 +9170,7 @@ class Api {
 																															
 																																// Reject canceled error
 																																reject(Common.CANCELED_ERROR);
-																															}	
+																															}
 																														
 																														// Catch errors
 																														}).catch(function(error) {
@@ -9187,7 +9187,7 @@ class Api {
 																															
 																																// Reject canceled error
 																																reject(Common.CANCELED_ERROR);
-																															}	
+																															}
 																														});
 																													}
 																													
@@ -10509,7 +10509,7 @@ class Api {
 																												
 																													// Reject canceled error
 																													reject(Common.CANCELED_ERROR);
-																												}	
+																												}
 																											});
 																										};
 																										
@@ -10595,7 +10595,7 @@ class Api {
 																																							
 																																								// Reject canceled error
 																																								reject(Common.CANCELED_ERROR);
-																																							}	
+																																							}
 																																						});
 																																					}
 																																					
@@ -10612,7 +10612,7 @@ class Api {
 																																				
 																																					// Reject canceled error
 																																					reject(Common.CANCELED_ERROR);
-																																				}	
+																																				}
 																																			});
 																																		};
 																																		
@@ -11037,7 +11037,7 @@ class Api {
 																																																		
 																																																			// Reject canceled error
 																																																			reject(Common.CANCELED_ERROR);
-																																																		}	
+																																																		}
 																																																	}
 																																													
 																																																	// Otherwise
@@ -11045,7 +11045,7 @@ class Api {
 																																																	
 																																																		// Reject canceled error
 																																																		reject(Common.CANCELED_ERROR);
-																																																	}	
+																																																	}
 																																																});
 																																															}
 																																															
@@ -11062,7 +11062,7 @@ class Api {
 																																														
 																																															// Reject canceled error
 																																															reject(Common.CANCELED_ERROR);
-																																														}	
+																																														}
 																																													});
 																																												};
 																																												
@@ -12366,7 +12366,7 @@ class Api {
 																																	
 																																			// Reject error
 																																			reject(Message.createText(Language.getDefaultTranslation('Broadcasting the transaction failed.')));
-																																		}	
+																																		}
 																																	});
 																																}
 																																
@@ -13293,7 +13293,7 @@ class Api {
 						
 							// Reject canceled error
 							reject(Common.CANCELED_ERROR);
-						}	
+						}
 					
 					// Catch errors
 					}).catch(function(responseStatusOrResponse) {
@@ -13335,7 +13335,7 @@ class Api {
 						
 							// Reject canceled error
 							reject(Common.CANCELED_ERROR);
-						}	
+						}
 					});
 				}
 				
@@ -13344,7 +13344,7 @@ class Api {
 				
 					// Reject canceled error
 					reject(Common.CANCELED_ERROR);
-				}	
+				}
 			});
 		}
 		
@@ -14159,7 +14159,7 @@ class Api {
 													
 														// Reject
 														reject();
-													} 
+													}
 													
 													// Otherwise check if a serialized slate was received
 													else if(Object.isObject(serializedSlateOrSlatepack) === true) {

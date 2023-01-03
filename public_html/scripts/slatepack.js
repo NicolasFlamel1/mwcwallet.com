@@ -899,7 +899,7 @@ class Slatepack {
 								// Slate
 								slate,
 								
-								//  Checksum
+								// Checksum
 								(new BigNumber((new Uint32Array([checksum]))[0])).toBytes(BigNumber.BIG_ENDIAN, Uint32Array["BYTES_PER_ELEMENT"])
 							
 							])).then(function(encryptedSlate) {
@@ -975,7 +975,7 @@ class Slatepack {
 								// Slate
 								slate,
 								
-								//  Checksum
+								// Checksum
 								(new BigNumber((new Uint32Array([checksum]))[0])).toBytes(BigNumber.BIG_ENDIAN, Uint32Array["BYTES_PER_ELEMENT"])
 							
 							]), Tor.publicKeyToTorAddress(publicKey), hardwareWalletLockedText, hardwareWalletLockedTextArguments, allowUnlock, preventMessages, cancelOccurred).then(function(encryptedSlate) {
@@ -1268,7 +1268,7 @@ class Slatepack {
 						reject("Invalid shared secret key");
 					}
 				}
-			});				
+			});
 		}
 		
 		// Decrypt

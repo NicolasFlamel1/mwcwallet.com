@@ -987,7 +987,7 @@ class Language {
 			if(Object.keys(AVAILABLE_LANGUAGES)["length"] > 1) {
 			
 				// Check if delay show
-				if(delayShow === true) 
+				if(delayShow === true)
 				
 					// Set language display to transition at a slower speed
 					$("div.language").removeClass("normalTransitionSpeed");
@@ -1715,7 +1715,7 @@ class Language {
 		
 			// Return date component padding
 			return "0";
-		}						
+		}
 }
 
 

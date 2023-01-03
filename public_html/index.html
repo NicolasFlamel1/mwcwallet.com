@@ -410,7 +410,7 @@
 						}
 						
 						// Otherwise
-						else  {
+						else {
 						
 							// Set text message
 							var textMessage = "<?= escapeString(getTranslation('Failed to load resources. Refresh this site to try again.')); ?>";
@@ -1948,7 +1948,7 @@
 													<select data-private>
 														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Match connection')); ?>" value="Match Connection"><?= encodeString(getTranslation('Match connection')); ?></option>
 														<option class="translatable" data-text="<?= encodeString((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? getDefaultTranslation('HTTPS') : getDefaultTranslation('HTTP')); ?>" value="HTTP"><?= encodeString((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? getTranslation('HTTPS') : getTranslation('HTTP')); ?></option>
-														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Onion Service')); ?>" value="Tor"><?= encodeString(getTranslation('Onion Service')); ?></option>	
+														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Onion Service')); ?>" value="Tor"><?= encodeString(getTranslation('Onion Service')); ?></option>
 													</select>
 													<span></span>
 												</div>
@@ -1962,7 +1962,7 @@
 													<select data-private>
 														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Spendable')); ?>" value="Spendable"><?= encodeString(getTranslation('Spendable')); ?></option>
 														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirmed')); ?>" value="Confirmed"><?= encodeString(getTranslation('Confirmed')); ?></option>
-														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirmed and unconfirmed')); ?>" value="Confirmed And Unconfirmed"><?= encodeString(getTranslation('Confirmed and unconfirmed')); ?></option>	
+														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirmed and unconfirmed')); ?>" value="Confirmed And Unconfirmed"><?= encodeString(getTranslation('Confirmed and unconfirmed')); ?></option>
 													</select>
 													<span></span>
 												</div>
@@ -2325,7 +2325,7 @@
 					</button>
 				</div>
 			</section>
-		</div>	
+		</div>
 	</div>
 	
 	<link rel="prefetch" as="font" href="<?= encodeString(getResource("./fonts/font_awesome/font_awesome-5.15.4.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">

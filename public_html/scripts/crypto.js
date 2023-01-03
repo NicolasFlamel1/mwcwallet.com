@@ -518,7 +518,7 @@ class Crypto {
 							
 								// Reject error
 								reject("Secret key is not a valid secret key.");
-							}	
+							}
 						
 						// Catch errors
 						}).catch(function(error) {

@@ -255,7 +255,7 @@ class Tor {
 						// Resolve
 						resolve();
 					
-					// Catch errors	
+					// Catch errors
 					}).catch(function(error) {
 					
 						// Clear browser supports Tor

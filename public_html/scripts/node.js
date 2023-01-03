@@ -516,7 +516,7 @@ class Node {
 						// Otherwise
 						else {
 						
-							// Return  addresses
+							// Return addresses
 							return [
 							
 								// Addresses

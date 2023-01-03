@@ -3093,7 +3093,7 @@ class Wallets {
 												// Return saving wallet
 												return self.saveWallet(wallet, function() {
 												
-													// Return 
+													// Return
 													return {
 													
 														// New locked amount value

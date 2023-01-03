@@ -269,7 +269,7 @@ class Tetris {
 				// Hide loading
 				self.application.hideLoading();
 				
-				// Set running 
+				// Set running
 				self.running = true;
 			});
 		}

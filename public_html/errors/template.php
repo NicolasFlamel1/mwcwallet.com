@@ -968,7 +968,7 @@
 					</div>
 				</div>
 			</aside>
-		</div>	
+		</div>
 	</div>
 	
 	<link rel="prefetch" as="font" href=".<?= encodeString(getResource("./fonts/font_awesome/font_awesome-5.15.4.woff2")); ?>" type="font/woff2" crossorigin="anonymous">

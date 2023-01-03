@@ -41,7 +41,7 @@ class Uuid {
 		serialize() {
 		
 			// Return serialized data
-			return Uuid.serializeData(this.data);	
+			return Uuid.serializeData(this.data);
 		}
 	
 		// Unserialize

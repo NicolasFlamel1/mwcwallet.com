@@ -16,7 +16,7 @@ rm -r "./3.7.2.tar.gz" "./js-base64-3.7.2"
 wget "https://github.com/bitcoinjs/bech32/archive/refs/tags/v2.0.0.tar.gz"
 tar -xf "./v2.0.0.tar.gz"
 sed -i 's/Object.defineProperty(/\/\/Object.defineProperty(/g' "./bech32-2.0.0/dist/index.js"
-sed -i 's/exports/globalThis/g'  "./bech32-2.0.0/dist/index.js"
+sed -i 's/exports/globalThis/g' "./bech32-2.0.0/dist/index.js"
 mv "./bech32-2.0.0/dist/index.js" "./bech32-2.0.0.js"
 rm -rf "./v2.0.0.tar.gz" "./bech32-2.0.0"
 

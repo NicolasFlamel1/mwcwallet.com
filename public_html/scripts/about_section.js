@@ -148,7 +148,7 @@ class AboutSection extends Section {
 				// Update copyright
 				self.updateCopyright();
 			
-			}, Math.min(nextYearTimestamp - currentTimestamp, Common.INT32_MAX_VALUE));	
+			}, Math.min(nextYearTimestamp - currentTimestamp, Common.INT32_MAX_VALUE));
 		}
 		
 		// Add disclaimer

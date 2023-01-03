@@ -60,7 +60,7 @@ button:active {
 
 button:disabled {
 	cursor: default;
-	background: #6000D5;	
+	background: #6000D5;
 	color: white;
 	pointer-events: none;
 }

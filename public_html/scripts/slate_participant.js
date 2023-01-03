@@ -135,7 +135,7 @@ class SlateParticipant {
 						// Write public nonce
 						Slate.compactPublicKey(this.getPublicNonce(), bitWriter);
 						
-						//  Check if partial signature exists
+						// Check if partial signature exists
 						if(this.getPartialSignature() !== SlateParticipant.NO_PARTIAL_SIGNATURE) {
 						
 							// Write partial signature exists

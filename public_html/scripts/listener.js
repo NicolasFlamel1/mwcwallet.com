@@ -427,7 +427,7 @@ class Listener {
 							// Break
 							break;
 					}
-				});	
+				});
 			});
 		}
 		
@@ -500,7 +500,7 @@ class Listener {
 								// Break
 								break;
 						}
-					});	
+					});
 				}
 				
 				// Otherwise
@@ -578,7 +578,7 @@ class Listener {
 							// Break
 							break;
 					}
-				});	
+				});
 			});
 		}
 		
@@ -656,7 +656,7 @@ class Listener {
 							// Break
 							break;
 					}
-				});	
+				});
 			});
 		}
 		
@@ -738,7 +738,7 @@ class Listener {
 							// Break
 							break;
 					}
-				});	
+				});
 			});
 		}
 		
@@ -876,7 +876,7 @@ class Listener {
 							// Break
 							break;
 					}
-				});	
+				});
 			});
 		}
 		

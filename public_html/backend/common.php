@@ -10,7 +10,9 @@
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Adds support for version 6.0.0 of the Ledger hardware wallet apps.",
+		"Changes to make this site work as a standalone HTML file.",
+		"Fixes version changes not being displayed when the browser extension version of this service is updated.",
+		"Adds support for version 6.0.0 of the Ledger hardware wallet apps."
 	];
 	
 	// Maintenance start time

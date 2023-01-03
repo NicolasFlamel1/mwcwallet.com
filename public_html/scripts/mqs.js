@@ -250,7 +250,7 @@ class Mqs {
 								
 									// Reject error
 									reject(error);
-								});			
+								});
 							
 							// Catch errors
 							}).catch(function(error) {
@@ -282,7 +282,7 @@ class Mqs {
 						reject("Invalid shared secret key");
 					}
 				}
-			});				
+			});
 		}
 		
 		// Decrypt
@@ -431,7 +431,7 @@ class Mqs {
 								
 									// Reject error
 									reject(error);
-								});			
+								});
 							
 							// Catch errors
 							}).catch(function(error) {

@@ -297,7 +297,7 @@ class Database {
 					// Resolve database transaction
 					resolve(databaseTransaction);
 				});
-			});	
+			});
 		}
 		
 		// Commit transaction
@@ -1682,7 +1682,7 @@ class Database {
 					}, 0);
 				}
 			}
-		}	
+		}
 		
 		// Invaid key path pattern
 		static get INVALID_KEY_PATH_PATTERN() {

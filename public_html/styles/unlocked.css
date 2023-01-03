@@ -266,7 +266,7 @@ main > div.unlocked > div > div > div.wallets > button.expand:active {
 
 main > div.unlocked > div > div > div.wallets > button.expand:disabled {
 	cursor: default;
-	background: #7A00D9;	
+	background: #7A00D9;
 	color: rgba(255, 255, 255, 0.8);
 }
 
@@ -491,7 +491,7 @@ main > div.unlocked > div > div > div.wallets > div > div.list > button.ledger::
 main > div.unlocked > div > div > div.wallets > div > div.list > button.hide {
 	display: flex;
 	visibility: hidden;
-	opacity: 0;	
+	opacity: 0;
 }
 
 @media only screen and (any-hover: hover) {

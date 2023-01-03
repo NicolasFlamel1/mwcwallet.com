@@ -1834,7 +1834,7 @@ class Wallet {
 									
 										// Reject error
 										reject(error);
-									});	
+									});
 								}
 								
 								// Otherwise

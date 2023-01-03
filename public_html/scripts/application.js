@@ -3230,7 +3230,7 @@ class Application {
 													// Prevent inactive automatic lock
 													self.automaticLock.prevent();
 												
-													// Return connecting to any hardware wallet descriptor 
+													// Return connecting to any hardware wallet descriptor
 													return hardwareWallet.connect(HardwareWallet.ANY_HARDWARE_WALLET_DESCRIPTOR, true).then(function() {
 													
 														// Restore automatic lock state

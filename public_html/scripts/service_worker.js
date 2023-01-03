@@ -285,7 +285,7 @@ self.addEventListener("fetch", function(event) {
 		}
 		
 		// Get request's cache name
-		var cacheName = RELATIVE_ROOT_PATH + parsedUrl["pathname"].substring("/"["length"]) + parsedUrl["search"];	
+		var cacheName = RELATIVE_ROOT_PATH + parsedUrl["pathname"].substring("/"["length"]) + parsedUrl["search"];
 		
 		// Check if request isn't a GET request, doesn't go to the server, or is for an HTML file
 		if(event["request"]["method"] !== "GET" || parsedUrl["hostname"] !== HOST_NAME || HTML_FILE_PATTERN.test(parsedUrl["pathname"]) === true) {

@@ -1601,7 +1601,7 @@ class Logo {
 					return true;
 			
 			// Return false
-			return false;				
+			return false;
 		}
 	
 		// No WebGL

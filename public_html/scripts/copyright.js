@@ -68,7 +68,7 @@ class Copyright {
 				// Update
 				Copyright.update();
 			
-			}, Math.min(nextYearTimestamp - currentTimestamp, Common.INT32_MAX_VALUE));	
+			}, Math.min(nextYearTimestamp - currentTimestamp, Common.INT32_MAX_VALUE));
 		}
 		
 		// Date copyright name
