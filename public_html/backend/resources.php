@@ -423,10 +423,10 @@
 			"Checksum" => "jSzvJoFNyGWGAlNp1a4r556E4qYOKEqZFy153hcWtYOjKYGsBLkY+z5koJK/kiDxemFjQ1v8HtfqeassdIiazg=="
 		],
 		"./scripts/crypto.js" => [
-			"Version" => 7,
+			"Version" => 8,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "4yY5psBP7LU06fpDKi8jCVfP0qltOSYDD3rmgqDdl198fgpqWulCRgKTEEIEGow9xGdrteYfXIjKv/PyATWZ1g=="
+			"Checksum" => "6KLqurhRAQJhjb3W1N2WxlO+Js7KkVwRa9pQ/PAeaLd0VHFLzkNf8hdiloAXMnN5r4jL/Vmar0Fe/G5qsmPkRQ=="
 		],
 		"./scripts/api.js" => [
 			"Version" => 49,
