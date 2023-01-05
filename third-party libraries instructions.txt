@@ -152,15 +152,15 @@ unzip "./SMAZ-0.0.30.zip"
 mv "./wasm/SMAZ.wasm" "./SMAZ-0.0.30.wasm"
 rm -rf "./SMAZ-0.0.30.zip" "./wasm" "./asm.js"
 
-# How to build /public_html/scripts/X25519-0.0.22.js
-wget "https://github.com/NicolasFlamel1/X25519-WASM-Wrapper/releases/download/v0.0.22/X25519-0.0.22.zip"
-unzip "./X25519-0.0.22.zip"
-sed -i 's/"X25519.wasm"/"." + getResource(".\/scripts\/X25519-0.0.22.wasm")/g' "./wasm/X25519.js"
-mv "./wasm/X25519.js" "./X25519-0.0.22.js"
-rm -rf "./X25519-0.0.22.zip" "./wasm" "./asm.js"
+# How to build /public_html/scripts/X25519-0.0.23.js
+wget "https://github.com/NicolasFlamel1/X25519-WASM-Wrapper/releases/download/v0.0.23/X25519-0.0.23.zip"
+unzip "./X25519-0.0.23.zip"
+sed -i 's/"X25519.wasm"/"." + getResource(".\/scripts\/X25519-0.0.23.wasm")/g' "./wasm/X25519.js"
+mv "./wasm/X25519.js" "./X25519-0.0.23.js"
+rm -rf "./X25519-0.0.23.zip" "./wasm" "./asm.js"
 
-# How to build /public_html/scripts/X25519-0.0.22.wasm
-wget "https://github.com/NicolasFlamel1/X25519-WASM-Wrapper/releases/download/v0.0.22/X25519-0.0.22.zip"
-unzip "./X25519-0.0.22.zip"
-mv "./wasm/X25519.wasm" "./X25519-0.0.22.wasm"
-rm -rf "./X25519-0.0.22.zip" "./wasm" "./asm.js"
+# How to build /public_html/scripts/X25519-0.0.23.wasm
+wget "https://github.com/NicolasFlamel1/X25519-WASM-Wrapper/releases/download/v0.0.23/X25519-0.0.23.zip"
+unzip "./X25519-0.0.23.zip"
+mv "./wasm/X25519.wasm" "./X25519-0.0.23.wasm"
+rm -rf "./X25519-0.0.23.zip" "./wasm" "./asm.js"

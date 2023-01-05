@@ -656,11 +656,11 @@
 			"Minified" => FALSE,
 			"Checksum" => "8z69nUefE0sJLexuhFr8X1Ljz/1vajNzWa+lYpX4438g+AJyUtZT/MGRpLWNnCzMt1iMM8Zi8MVmG3dydMWG1g=="
 		],
-		"./scripts/X25519-0.0.22.js" => [
+		"./scripts/X25519-0.0.23.js" => [
 			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "PVynPD+VyTW3PqtLutGHxWoFdxhuqgE2uGnI9hZX24LliSTco6S3x9+6sIDuu+D5HvWsM5mihP9meYVi52vylQ=="
+			"Checksum" => "Ba4AMi1Gkx7QB5Xa8OiafsoSjdA5zxaqG3WfyB1I4p9RumPDxl0ZAR21mVN5fPRxsnImSbkIiuU+Lwif40LvqQ=="
 		],
 		"./scripts/tor_proxy.js" => [
 			"Version" => 4,
@@ -764,11 +764,11 @@
 			"Minified" => FALSE,
 			"Checksum" => "unWNdFJP8XDQLIzNHRaCNzt1XP9u9zQMLwFkxL0BLkb6jd16angfAlGK2zLyv5DukC74edDQ+OSZa+HJl+iS9g=="
 		],
-		"./scripts/X25519-0.0.22.wasm" => [
+		"./scripts/X25519-0.0.23.wasm" => [
 			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "EVo+ydAdXW00myPydlVk7HPm2ROg5wrIDyuYA3xuxYoLulhDH6hRy98UKP0Z9qkLGObL3mvZRel78pHKJaC++g=="
+			"Checksum" => "aD21EXxdkP4IWbct7HkP1+KNqzcQM/vfm3kRRH3jzhpCOJ+uAS/WNAe8R83stTD1wQTYhVJhQcRLjh5UdeTsVw=="
 		],
 		"./scripts/height.js" => [
 			"Version" => 4,

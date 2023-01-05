@@ -10,7 +10,8 @@
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Changes Grin's Slatepack address derivation to match the official implementation."
+		"Changes Grin's Slatepack address derivation to match the official implementation.",
+		"Updated dependencies."
 	];
 	
 	// Maintenance start time
