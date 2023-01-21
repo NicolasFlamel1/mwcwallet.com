@@ -16,7 +16,7 @@
 
 // Import scripts
 importScripts(".<?= escapeString(getResource("./scripts/BLAKE2b-0.0.2.js")); ?>");
-importScripts(".<?= escapeString(getResource("./scripts/secp256k1-zkp-0.0.25.js")); ?>");
+importScripts(".<?= escapeString(getResource("./scripts/secp256k1-zkp-0.0.27.js")); ?>");
 importScripts(".<?= escapeString(getResource("./scripts/bignumber.js-9.0.2.js")); ?>");
 importScripts(".<?= escapeString(getResource("./scripts/common.js")); ?>");
 importScripts(".<?= escapeString(getResource("./scripts/crypto.js")); ?>");

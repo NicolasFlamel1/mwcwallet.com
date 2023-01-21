@@ -519,13 +519,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 36,
+			"Version" => 37,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 104,
+			"Version" => 105,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -537,7 +537,7 @@
 			"Checksum" => "fgXcToDtI6wmtS0RjZW5pbWUYkBBkENvqM+gtInk+grrPOQxx37PqgMCyjDm5JTlC3fMvdWSeNrWv1T1CZ0a3g=="
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 31,
+			"Version" => 32,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -638,11 +638,11 @@
 			"Minified" => FALSE,
 			"Checksum" => "kVINxDNBZFLQHjbDfaG+9lw2OkAlwe+YGGMcrRqDYz1mB70+y5ri3qbM/Y/a4XnR9xXMwJt78jcsqJ2lM363CA=="
 		],
-		"./scripts/secp256k1-zkp-0.0.25.js" => [
+		"./scripts/secp256k1-zkp-0.0.27.js" => [
 			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "J12mXeXWL2UEBTAumKpc9fAWkoW7ir/ctUPGMrfR3Bsj8hbaGXpTGAEMXpqYOmY3SKJuckyXdODFGqZofXT3cQ=="
+			"Checksum" => "+83iIFHh2h8o3fxmHaFJ/VtK4Tvy/OW7iv6B2w4nVOPd8c+QlWIYfjpmb53wh6DTgia4zPWMreEn+TezVTUFpA=="
 		],
 		"./scripts/SMAZ-0.0.31.js" => [
 			"Version" => 1,
@@ -746,11 +746,11 @@
 			"Minified" => FALSE,
 			"Checksum" => "SeDn9aV8tLcfbel3vPaPkohO1OhuVWC2KJhndRIKvC3JT5yCYRWz8/+v2oIbsLLwCjBqnYFr6mghA33y+eySYQ=="
 		],
-		"./scripts/secp256k1-zkp-0.0.25.wasm" => [
+		"./scripts/secp256k1-zkp-0.0.27.wasm" => [
 			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "plj3cgdR+MkdYUTPD0cML9HjcOVXZ8Tegknuqo6VymR+zbpTTOw/jDBQojQIF6eXoJJlXCVAzT+0dkJs6HL3rQ=="
+			"Checksum" => "cy6D8ymfNYx2nClB7IewZw/TkVQmLQW9Y2ioL0eQTyLVRGC4xUjH5nc/le1uTXq8fQhwqkcwnpN9vlFcZLWIow=="
 		],
 		"./scripts/SMAZ-0.0.31.wasm" => [
 			"Version" => 1,
@@ -1449,16 +1449,16 @@
 			"Checksum" => "qqcTSJHo3upbPBJR1exc31V0W9MoKKpCuSciuQ8Wr+hYVF+NmdYYCqdABSb2S84Xr8I1WkHeDMOzI5Fbtd5vHw=="
 		],
 		"./scripts/secp256k1-zkp license.txt" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "qqcTSJHo3upbPBJR1exc31V0W9MoKKpCuSciuQ8Wr+hYVF+NmdYYCqdABSb2S84Xr8I1WkHeDMOzI5Fbtd5vHw=="
+			"Checksum" => "qElcmcO63QPcv3OrJp1b98l+Ut/sPnm6deMY93mqyUOedv9oLvA5EG4JNEWZ/Yxfzvb68jfk69CiNlo4QVreSQ=="
 		],
 		"./scripts/SMAZ license.txt" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "qqcTSJHo3upbPBJR1exc31V0W9MoKKpCuSciuQ8Wr+hYVF+NmdYYCqdABSb2S84Xr8I1WkHeDMOzI5Fbtd5vHw=="
+			"Checksum" => "qElcmcO63QPcv3OrJp1b98l+Ut/sPnm6deMY93mqyUOedv9oLvA5EG4JNEWZ/Yxfzvb68jfk69CiNlo4QVreSQ=="
 		],
 		"./fonts/btc/BTC license.txt" => [
 			"Version" => 3,
@@ -1503,10 +1503,10 @@
 			"Checksum" => "qqcTSJHo3upbPBJR1exc31V0W9MoKKpCuSciuQ8Wr+hYVF+NmdYYCqdABSb2S84Xr8I1WkHeDMOzI5Fbtd5vHw=="
 		],
 		"./scripts/X25519 license.txt" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "qqcTSJHo3upbPBJR1exc31V0W9MoKKpCuSciuQ8Wr+hYVF+NmdYYCqdABSb2S84Xr8I1WkHeDMOzI5Fbtd5vHw=="
+			"Checksum" => "qElcmcO63QPcv3OrJp1b98l+Ut/sPnm6deMY93mqyUOedv9oLvA5EG4JNEWZ/Yxfzvb68jfk69CiNlo4QVreSQ=="
 		],
 		"./images/down arrow license.txt" => [
 			"Version" => 3,
