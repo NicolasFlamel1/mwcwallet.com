@@ -3481,7 +3481,7 @@ class HardwareWallet {
 		static get MINIMUM_COMPATIBLE_APPLICATION_VERSION() {
 		
 			// Return minimum compatible application version
-			return "6.0.0";
+			return "6.0.1";
 		}
 		
 		// Built-in request class

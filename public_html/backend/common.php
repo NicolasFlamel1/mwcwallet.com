@@ -6,12 +6,13 @@
 	const VERSION_NUMBER = "1.1.18";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "20 Dec 2022 10:00:00 UTC";
+	const VERSION_RELEASE_DATE = "23 Jan 2023 00:51:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
 		"Changes Grin's Slatepack address derivation to match the official implementation.",
-		"Updated dependencies."
+		"Updated dependencies.",
+		"Requires version 6.0.1 or newer of the hardware wallet apps."
 	];
 	
 	// Maintenance start time
