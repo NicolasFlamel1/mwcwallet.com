@@ -2632,7 +2632,7 @@ class Api {
 																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																										
 																																											// Check if slate was sent from self
-																																											if(self.currentSlateSendId !== Api.NO_CURRENT_SLATE_SEND_ID && Common.arraysAreEqualTimingSafe(self.currentSlateSendId.getData(), slate.getId().getData()) === true) {
+																																											if(self.currentSlateSendId !== Api.NO_CURRENT_SLATE_SEND_ID && Common.arraysAreEqualTimingSafe(slate.getId().getData(), self.currentSlateSendId.getData()) === true) {
 																																											
 																																												// Check if wallet's hardware wallet is connected
 																																												if(wallet.isHardwareConnected() === true) {
