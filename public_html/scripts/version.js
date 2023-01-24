@@ -70,89 +70,93 @@ class Version {
 				
 					// Check if there's version changes to show
 					if(VERSION_CHANGES["length"] !== 0) {
+					
+						// Set timeout
+						setTimeout(function() {
 				
-						// Window storage version event
-						$(window).on("storage.version", function(event) {
-						
-							// Check if current version was changed
-							if(event["originalEvent"]["key"] === Version.CURRENT_VERSION_LOCAL_STORAGE_NAME) {
+							// Window storage version event
+							$(window).on("storage.version", function(event) {
 							
-								// Check if current version is the same version
-								if(event["originalEvent"]["newValue"] === self.version) {
-							
-									// Turn off window storage version event
-									$(window).off("storage.version");
-									
-									// Set timeout
-									setTimeout(function() {
-									
-										// Show loading
-										self.application.showLoading();
-									
-										// Hide message
-										self.message.hide().then(function() {
+								// Check if current version was changed
+								if(event["originalEvent"]["key"] === Version.CURRENT_VERSION_LOCAL_STORAGE_NAME) {
 								
-											// Resolve
-											resolve();
-										});
+									// Check if current version is the same version
+									if(event["originalEvent"]["newValue"] === self.version) {
+								
+										// Turn off window storage version event
+										$(window).off("storage.version");
+										
+										// Set timeout
+										setTimeout(function() {
+										
+											// Show loading
+											self.application.showLoading();
+										
+											// Hide message
+											self.message.hide().then(function() {
 									
-									}, Version.HIDE_VERSION_CHANGES_MESSAGE_DELAY_MILLISECONDS);
+												// Resolve
+												resolve();
+											});
+										
+										}, Version.HIDE_VERSION_CHANGES_MESSAGE_DELAY_MILLISECONDS);
+									}
 								}
-							}
-						});
-						
-						// Show message and allow showing messages
-						self.message.show(Language.getDefaultTranslation('Version Changes'), "<b>" + Message.createText(Language.getDefaultTranslation('Version %1$v'), [VERSION_NUMBER]) + "</b>" + Message.createLineBreak() + "<ul>" + VERSION_CHANGES.map(function(versionChange) {
-			
-							return "<li>" + Message.createText(versionChange) + "</li>";
-						
-						}).join("") + "</ul>" + Message.createLineBreak(), false, function() {
-						
-							// Hide loading
-							self.application.hideLoading();
+							});
 							
-							// Show language display
-							Language.showDisplay();
-						
-						}, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true).then(function(messageResult) {
-						
-							// Turn off window storage version event
-							$(window).off("storage.version");
+							// Show message and allow showing messages
+							self.message.show(Language.getDefaultTranslation('Version Changes'), "<b>" + Message.createText(Language.getDefaultTranslation('Version %1$v'), [VERSION_NUMBER]) + "</b>" + Message.createLineBreak() + "<ul>" + VERSION_CHANGES.map(function(versionChange) {
+				
+								return "<li>" + Message.createText(versionChange) + "</li>";
 							
-							// Check if message was displayed
-							if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
-						
-								// Try
-								try {
+							}).join("") + "</ul>" + Message.createLineBreak(), false, function() {
 							
-									// Save current version
-									localStorage.setItem(Version.CURRENT_VERSION_LOCAL_STORAGE_NAME, self.version);
-								}
+								// Hide loading
+								self.application.hideLoading();
 								
-								// Catch errors
-								catch(error) {
+								// Show language display
+								Language.showDisplay();
+							
+							}, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true).then(function(messageResult) {
+							
+								// Turn off window storage version event
+								$(window).off("storage.version");
 								
-									// Trigger a fatal error
-									new FatalError(FatalError.LOCAL_STORAGE_ERROR);
+								// Check if message was displayed
+								if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
+							
+									// Try
+									try {
+								
+										// Save current version
+										localStorage.setItem(Version.CURRENT_VERSION_LOCAL_STORAGE_NAME, self.version);
+									}
 									
-									// Return
-									return;
+									// Catch errors
+									catch(error) {
+									
+										// Trigger a fatal error
+										new FatalError(FatalError.LOCAL_STORAGE_ERROR);
+										
+										// Return
+										return;
+									}
+									
+									// Show loading
+									self.application.showLoading();
+									
+									// Prevent showing messages
+									self.message.prevent();
+									
+									// Hide message
+									self.message.hide().then(function() {
+							
+										// Resolve
+										resolve();
+									});
 								}
-								
-								// Show loading
-								self.application.showLoading();
-								
-								// Prevent showing messages
-								self.message.prevent();
-								
-								// Hide message
-								self.message.hide().then(function() {
-						
-									// Resolve
-									resolve();
-								});
-							}
-						});
+							});
+						}, Version.SHOW_VERSION_CHANGES_DELAY_MILLISECONDS);
 					}
 					
 					// Otherwise
@@ -232,6 +236,13 @@ class Version {
 		
 			// Return hide version changes message delay milliseconds
 			return Application.HIDE_PRIMARY_INSTANCE_MESSAGE_DELAY_MILLISECONDS;
+		}
+		
+		// Show version changes delay milliseconds
+		static get SHOW_VERSION_CHANGES_DELAY_MILLISECONDS() {
+		
+			// Return show version changes delay milliseconds
+			return 300;
 		}
 }
 
