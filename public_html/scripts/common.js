@@ -188,7 +188,7 @@ class Common {
 				var arrayTwoValue = (i < arrayTwo["length"]) ? arrayTwo[i] : 0;
 				
 				// Update result to if current values are equal
-				result |= ((arrayOneValue ^ arrayTwoValue) !== 0) ? 1 : 0;
+				result |= (arrayOneValue === arrayTwoValue) ? 0 : 1;
 			}
 			
 			// Return if arrays are equal
