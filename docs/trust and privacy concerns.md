@@ -7,4 +7,4 @@ However, this web wallet does provide a way to use it in a completely trustless 
 2. Run your own [MWC node](https://github.com/mwcproject/mwc-node) and set the web wallet to use it in its settings.
 3. Run your own [listener](https://github.com/NicolasFlamel1/WebSocket-Listener) and set the web wallet to use it in its settings.
 
-Accessing this web wallet in this way will remove the need to trust the servers hosting the site, listener, tor proxy, and node. This will also preserve your privacy by not leaking your IP address to any wallets that you send MWC to and your ISP won't be aware that you're using this web wallet.
+Accessing this web wallet in this way will remove the need to trust the servers hosting the site, listener, tor proxy, and node. This will also preserve your privacy by not leaking your IP address to anyone that you send MWC to and your ISP won't be aware that you're using this web wallet.
