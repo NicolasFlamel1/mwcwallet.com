@@ -12,6 +12,7 @@ Compatibility for sending MWC from the MimbleWimble Coin web wallet and Ledger L
 | [Ledger Live Desktop/Mobile](https://github.com/NicolasFlamel1/ledger-live) | ❌ I don't know why this doesn't work. Hotbit returns an empty response when sent a receive_tx request. | ✔ | ✔ |
 
 \* This table assumes that the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile are using their default settings.
+ 
 \* [WhiteBIT](https://whitebit.com/trade/MWC-BTC) had temporarily suspended depositing and withdrawing MWC when this table was created which is why they aren't included.
 
 # Receiving MWC From Exchanges Compatibility
@@ -28,6 +29,7 @@ Compatibility for receiving MWC from exchanges to the MimbleWimble Coin web wall
 | [Ledger Live Desktop/Mobile](https://github.com/NicolasFlamel1/ledger-live) | ❌ Hotbit doesn't support withdrawing as file. | ✔ | ❌ BitForex doesn't support withdrawing as file. |
 
 \* This table assumes that the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile are using their default settings.
+ 
 \* [WhiteBIT](https://whitebit.com/trade/MWC-BTC) had temporarily suspended depositing and withdrawing MWC when this table was created which is why they aren't included.
+ 
 \*  It's unlikely that any exchanges currently supports sending MWC to the MimbleWimble Coin web wallet when using a hardware wallet due to that [needing a longer network read timeout](https://github.com/mwcproject/mwc-wallet/pull/17).
-
