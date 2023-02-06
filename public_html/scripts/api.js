@@ -13304,8 +13304,19 @@ class Api {
 							// Check if response status is provided
 							if(typeof responseStatusOrResponse === "number") {
 							
-								// Reject status as text
-								reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
+								// Check if the status is bad request
+								if(responseStatusOrResponse === Common.HTTP_BAD_REQUEST_STATUS) {
+								
+									// Resolve no proof address
+									resolve(Api.NO_PROOF_ADDRESS);
+								}
+								
+								// Otherwise
+								else {
+							
+									// Reject status as text
+									reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
+								}
 							}
 							
 							// Otherwise check if response is a method not found error
