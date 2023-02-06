@@ -10,7 +10,8 @@
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Updated dependencies."
+		"Updated dependencies.",
+		"Fixes sending to BitForex when using the browser extension version of this service".
 	];
 	
 	// Maintenance start time
