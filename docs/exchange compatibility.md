@@ -9,7 +9,7 @@ Compatibility for sending MWC from the MimbleWimble Coin web wallet and Ledger L
 | MWC web wallet progressive web app version | ❌ Hotbit doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ❌ TradeOgre only supports depositing as file. | ❌ BitForex doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). |
 | [MWC web wallet browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) | ✔ | ❌ TradeOgre only supports depositing as file. | ✔ Requires version 1.1.19 or newer of the browser extension. |
 | [MWC web wallet standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone) | ❌ Hotbit doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ❌ TradeOgre only supports depositing as file. | ❌ BitForex doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). |
-| [Ledger Live Desktop/Mobile](https://github.com/NicolasFlamel1/ledger-live) | ❌ I don't know why this doesn't work. Hotbit returns an empty response when sent a receive_tx request. | ✔ | ✔ |
+| [Ledger Live Desktop/Mobile](https://github.com/NicolasFlamel1/ledger-live) | ✔ Requires version 2.52.1 or newer of Ledger Live Desktop and version 3.14.1 or newer of Ledger Live Mobile. | ✔ | ✔ |
 
 \* This table assumes that the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile are using their default settings.
  
