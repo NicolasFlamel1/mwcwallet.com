@@ -663,10 +663,10 @@
 			"Checksum" => "Ba4AMi1Gkx7QB5Xa8OiafsoSjdA5zxaqG3WfyB1I4p9RumPDxl0ZAR21mVN5fPRxsnImSbkIiuU+Lwif40LvqQ=="
 		],
 		"./scripts/tor_proxy.js" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "u5Sc8nYnYhnKnVXwZ84dDHJeyE2rDIzzFM9qHa74sgVPNc2DKh4gNArK4Hmjq+L9qGhkBO8rw41RApbzYj1mxA=="
+			"Checksum" => "GSKJh+A1Hq9sZQcl3pMEtqSVu73YSJeRjJSVb2QJp1cxvBCXM1yKPrh1t8tz0WMFej3V2y6Tw5UH+ZqBpOWNlQ=="
 		],
 		"./scripts/node.js" => [
 			"Version" => 15,
