@@ -14506,14 +14506,14 @@ class Api {
 								if(Common.isApp() === true) {
 							
 									// Return connecting failed with insecure content information
-									return Message.createText(Language.getDefaultTranslation('Connecting to the recipient failed.')) + " " + Message.createText(Language.getDefaultTranslation('Most browsers won\'t allow connecting to content that is served insecurely from an app that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a recipient address that is served over HTTPS or as an Onion Service to connect to the recipient.'));
+									return Message.createText(Language.getDefaultTranslation('Connecting to the recipient failed.')) + " " + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from an app that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a recipient address that is served over HTTPS or as an Onion Service to connect to the recipient.'));
 								}
 								
 								// Otherwise
 								else {
 								
 									// Return connecting failed with insecure content information
-									return Message.createText(Language.getDefaultTranslation('Connecting to the recipient failed.')) + " " + Message.createText(Language.getDefaultTranslation('Most browsers won\'t allow connecting to content that is served insecurely from a site that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a recipient address that is served over HTTPS or as an Onion Service to connect to the recipient.'));
+									return Message.createText(Language.getDefaultTranslation('Connecting to the recipient failed.')) + " " + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from a site that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a recipient address that is served over HTTPS or as an Onion Service to connect to the recipient.'));
 								}
 							}
 						}

@@ -885,14 +885,14 @@ class Application {
 														if(Common.isApp() === true) {
 													
 															// Set message with insecure content information
-															var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + " " + Message.createText(Language.getDefaultTranslation('Most browsers won\'t allow connecting to content that is served insecurely from an app that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a node address that is served over HTTPS or as an Onion Service to connect to the node.'));
+															var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + " " + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from an app that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a node address that is served over HTTPS or as an Onion Service to connect to the node.'));
 														}
 														
 														// Otherwise
 														else {
 														
 															// Set message with insecure content information
-															var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + " " + Message.createText(Language.getDefaultTranslation('Most browsers won\'t allow connecting to content that is served insecurely from a site that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a node address that is served over HTTPS or as an Onion Service to connect to the node.'));
+															var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + " " + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from a site that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a node address that is served over HTTPS or as an Onion Service to connect to the node.'));
 														}
 													}
 												}
@@ -1371,14 +1371,14 @@ class Application {
 														if(Common.isApp() === true) {
 													
 															// Set message with insecure content information
-															var message = Message.createText(Language.getDefaultTranslation('Connecting to the listener failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.')) + " " + Message.createText(Language.getDefaultTranslation('Most browsers won\'t allow connecting to content that is served insecurely from an app that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a listener address that is served over HTTPS to connect to the listener.'));
+															var message = Message.createText(Language.getDefaultTranslation('Connecting to the listener failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.')) + " " + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from an app that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a listener address that is served over HTTPS to connect to the listener.'));
 														}
 														
 														// Otherwise
 														else {
 														
 															// Set message with insecure content information
-															var message = Message.createText(Language.getDefaultTranslation('Connecting to the listener failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.')) + " " + Message.createText(Language.getDefaultTranslation('Most browsers won\'t allow connecting to content that is served insecurely from a site that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a listener address that is served over HTTPS to connect to the listener.'));
+															var message = Message.createText(Language.getDefaultTranslation('Connecting to the listener failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.')) + " " + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from a site that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a listener address that is served over HTTPS to connect to the listener.'));
 														}
 													}
 												}

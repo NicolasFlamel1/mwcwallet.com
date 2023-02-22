@@ -434,11 +434,11 @@
 			"Minified" => FALSE,
 			"Checksum" => "yTbFY8uqne+rBHY7jzf5pjqyT2WIY9cfalKGGotqLfsaw0gpXRotL2hmQuzXd8FY7LGgopZNXdD2XGy0xpBrag=="
 		],
-		"./scripts/LedgerJS_Browser-0.0.1.js" => [
-			"Version" => 13,
+		"./scripts/LedgerJS_Browser-0.0.2.js" => [
+			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "jl++6VkJwNIMfadu0Z9UjM1BIbjPsY00UtJu68t71Z/qTaqH0y+k4D/su9WUKu2Res4OKSMpwJSlgIZ5QbTxhg=="
+			"Checksum" => "WWrHw7TzCNscPmJbc80xUfy489yUi4N+Q8ZSwlu8ZtokUGL3TUkm+h3QccgB+lhcmGA0uLNGDLmp0/fWyNXfUg=="
 		],
 		"./scripts/hardware_wallet.js" => [
 			"Version" => 24,
@@ -1443,10 +1443,10 @@
 			"Checksum" => "+URz+C7K7G1agtqu6vjZUWLiNMxk6ZmrRNcxHs7pb1sbD5yMPsPp8VEiSBWUqkKPMcm/XiKsXL32ue6by7dDdg=="
 		],
 		"./scripts/LedgerJS Browser license.txt" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "qqcTSJHo3upbPBJR1exc31V0W9MoKKpCuSciuQ8Wr+hYVF+NmdYYCqdABSb2S84Xr8I1WkHeDMOzI5Fbtd5vHw=="
+			"Checksum" => "qElcmcO63QPcv3OrJp1b98l+Ut/sPnm6deMY93mqyUOedv9oLvA5EG4JNEWZ/Yxfzvb68jfk69CiNlo4QVreSQ=="
 		],
 		"./scripts/secp256k1-zkp license.txt" => [
 			"Version" => 5,
