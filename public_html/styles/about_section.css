@@ -39,6 +39,10 @@ main > div.unlocked > div > div > div.sections > div > div.about > div > div.tra
 	padding-bottom: 0.6em;
 }
 
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.attributions > ul > li > span > a:first-of-type {
+	word-break: break-all;
+}
+
 @media only screen and (max-width: 400px) {
 
 	main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul {
