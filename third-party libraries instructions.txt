@@ -6,11 +6,11 @@ tar -xf "./8.0.1.tar.gz"
 mv "./normalize.css-8.0.1/normalize.css" "./normalize.css-8.0.1.css"
 rm -r "./8.0.1.tar.gz" "./normalize.css-8.0.1"
 
-# How to build /public_html/scripts/base64.js-3.7.2.js
-wget "https://github.com/dankogai/js-base64/archive/refs/tags/3.7.2.tar.gz"
-tar -xf "./3.7.2.tar.gz"
-mv "./js-base64-3.7.2/base64.js" "./base64.js-3.7.2.js"
-rm -r "./3.7.2.tar.gz" "./js-base64-3.7.2"
+# How to build /public_html/scripts/base64.js-3.7.5.js
+wget "https://github.com/dankogai/js-base64/archive/refs/tags/3.7.5.tar.gz"
+tar -xf "./3.7.5.tar.gz"
+mv "./js-base64-3.7.5/base64.js" "./base64.js-3.7.5.js"
+rm -r "./3.7.5.tar.gz" "./js-base64-3.7.5"
 
 # How to build /public_html/scripts/bech32-2.0.0.js
 wget "https://github.com/bitcoinjs/bech32/archive/refs/tags/v2.0.0.tar.gz"
@@ -20,11 +20,11 @@ sed -i 's/exports/globalThis/g' "./bech32-2.0.0/dist/index.js"
 mv "./bech32-2.0.0/dist/index.js" "./bech32-2.0.0.js"
 rm -rf "./v2.0.0.tar.gz" "./bech32-2.0.0"
 
-# How to build /public_html/scripts/bignumber.js-9.0.2.js
-wget "https://github.com/MikeMcl/bignumber.js/archive/refs/tags/v9.0.2.tar.gz"
-tar -xf "./v9.0.2.tar.gz"
-mv "./bignumber.js-9.0.2/bignumber.js" "./bignumber.js-9.0.2.js"
-rm -rf "./v9.0.2.tar.gz" "./bignumber.js-9.0.2"
+# How to build /public_html/scripts/bignumber.js-9.1.1.js
+wget "https://github.com/MikeMcl/bignumber.js/archive/refs/tags/v9.1.1.tar.gz"
+tar -xf "./v9.1.1.tar.gz"
+mv "./bignumber.js-9.1.1/bignumber.js" "./bignumber.js-9.1.1.js"
+rm -rf "./v9.1.1.tar.gz" "./bignumber.js-9.1.1"
 
 # How to build /public_html/scripts/BLAKE2b-0.0.2.js
 wget "https://github.com/NicolasFlamel1/BLAKE2b-WASM-Wrapper/releases/download/v0.0.2/BLAKE2b-0.0.2.zip"
@@ -79,11 +79,11 @@ sed -i 's/: {};/: self;/g' "./hi-base32-0.5.1/src/base32.js"
 mv "./hi-base32-0.5.1/src/base32.js" "./hi-base32-0.5.1.js"
 rm -rf "./v0.5.1.tar.gz" "./hi-base32-0.5.1"
 
-# How to build /public_html/scripts/jQuery-3.6.1.js
-wget "https://github.com/jquery/jquery/archive/refs/tags/3.6.1.tar.gz"
-tar -xf "./3.6.1.tar.gz"
-mv "./jquery-3.6.1/dist/jquery.js" "./jQuery-3.6.1.js"
-rm -rf "./3.6.1.tar.gz" "./jquery-3.6.1"
+# How to build /public_html/scripts/jQuery-3.6.4.js
+wget "https://github.com/jquery/jquery/archive/refs/tags/3.6.4.tar.gz"
+tar -xf "./3.6.4.tar.gz"
+mv "./jquery-3.6.4/dist/jquery.js" "./jQuery-3.6.4.js"
+rm -rf "./3.6.4.tar.gz" "./jquery-3.6.4"
 
 # How to build /public_html/scripts/JSONBigNumber-1.1.1.js
 wget "https://github.com/wbuss/JSONBigNumber/archive/refs/tags/v1.1.1.tar.gz"

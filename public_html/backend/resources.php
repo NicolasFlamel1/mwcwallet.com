@@ -476,17 +476,17 @@
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
-		"./scripts/bignumber.js-9.0.2.js" => [
-			"Version" => 4,
+		"./scripts/bignumber.js-9.1.1.js" => [
+			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "LwuLTnQxdGPjeUYjvSChW/6/zMtouXaKSFPTYW2X6c6jvGTCvbdRCywt4kEP1DzP28ehutkTzM3/fQMNk+NOcg=="
+			"Checksum" => "rc10/7RWHaBylfU5d1xX+pGO2dWTaooPdO7PbRmGSN8majqQGqDRoZ88xKUYfMK9oWp+m86MnRtvsx2CnmogDQ=="
 		],
-		"./scripts/base64.js-3.7.2.js" => [
-			"Version" => 4,
+		"./scripts/base64.js-3.7.5.js" => [
+			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "ip85wUl3ZLmO1/AxxUTElffAhAkdLbZwl85WBEFATtsvM7qDq8DLVBQztVpndreDDk+Sr7ANBJd2WNH5N3nCuw=="
+			"Checksum" => "i7T2cMTN4yMPw3QW8KMu48My+GLzRYpuJsA71Y5JJYYKJh+H8hjvycsVwkIeLZcpGbNbX+G4q6uZ7WuVEI61eA=="
 		],
 		"./scripts/crc32-1.2.0.js" => [
 			"Version" => 4,
@@ -519,13 +519,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 41,
+			"Version" => 42,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 109,
+			"Version" => 110,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -537,7 +537,7 @@
 			"Checksum" => "fgXcToDtI6wmtS0RjZW5pbWUYkBBkENvqM+gtInk+grrPOQxx37PqgMCyjDm5JTlC3fMvdWSeNrWv1T1CZ0a3g=="
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 36,
+			"Version" => 37,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -566,11 +566,11 @@
 			"Minified" => FALSE,
 			"Checksum" => "7oogIEuYjEdB9P08VXSyYmGIk6ltV1xlhXey/p/kjYaduDRLCFaLLK5AJi2pQy08vBR1Vs0Irn0FTCTEb9VqAA=="
 		],
-		"./scripts/jQuery-3.6.1.js" => [
+		"./scripts/jQuery-3.6.4.js" => [
 			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "CX7sDOp7UTAq+i1FYIlf9Uo27x4os+kGeoT7rgwvY+4dmjqV0IuE/Bl5hVsjnQPQiTOhAX1O2r2j5bjsFBvv/A=="
+			"Checksum" => "6DC1eE3AWg1bgitkoaRM1lhY98PxbMIbhgYCGV107aZlyzzvaWCW1nJW2vDuYQm06hXrW0As6OGKcIaAVWnHJw=="
 		],
 		"./scripts/js-sha3-0.8.0.js" => [
 			"Version" => 5,
@@ -1371,10 +1371,10 @@
 			"Checksum" => "+ZcrmzsP3IHjWOBoSb0idDvDXvHkWVzqR98/EZdANUoeDg8bJOmM1aS7KhdEWdGO/ejk5jSwbl0bT8lqaLTBIg=="
 		],
 		"./scripts/bignumber.js license.txt" => [
-			"Version" => 3,
+			"Version" => 4,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "gfSMQ0Z0PmIZw/NCu+llDR6IjwiJqzdKNP6yWglpsHpQY/9UI5axU1uTSsp9KKBDNFgxuiwa+YxcdLepB/izzg=="
+			"Checksum" => "0TceHGsWk3ibsrAv8lI3NGV904M5XxzjfVFV0nyMGRxXgYBn2056ANUOkznCUXXzdAOirlm6m0c6M6kC1gDXYQ=="
 		],
 		"./scripts/bech32 license.txt" => [
 			"Version" => 1,
