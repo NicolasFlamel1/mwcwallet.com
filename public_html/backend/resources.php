@@ -1311,16 +1311,16 @@
 			"Checksum" => "xuP3NU/Hfnt3btDEO6WHwJIC40KPForIYv6WmXALtPTFDCfnCXOpcktWCjoYutEpRXMnVKoVccOhARjsyE/XMA=="
 		],
 		"./styles/application.css" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "JFrhObnj+aDK5xsGZMZ6T+2AK0xpV3qYq6Nn8unlRvRz7GPNxpmpyPCgr243qInwAInTNkj1TgXALJTKvBQViw=="
+			"Checksum" => "/o4crAs0KMfybxgKMxmhD/RLocp/MXbx/+rI2e1aRg+ciwlw9rHV3e6RZKkeE3cGz7kUVVVhLzhTfaAjBbJHaw=="
 		],
 		"./styles/message.css" => [
-			"Version" => 14,
+			"Version" => 15,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "Ww7hVYVGdM7GE9eWeSeh/fTo76FVvDGJrmCVLapctoNSB8/uaQWSEoLCsWVEueW3ZSyhHBl83b9rk5sz4xq5WA=="
+			"Checksum" => "AinbXNJVAI5x2DIXFi7K8sXrhgbsEmJqyP0zz2cAK4PbHv1nBfp5k5rYNABa/cw48UVb1oNr5akNpD4aD4Zc1Q=="
 		],
 		"./styles/tetris.css" => [
 			"Version" => 3,

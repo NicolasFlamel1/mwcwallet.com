@@ -228,6 +228,7 @@ main > div > div > form > div > input:disabled {
 
 main > div > div > form > div > input::placeholder {
 	color: #CEA5F2;
+	opacity: 1;
 }
 
 main > div > div > form > div > input:focus {

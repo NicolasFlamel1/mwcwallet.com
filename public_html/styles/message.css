@@ -195,6 +195,7 @@ aside.message > div > div > p > span.text span.input > input:disabled {
 
 aside.message > div > div > p > span.text span.input > input::placeholder {
 	color: #9A7FE4;
+	opacity: 1;
 }
 
 aside.message > div > div > p > span.text span.input > input:focus {
