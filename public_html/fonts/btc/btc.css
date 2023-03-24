@@ -15,7 +15,7 @@
 
 @font-face {
 	font-family: "BTC";
-	src: local("BTC"), url("../.<?= escapeString(getResource("./fonts/btc/btc.woff2")); ?>") format("woff2"), url("../.<?= escapeString(getResource("./fonts/btc/btc.woff")); ?>") format("woff");
+	src: url("../.<?= escapeString(getResource("./fonts/btc/btc.woff2")); ?>") format("woff2"), url("../.<?= escapeString(getResource("./fonts/btc/btc.woff")); ?>") format("woff");
 	font-weight: normal;
 	font-style: normal;
 	font-display: block;

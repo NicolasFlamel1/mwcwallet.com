@@ -3,17 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "1.1.19";
+	const VERSION_NUMBER = "1.1.20";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "23 Mar 2023 23:49:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Updated dependencies.",
-		"Fixed sending to BitForex when using the browser extension version of this service.",
-		"Fixed sending to Tor addresses when using the browser extension or standalone version of this service.",
-		"Fixed placeholder text not displaying correctly in Firefox."
+		"Fixed bold fonts being displayed inconsistently across different web browsers."
 	];
 	
 	// Maintenance start time

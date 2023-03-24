@@ -165,22 +165,34 @@
 			"Checksum" => "2RsYqSOpBz8fwf7PGwEJOPedgk0hB2Z1l/RaZdOEPjUOQguCqVBtfKYsAqWuq7HTZ2Y1+CXdN7hk0w8oNXFMQg=="
 		],
 		"./fonts/open_sans/open_sans.css" => [
-			"Version" => 3,
+			"Version" => 4,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./fonts/open_sans/open_sans-1.10.woff" => [
-			"Version" => 3,
+			"Version" => 4,
 			"Cache" => FALSE,
 			"Minified" => FALSE,
-			"Checksum" => "ajvR5ujQzI20qpYmF1+a/2W4dlWFzfeVY8X0aqgnCqZRiZA4W7NuSexPkGM5tm1oPNpy3GDdX2hNaaRaY4QAjA=="
+			"Checksum" => "d3WdXIW6Z4EumIsy5FdtC8dPTlap7QuUhf5tjoM+NC/Rd60w5wXJJC0FhK8V9/aRQ9usHfNUPe/KldMpzrCcoA=="
 		],
 		"./fonts/open_sans/open_sans-1.10.woff2" => [
-			"Version" => 3,
+			"Version" => 4,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "oZ+BPZ7oxeHoJcqiacydldNdn1TQ9XKN2VgbJcEpvG6hT6CkcggWxoQZ5UJq1+Vvug5/w1nZ+wQjGAnaB+Ce0w=="
+			"Checksum" => "1rOU7Kf82ZZRJvJiNGXlgypsFrwAnO2Pwz6y84jWZ3zuz7GLfVontK79sm35BPlBvDdvwFl/Yrl4ogXzPu3q6A=="
+		],
+		"./fonts/open_sans/open_sans_semibold-1.10.woff" => [
+			"Version" => 1,
+			"Cache" => FALSE,
+			"Minified" => FALSE,
+			"Checksum" => "jW/+TDOsxdKHWZTSq5UOyKLPsrUlRyb6qN572yo/aCqgS9xsPZ5OBHi4GaMQDQOSmXvD9W6VwAa+6LuiFWthDg=="
+		],
+		"./fonts/open_sans/open_sans_semibold-1.10.woff2" => [
+			"Version" => 1,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "0JKBQKmvWErkWlPg4bfszONNBjfUWJWZhK6yr936YeLYfGGkM9DULs/7puQcUK8iEVC4+XZ3jhUP4B91flnInQ=="
 		],
 		"./fonts/mwc/mwc.css" => [
 			"Version" => 3,

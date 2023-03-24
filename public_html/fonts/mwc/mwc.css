@@ -15,7 +15,7 @@
 
 @font-face {
 	font-family: "MWC";
-	src: local("MWC"), url("../.<?= escapeString(getResource("./fonts/mwc/mwc.woff2")); ?>") format("woff2"), url("../.<?= escapeString(getResource("./fonts/mwc/mwc.woff")); ?>") format("woff");
+	src: url("../.<?= escapeString(getResource("./fonts/mwc/mwc.woff2")); ?>") format("woff2"), url("../.<?= escapeString(getResource("./fonts/mwc/mwc.woff")); ?>") format("woff");
 	font-weight: normal;
 	font-style: normal;
 	font-display: block;

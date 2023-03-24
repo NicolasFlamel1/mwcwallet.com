@@ -15,7 +15,7 @@
 
 @font-face {
 	font-family: "Font Awesome";
-	src: local("Font Awesome Regular"), local("Font-Awesome-Regular"), url("../.<?= escapeString(getResource("./fonts/font_awesome/font_awesome-5.15.4.woff2")); ?>") format("woff2"), url("../.<?= escapeString(getResource("./fonts/font_awesome/font_awesome-5.15.4.woff")); ?>") format("woff");
+	src: url("../.<?= escapeString(getResource("./fonts/font_awesome/font_awesome-5.15.4.woff2")); ?>") format("woff2"), url("../.<?= escapeString(getResource("./fonts/font_awesome/font_awesome-5.15.4.woff")); ?>") format("woff");
 	font-weight: normal;
 	font-style: normal;
 	font-display: block;
@@ -23,7 +23,7 @@
 
 @font-face {
 	font-family: "Font Awesome";
-	src: local("Font Awesome Solid"), local("Font-Awesome-Solid"), url("../.<?= escapeString(getResource("./fonts/font_awesome/font_awesome_solid-5.15.4.woff2")); ?>") format("woff2"), url("../.<?= escapeString(getResource("./fonts/font_awesome/font_awesome_solid-5.15.4.woff")); ?>") format("woff");
+	src: url("../.<?= escapeString(getResource("./fonts/font_awesome/font_awesome_solid-5.15.4.woff2")); ?>") format("woff2"), url("../.<?= escapeString(getResource("./fonts/font_awesome/font_awesome_solid-5.15.4.woff")); ?>") format("woff");
 	font-weight: bold;
 	font-style: normal;
 	font-display: block;

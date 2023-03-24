@@ -51,6 +51,7 @@
 	<link rel="preload" as="image" href=".<?= encodeString(getResource("./images/logo_big.svg")); ?>" type="image/svg+xml">
 	<link rel="preload" as="image" href=".<?= encodeString(getResource("./images/logo_small.svg")); ?>" type="image/svg+xml">
 	<link rel="preload" as="font" href=".<?= encodeString(getResource("./fonts/open_sans/open_sans-1.10.woff2")); ?>" type="font/woff2" crossorigin="anonymous">
+	<link rel="preload" as="font" href=".<?= encodeString(getResource("./fonts/open_sans/open_sans_semibold-1.10.woff2")); ?>" type="font/woff2" crossorigin="anonymous">
 	
 	<link rel="stylesheet" type="text/css" href=".<?= encodeString(getResource("./styles/normalize.css-8.0.1.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/normalize.css-8.0.1.css")); ?>">
 	<link rel="stylesheet" type="text/css" href=".<?= encodeString(getResource("./fonts/open_sans/open_sans.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/open_sans/open_sans.css")); ?>">
