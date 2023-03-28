@@ -132,7 +132,7 @@
 			"Version" => 0,
 			"Cache" => FALSE,
 			"Minified" => FALSE,
-			"Checksum" => "z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg/SpIdNs6c5H0NE8XYXysP+DGNKHfuwvY7kxvUdBeoGlODJ6+SfaPg=="
+			"Checksum" => NULL
 		],
 		"./fonts/font_awesome/font_awesome-5.15.4.woff2" => [
 			"Version" => 3,
@@ -276,7 +276,7 @@
 			"Version" => 0,
 			"Cache" => FALSE,
 			"Minified" => FALSE,
-			"Checksum" => "oOBBQN7VKeqm/bM2XAeLww8AXTXKudmYJy5K9aQSOIDGsKylOTbjc8OkNy4EMkEIdykjPWtMfr76/q6ug8SCrA=="
+			"Checksum" => NULL
 		],
 		"./favicon.ico" => [
 			"Version" => 0,

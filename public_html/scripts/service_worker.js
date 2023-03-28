@@ -91,11 +91,14 @@ self.addEventListener("install", function(event) {
 						// Check if cached response doesn't exist, request is for an HTML or manifest file, or the file doesn't have a version
 						if(response === RESPONSE_NOT_IN_CACHE || HTML_FILE_PATTERN.test(urlParts[0]) === true || MANIFEST_FILE_PATTERN.test(urlParts[0]) === true || urlParts["length"] === 1) {
 						
+							// Get checksum
+							var checksum = getFileChecksum(url);
+							
 							// Return getting network response for the file
-							return fetch(url, {
+							return fetch(url, (checksum === "") ? {} : {
 							
 								// Integrity
-								"integrity": getFileChecksum(url)
+								"integrity": checksum
 							
 							}).then(function(response) {
 								
@@ -293,11 +296,14 @@ self.addEventListener("fetch", function(event) {
 		// Check if request isn't a GET request, doesn't go to the server, or is for an HTML or manifest file
 		if(event["request"]["method"] !== "GET" || parsedUrl["hostname"] !== HOST_NAME || HTML_FILE_PATTERN.test(parsedUrl["pathname"]) === true || MANIFEST_FILE_PATTERN.test(parsedUrl["pathname"]) === true) {
 		
+			// Get checksum
+			var checksum = (parsedUrl["hostname"] === HOST_NAME) ? getFileChecksum(cacheName) : "";
+			
 			// Return getting network response for the request
-			return fetch(event["request"], {
+			return fetch(event["request"], (checksum === "") ? {} : {
 			
 				// Integrity
-				"integrity": (parsedUrl["hostname"] === HOST_NAME) ? getFileChecksum(cacheName) : ""
+				"integrity": checksum
 			
 			}).then(function(networkResponse) {
 			
@@ -401,11 +407,14 @@ self.addEventListener("fetch", function(event) {
 				// Check if cached response doesn't exist
 				if(cachedResponse === RESPONSE_NOT_IN_CACHE) {
 				
+					// Get checksum
+					var checksum = (parsedUrl["hostname"] === HOST_NAME) ? getFileChecksum(cacheName) : "";
+					
 					// Return getting network response for the request
-					return fetch(event["request"], {
+					return fetch(event["request"], (checksum === "") ? {} : {
 					
 						// Integrity
-						"integrity": (parsedUrl["hostname"] === HOST_NAME) ? getFileChecksum(cacheName) : ""
+						"integrity": checksum
 						
 					}).then(function(networkResponse) {
 					

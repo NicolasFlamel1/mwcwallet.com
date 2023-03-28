@@ -10,7 +10,7 @@
 	// Seconds before refresh
 	const SECONDS_BEFORE_REFRESH = 5;
 	
-	// Check if referer doesn't exist
+	// Check if referrer doesn't exist
 	if(array_key_exists("HTTP_REFERER", $_SERVER) === FALSE) {
 	
 		// Require 404 error page
@@ -23,10 +23,10 @@
 	
 	// Main function
 	
-	// Parse referer as a URL
+	// Parse referrer as a URL
 	$url = parse_url($_SERVER["HTTP_REFERER"]);
 	
-	// Check if referer is invalid or from a different origin
+	// Check if referrer is invalid or from a different origin
 	if($url === FALSE || array_key_exists("host", $url) === FALSE || $url["host"] !== $_SERVER["SERVER_NAME"]) {
 	
 		// Require 404 error page
@@ -36,10 +36,10 @@
 		exit();
 	}
 	
-	// Check if referer is the service worker
+	// Check if referrer is the service worker
 	if($_SERVER["HTTP_REFERER"] === "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . $_SERVER["SERVER_NAME"] . "/scripts/service_worker.js") {
 	
-		// Set referer to the initial page
+		// Set referrer to the initial page
 		$_SERVER["HTTP_REFERER"] = "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . $_SERVER["SERVER_NAME"] . "/";
 	}
 	

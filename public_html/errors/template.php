@@ -1327,8 +1327,8 @@
 		// No state
 		var NO_STATE = null;
 		
-		// Referer
-		var REFERER = "<?= escapeString($_SERVER["HTTP_REFERER"]); ?>";
+		// Referrer
+		var REFERRER = "<?= escapeString($_SERVER["HTTP_REFERER"]); ?>";
 		
 		
 		// Main function
@@ -1339,8 +1339,8 @@
 		// Try
 		try {
 	
-			// Parse referer as a URL
-			var url = new URL(REFERER);
+			// Parse referrer as a URL
+			var url = new URL(REFERRER);
 		}
 		
 		// Catch errors
