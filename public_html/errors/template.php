@@ -32,7 +32,7 @@
 	<meta name="robots" content="none">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<base href="http<?= ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]) . "/errors/"; ?>">
+	<base href="<?= "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]) . "/errors/"; ?>">
 	
 	<script>
 	
@@ -788,7 +788,7 @@
 		}
 	</style>
 	
-	<link rel="manifest" href=".<?= encodeString(getResource("./site.webmanifest")); ?>">
+	<link class="translatable" rel="manifest" href=".<?= encodeString(getResource("./site.webmanifest")); ?>" crossorigin="use-credentials">
 	<meta name="msapplication-config" content=".<?= encodeString(getResource("./browserconfig.xml")); ?>">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="mobile-web-app-capable" content="yes">
@@ -801,7 +801,7 @@
 	<meta class="translatable" name="application-name" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta class="translatable" name="msapplication-tooltip" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta name="msapplication-starturl" content="<?= "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]); ?>">
-	<meta class="translatable" name="description" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin with your web browser.')); ?>" content="<?= encodeString(getTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin with your web browser.')); ?>">
+	<meta class="translatable" name="description" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin in your web browser.')); ?>" content="<?= encodeString(getTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin in your web browser.')); ?>">
 	<meta class="translatable" name="author" data-text="<?= encodeString(getDefaultTranslation('Nicolas Flamel')); ?>" content="<?= encodeString(getTranslation('Nicolas Flamel')); ?>">
 	<link rel="schema.dcterms" href="http://purl.org/dc/terms/">
 	<meta class="translatable" name="dcterms.rightsHolder" data-text="<?= encodeString(getDefaultTranslation('Nicolas Flamel')); ?>" content="<?= encodeString(getTranslation('Nicolas Flamel')); ?>">
@@ -888,7 +888,7 @@
 
 </head>
 
-<body class="loading">
+<body class="loading" spellcheck="false">
 	<div>
 		<div>
 			<main>
@@ -1359,8 +1359,12 @@
 			// Title language change event
 			$("title").on(Language.CHANGE_EVENT, function() {
 			
-				// Update URL
-				updateUrl(url["pathname"] + url["search"]);
+				// Set timeout
+				setTimeout(function() {
+				
+					// Update URL
+					updateUrl(url["pathname"] + url["search"]);
+				}, 0);
 			});
 		}
 		

@@ -6772,14 +6772,14 @@ class Api {
 					if(amount !== Api.ALL_AMOUNT && amount.isLessThan(Slate.MINIMUM_AMOUNT) === true) {
 					
 						// Reject error
-						reject(Language.getDefaultTranslation('The amount is invalid.'));
+						reject(Language.getDefaultTranslation('Amount is invalid.'));
 					}
 					
 					// Otherwise check if base fee is invalid
 					else if(baseFee.isLessThan(Api.MINIMUM_BASE_FEE) === true) {
 					
 						// Reject error
-						reject(Language.getDefaultTranslation('The base fee is invalid.'));
+						reject(Language.getDefaultTranslation('Base fee is invalid.'));
 					}
 					
 					// Otherwise
@@ -7120,7 +7120,7 @@ class Api {
 						if(amount.isLessThan(Slate.MINIMUM_AMOUNT) === true) {
 						
 							// Reject error
-							reject(Message.createText(Language.getDefaultTranslation('The amount is invalid.')));
+							reject(Message.createText(Language.getDefaultTranslation('Amount is invalid.')));
 							
 							// Return
 							return;
@@ -7140,7 +7140,7 @@ class Api {
 						if(baseFee.isLessThan(Api.MINIMUM_BASE_FEE) === true) {
 						
 							// Reject error
-							reject(Message.createText(Language.getDefaultTranslation('The base fee is invalid.')));
+							reject(Message.createText(Language.getDefaultTranslation('Base fee is invalid.')));
 							
 							// Return
 							return;
@@ -7156,7 +7156,7 @@ class Api {
 							if(timeToLiveCutOffHeight.isLessThanOrEqualTo(currentHeight) === true) {
 							
 								// Reject error
-								reject(Message.createText(Language.getDefaultTranslation('The time to live cut off height must be greater than the current height.')));
+								reject(Message.createText(Language.getDefaultTranslation('Time to live cut off height must be greater than the current height.')));
 								
 								// Return
 								return;
@@ -7166,7 +7166,7 @@ class Api {
 							if(lockHeight.isEqualTo(Slate.NO_LOCK_HEIGHT) === false && timeToLiveCutOffHeight.isLessThan(lockHeight) === true) {
 							
 								// Reject error
-								reject(Message.createText(Language.getDefaultTranslation('The time to live cut off height must be greater than or equal to the lock height.')));
+								reject(Message.createText(Language.getDefaultTranslation('Time to live cut off height must be greater than or equal to the lock height.')));
 								
 								// Return
 								return;
@@ -7177,7 +7177,7 @@ class Api {
 						if(relativeHeight !== Slate.NO_RELATIVE_HEIGHT && (Consensus.isNoRecentDuplicateKernelsEnabled(wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE) === false || relativeHeight.isLessThan(SlateKernel.MINIMUM_RECENT_HEIGHT) === true || relativeHeight.isGreaterThan(SlateKernel.MAXIMUM_RECENT_HEIGHT) === true)) {
 						
 							// Reject error
-							reject(Message.createText(Language.getDefaultTranslation('The relative height is invalid.')));
+							reject(Message.createText(Language.getDefaultTranslation('Relative height is invalid.')));
 							
 							// Return
 							return;
@@ -12358,7 +12358,7 @@ class Api {
 																																		if(Node.isMessageError(error) === true) {
 																																		
 																																			// Reject error
-																																			reject(Message.createText(Language.getDefaultTranslation('Broadcasting the transaction failed for the following reason.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Message.createText(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"]) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+																																			reject(Message.createText(Language.getDefaultTranslation('Broadcasting the transaction failed for the following reason.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Message.createText(Language.escapeText(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
 																																		}
 																																		
 																																		// Otherwise
@@ -13093,7 +13093,7 @@ class Api {
 							else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
 							
 								// Reject the response's error message
-								reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Message.createText(responseStatusOrResponse["message"]) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+								reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
 							}
 							
 							// Otherwise
@@ -13330,7 +13330,7 @@ class Api {
 							else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
 							
 								// Reject the response's error message
-								reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Message.createText(responseStatusOrResponse["message"]) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+								reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
 							}
 							
 							// Otherwise
@@ -14325,7 +14325,7 @@ class Api {
 									else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
 									
 										// Reject the response's error message
-										reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Message.createText(responseStatusOrResponse["message"]) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+										reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
 									}
 									
 									// Otherwise

@@ -1836,7 +1836,7 @@ class Listener {
 		static get DEFAULT_LISTENER_ADDRESS() {
 		
 			// Set server
-			var server = (Common.isExtension() === true || location["protocol"] === "file:") ? new URL(HTTP_SERVER_ADDRESS) : location;
+			var server = (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL) ? new URL(HTTP_SERVER_ADDRESS) : location;
 			
 			// Return default listener address
 			return ((server["protocol"] === Common.HTTPS_PROTOCOL) ? Common.WEBSOCKET_SECURE_PROTOCOL : Common.WEBSOCKET_PROTOCOL) + "//" + server["hostname"] + "/listen";

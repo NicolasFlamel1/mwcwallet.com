@@ -1396,10 +1396,10 @@ class Logo {
 							var context = $("<canvas></canvas>").attr({
 							
 								// Width
-								"width": canvasWidth,
+								"width": canvasWidth.toFixed(),
 								
 								// Height
-								"height": canvasHeight
+								"height": canvasHeight.toFixed()
 							
 							}).get(0).getContext("2d");
 							

@@ -1007,6 +1007,13 @@ class Language {
 			return "LanguageChangeEvent";
 		}
 		
+		// Before change event
+		static get BEFORE_CHANGE_EVENT() {
+		
+			// Return before change event
+			return "LanguageBeforeChangeEvent";
+		}
+		
 		// Currency constant
 		static get CURRENCY_CONSTANT() {
 		
@@ -1032,6 +1039,9 @@ class Language {
 	
 		// Change language
 		static changeLanguage(newLanguage) {
+		
+			// Trigger language before change event
+			$(document).trigger(Language.BEFORE_CHANGE_EVENT);
 		
 			// Set current language
 			Language.currentLanguage = newLanguage;
@@ -1060,6 +1070,28 @@ class Language {
 						// Set element's direction attribute
 						element.attr("dir", Language.getConstant("Direction", Language.currentLanguage));
 					
+						// Break
+						break;
+					
+					// Link
+					case "LINK":
+					
+						// Check if element has an href
+						var href = element.attr("href");
+						
+						if(href !== Common.NO_ATTRIBUTE) {
+					
+							// Set element's href
+							element.removeAttr("href");
+							
+							// Set timeout
+							setTimeout(function() {
+							
+								// Restore element's href
+								element.attr("href", href);
+							}, 0);
+						}
+						
 						// Break
 						break;
 					

@@ -259,7 +259,7 @@ class AccountSection extends Section {
 					if(input.hasClass("currentPassword") === true) {
 					
 						// Check if value isn't the current password
-						if(self.getWallets().isPassword(input.val()) === false) {
+						if(self.getWallets().isPassword(value) === false) {
 						
 							// Set that display shows an error
 							display.addClass("error");
@@ -273,7 +273,7 @@ class AccountSection extends Section {
 					else if(input.hasClass("newPassword") === true) {
 					
 						// Check if value isn't the confirm new password
-						if(input.val() === self.getDisplay().find("input.confirmNewPassword").val()) {
+						if(value === self.getDisplay().find("input.confirmNewPassword").val()) {
 						
 							// Set that confirm new password's display doesn't show an error
 							self.getDisplay().find("input.confirmNewPassword").closest("div").parent().closest("div").removeClass("error");
@@ -291,7 +291,7 @@ class AccountSection extends Section {
 					else if(input.hasClass("confirmNewPassword") === true) {
 					
 						// Check if value isn't the new password
-						if(input.val() !== self.getDisplay().find("input.newPassword").val()) {
+						if(value !== self.getDisplay().find("input.newPassword").val()) {
 						
 							// Set that display shows an error
 							display.addClass("error");

@@ -274,7 +274,7 @@ class SettingsSection extends Section {
 				var input = $(this);
 			
 				// Set that input is private
-				input.attr(Common.DATA_ATTRIBUTE_PREFIX + "private", true);
+				input.attr(Common.DATA_ATTRIBUTE_PREFIX + "private", "true");
 			
 				// Check if automatic lock isn't locking
 				if(self.getAutomaticLock().isLocking() === false) {
@@ -397,7 +397,7 @@ class SettingsSection extends Section {
 										if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
 									
 											// Restore old value
-											input.val(currentValue);
+											input.val((typeof currentValue === "number") ? currentValue.toFixed() : currentValue);
 											
 											// Check if old value is an empty string
 											if(typeof currentValue === "string" && currentValue["length"] === 0)
@@ -443,7 +443,7 @@ class SettingsSection extends Section {
 						input.disableTab().disable().enableTab().enable();
 						
 						// Restore old value
-						input.val(currentValue);
+						input.val((typeof currentValue === "number") ? currentValue.toFixed() : currentValue);
 						
 						// Check if old value is an empty string
 						if(typeof currentValue === "string" && currentValue["length"] === 0)
@@ -781,7 +781,7 @@ class SettingsSection extends Section {
 				button.addClass("clicked");
 				
 				// Show message
-				self.getMessage().show(Language.getDefaultTranslation('Reset Settings'), Message.createText(Language.getDefaultTranslation('Are you sure you want to reset the settings to their default values?')) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Resetting the settings won\'t affect your wallets or your password.')) + "</b>", false, function() {
+				self.getMessage().show(Language.getDefaultTranslation('Reset Settings'), Message.createText(Language.getDefaultTranslation('Are you sure you want to reset the settings to their default values?')), false, function() {
 				
 					// Save focus and blur
 					self.getFocus().save(true);
@@ -889,7 +889,7 @@ class SettingsSection extends Section {
 												case "url":
 												
 													// Set that setting's value display's input to the default value
-													settingsValueDisplay.find("input").val(defaultValue);
+													settingsValueDisplay.find("input").val((typeof defaultValue === "number") ? defaultValue.toFixed() : defaultValue);
 													
 													// Break
 													break;
@@ -1234,7 +1234,7 @@ class SettingsSection extends Section {
 											value = defaultValue;
 										
 										// Set that setting's value display's input to the value
-										settingsValueDisplay.find("input").val(value);
+										settingsValueDisplay.find("input").val((typeof value === "number") ? value.toFixed() : value);
 										
 										// Break
 										break;

@@ -538,7 +538,7 @@ class Message {
 								}
 								
 								// Set message display visible state
-								self.messageDisplay.attr(Common.DATA_ATTRIBUTE_PREFIX + "visibleState", visibleState);
+								self.messageDisplay.attr(Common.DATA_ATTRIBUTE_PREFIX + "visibleState", visibleState.toFixed());
 								
 								// Scroll to the top of message display text
 								self.messageDisplay.find("p").scrollTop(0);
@@ -1043,7 +1043,7 @@ class Message {
 			var visibleState = this.messageDisplay.attr(Common.DATA_ATTRIBUTE_PREFIX + "visibleState");
 			
 			// Return visible state or none if it doesn't exist
-			return (visibleState !== Common.NO_ATTRIBUTE) ? visibleState : Message.VISIBLE_STATE_NONE;
+			return (visibleState !== Common.NO_ATTRIBUTE) ? parseInt(visibleState, Common.DECIMAL_NUMBER_BASE) : Message.VISIBLE_STATE_NONE;
 		}
 		
 		// Show success result
@@ -1191,7 +1191,7 @@ class Message {
 		}
 		
 		// Create input
-		static createInput(text, textArguments = [], isPassword = false, autoComplete = false, autoCapitalize = false) {
+		static createInput(text, textArguments = [], isPassword = false, autoComplete = false, autoCapitalize = false, spellcheck = false) {
 		
 			// Create container
 			var container = $(`<span class=\"input\">` +
@@ -1221,7 +1221,7 @@ class Message {
 				input.attr("type", "text");
 				input.attr("autocomplete", (autoComplete === true) ? "on" : "off");
 				input.attr("autocapitalize", (autoCapitalize === true) ? "on" : "off");
-				input.attr("spellcheck", "on");
+				input.attr("spellcheck", (spellcheck === true) ? "true" : "false");
 			}
 			
 			// Return container's outer HTML
@@ -1248,7 +1248,7 @@ class Message {
 				label.attr("for", i.toFixed());
 				
 				// Append radio button and label to text container
-				textContainer.append("<input type=\"radio\" id=\"" + i.toFixed() + "\" name=\"messageRadioButtons\" value=\"" + i.toFixed() + "\"" + ((i === 0) ? " checked" : "") + ">");
+				textContainer.append("<input type=\"radio\" id=\"" + i.toFixed() + "\" name=\"messageRadioButtons\" value=\"" + i.toFixed() + "\"" + ((i === 0) ? " checked" : "") + " autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\">");
 				textContainer.append(label);
 				
 				// Append text container to container

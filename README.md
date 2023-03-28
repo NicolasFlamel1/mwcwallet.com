@@ -6,7 +6,7 @@ Source code of the MimbleWimble Coin web wallet, [mwcwallet.com](https://mwcwall
 ### Develop
 This site can be ran from a local machine for development purposes. To do that, this repo's files are intended to reside at `/srv/mwcwallet.com`, but can be located anywhere as long as the `root` directive in the `nginx.conf` file correctly reflects the `public_html` folder's current location.
 
-This repo includes a self-signed certificate, `privkey.pem` and `fullchain.pem`, that will work for `https://mwcwallet.com` and `https://www.mwcwallet.com` if `fullchain.pem` is added to your browsers trusted certificate authorities.
+This repo includes a self-signed certificate, `privkey.pem` and `fullchain.pem`, that will work for `https://mwcwallet.com` and `https://www.mwcwallet.com` if `fullchain.pem` is added to your browser's trusted certificate authorities.
 
 This site requires that the following are installed.
 * [Nginx](https://www.nginx.com/) >= 1.18.0

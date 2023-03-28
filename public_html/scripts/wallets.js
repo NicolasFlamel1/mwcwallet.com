@@ -1343,7 +1343,7 @@ class Wallets {
 									// Return wallet's encrypting seed and BIP39 salt
 									return wallet.encryptSeedAndBip39Salt(passwordCandidate, salt, numberOfIterations, initializationVector).then(function(encryptedSeedAndBip39Salt) {
 									
-										// Append vaues to new encryption values
+										// Append values to new encryption values
 										newEncryptionValues[keyPath] = [
 										
 											// Salt
@@ -1379,7 +1379,7 @@ class Wallets {
 									// Return wallet's encrypting root public key
 									return wallet.encryptRootPublicKey(passwordCandidate, salt, numberOfIterations, initializationVector).then(function(encryptedRootPublicKey) {
 									
-										// Append vaues to new encryption values
+										// Append values to new encryption values
 										newEncryptionValues[keyPath] = [
 										
 											// Salt

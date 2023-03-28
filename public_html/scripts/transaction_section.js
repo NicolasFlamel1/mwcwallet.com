@@ -453,7 +453,7 @@ class TransactionSection extends Section {
 								if(Node.isMessageError(error) === true) {
 								
 									// Show rebroadcast transaction error
-									showRebroadcastTransactionError(Message.createText(Language.getDefaultTranslation('Rebroadcasting the transaction failed for the following reason.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Message.createText(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"]) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+									showRebroadcastTransactionError(Message.createText(Language.getDefaultTranslation('Rebroadcasting the transaction failed for the following reason.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Message.createText(Language.escapeText(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
 								}
 								
 								// Otherwise check if error is a connection error
@@ -485,7 +485,7 @@ class TransactionSection extends Section {
 				button.addClass("clicked");
 
 				// Show message
-				self.getMessage().show(Language.getDefaultTranslation('Cancel Transaction'), Message.createText(Language.getDefaultTranslation('Are you sure you want to cancel transaction %1$s?'), [self.transactionIndex.toFixed()]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You should only cancel a transaction if those involved in the transaction have all agreed that it can be canceled.')) + "</b>", false, function() {
+				self.getMessage().show(Language.getDefaultTranslation('Cancel Transaction'), Message.createText(Language.getDefaultTranslation('Are you sure you want to cancel transaction %1$s?'), [self.transactionIndex.toFixed()]), false, function() {
 				
 					// Save focus and blur
 					self.getFocus().save(true);

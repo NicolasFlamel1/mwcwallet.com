@@ -2213,7 +2213,7 @@ class Application {
 												}
 											
 												// Show message and allow showing messages
-												self.message.show(Language.getDefaultTranslation('New Wallet Passphrase'), Message.createText(Language.getDefaultTranslation('This passphrase will allow you to recover Wallet %1$s in case you lose access to it. It\'s recommended that you record this passphrase in a secure, nondigital way.'), [wallet.getKeyPath().toFixed()]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"passphrase contextMenu\">" + Common.htmlEncode(walletPassphrase) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Don\'t disclose this passphrase to anyone.')) + "</b>", false, Message.NO_BEFORE_SHOW_FUNCTION, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+												self.message.show(Language.getDefaultTranslation('New Wallet Passphrase'), Message.createText(Language.getDefaultTranslation('This passphrase will allow you to recover Wallet %1$s. It\'s recommended that you record this passphrase in a secure, nondigital way.'), [wallet.getKeyPath().toFixed()]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"passphrase contextMenu\" spellcheck=\"false\">" + Common.htmlEncode(walletPassphrase) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Don\'t disclose this passphrase to anyone.')) + "</b>", false, Message.NO_BEFORE_SHOW_FUNCTION, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
 												
 													// TODO Securely clear walletPassphrase
 													
@@ -2977,13 +2977,13 @@ class Application {
 								}
 								
 								// Document wallet connect application wallet key path event
-								$(document).on(Wallet.CONNECT_EVENT + ".application" + wallet.getKeyPath(), function(event, walletKeyPath) {
+								$(document).on(Wallet.CONNECT_EVENT + ".application" + wallet.getKeyPath().toFixed(), function(event, walletKeyPath) {
 								
 									// Check if wallet's hardware wallet is connected
 									if(walletKeyPath === wallet.getKeyPath()) {
 									
 										// Turn off document wallet connect application wallet key path event
-										$(document).off(Wallet.CONNECT_EVENT + ".application" + wallet.getKeyPath());
+										$(document).off(Wallet.CONNECT_EVENT + ".application" + wallet.getKeyPath().toFixed());
 										
 										// Clear external cancel check allowed
 										externalCancelCheckAllowed = false;
@@ -3061,7 +3061,7 @@ class Application {
 										if(cancelOccurred !== Common.NO_CANCEL_OCCURRED && cancelOccurred() === true && recursivelyShown === false) {
 										
 											// Turn off document wallet connect application wallet key path event
-											$(document).off(Wallet.CONNECT_EVENT + ".application" + wallet.getKeyPath());
+											$(document).off(Wallet.CONNECT_EVENT + ".application" + wallet.getKeyPath().toFixed());
 											
 											// Disable message
 											self.message.disable();
@@ -3147,7 +3147,7 @@ class Application {
 					}, Language.getDefaultTranslation('Cancel'), Language.getDefaultTranslation('Connect'), preventMessages === true || recursivelyShown === true, (allowUnlock === true) ? Message.VISIBLE_STATE_UNLOCK | Message.VISIBLE_STATE_UNLOCKED : Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
 					
 						// Turn off document wallet connect application wallet key path event
-						$(document).off(Wallet.CONNECT_EVENT + ".application" + wallet.getKeyPath());
+						$(document).off(Wallet.CONNECT_EVENT + ".application" + wallet.getKeyPath().toFixed());
 						
 						// Clear external cancel check allowed
 						externalCancelCheckAllowed = false;
@@ -4395,7 +4395,7 @@ class Application {
 								location["href"],
 								
 								// Is external
-								false
+								true
 							]
 						]);
 					}
@@ -5025,7 +5025,7 @@ class Application {
 					});
 					
 					// Show message and allow showing messages
-					self.message.show(Language.getDefaultTranslation('Private Browsing And Site Data Information'), Message.createText(Language.getDefaultTranslation('This site won\'t function correctly if you have private or incognito browsing modes enabled or if your browser is configured to automatically delete cookies and site data since those features prevent storing persistent data on your device. Make sure that private and incognito browsing modes are disabled and that your browser is configured to retain cookies and site data before continuing.')), false, function() {
+					self.message.show(Language.getDefaultTranslation('Private Browsing And Site Data Information'), Message.createText(Language.getDefaultTranslation('This site won\'t function correctly if you have private or incognito browsing modes enabled or if your browser is configured to automatically delete cookies and site data. Make sure that private and incognito browsing modes are disabled and that your browser is configured to retain cookies and site data before continuing.')), false, function() {
 					
 						// Hide loading
 						self.hideLoading();
@@ -5101,7 +5101,7 @@ class Application {
 				var thirdPartyCookiesMessageShown = localStorage.getItem(Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_LOCAL_STORAGE_NAME);
 				
 				// Check if third-party cookies message hasn't been shown and is an extension or loading from a file
-				if((thirdPartyCookiesMessageShown === Common.INVALID_LOCAL_STORAGE_ITEM || thirdPartyCookiesMessageShown !== Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_TRUE_VALUE) && (Common.isExtension() === true || location["protocol"] === "file:")) {
+				if((thirdPartyCookiesMessageShown === Common.INVALID_LOCAL_STORAGE_ITEM || thirdPartyCookiesMessageShown !== Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_TRUE_VALUE) && (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL)) {
 				
 					// Check if browser is Safari
 					if(typeof navigator === "object" && navigator !== null && navigator["userAgent"].toLowerCase().indexOf("safari") !== Common.INDEX_NOT_FOUND && navigator["userAgent"].toLowerCase().indexOf("chrome") === Common.INDEX_NOT_FOUND) {
@@ -5377,7 +5377,7 @@ class Application {
 				if(self.resetSettings === true && "Request" in urlParameters === false) {
 				
 					// Show message and allow showing messages
-					self.message.show(Language.getDefaultTranslation('Reset Settings'), Message.createText(Language.getDefaultTranslation('Are you sure you want to reset the settings to their default values?')) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Resetting the settings won\'t affect your wallets or your password.')) + "</b>", false, function() {
+					self.message.show(Language.getDefaultTranslation('Reset Settings'), Message.createText(Language.getDefaultTranslation('Are you sure you want to reset the settings to their default values?')), false, function() {
 					
 						// Hide loading
 						self.hideLoading();

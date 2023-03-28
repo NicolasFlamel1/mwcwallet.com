@@ -13,7 +13,7 @@ class Version {
 		constructor(application, message) {
 		
 			// Set version
-			this.version = (Common.isExtension() === true || location["protocol"] === "file:") ? VERSION_NUMBER : Version.hash(JSON.stringify(FILES));
+			this.version = (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL) ? VERSION_NUMBER : Version.hash(JSON.stringify(FILES));
 			
 			// Set application
 			this.application = application;
@@ -107,7 +107,7 @@ class Version {
 							// Show message and allow showing messages
 							self.message.show(Language.getDefaultTranslation('Version Changes'), "<b>" + Message.createText(Language.getDefaultTranslation('Version %1$v'), [VERSION_NUMBER]) + "</b>" + Message.createLineBreak() + "<ul>" + VERSION_CHANGES.map(function(versionChange) {
 				
-								return "<li>" + Message.createText(versionChange) + "</li>";
+								return "<li>" + Message.createText(Language.escapeText(versionChange)) + "</li>";
 							
 							}).join("") + "</ul>" + Message.createLineBreak(), false, function() {
 							

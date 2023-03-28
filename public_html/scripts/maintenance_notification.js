@@ -83,7 +83,7 @@ class MaintenanceNotification {
 			if(this.canShow === true) {
 			
 				// Check if not an extension and not loading from file
-				if(Common.isExtension() === false && location["protocol"] !== "file:") {
+				if(Common.isExtension() === false && location["protocol"] !== Common.FILE_PROTOCOL) {
 			
 					// Get the current timestamp
 					var currentTimestamp = Common.getCurrentTimestamp();
@@ -137,7 +137,7 @@ class MaintenanceNotification {
 										Extension.preventInterruptOnClose();
 									
 										// Go to maintenance page
-										location.replace("http" + ((location["protocol"] === Common.HTTPS_PROTOCOL) ? "s" : "") + "://" + location["hostname"] + MaintenanceNotification.MAINTENANCE_PAGE_URL);
+										location.replace(((location["protocol"] === Common.HTTPS_PROTOCOL) ? Common.HTTPS_PROTOCOL : Common.HTTP_PROTOCOL) + "//" + location["hostname"] + MaintenanceNotification.MAINTENANCE_PAGE_URL);
 										
 									}, (this.startTimestamp - currentTimestamp) * Common.MILLISECONDS_IN_A_SECOND);
 								}

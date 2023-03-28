@@ -29,8 +29,11 @@
 	// Ethereum currency name
 	const ETHEREUM_CURRENCY_NAME = "ETH";
 	
+	// Escape character
+	const ESCAPE_CHARACTER = "%";
+	
 	// Placeholder pattern
-	const PLACEHOLDER_PATTERN = '/^%\d+\$s$/u';
+	const PLACEHOLDER_PATTERN = '/^' . ESCAPE_CHARACTER . '\d+\$s$/u';
 	
 	
 	// Supporting function implementation
@@ -499,6 +502,13 @@
 				}
 			};
 		}
+	}
+	
+	// Escape text
+	function escapeText($text) {
+	
+		// Return text with all escape characters escaped
+		return preg_replace('/' . ESCAPE_CHARACTER . '/u', ESCAPE_CHARACTER . ESCAPE_CHARACTER, $text);
 	}
 	
 	// Escape Data

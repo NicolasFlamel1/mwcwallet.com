@@ -21,7 +21,7 @@ class SendPaymentSection extends Section {
 			// Set amount last changed
 			this.amountLastChanged = true;
 			
-			// Set allow changing base fee to setting's default vaue
+			// Set allow changing base fee to setting's default value
 			this.allowChangingBaseFee = SendPaymentSection.SETTINGS_ALLOW_CHANGING_BASE_FEE_DEFAULT_VALUE;
 			
 			// Set self
@@ -185,7 +185,7 @@ class SendPaymentSection extends Section {
 									input.val(number.toFixed());
 									
 									// Update value
-									value = input.val();
+									value = (new BigNumber(input.val())).toFixed();
 								}
 						
 								// Check if value isn't a number
@@ -464,8 +464,8 @@ class SendPaymentSection extends Section {
 				// Check if type is a number
 				if(display.find("div.value").attr(Common.DATA_ATTRIBUTE_PREFIX + "type") === "number") {
 				
-					// Check if key isn't a number or a period
-					if((event["which"] < "0".charCodeAt(0) || event["which"] > "9".charCodeAt(0)) && event["which"] !== ".".charCodeAt(0)) {
+					// Check if key isn't a number, a period, or a comma
+					if((event["which"] < "0".charCodeAt(0) || event["which"] > "9".charCodeAt(0)) && event["which"] !== ".".charCodeAt(0) && event["which"] !== ",".charCodeAt(0)) {
 					
 						// Prevent default
 						event.preventDefault();
@@ -1152,6 +1152,13 @@ class SendPaymentSection extends Section {
 					showSendError(Message.createText(Language.getDefaultTranslation('Recipient address is empty.')));
 				}
 				
+				// Otherwise check if recipient address shows an error
+				else if(self.getDisplay().find("input.recipientAddress").closest("div").parent().closest("div").hasClass("error") === true) {
+				
+					// Show send error
+					showSendError(Message.createText(Language.getDefaultTranslation('Recipient address is invalid.')));
+				}
+				
 				// Otherwise check if amount doesn't exist
 				else if(self.getDisplay().find("input.amount").val()["length"] === 0) {
 				
@@ -1159,11 +1166,25 @@ class SendPaymentSection extends Section {
 					showSendError(Message.createText(Language.getDefaultTranslation('Amount is empty.')));
 				}
 				
+				// Otherwise check if amount shows an error
+				else if(self.getDisplay().find("input.amount").closest("div").parent().closest("div").hasClass("error") === true) {
+				
+					// Show send error
+					showSendError(Message.createText(Language.getDefaultTranslation('Amount is invalid.')));
+				}
+				
 				// Otherwise check if base fee can be changed and base fee doesn't exist
 				else if(self.allowChangingBaseFee === true && self.getDisplay().find("input.baseFee").val()["length"] === 0) {
 				
 					// Show send error
 					showSendError(Message.createText(Language.getDefaultTranslation('Base fee is empty.')));
+				}
+				
+				// Otherwise check if base fee can be changed and base fee shows an error
+				else if(self.allowChangingBaseFee === true && self.getDisplay().find("input.baseFee").closest("div").parent().closest("div").hasClass("error") === true) {
+				
+					// Show send error
+					showSendError(Message.createText(Language.getDefaultTranslation('Base fee is invalid.')));
 				}
 				
 				// Otherwise
@@ -1589,7 +1610,27 @@ class SendPaymentSection extends Section {
 																										if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
 																										
 																											// Set text
-																											text = ((wallet.getName() === Wallet.NO_NAME) ? (Message.createText(Language.getDefaultTranslation('Finalize the transaction for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) + " " + Message.createText(Language.getDefaultTranslation('This transaction doesn\'t contain a payment proof.'))) : (Message.createText(Language.getDefaultTranslation('Finalize the transaction for %1$y to continue sending the payment.'), [wallet.getName()]) + " " + Message.createText(Language.getDefaultTranslation('This transaction doesn\'t contain a payment proof.')))) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can\'t guarantee that this payment is going to the intended recipient since this transaction doesn\'t contain a payment proof.')) + "</b>";
+																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Finalize the transaction for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Finalize the transaction for %1$y to continue sending the payment.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('You\'re sending %1$c for a fee of %2$c, and this transaction doesn\'t have a payment proof.'), [
+																											
+																												[
+																
+																													// Number
+																													amount.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
+																													
+																													// Currency
+																													Consensus.CURRENCY_NAME
+																												],
+																												
+																												[
+																												
+																													// Number
+																													fee.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
+																													
+																													// Currency
+																													Consensus.CURRENCY_NAME
+																												]
+																												
+																											]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can\'t guarantee that this payment is going to the intended recipient since this transaction doesn\'t have a payment proof.')) + "</b>";
 																											
 																											// Set second button
 																											secondButton = Language.getDefaultTranslation('Finalize');
@@ -1622,7 +1663,7 @@ class SendPaymentSection extends Section {
 																												// Kernel features
 																												kernelFeatures
 																												
-																											]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can\'t guarantee that this payment is going to the intended recipient since this transaction doesn\'t contain a payment proof.')) + "</b>";
+																											]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can\'t guarantee that this payment is going to the intended recipient since this transaction doesn\'t have a payment proof.')) + "</b>";
 																											
 																											// Set second button
 																											secondButton = Message.NO_BUTTON;
@@ -1636,7 +1677,27 @@ class SendPaymentSection extends Section {
 																										if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
 																										
 																											// Set text
-																											text = ((wallet.getName() === Wallet.NO_NAME) ? (Message.createText(Language.getDefaultTranslation('Finalize the transaction for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) + " " + Message.createText(Language.getDefaultTranslation('The recipient\'s payment proof address is the following payment proof address.'))) : (Message.createText(Language.getDefaultTranslation('Finalize the transaction for %1$y to continue sending the payment.'), [wallet.getName()]) + " " + Message.createText(Language.getDefaultTranslation('The recipient\'s payment proof address is the following payment proof address.')))) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(receiverAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can guarantee that this payment is going to the intended recipient by having the recipient confirm that this payment proof address is their payment proof address.')) + "</b>";
+																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Finalize the transaction for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Finalize the transaction for %1$y to continue sending the payment.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('You\'re sending %1$c for a fee of %2$c, and the recipient\'s payment proof address is the following payment proof address.'), [
+																											
+																												[
+																
+																													// Number
+																													amount.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
+																													
+																													// Currency
+																													Consensus.CURRENCY_NAME
+																												],
+																												
+																												[
+																												
+																													// Number
+																													fee.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
+																													
+																													// Currency
+																													Consensus.CURRENCY_NAME
+																												]
+																												
+																											]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(receiverAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can guarantee that this payment is going to the intended recipient by having the recipient confirm that this payment proof address is their payment proof address.')) + "</b>";
 																											
 																											// Set second button
 																											secondButton = Language.getDefaultTranslation('Finalize');
@@ -2166,6 +2227,7 @@ class SendPaymentSection extends Section {
 			});
 			
 			// Document key down event
+			var savedValues = [];
 			$(document).on("keydown", function(event) {
 			
 				// Check if key tab is pressed
@@ -2176,6 +2238,47 @@ class SendPaymentSection extends Section {
 					
 					// Disable tabbing to all disabled inputs
 					self.getDisplay().find("div.disabled").find("input").disableTab();
+				}
+			
+			// Document language before change event
+			}).on(Language.BEFORE_CHANGE_EVENT, function() {
+			
+				// Check if shown
+				if(self.isShown() === true) {
+				
+					// Clear saved values
+					savedValues = [];
+				
+					// Go through all of the display's number inputs
+					self.getDisplay().find("input[type=\"number\"]").each(function() {
+					
+						// Get input
+						var input = $(this);
+					
+						// Append input's value to list
+						savedValues.push((input.val()["length"] !== 0) ? (new BigNumber(input.val())).toFixed() : "");
+					});
+				}
+			});
+			
+			// HTML on language change event
+			$("html").on(Language.CHANGE_EVENT, function(event) {
+			
+				// Check if target is HTML, is shown, and values are saved
+				if($(event["target"]).is("html") === true && self.isShown() === true && savedValues["length"] !== 0) {
+			
+					// Go through all of the display's number inputs
+					self.getDisplay().find("input[type=\"number\"]").each(function(index) {
+					
+						// Get input
+						var input = $(this);
+					
+						// Restore input's value
+						input.val(savedValues[index]);
+					});
+					
+					// Clear saved values
+					savedValues = [];
 				}
 			});
 		}
@@ -2307,7 +2410,7 @@ class SendPaymentSection extends Section {
 							]));
 							
 							// Set option's value and disable it
-							option.attr("value", wallet.getKeyPath()).disable();
+							option.attr("value", wallet.getKeyPath().toFixed()).disable();
 							
 							// Append option to from wallet selection display
 							fromWalletSelectionDisplay.append(option);
@@ -2351,9 +2454,16 @@ class SendPaymentSection extends Section {
 						
 						// Trigger resize event
 						$(window).trigger("resize");
-					
+						
 						// Update value input
 						self.updateValueInput();
+						
+						// Request animation frame
+						requestAnimationFrame(function() {
+					
+							// Update value input
+							self.updateValueInput();
+						});
 						
 						// Check if not first shown
 						if(firstShown === false) {
@@ -2439,7 +2549,7 @@ class SendPaymentSection extends Section {
 				// Set value display's text
 				this.getDisplay().find("input.value").parent().siblings("p").find("span").replaceWith(Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value in %1$y'), [currency]));
 				
-				// Check if vaue input is hidden
+				// Check if value input is hidden
 				if(this.getDisplay().find("input.value").closest("div").parent().closest("div").hasClass("hide") === true) {
 				
 					// Show value input
@@ -2467,38 +2577,38 @@ class SendPaymentSection extends Section {
 			// Get price in the currency
 			var price = this.getPrices().getPrice(currency);
 			
+			// Get amount input
+			var amountInput = this.getDisplay().find("input.amount");
+			
+			// Get value input
+			var valueInput = this.getDisplay().find("input.value");
+			
 			// Check if price exists
 			if(price !== Prices.NO_PRICE_FOUND) {
 			
-				// Get amount input
-				var amountInput = this.getDisplay().find("input.amount");
-				
-				// Get value input
-				var valueInput = this.getDisplay().find("input.value");
-				
 				// Check if amount last changed
 				if(this.amountLastChanged === true) {
 				
-					// Check if amount input is empty
-					if(amountInput.val()["length"] === 0) {
+					// Check if amount input is empty or it show an error
+					if(amountInput.val()["length"] === 0 || amountInput.closest("div").parent().closest("div").hasClass("error") === true) {
 					
-						// Clear value input
-						valueInput.val("");
+						// Clear value input and have it not show an error
+						valueInput.val("").closest("div").parent().closest("div").removeClass("error");
 					}
 					
 					// Otherwise
 					else {
 					
-						// Set value input to the amount input value multipled by the price
-						valueInput.val((new BigNumber(amountInput.val())).multipliedBy(price).toFixed());
+						// Set value input to the amount input value multipled by the price and have it not show an error
+						valueInput.val((new BigNumber(amountInput.val())).multipliedBy(price).toFixed()).closest("div").parent().closest("div").removeClass("error");
 					}
 				}
 				
 				// Otherwise
 				else {
 				
-					// Check if value input is empty
-					if(valueInput.val()["length"] === 0) {
+					// Check if value input is empty or it show an error
+					if(valueInput.val()["length"] === 0 || valueInput.closest("div").parent().closest("div").hasClass("error") === true) {
 					
 						// Clear amount input and have it not show an error
 						amountInput.val("").closest("div").parent().closest("div").removeClass("error");
@@ -2535,6 +2645,24 @@ class SendPaymentSection extends Section {
 							}
 						}
 					}
+				}
+			}
+			
+			// Otherwise
+			else {
+			
+				// Check if amount last changed
+				if(this.amountLastChanged === true) {
+				
+					// Clear value input and have it not show an error
+					valueInput.val("").closest("div").parent().closest("div").removeClass("error");
+				}
+				
+				// Otherwise
+				else {
+				
+					// Clear amount input and have it not show an error
+					amountInput.val("").closest("div").parent().closest("div").removeClass("error");
 				}
 			}
 		}

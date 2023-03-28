@@ -3,14 +3,16 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "1.1.20";
+	const VERSION_NUMBER = "1.2.0";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "23 Mar 2023 23:49:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed bold fonts being displayed inconsistently across different web browsers."
+		"Fixed bold fonts being displayed inconsistently across different browsers.",
+		"Fixed error response messages not being displayed if they contained certain characters.",
+		"Improved localization support."
 	];
 	
 	// Maintenance start time

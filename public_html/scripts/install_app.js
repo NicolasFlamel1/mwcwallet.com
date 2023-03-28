@@ -258,7 +258,7 @@ class InstallApp {
 			this.canShow = true;
 			
 			// Check if not an app or extension and not loading from file
-			if(Common.isApp() === false && Common.isExtension() === false && location["protocol"] !== "file:") {
+			if(Common.isApp() === false && Common.isExtension() === false && location["protocol"] !== Common.FILE_PROTOCOL) {
 		
 				// Check if the install app prompt exists, cookie acceptance is hidden, and wasn't installed
 				if(installAppPrompt !== InstallApp.NO_INSTALL_APP_PROMPT && this.cookieAcceptanceIsHidden === true && this.wasInstalled === false) {

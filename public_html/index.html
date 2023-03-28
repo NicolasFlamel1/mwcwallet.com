@@ -324,7 +324,7 @@
 		function isExtension() {
 		
 			// Return if extension
-			return typeof location === "object" && location !== null && "protocol" in location === true && location["protocol"] === "chrome-extension:";
+			return typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:";
 		}
 		
 		// Is app
@@ -380,10 +380,10 @@
 						var headerText = "<?= escapeString(getDefaultTranslation('MWC Wallet')); ?>";
 						
 						// Set text message
-						var textMessage = "<?= escapeString(getTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin with your web browser.')); ?>";
+						var textMessage = "<?= escapeString(getTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin in your web browser.')); ?>";
 						
 						// Set text text
-						var textText = "<?= escapeString(getDefaultTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin with your web browser.')); ?>";
+						var textText = "<?= escapeString(getDefaultTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin in your web browser.')); ?>";
 						
 					<?php
 					
@@ -1307,7 +1307,7 @@
 		</style>
 	</noscript>
 	
-	<link rel="manifest" href="<?= encodeString(getResource("./site.webmanifest")); ?>">
+	<link class="translatable" rel="manifest" href="<?= encodeString(getResource("./site.webmanifest")); ?>" crossorigin="use-credentials">
 	<meta name="msapplication-config" content="<?= encodeString(getResource("./browserconfig.xml")); ?>">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="mobile-web-app-capable" content="yes">
@@ -1320,7 +1320,7 @@
 	<meta class="translatable" name="application-name" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta class="translatable" name="msapplication-tooltip" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta name="msapplication-starturl" content="<?= "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]); ?>">
-	<meta class="translatable" name="description" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin with your web browser.')); ?>" content="<?= encodeString(getTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin with your web browser.')); ?>">
+	<meta class="translatable" name="description" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin in your web browser.')); ?>" content="<?= encodeString(getTranslation('MWC Wallet is a self-custodial web wallet that allows you to manage your MimbleWimble Coin in your web browser.')); ?>">
 	<meta class="translatable" name="author" data-text="<?= encodeString(getDefaultTranslation('Nicolas Flamel')); ?>" content="<?= encodeString(getTranslation('Nicolas Flamel')); ?>">
 	<link rel="schema.dcterms" href="http://purl.org/dc/terms/">
 	<meta class="translatable" name="dcterms.rightsHolder" data-text="<?= encodeString(getDefaultTranslation('Nicolas Flamel')); ?>" content="<?= encodeString(getTranslation('Nicolas Flamel')); ?>">
@@ -1407,7 +1407,7 @@
 
 </head>
 
-<body class="loading">
+<body class="loading" spellcheck="false">
 	<div>
 		<div>
 			<section class="maintenanceNotification hide noFocus">
@@ -1466,7 +1466,7 @@
 					<div class="create hide">
 						<div class="logo"></div>
 						<form class="hide">
-							<input class="hide translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" type="hidden" name="Username" value="<?= encodeString(getTranslation('MWC Wallet')); ?>">
+							<input class="hide translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" type="hidden" name="Username" value="<?= encodeString(getTranslation('MWC Wallet')); ?>" autocomplete="off" autocapitalize="off" spellcheck="false">
 							<div>
 								<span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span>
 								<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('Password')); ?>" type="password" name="Password" placeholder="<?= encodeString(getTranslation('Password')); ?>" autocomplete="new-password" autocapitalize="off" spellcheck="false">
@@ -1490,7 +1490,7 @@
 					<div class="unlock hide">
 						<div class="logo"></div>
 						<form class="hide">
-							<input class="hide translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" type="hidden" name="Username" value="<?= encodeString(getTranslation('MWC Wallet')); ?>">
+							<input class="hide translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" type="hidden" name="Username" value="<?= encodeString(getTranslation('MWC Wallet')); ?>" autocomplete="off" autocapitalize="off" spellcheck="false">
 							<div>
 								<span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span>
 								<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('Password')); ?>" type="password" name="Password" placeholder="<?= encodeString(getTranslation('Password')); ?>" autocomplete="current-password" autocapitalize="off" spellcheck="false">
@@ -1647,10 +1647,10 @@
 												<p class="translatable noTransactions" data-text="<?= encodeString(getDefaultTranslation('No transactions exist for this wallet.')); ?>"><?= encodeString(getTranslation('No transactions exist for this wallet.')); ?></p>
 											</div>
 											<div class="transactionsNavigation">
-												<button class="first translatable" data-text="<?= encodeString(getDefaultTranslation('First')); ?>" title="<?= encodeString(getTranslation('First')); ?>"></button>
-												<button class="previous translatable" data-text="<?= encodeString(getDefaultTranslation('Previous')); ?>" title="<?= encodeString(getTranslation('Previous')); ?>"></button>
-												<button class="next translatable" data-text="<?= encodeString(getDefaultTranslation('Next')); ?>" title="<?= encodeString(getTranslation('Next')); ?>"></button>
-												<button class="last translatable" data-text="<?= encodeString(getDefaultTranslation('Last')); ?>" title="<?= encodeString(getTranslation('Last')); ?>"></button>
+												<button class="first translatable" data-text="<?= encodeString(getDefaultTranslation('First')); ?>" title="<?= encodeString(getTranslation('First')); ?>" data-private></button>
+												<button class="previous translatable" data-text="<?= encodeString(getDefaultTranslation('Previous')); ?>" title="<?= encodeString(getTranslation('Previous')); ?>" data-private></button>
+												<button class="next translatable" data-text="<?= encodeString(getDefaultTranslation('Next')); ?>" title="<?= encodeString(getTranslation('Next')); ?>" data-private></button>
+												<button class="last translatable" data-text="<?= encodeString(getDefaultTranslation('Last')); ?>" title="<?= encodeString(getTranslation('Last')); ?>" data-private></button>
 											</div>
 										</div>
 									</div>
@@ -1668,7 +1668,7 @@
 												</p>
 												<span class="dots"></span>
 												<div class="value" data-type="url">
-													<input class="recipientAddress translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false">
+													<input class="recipientAddress translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" inputmode="url">
 													<span></span>
 													<span class="capsLock hide"></span>
 												</div>
@@ -1700,7 +1700,7 @@
 												</p>
 												<span class="dots"></span>
 												<div class="value" data-type="number">
-													<input class="amount" type="number" min="0.000000001" step="0.000000001" autocomplete="off">
+													<input class="amount" type="number" min="0.000000001" step="0.000000001" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal">
 													<span></span>
 												</div>
 											</div>
@@ -1720,7 +1720,7 @@
 												</p>
 												<span class="dots"></span>
 												<div class="value" data-type="number">
-													<input class="value" type="number" min="0" autocomplete="off">
+													<input class="value" type="number" min="0" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal">
 													<span></span>
 												</div>
 											</div>
@@ -1730,7 +1730,7 @@
 												</p>
 												<span class="dots"></span>
 												<div class="value" data-type="number">
-													<input class="baseFee" type="number" min="0.000000001" step="0.000000001" autocomplete="off">
+													<input class="baseFee" type="number" min="0.000000001" step="0.000000001" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal">
 													<span></span>
 												</div>
 											</div>
@@ -1750,7 +1750,7 @@
 												</p>
 												<span class="dots"></span>
 												<div class="value" data-type="text">
-													<input class="message" type="text" autocomplete="on" autocapitalize="on" spellcheck="on">
+													<input class="message" type="text" autocomplete="on" autocapitalize="on" spellcheck="true">
 													<span></span>
 													<span class="capsLock hide"></span>
 												</div>
@@ -1881,7 +1881,7 @@
 												</p>
 												<span class="dots"></span>
 												<div class="value" data-type="number">
-													<input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR; ?>" autocomplete="off" data-private>
+													<input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric">
 													<span></span>
 												</div>
 											</div>
@@ -1936,7 +1936,7 @@
 												</p>
 												<span class="dots"></span>
 												<div class="value" data-type="number">
-													<input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" data-private>
+													<input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric">
 													<span></span>
 												</div>
 											</div>
@@ -1979,13 +1979,13 @@
 													</button>
 												</div>
 											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Maximum Number Of Messages"); ?>" data-text="<?= encodeString(getDefaultTranslation('Sets the maximum number of messages the log can display. Earlier messages will be removed once this limit is reached')); ?>" title="<?= encodeString(getTranslation('Sets the maximum number of messages the log can display. Earlier messages will be removed once this limit is reached')); ?>">
+											<div class="setting translatable" data-setting="<?= encodeString("Maximum Number Of Messages"); ?>" data-text="<?= encodeString(getDefaultTranslation('Sets the maximum number of messages that the log can display. Earlier messages will be removed once this limit is reached')); ?>" title="<?= encodeString(getTranslation('Sets the maximum number of messages that the log can display. Earlier messages will be removed once this limit is reached')); ?>">
 												<p>
 													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Maximum number of messages that the log can display')); ?>"><?= encodeString(getTranslation('Maximum number of messages that the log can display')); ?></span>
 												</p>
 												<span class="dots"></span>
 												<div class="value" data-type="number">
-													<input type="number" min="10" max="1000" autocomplete="off" data-private>
+													<input type="number" min="10" max="1000" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric">
 													<span></span>
 												</div>
 											</div>
@@ -2007,7 +2007,7 @@
 												</p>
 												<span class="dots"></span>
 												<div class="value" data-type="url">
-													<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private>
+													<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url">
 													<span></span>
 													<span class="capsLock hide"></span>
 												</div>
@@ -2030,7 +2030,7 @@
 												</p>
 												<span class="dots"></span>
 												<div class="value" data-type="number">
-													<input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" data-private>
+													<input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric">
 													<span></span>
 												</div>
 											</div>
@@ -2046,7 +2046,7 @@
 													</button>
 												</div>
 											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Require Payment Proof"); ?>" data-text="<?= encodeString(getDefaultTranslation('Requires a payment proof to exist in all new transactions')); ?>" title="<?= encodeString(getTranslation('Requires a payment proof to exist in all new transactions')); ?>">
+											<div class="setting translatable" data-setting="<?= encodeString("Require Payment Proof"); ?>" data-text="<?= encodeString(getDefaultTranslation('Requires all new transactions to have a payment proof')); ?>" title="<?= encodeString(getTranslation('Requires all new transactions to have a payment proof')); ?>">
 												<p>
 													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Require payment proof')); ?>"><?= encodeString(getTranslation('Require payment proof')); ?></span>
 												</p>
@@ -2075,7 +2075,7 @@
 												</p>
 												<span class="dots"></span>
 												<div class="value" data-type="url">
-													<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private>
+													<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url">
 													<span></span>
 													<span class="capsLock hide"></span>
 												</div>
@@ -2098,7 +2098,7 @@
 												</p>
 												<span class="dots"></span>
 												<div class="value" data-type="url">
-													<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private>
+													<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url">
 													<span></span>
 													<span class="capsLock hide"></span>
 												</div>
@@ -2141,7 +2141,7 @@
 															foreach(VERSION_CHANGES as $versionChange) {
 															
 																// Display version change
-																echo "<li><span class=\"translatable\" data-text=\"" . encodeString($versionChange) . "\">" . encodeString(getTranslation($versionChange)) . "</span></li>";
+																echo "<li><span class=\"translatable\" data-text=\"" . encodeString(escapeText($versionChange)) . "\">" . encodeString(getTranslation(escapeText($versionChange))) . "</span></li>";
 															}
 														}
 													?>
@@ -2433,8 +2433,12 @@
 			// Title language change event
 			addEvent(getElement(document, "title", "translatable"), LANGUAGE_CHANGE_EVENT, function() {
 			
-				// Change displayed URL to remove query string
-				history.replaceState(NO_STATE, document["title"], (location["protocol"] === "file:") ? location["protocol"] + "//" + location["pathname"] : "/");
+				// Set timeout
+				setTimeout(function() {
+				
+					// Change displayed URL to remove query string
+					history.replaceState(NO_STATE, document["title"], (location["protocol"] === "file:") ? location["protocol"] + "//" + location["pathname"] : "/");
+				}, 0);
 			});
 		}
 		

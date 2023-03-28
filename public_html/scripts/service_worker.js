@@ -38,7 +38,10 @@ const HOST_NAME = "<?= escapeString(rawurlencode($_SERVER["SERVER_NAME"])); ?>";
 const RESPONSE_NOT_IN_CACHE = undefined;
 
 // HTML file pattern
-const HTML_FILE_PATTERN = /(?:\.html?|\/)$/ui;
+const HTML_FILE_PATTERN = /(?:\.html|\/)$/ui;
+
+// Manifest file pattern
+const MANIFEST_FILE_PATTERN = /\.webmanifest$/ui;
 
 // Minified file pattern
 const MINIFIED_FILE_PATTERN = /\.min(\.[^\.]*)?$/u;
@@ -85,8 +88,8 @@ self.addEventListener("install", function(event) {
 						// Get URL parts
 						var urlParts = url.split("?");
 					
-						// Check if cached response doesn't exist, request is for an HTML file, or the file doesn't have a version
-						if(response === RESPONSE_NOT_IN_CACHE || HTML_FILE_PATTERN.test(urlParts[0]) === true || urlParts["length"] === 1) {
+						// Check if cached response doesn't exist, request is for an HTML or manifest file, or the file doesn't have a version
+						if(response === RESPONSE_NOT_IN_CACHE || HTML_FILE_PATTERN.test(urlParts[0]) === true || MANIFEST_FILE_PATTERN.test(urlParts[0]) === true || urlParts["length"] === 1) {
 						
 							// Return getting network response for the file
 							return fetch(url, {
@@ -287,8 +290,8 @@ self.addEventListener("fetch", function(event) {
 		// Get request's cache name
 		var cacheName = RELATIVE_ROOT_PATH + parsedUrl["pathname"].substring("/"["length"]) + parsedUrl["search"];
 		
-		// Check if request isn't a GET request, doesn't go to the server, or is for an HTML file
-		if(event["request"]["method"] !== "GET" || parsedUrl["hostname"] !== HOST_NAME || HTML_FILE_PATTERN.test(parsedUrl["pathname"]) === true) {
+		// Check if request isn't a GET request, doesn't go to the server, or is for an HTML or manifest file
+		if(event["request"]["method"] !== "GET" || parsedUrl["hostname"] !== HOST_NAME || HTML_FILE_PATTERN.test(parsedUrl["pathname"]) === true || MANIFEST_FILE_PATTERN.test(parsedUrl["pathname"]) === true) {
 		
 			// Return getting network response for the request
 			return fetch(event["request"], {

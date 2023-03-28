@@ -155,7 +155,7 @@ class WalletSection extends Section {
 									button.find("span.name").find("span.index").replaceWith(Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('#%1$s'), [index.toFixed()], "index"));
 									
 									// Set button's index
-									button.attr(Common.DATA_ATTRIBUTE_PREFIX + "index", index);
+									button.attr(Common.DATA_ATTRIBUTE_PREFIX + "index", index.toFixed());
 									
 									// Prepend button to transactions display
 									self.transactionsDisplay.prepend(button);
@@ -593,9 +593,6 @@ class WalletSection extends Section {
 					// Blur copy button
 					copyButton.blur();
 				}, 0);
-				
-				// Get transaction's key path
-				var keyPath = copyButton.closest("button").attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath");
 				
 				// Get transaction's ID
 				var id = copyButton.prev().text();
@@ -1545,7 +1542,7 @@ class WalletSection extends Section {
 										if(self.getAutomaticLock().isLocking() === false) {
 									
 											// Show message immediately and allow showing messages
-											self.getMessage().show(Language.getDefaultTranslation('Passphrase'), Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('The passphrase for Wallet %1$s is the following passphrase.') : Language.getDefaultTranslation('The passphrase for %1$y is the following passphrase.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"passphrase contextMenu\">" + Common.htmlEncode(passphrase) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Don\'t disclose this passphrase to anyone.')) + "</b>", true, function() {
+											self.getMessage().show(Language.getDefaultTranslation('Passphrase'), Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('The passphrase for Wallet %1$s is the following passphrase.') : Language.getDefaultTranslation('The passphrase for %1$y is the following passphrase.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"passphrase contextMenu\" spellcheck=\"false\">" + Common.htmlEncode(passphrase) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Don\'t disclose this passphrase to anyone.')) + "</b>", true, function() {
 											
 												// Hide loading
 												self.getApplication().hideLoading();
@@ -2655,7 +2652,7 @@ class WalletSection extends Section {
 				}
 
 				// Show message
-				self.getMessage().show(Language.getDefaultTranslation('Rename'), Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Enter a new name for Wallet %1$s.') : Language.getDefaultTranslation('Enter a new name for %1$y.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createLineBreak() + Message.createLineBreak() + Message.createInput(Language.getDefaultTranslation('Name'), [], false, true, true) + Message.createLineBreak(), false, function() {
+				self.getMessage().show(Language.getDefaultTranslation('Rename'), Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Enter a new name for Wallet %1$s.') : Language.getDefaultTranslation('Enter a new name for %1$y.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createLineBreak() + Message.createLineBreak() + Message.createInput(Language.getDefaultTranslation('Name'), [], false, true, true, true) + Message.createLineBreak(), false, function() {
 				
 					// Save focus and blur
 					self.getFocus().save(true);
@@ -3121,7 +3118,7 @@ class WalletSection extends Section {
 									button.find("span.name").find("span.index").replaceWith(Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('#%1$s'), [index.toFixed()], "index"));
 									
 									// Set button's index
-									button.attr(Common.DATA_ATTRIBUTE_PREFIX + "index", index);
+									button.attr(Common.DATA_ATTRIBUTE_PREFIX + "index", index.toFixed());
 									
 									// Append button to transactions display
 									self.transactionsDisplay.append(button);
@@ -3524,7 +3521,7 @@ class WalletSection extends Section {
 										button.find("span.name").find("span.index").replaceWith(Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('#%1$s'), [index.toFixed()], "index"));
 										
 										// Set button's index
-										button.attr(Common.DATA_ATTRIBUTE_PREFIX + "index", index);
+										button.attr(Common.DATA_ATTRIBUTE_PREFIX + "index", index.toFixed());
 										
 										// Append button to transactions display
 										self.transactionsDisplay.append(button);
@@ -3996,7 +3993,7 @@ class WalletSection extends Section {
 			}
 			
 			// Set button's key path
-			button.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath", transaction.getKeyPath());
+			button.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath", transaction.getKeyPath().toFixed());
 			
 			// Check if unlocked is disabled
 			if(this.getUnlocked().isDisabled() === true) {

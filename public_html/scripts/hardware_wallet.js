@@ -233,8 +233,26 @@ class HardwareWallet {
 														// Otherwise check if error was a connection error
 														else if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NETWORK_ERROR_CODE) || ("name" in error === true && error["name"] === "NetworkError"))) {
 														
-															// Reject error
-															reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this site can connect to it.')));
+															// Check if is an extension
+															if(Common.isExtension() === true) {
+														
+																// Reject error
+																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this extension can connect to it.')));
+															}
+															
+															// Otherwise check if is an app
+															else if(Common.isApp() === true) {
+															
+																// Reject error
+																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this app can connect to it.')));
+															}
+															
+															// Otherwise
+															else {
+															
+																// Reject error
+																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this site can connect to it.')));
+															}
 														}
 														
 														// Otherwise

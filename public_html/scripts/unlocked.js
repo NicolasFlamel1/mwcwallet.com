@@ -232,7 +232,7 @@ class Unlocked {
 							try {
 							
 								// Get button's wallet
-								var wallet = self.wallets.getWallet(button.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath"));
+								var wallet = self.wallets.getWallet(parseInt(button.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath"), Common.DECIMAL_NUMBER_BASE));
 							}
 							
 							// Catch errors
@@ -898,7 +898,7 @@ class Unlocked {
 					try {
 					
 						// Get copy button's wallet
-						var wallet = self.wallets.getWallet(copyButton.closest("button").attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath"));
+						var wallet = self.wallets.getWallet(parseInt(copyButton.closest("button").attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath"), Common.DECIMAL_NUMBER_BASE));
 					}
 					
 					// Catch errors
@@ -1484,7 +1484,7 @@ class Unlocked {
 									}).then(function() {
 									
 										// Show message and allow showing messages
-										self.message.show(Language.getDefaultTranslation('New Wallet Passphrase'), Message.createText(Language.getDefaultTranslation('This passphrase will allow you to recover Wallet %1$s in case you lose access to it. It\'s recommended that you record this passphrase in a secure, nondigital way.'), [wallet.getKeyPath().toFixed()]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"passphrase contextMenu\">" + Common.htmlEncode(walletPassphrase) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Don\'t disclose this passphrase to anyone.')) + "</b>", false, function() {
+										self.message.show(Language.getDefaultTranslation('New Wallet Passphrase'), Message.createText(Language.getDefaultTranslation('This passphrase will allow you to recover Wallet %1$s. It\'s recommended that you record this passphrase in a secure, nondigital way.'), [wallet.getKeyPath().toFixed()]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"passphrase contextMenu\" spellcheck=\"false\">" + Common.htmlEncode(walletPassphrase) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Don\'t disclose this passphrase to anyone.')) + "</b>", false, function() {
 										
 											// Hide loading
 											self.application.hideLoading();
@@ -2408,7 +2408,7 @@ class Unlocked {
 						var currentScrollPosition = walletsDisplayList.scrollTop();
 					
 						// Change order
-						self.wallets.changeOrder(selectedWalletButton.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath"), otherWalletButton.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath")).then(function() {
+						self.wallets.changeOrder(parseInt(selectedWalletButton.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath"), Common.DECIMAL_NUMBER_BASE), parseInt(otherWalletButton.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath"), Common.DECIMAL_NUMBER_BASE)).then(function() {
 						
 							// Check if up button was pressed
 							if(button.hasClass("up") === true) {
@@ -3355,7 +3355,7 @@ class Unlocked {
 			}
 			
 			// Set button's key path
-			button.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath", wallet.getKeyPath());
+			button.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath", wallet.getKeyPath().toFixed());
 			
 			// Set button's address
 			button.find("span.address").attr(Common.DATA_ATTRIBUTE_PREFIX + "address", address);
@@ -3529,7 +3529,7 @@ class Unlocked {
 				try {
 				
 					// Get wallet
-					var wallet = self.wallets.getWallet(button.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath"));
+					var wallet = self.wallets.getWallet(parseInt(button.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath"), Common.DECIMAL_NUMBER_BASE));
 				}
 				
 				// Catch errors

@@ -87,7 +87,7 @@ class CookieAcceptance {
 				this.canShow = true;
 				
 				// Check if not an app or extension and not loading from file
-				if(Common.isApp() === false && Common.isExtension() === false && location["protocol"] !== "file:") {
+				if(Common.isApp() === false && Common.isExtension() === false && location["protocol"] !== Common.FILE_PROTOCOL) {
 		
 					// Get cookie acceptance message acknowledged
 					var cookieAcceptanceMessageAcknowledged = localStorage.getItem(CookieAcceptance.COOKIE_ACCEPTANCE_MESSAGE_ACKNOWLEDGED_LOCAL_STORAGE_NAME);
@@ -97,6 +97,26 @@ class CookieAcceptance {
 				
 						// Show cookie acceptance display and make it so that its elements can be focused
 						this.cookieAcceptanceDisplay.removeClass("hide noFocus");
+						
+						// Set self
+						var self = this;
+						
+						// Windows resize cookie acceptance event
+						$(window).on("resize.cookieAcceptance", function() {
+							
+							// Check if is an app
+							if(Common.isApp() === true) {
+							
+								// Turn off window resize cookie acceptance event
+								$(window).off("resize.cookieAcceptance");
+								
+								// Hide
+								self.hide();
+								
+								// Clear can show
+								self.canShow = false;
+							}
+						});
 						
 						// Return true
 						return true;

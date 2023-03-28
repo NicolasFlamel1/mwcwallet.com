@@ -214,10 +214,10 @@ class TorProxy {
 		static get DEFAULT_TOR_PROXY_ADDRESS() {
 		
 			// Set server
-			var server = (Common.isExtension() === true || location["protocol"] === "file:") ? new URL(HTTP_SERVER_ADDRESS) : location;
+			var server = (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL) ? new URL(HTTP_SERVER_ADDRESS) : location;
 		
 			// Return default Tor proxy address
-			return "http" + ((server["protocol"] === Common.HTTPS_PROTOCOL) ? "s" : "") + "://" + server["hostname"] + "/tor/";
+			return ((server["protocol"] === Common.HTTPS_PROTOCOL) ? Common.HTTPS_PROTOCOL : Common.HTTP_PROTOCOL) + "//" + server["hostname"] + "/tor/";
 		}
 }
 

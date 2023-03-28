@@ -32,12 +32,12 @@ class Focus {
 				}
 			});
 			
-			// Check if is an extension and a popup or is an app
-			if((Common.isExtension() === true && Common.isPopup() === true) || Common.isApp() === true) {
-				
-				// Document key down event
-				$(document).on("keydown", function(event) {
-				
+			// Document key down event
+			$(document).on("keydown", function(event) {
+			
+				// Check if is an extension and a popup or is an app
+				if((Common.isExtension() === true && Common.isPopup() === true) || Common.isApp() === true) {
+			
 					// Check if key tab is pressed
 					if(event["which"] === "\t".charCodeAt(0)) {
 					
@@ -108,8 +108,8 @@ class Focus {
 							event.preventDefault();
 						}
 					}
-				});
-			}
+				}
+			});
 		}
 		
 		// Save
