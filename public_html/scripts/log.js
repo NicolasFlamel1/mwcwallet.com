@@ -47,7 +47,7 @@ class Log {
 			if(typeof Log.logDisplay !== "undefined" && Log.logDisplay["length"] !== 0) {
 		
 				// Get if log display is scrolled to the bottom
-				var scrollToBottom = Log.logDisplay.get(0)["scrollHeight"] - Log.logDisplay.get(0)["scrollTop"] <= Log.logDisplay.get(0)["clientHeight"];
+				var scrollToBottom = Math.abs(Log.logDisplay.get(0)["scrollHeight"] - Log.logDisplay.get(0)["clientHeight"] - Log.logDisplay.get(0)["scrollTop"]) <= Scroll.TOLERANCE;
 				
 				// Append message to message display
 				Log.messageDisplay.append("<p class=\"contextMenu\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('%1$u:'), [
@@ -64,7 +64,7 @@ class Log {
 					requestAnimationFrame(function() {
 				
 						// Scroll log display to the bottom
-						Log.logDisplay.get(0)["scrollTop"] = Log.logDisplay.get(0)["scrollHeight"] - Log.logDisplay.get(0)["clientHeight"];
+						Log.logDisplay.get(0)["scrollTop"] = Log.logDisplay.get(0)["scrollHeight"] - Log.logDisplay.get(0)["clientHeight"] + Scroll.TOLERANCE;
 					});
 				}
 				

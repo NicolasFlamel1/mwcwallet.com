@@ -297,10 +297,10 @@
 			"Checksum" => "yk2GBWu9O3ZjP0dmvKrvDz4jI2SCzvwXbVZUQy1sw9AOHHiMwUspwD/c+L/Nuhpbsl5hyHyQyU5rkXGTnbBCcg=="
 		],
 		"./scripts/log.js" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "gbCZy+OHBjani+0rLpX5C2qcC+RipRQKgoI62Pm4aAEsK3V0wKSNaz9i5XoLPSI1+Fu2kiVbckhS+sYsLdHgKQ=="
+			"Checksum" => "yFJPoSVIP7X7QLN1H2z3xnSRIonc1Zr6SzA3ZNH0UW1Bpzgd77oAdK7V3Jg8xdQAJ0lX2u6aKYbs98I9XZEuFg=="
 		],
 		"./scripts/qrcode-generator-1.4.4.js" => [
 			"Version" => 5,
@@ -687,10 +687,10 @@
 			"Checksum" => "qBjb4NmgQ4zX2LcSrrv1ZttoRYfe0RUKWvwdv3qJvAHV+tvWoAdeaj2VEYjqJHoOa8MilptjVF+/O3IKyDpNhA=="
 		],
 		"./scripts/message.js" => [
-			"Version" => 7,
+			"Version" => 8,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "hpheoeq+ys8uUEL2WUvOnDbNfDzrXiby3Z+jfdVxsxctLUkLBuD3nEtnsPzGH2RQzcfeMQuii36QF4JcoclWbg=="
+			"Checksum" => "qVcZrk9DIQxCbpnZAVVeW6b1155HHvxwJDNb31J9ZRTYhsIQ764PecVnwxzqFRm5jgzO1CAZjE9Cnx2AzmdM+A=="
 		],
 		"./scripts/common.js" => [
 			"Version" => 57,
@@ -735,10 +735,10 @@
 			"Checksum" => "aWPcZ8cSOyW0hKu7hOVlQrx4fwuZt5E6vftLCyOboHC1HTPUoizRoRtdLeGipTXLZ4dpGo6HmjanE4SFHPDDIQ=="
 		],
 		"./scripts/scroll.js" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "03YSXbjRWk2Eod/YV17+YIAHvyNnABOJ0qD3OzNBDv2xTeB0y/PqBBKJKhSUC6goFFdIubkejP97p2uL7eTujw=="
+			"Checksum" => "pgExXV4p0ebaDuAaMvUh+bdmAzcNCc5eqTJjylQnKnbQy0+rzNi64SLUa5CBrwwJxHoym7zNBnTYkh8my4Wzag=="
 		],
 		"./scripts/startup_images_creator.js" => [
 			"Version" => 5,
@@ -837,10 +837,10 @@
 			"Checksum" => "8gWi0mY0k0ioClGm+Lcc+uVGCzlpG8SbngtCTBaIrDgvsN25XsAIWp1yQsLLakQcSzqYmMCF6RUbGRxcUEXQhg=="
 		],
 		"./scripts/log_section.js" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "/bUMki4pRNv48ReFqi6+EG2HRLbemO32D95KvdWvvbrwxJ7k4jM7Hj7rrv30ba0PAlZP6d/oNFfeOkmcY3XW3A=="
+			"Checksum" => "h4APTTWPxoKWLuY4r/aimVgTfXAbxgexTWCSMvQaDoALxljcXZmLHwukvjfY4ts6mMc2yKZ1t21D/t+pvMQyDg=="
 		],
 		"./scripts/initial_heights_obtained.js" => [
 			"Version" => 4,

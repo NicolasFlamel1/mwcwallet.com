@@ -74,6 +74,13 @@ class Scroll {
 			// Clear prevent scrolling keys
 			this.preventScrollingKeys = false;
 		}
+		
+		// Tolerance
+		static get TOLERANCE() {
+		
+			// Return tolerance
+			return 2;
+		}
 	
 	// Private
 	

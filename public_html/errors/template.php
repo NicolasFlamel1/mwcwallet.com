@@ -1001,6 +1001,9 @@
 		// Index not found
 		var INDEX_NOT_FOUND = -1;
 		
+		// Scroll tolerance
+		var SCROLL_TOLERANCE = 2;
+		
 	
 		// Global variables
 		
@@ -1228,7 +1231,7 @@
 					addClass(messageDisplayText["parentNode"], "scrollUp");
 				
 				// Check if scrolled to the bottom
-				if(messageDisplayText["scrollHeight"] - messageDisplayText["scrollTop"] <= messageDisplayText["clientHeight"])
+				if(Math.abs(messageDisplayText["scrollHeight"] - messageDisplayText["clientHeight"] - messageDisplayText["scrollTop"]) <= SCROLL_TOLERANCE)
 				
 					// Hide scroll down arrow
 					removeClass(messageDisplayText["parentNode"], "scrollDown");

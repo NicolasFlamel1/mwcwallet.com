@@ -129,7 +129,7 @@ class LogSection extends Section {
 				if(self.isShown() === true) {
 			
 					// Update scroll to bottom
-					self.scrollToBottom = self.getDisplay().get(0)["scrollHeight"] - self.getDisplay().get(0)["scrollTop"] <= self.getDisplay().get(0)["clientHeight"];
+					self.scrollToBottom = Math.abs(self.getDisplay().get(0)["scrollHeight"] - self.getDisplay().get(0)["clientHeight"] - self.getDisplay().get(0)["scrollTop"]) <= Scroll.TOLERANCE;
 				}
 			});
 			
@@ -153,7 +153,7 @@ class LogSection extends Section {
 					requestAnimationFrame(function() {
 					
 						// Scroll display to the bottom
-						self.getDisplay().get(0)["scrollTop"] = self.getDisplay().get(0)["scrollHeight"] - self.getDisplay().get(0)["clientHeight"];
+						self.getDisplay().get(0)["scrollTop"] = self.getDisplay().get(0)["scrollHeight"] - self.getDisplay().get(0)["clientHeight"] + Scroll.TOLERANCE;
 					});
 				}
 			});
@@ -165,7 +165,7 @@ class LogSection extends Section {
 				if(self.scrollToBottom === true) {
 				
 					// Scroll display to the bottom
-					self.getDisplay().get(0)["scrollTop"] = self.getDisplay().get(0)["scrollHeight"] - self.getDisplay().get(0)["clientHeight"];
+					self.getDisplay().get(0)["scrollTop"] = self.getDisplay().get(0)["scrollHeight"] - self.getDisplay().get(0)["clientHeight"] + Scroll.TOLERANCE;
 				}
 			});
 		}

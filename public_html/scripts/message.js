@@ -65,7 +65,7 @@ class Message {
 					$(this).parent().addClass("scrollUp");
 				
 				// Check if scrolled to the bottom
-				if(this["scrollHeight"] - this["scrollTop"] <= this["clientHeight"])
+				if(Math.abs(this["scrollHeight"] - this["clientHeight"] - this["scrollTop"]) <= Scroll.TOLERANCE)
 				
 					// Hide scroll down arrow
 					$(this).parent().removeClass("scrollDown");
