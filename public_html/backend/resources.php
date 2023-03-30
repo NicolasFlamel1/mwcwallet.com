@@ -441,10 +441,10 @@
 			"Checksum" => "HXalEjHaNCXllLsT3dKTTMxKNgnetgHPVymdILPEuLIVorKLEDInK20ck8lq8nFIQPAblK5sf79H3lIg83GqTg=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 53,
+			"Version" => 56,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "8cBSmUZx9wWTGaEDJayk0yWWoJetaoSFxjI65+45OxNOUWndRRoyor/ajF5F1oy/MMqXAg+9kRGLjA7lUbjHyg=="
+			"Checksum" => "CvmvVbaUiWs4yuPO5SCcbKMXeMEuWGezCNBnIgDE77B2t2tOzccG+SVzcgI6Z/BIjhuR64lqY/ifbN3EEOZT3w=="
 		],
 		"./scripts/LedgerJS_Browser-0.0.2.js" => [
 			"Version" => 1,
@@ -453,10 +453,10 @@
 			"Checksum" => "WWrHw7TzCNscPmJbc80xUfy489yUi4N+Q8ZSwlu8ZtokUGL3TUkm+h3QccgB+lhcmGA0uLNGDLmp0/fWyNXfUg=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 25,
+			"Version" => 37,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "eua4F3OYvNpgrn6jO1toZS90Z3dkamENqoPj6NcCGdSP9/vjxFJZUU8PvxCceAe4KIIoIQaDQt2XkPhaNRQ25A=="
+			"Checksum" => "eUmnp2ulu+Cky6/NrOumBG/i1xhZFg+mfAROzKUkYqFD0hS4H1IBqGt3SxcdbXB2mROYOk0h9+cC0SLFhO2ozw=="
 		],
 		"./scripts/proof_builder.js" => [
 			"Version" => 5,
@@ -531,13 +531,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 46,
+			"Version" => 47,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 114,
+			"Version" => 115,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -549,7 +549,7 @@
 			"Checksum" => "fgXcToDtI6wmtS0RjZW5pbWUYkBBkENvqM+gtInk+grrPOQxx37PqgMCyjDm5JTlC3fMvdWSeNrWv1T1CZ0a3g=="
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 41,
+			"Version" => 42,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -1287,10 +1287,10 @@
 			"Checksum" => "+iLOox399ALnS2ocTTcoR8TeLA911Bq1xoTAcINCUU40rxukwsiTQUbPLWxukc4VqPRhUlbTiTLie5fVPL64+Q=="
 		],
 		"./styles/wallet_section.css" => [
-			"Version" => 9,
+			"Version" => 10,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "EyICm3EVTVoUfvkdrs8IZaIgrPe9hdjZCYGxYHYLpv2j/vCBFh+1i4yjPZ0l6dxky+N1lgjYKdIMsCGt1Tr7KQ=="
+			"Checksum" => "7/0Nqu/gnmgiKdVCIHGNMXYxnQkcbWrr534/q+suIVGf7P6ipqVKf1D5ho1IIEWb6MuCDxHlSIhOpiT+TYZXsg=="
 		],
 		"./styles/send_payment_section.css" => [
 			"Version" => 4,

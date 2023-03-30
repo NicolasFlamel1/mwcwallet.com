@@ -570,6 +570,8 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.tr
 	font-weight: bold;
 	content: "\F058";
 	font-size: 15pt;
+	position: relative;
+	left: 1px;
 }
 
 main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button.confirmed > span.name > span.confirmed {

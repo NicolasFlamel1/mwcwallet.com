@@ -449,7 +449,7 @@ class HardwareWallet {
 																	self.releaseExclusiveLock();
 																
 																	// Reject error
-																	reject(Message.createText(Language.getDefaultTranslation('Getting the seed cookie from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+																	reject(Message.createText(Language.getDefaultTranslation('Getting the seed cookie from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 																});
 															}
 														
@@ -475,7 +475,7 @@ class HardwareWallet {
 																self.releaseExclusiveLock();
 															
 																// Reject error
-																reject(Message.createText(Language.getDefaultTranslation('Getting the seed cookie from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+																reject(Message.createText(Language.getDefaultTranslation('Getting the seed cookie from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 															});
 														});
 													}
@@ -529,7 +529,7 @@ class HardwareWallet {
 														self.releaseExclusiveLock();
 													
 														// Reject error
-														reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+														reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 													});
 												}
 											}
@@ -556,7 +556,7 @@ class HardwareWallet {
 													self.releaseExclusiveLock();
 												
 													// Reject error
-													reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+													reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 												});
 											}
 										}
@@ -583,7 +583,7 @@ class HardwareWallet {
 												self.releaseExclusiveLock();
 											
 												// Reject error
-												reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+												reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 											});
 										}
 									}
@@ -610,7 +610,7 @@ class HardwareWallet {
 											self.releaseExclusiveLock();
 										
 											// Reject error
-											reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+											reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 										});
 									}
 								}
@@ -637,7 +637,7 @@ class HardwareWallet {
 										self.releaseExclusiveLock();
 									
 										// Reject error
-										reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+										reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 									});
 								}
 							
@@ -663,7 +663,7 @@ class HardwareWallet {
 									self.releaseExclusiveLock();
 								
 									// Reject error
-									reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+									reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 								});
 							});
 						
@@ -3161,6 +3161,13 @@ class HardwareWallet {
 					// Catch errors
 					}).catch(function(error) {
 					
+						// Check if error doesn't contain a status code but does contain a message with a status code
+						if(typeof error === "object" && error !== null && "statusCode" in error === false && "message" in error === true && typeof error["message"] === "string" && HardwareWallet.ERROR_MESSAGE_STATUS_PATTERN.test(error["message"]) === true) {
+						
+							// Set error's status code
+							error["statusCode"] = parseInt(error["message"].match(HardwareWallet.ERROR_MESSAGE_STATUS_PATTERN)[1], Common.HEX_NUMBER_BASE);
+						}
+						
 						// Check if the hardware wallet is locked and not set to fail on lock
 						if(typeof error === "object" && error !== null && "statusCode" in error === true && (error["statusCode"] === HardwareWallet.DEVICE_LOCKED_RESPONSE_STATUS || error["statusCode"] === HardwareWallet.OPERATING_SYSTEM_LOCKED_RESPONSE_STATUS) && failOnLock === false) {
 						
@@ -3238,6 +3245,13 @@ class HardwareWallet {
 												
 												// Catch errors
 												}).catch(function(error) {
+												
+													// Check if error doesn't contain a status code but does contain a message with a status code
+													if(typeof error === "object" && error !== null && "statusCode" in error === false && "message" in error === true && typeof error["message"] === "string" && HardwareWallet.ERROR_MESSAGE_STATUS_PATTERN.test(error["message"]) === true) {
+													
+														// Set error's status code
+														error["statusCode"] = parseInt(error["message"].match(HardwareWallet.ERROR_MESSAGE_STATUS_PATTERN)[1], Common.HEX_NUMBER_BASE);
+													}
 												
 													// Check if the hardware wallet is locked and not set to fail on lock
 													if(typeof error === "object" && error !== null && "statusCode" in error === true && (error["statusCode"] === HardwareWallet.DEVICE_LOCKED_RESPONSE_STATUS || error["statusCode"] === HardwareWallet.OPERATING_SYSTEM_LOCKED_RESPONSE_STATUS) && failOnLock === false) {
@@ -3843,6 +3857,13 @@ class HardwareWallet {
 		
 			// Return encryption and decryption maximum chunk size
 			return 64;
+		}
+		
+		// Error message status pattern
+		static get ERROR_MESSAGE_STATUS_PATTERN() {
+		
+			// Return error message status pattern
+			return /\(0x([A-F0-9]+)\)$/ui;
 		}
 }
 

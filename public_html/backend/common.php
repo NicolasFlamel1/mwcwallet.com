@@ -12,7 +12,8 @@
 	const VERSION_CHANGES = [
 		"Fixed bold fonts being displayed inconsistently across different browsers.",
 		"Fixed error response messages not being displayed if they contained certain characters.",
-		"Improved localization support."
+		"Improved localization support.",
+		"Fixed detecting when a hardware wallet is locked."
 	];
 	
 	// Maintenance start time

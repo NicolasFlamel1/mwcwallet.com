@@ -11315,7 +11315,7 @@ class Api {
 																																																			else if(error === HardwareWallet.USER_REJECTED_ERROR) {
 																																																			
 																																																				// Reject error
-																																																				reject(Message.createText(Language.getDefaultTranslation('Finalizing the transaction on the hardware wallet was denied.')));
+																																																				reject(Message.createText(Language.getDefaultTranslation('Approving the transaction on the hardware wallet was denied.')));
 																																																			}
 																																																			
 																																																			// Otherwise
@@ -11391,7 +11391,7 @@ class Api {
 																																																		else if(error === HardwareWallet.USER_REJECTED_ERROR) {
 																																																		
 																																																			// Reject error
-																																																			reject(Message.createText(Language.getDefaultTranslation('Finalizing the transaction on the hardware wallet was denied.')));
+																																																			reject(Message.createText(Language.getDefaultTranslation('Approving the transaction on the hardware wallet was denied.')));
 																																																		}
 																																																		
 																																																		// Otherwise
