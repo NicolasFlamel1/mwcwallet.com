@@ -169,6 +169,13 @@ class Language {
 						// Make language display button not transition and set that it isn't clicked
 						languageDisplayButton.removeClass("transition clicked");
 					}
+				
+				// Language display button language change event
+				}).on(Language.CHANGE_EVENT, function() {
+				
+					// Update language display select's size
+					languageDisplaySelect.width(languageDisplayButton.width());
+					languageDisplaySelect.height(languageDisplayButton.height());
 				});
 				
 				// Language display focus out event
@@ -1189,7 +1196,7 @@ class Language {
 		static setCookie() {
 		
 			// Set language cookie as current language
-			document["cookie"] = Language.COOKIE_NAME + "=" + Language.currentLanguage + "; max-age=" + Language.COOKIE_MAX_AGE.toFixed() + "; secure; samesite=strict; priority=high; path=/";
+			document["cookie"] = Language.COOKIE_NAME + "=" + Language.currentLanguage + "; max-age=" + Language.COOKIE_MAX_AGE.toFixed() + "; secure; samesite=strict; priority=high; path=/; partitioned";
 		}
 		
 		// Set local storage
@@ -1425,7 +1432,7 @@ class Language {
 		static get COOKIE_NAME() {
 		
 			// Return cookie name
-			return "Language";
+			return "__Host-Language";
 		}
 		
 		// Cookie max age
@@ -1524,20 +1531,6 @@ class Language {
 		
 			// Return placeholder pattern
 			return new RegExp("^" + Common.escapeRegularExpression(Language.ESCAPE_CHARACTER) + "(\\d+)\\$([" + Common.escapeRegularExpression(Language.NUMBER_PLACEHOLDER_TYPE + Language.CURRENCY_PLACEHOLDER_TYPE + Language.TRANSLATED_TEXT_PLACEHOLDER_TYPE + Language.NOT_TRANSLATED_TEXT_PLACEHOLDER_TYPE + Language.TIME_PLACEHOLDER_TYPE + Language.DATE_PLACEHOLDER_TYPE + Language.TIMESTAMP_PLACEHOLDER_TYPE + Language.TRANSLATED_LINK_PLACEHOLDER_TYPE + Language.NOT_TRANSLATED_LINK_PLACEHOLDER_TYPE + Language.VERSION_PLACEHOLDER_TYPE) + "])$", "u");
-		}
-		
-		// Double quote escape pattern
-		static get DOUBLE_QUOTE_ESCAPE_PATTERN() {
-		
-			// Return double quote escape pattern
-			return /["\\]/ug;
-		}
-		
-		// Double quote escape result
-		static get DOUBLE_QUOTE_ESCAPE_RESULT() {
-		
-			// Return double quote escape result
-			return "\\$&";
 		}
 		
 		// Default formatter locale

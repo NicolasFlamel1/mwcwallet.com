@@ -815,7 +815,7 @@ class WalletSection extends Section {
 								self.showingSyncDone = true;
 								
 								// Get if percent changed
-								var percentChange = WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET !== parseFloat(self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset"));
+								var percentChanged = WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET !== parseFloat(self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset"));
 								
 								// Set shown syncing percent and allow it to transition
 								self.balanceDisplay.find("circle.foreground").removeClass("noTransition").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toFixed());
@@ -830,7 +830,7 @@ class WalletSection extends Section {
 								self.balanceDisplay.removeClass("failed");
 								
 								// Check if percent changed
-								if(percentChange === true) {
+								if(percentChanged === true) {
 								
 									// Check if shown syncing percent is visible
 									if(self.balanceDisplay.find("circle.foreground").is(":visible") === true) {

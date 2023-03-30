@@ -42,7 +42,7 @@
 	// Encode string
 	function encodeString($string) {
 	
-		// Return string backticks, ampersands, double quotes, single quotes, greater than signs, and less than signs encoded as HTML
+		// Return string with backticks, ampersands, double quotes, single quotes, greater than signs, and less than signs encoded as HTML
 		return preg_replace('/`/u', GRAVE_ACCENT_HTML_ENTITY, htmlspecialchars($string, ENT_QUOTES));
 	}
 	
@@ -50,7 +50,14 @@
 	function escapeString($string) {
 	
 		// Return string with double quotes and back slashes escaped
-		return preg_replace('/("|\\\\)/u', "\\\\$1", $string);
+		return preg_replace('/(["\\\\])/u', "\\\\$1", $string);
+	}
+	
+	// Sanitize attribute name
+	function sanitizeAttributeName($string) {
+	
+		// Return string without spaces, equals, double quotes, single quotes, backticks, greater than signs, less than signs, and ampersands
+		return preg_replace('/[ ="\'`<>&]/u', "", $string);
 	}
 	
 	// Get year

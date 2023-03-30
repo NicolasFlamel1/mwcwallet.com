@@ -19,7 +19,7 @@
 			foreach(TILE_IMAGES as $tileImage)
 			
 				// Display tile image
-				echo PHP_EOL . "\t\t\t<" . escapeString(mb_strtolower($tileImage[TILE_IMAGE_PARTS["Ratio"]])) . escapeString($tileImage[TILE_IMAGE_PARTS["X Dimension"]]) . "x" . escapeString($tileImage[TILE_IMAGE_PARTS["Y Dimension"]]) . "logo src=\"" . escapeString(getResource($tileImage[TILE_IMAGE_PARTS["File Path"]])) . "\"/>";
+				echo PHP_EOL . "\t\t\t<" . sanitizeAttributeName(mb_strtolower($tileImage[TILE_IMAGE_PARTS["Ratio"]])) . sanitizeAttributeName($tileImage[TILE_IMAGE_PARTS["X Dimension"]]) . "x" . sanitizeAttributeName($tileImage[TILE_IMAGE_PARTS["Y Dimension"]]) . "logo src=\"" . escapeString(getResource($tileImage[TILE_IMAGE_PARTS["File Path"]])) . "\"/>";
 		?>
 			
 			<TileColor><?= encodeString(BACKGROUND_COLOR); ?></TileColor>

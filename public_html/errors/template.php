@@ -1231,16 +1231,18 @@
 					addClass(messageDisplayText["parentNode"], "scrollUp");
 				
 				// Check if scrolled to the bottom
-				if(Math.abs(messageDisplayText["scrollHeight"] - messageDisplayText["clientHeight"] - messageDisplayText["scrollTop"]) <= SCROLL_TOLERANCE)
+				if(Math.abs(messageDisplayText["scrollHeight"] - messageDisplayText["clientHeight"] - messageDisplayText["scrollTop"]) <= SCROLL_TOLERANCE || messageDisplayText["scrollHeight"] - messageDisplayText["scrollTop"] <= messageDisplayText["clientHeight"]) {
 				
 					// Hide scroll down arrow
 					removeClass(messageDisplayText["parentNode"], "scrollDown");
+				}
 				
 				// Otherwise
-				else
+				else {
 				
 					// Show scroll down arrow
 					addClass(messageDisplayText["parentNode"], "scrollDown");
+				}
 			}
 			
 			// Otherwise

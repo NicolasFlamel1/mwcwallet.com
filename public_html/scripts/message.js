@@ -65,16 +65,24 @@ class Message {
 					$(this).parent().addClass("scrollUp");
 				
 				// Check if scrolled to the bottom
-				if(Math.abs(this["scrollHeight"] - this["clientHeight"] - this["scrollTop"]) <= Scroll.TOLERANCE)
+				if(Math.abs(this["scrollHeight"] - this["clientHeight"] - this["scrollTop"]) <= Scroll.TOLERANCE || this["scrollHeight"] - this["scrollTop"] <= this["clientHeight"]) {
 				
 					// Hide scroll down arrow
 					$(this).parent().removeClass("scrollDown");
+				}
 				
 				// Otherwise
-				else
+				else {
 				
 					// Show scroll down arrow
 					$(this).parent().addClass("scrollDown");
+				}
+			
+			// Message display text language change event
+			}).on(Language.CHANGE_EVENT, function() {
+			
+				// Update scroll bars
+				self.updateScrollBars();
 			});
 			
 			// Message text input input event

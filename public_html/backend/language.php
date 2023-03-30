@@ -90,7 +90,7 @@
 			$localeLanguage = (array_key_exists("HTTP_ACCEPT_LANGUAGE", $_SERVER) === TRUE) ? locale_accept_from_http($_SERVER["HTTP_ACCEPT_LANGUAGE"]) : FALSE;
 			
 			// Get prefered languages
-			$preferedLanguages = array_unique(($localeLanguage === FALSE) ? ((array_key_exists("Language", $_COOKIE) === FALSE) ? [
+			$preferedLanguages = array_unique(($localeLanguage === FALSE) ? ((array_key_exists("__Host-Language", $_COOKIE) === FALSE) ? [
 			
 				// Default language
 				DEFAULT_LANGUAGE
@@ -98,12 +98,12 @@
 			] : [
 			
 				// Choosen language
-				$_COOKIE["Language"],
+				$_COOKIE["__Host-Language"],
 				
 				// Default language
 				DEFAULT_LANGUAGE
 			
-			]) : ((array_key_exists("Language", $_COOKIE) === FALSE) ? [
+			]) : ((array_key_exists("__Host-Language", $_COOKIE) === FALSE) ? [
 			
 				// Locale language with variant
 				preg_replace('/_/u', "-", $localeLanguage),
@@ -117,7 +117,7 @@
 			] : [
 			
 				// Choosen language
-				$_COOKIE["Language"],
+				$_COOKIE["__Host-Language"],
 			
 				// Locale language with variant
 				preg_replace('/_/u', "-", $localeLanguage),
