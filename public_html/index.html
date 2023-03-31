@@ -1418,7 +1418,9 @@
 			<section class="maintenanceNotification hide noFocus">
 				<div class="maintenanceNotification">
 					<span></span>
-					<button class="translatable" data-text="<?= encodeString(getDefaultTranslation('OK')); ?>"><?= encodeString(getTranslation('OK')); ?></button>
+					<button>
+						<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('OK')); ?>"><?= encodeString(getTranslation('OK')); ?></span>
+					</button>
 				</div>
 			</section>
 			<main>
@@ -2318,14 +2320,18 @@
 				<div class="cookieAcceptance">
 					<span></span>
 					<p class="translatable" data-text="<?= encodeString(getDefaultTranslation('This site uses cookies that are essential to its functionality. By using this site\'s services or clicking OK, you agree to this site\'s use of cookies.')); ?>"><?= encodeString(getTranslation('This site uses cookies that are essential to its functionality. By using this site\'s services or clicking OK, you agree to this site\'s use of cookies.')); ?></p>
-					<button class="translatable" data-text="<?= encodeString(getDefaultTranslation('OK')); ?>"><?= encodeString(getTranslation('OK')); ?></button>
+					<button>
+						<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('OK')); ?>"><?= encodeString(getTranslation('OK')); ?></span>
+					</button>
 				</div>
 			</section>
 			<section class="installApp hide noFocus">
 				<div class="installApp">
 					<img src="<?= encodeString(getResource("./images/app_icons/app_icon.svg")); ?>" integrity="<?= encodeString(getChecksum("./images/app_icons/app_icon.svg")); ?>">
 					<p class="translatable" data-text="<?= encodeString(getDefaultTranslation('Install the MWC Wallet app?')); ?>"><?= encodeString(getTranslation('Install the MWC Wallet app?')); ?></p>
-					<button class="installNow translatable" data-text="<?= encodeString(getDefaultTranslation('Install Now')); ?>"><?= encodeString(getTranslation('Install Now')); ?></button>
+					<button class="installNow">
+						<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Install Now')); ?>"><?= encodeString(getTranslation('Install Now')); ?></span>
+					</button>
 					<button class="remindMeLater translatable" data-text="<?= encodeString(getDefaultTranslation('Remind me later')); ?>" title="<?= encodeString(getTranslation('Remind me later')); ?>">
 						<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Remind me later')); ?>"><?= encodeString(getTranslation('Remind me later')); ?></span>
 					</button>

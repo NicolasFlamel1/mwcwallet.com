@@ -72,6 +72,8 @@ section.maintenanceNotification > div > p {
 	flex-grow: 1;
 	flex-shrink: 1;
 	padding: 0 1em;
+	word-wrap: break-word;
+	min-width: 0;
 }
 
 @media only screen and (max-width: 350px) {
@@ -79,6 +81,7 @@ section.maintenanceNotification > div > p {
 	section.maintenanceNotification > div > p {
 		padding: 0 1em 0 1.5em;
 		text-align: center;
+		min-width: 30%;
 	}
 }
 
@@ -96,8 +99,10 @@ section.maintenanceNotification > div > button {
 	line-height: unset;
 	white-space: normal;
 	font-family: Arial, sans-serif;
+	overflow: hidden;
 	line-height: 1.5em;
 	padding: 0.6em 1em 0.5em 1em;
+	min-width: calc(1em * 2 + 1.5em);
 }
 
 @media only screen and (any-hover: hover) {
@@ -117,4 +122,11 @@ section.maintenanceNotification > div > button:focus {
 section.maintenanceNotification > div > button:active {
 	background: rgba(12, 12, 13, 0.3);
 	color: rgb(12, 12, 13);
+}
+
+section.maintenanceNotification > div > button > span {
+	min-height: auto;
+	white-space: normal;
+	cursor: pointer !important;
+	min-width: 1.5em;
 }

@@ -427,8 +427,8 @@ class Language {
 					// Check if applicable language is available
 					if(applicableLanguage in AVAILABLE_LANGUAGES === true) {
 					
-						// Check if text exist for the applicable language and the specified text exists
-						if("Text" in AVAILABLE_LANGUAGES[applicableLanguage] === true && text in AVAILABLE_LANGUAGES[applicableLanguage]["Text"] === true) {
+						// Check if text exist for the applicable language and the specified text exists and isn't empty
+						if("Text" in AVAILABLE_LANGUAGES[applicableLanguage] === true && text in AVAILABLE_LANGUAGES[applicableLanguage]["Text"] === true && AVAILABLE_LANGUAGES[applicableLanguage]["Text"][text]["length"] !== 0) {
 						
 							// Set text to the text for the applicable language
 							text = AVAILABLE_LANGUAGES[applicableLanguage]["Text"][text];

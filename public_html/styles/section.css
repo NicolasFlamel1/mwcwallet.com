@@ -408,6 +408,7 @@ main > div.unlocked > div > div > div.sections > div > div > div > div > div.val
 
 main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input[type="number"] {
 	padding: 0 0.6em;
+	min-width: calc((2em - 0.6em) * 2);
 }
 
 main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input.notEmpty[type="password"], main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > input[type="password"]:-webkit-autofill::first-line {
@@ -448,14 +449,11 @@ main > div.unlocked > div > div > div.sections > div > div > div > div > div.val
 	cursor: pointer;
 	text-align-last: center;
 	padding: 0 1.7em 0 0.6em;
+	min-width: calc(2em * 2 - 1.7em - 0.6em);
 }
 
 main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select:focus-visible {
 	color: rgb(12, 12, 13) !important;
-}
-
-main > div.unlocked.minimal > div > div > div.sections > div > div > div > div > div.value > select {
-	min-width: 7em;
 }
 
 main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > select > option {

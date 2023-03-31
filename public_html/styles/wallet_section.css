@@ -609,6 +609,7 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.tr
 
 main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span > span:first-child {
 	flex-shrink: 0;
+	max-width: 50%;
 }
 
 main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.id {

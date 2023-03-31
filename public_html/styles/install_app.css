@@ -69,6 +69,8 @@ section.installApp > div > p {
 	flex-grow: 1;
 	flex-shrink: 1;
 	padding: 0 1em;
+	word-wrap: break-word;
+	min-width: 0;
 }
 
 @media only screen and (max-width: 350px) {
@@ -76,6 +78,7 @@ section.installApp > div > p {
 	section.installApp > div > p {
 		padding: 0 1em 0 1.5em;
 		text-align: center;
+		min-width: 30%;
 	}
 }
 
@@ -96,6 +99,7 @@ section.installApp > div > button {
 	overflow: hidden;
 	line-height: 1.5em;
 	padding: 0.6em 1em 0.5em 1em;
+	min-width: calc(1em * 2 + 1.5em);
 	
 }
 
@@ -122,6 +126,7 @@ section.installApp > div > button > span {
 	min-height: auto;
 	white-space: normal;
 	cursor: pointer !important;
+	min-width: 1.5em;
 }
 
 @media only screen and (max-width: 700px) and (any-hover: hover) {
@@ -145,6 +150,7 @@ section.installApp > div > button > span {
 		font-size: 14pt;
 		font-family: "Font Awesome";
 		font-weight: bold;
+		min-width: auto;
 	}
 
 	section.installApp > div > button.remindMeLater:focus {

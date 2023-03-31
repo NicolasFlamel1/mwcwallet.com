@@ -910,7 +910,7 @@ class Wallets {
 									// Release wallet's exclusive transactions lock
 									self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
 								
-									// Cancel interation with not found response and catch errors
+									// Cancel interaction with not found response and catch errors
 									interaction.cancel(Listener.NOT_FOUND_RESPONSE).catch(function(error) {
 									
 									});
@@ -928,7 +928,7 @@ class Wallets {
 										// Release wallet's exclusive transactions lock
 										self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
 									
-										// Cancel interation with error and catch errors
+										// Cancel interaction with error and catch errors
 										interaction.cancel(error).catch(function(error) {
 										
 										});
@@ -939,7 +939,7 @@ class Wallets {
 										// Release wallet's exclusive transactions lock
 										self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
 									
-										// Cancel interation with error and catch errors
+										// Cancel interaction with error and catch errors
 										interaction.cancel(error).catch(function(error) {
 										
 										// Finally
@@ -957,7 +957,7 @@ class Wallets {
 									// Release wallet's exclusive transactions lock
 									self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
 								
-									// Cancel interation with error and catch errors
+									// Cancel interaction with error and catch errors
 									interaction.cancel(error).catch(function(error) {
 									
 									});
@@ -971,7 +971,7 @@ class Wallets {
 							// Release wallet's exclusive transactions lock
 							self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
 						
-							// Cancel interation with not found response and catch errors
+							// Cancel interaction with not found response and catch errors
 							interaction.cancel(Listener.NOT_FOUND_RESPONSE).catch(function(error) {
 							
 							});
@@ -981,7 +981,7 @@ class Wallets {
 				// Catch errors
 				}).catch(function(error) {
 				
-					// Cancel interation with not found response and catch errors
+					// Cancel interaction with not found response and catch errors
 					interaction.cancel(Listener.NOT_FOUND_RESPONSE).catch(function(error) {
 					
 					});
