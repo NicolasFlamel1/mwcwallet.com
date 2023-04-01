@@ -408,7 +408,7 @@ class Prices {
 				var newPrices = [];
 				
 				// Check if response is valid
-				if(Prices.API_CURRENCY_ID in response === true && Object.isObject(response[Prices.API_CURRENCY_ID]) === true) {
+				if(Object.isObject(response) === true && Prices.API_CURRENCY_ID in response === true && Object.isObject(response[Prices.API_CURRENCY_ID]) === true) {
 				
 					// Go through price for each currency
 					Object.keys(response[Prices.API_CURRENCY_ID]).forEach(function(currency) {

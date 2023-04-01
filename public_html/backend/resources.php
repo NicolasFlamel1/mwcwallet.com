@@ -291,10 +291,10 @@
 			"Checksum" => NULL
 		],
 		"./scripts/prices.js" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "yk2GBWu9O3ZjP0dmvKrvDz4jI2SCzvwXbVZUQy1sw9AOHHiMwUspwD/c+L/Nuhpbsl5hyHyQyU5rkXGTnbBCcg=="
+			"Checksum" => "8gRXfMW36n2mBVYqsSH3emzd0I0l/JJbRTlu67ja27hptLr4YsGG1rZG4w1U8450ZJ8WMzCRNeX6rJbj4NiWgw=="
 		],
 		"./scripts/log.js" => [
 			"Version" => 6,

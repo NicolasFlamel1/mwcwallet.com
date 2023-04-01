@@ -140,6 +140,7 @@
 			min-width: 250px;
 			min-height: 250px;
 			overflow: hidden;
+			font-size: 100%;
 		}
 		
 		body.loading, body.loading * {
