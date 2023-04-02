@@ -89,8 +89,11 @@
 			// Get locale language
 			$localeLanguage = (array_key_exists("HTTP_ACCEPT_LANGUAGE", $_SERVER) === TRUE) ? locale_accept_from_http($_SERVER["HTTP_ACCEPT_LANGUAGE"]) : FALSE;
 			
+			// Get language parameter
+			$languageParameter = (array_key_exists("Language", $_GET) === TRUE && is_string($_GET["Language"]) === TRUE && mb_strlen($_GET["Language"]) !== 0) ? $_GET["Language"] : FALSE;
+			
 			// Get prefered languages
-			$preferedLanguages = array_unique(($localeLanguage === FALSE) ? ((array_key_exists("__Host-Language", $_COOKIE) === FALSE) ? [
+			$preferedLanguages = array_unique(($languageParameter === FALSE) ? (($localeLanguage === FALSE) ? ((array_key_exists("__Host-Language", $_COOKIE) === FALSE || is_string($_COOKIE["__Host-Language"]) === FALSE || mb_strlen($_COOKIE["__Host-Language"]) === 0) ? [
 			
 				// Default language
 				DEFAULT_LANGUAGE
@@ -103,7 +106,7 @@
 				// Default language
 				DEFAULT_LANGUAGE
 			
-			]) : ((array_key_exists("__Host-Language", $_COOKIE) === FALSE) ? [
+			]) : ((array_key_exists("__Host-Language", $_COOKIE) === FALSE || is_string($_COOKIE["__Host-Language"]) === FALSE || mb_strlen($_COOKIE["__Host-Language"]) === 0) ? [
 			
 				// Locale language with variant
 				preg_replace('/_/u', "-", $localeLanguage),
@@ -127,7 +130,57 @@
 				
 				// Default language
 				DEFAULT_LANGUAGE
-			]));
+			
+			])) : (($localeLanguage === FALSE) ? ((array_key_exists("__Host-Language", $_COOKIE) === FALSE || is_string($_COOKIE["__Host-Language"]) === FALSE || mb_strlen($_COOKIE["__Host-Language"]) === 0) ? [
+			
+				// Language parameter
+				$languageParameter,
+				
+				// Default language
+				DEFAULT_LANGUAGE
+			
+			] : [
+			
+				// Choosen language
+				$_COOKIE["__Host-Language"],
+				
+				// Language parameter
+				$languageParameter,
+				
+				// Default language
+				DEFAULT_LANGUAGE
+			
+			]) : ((array_key_exists("__Host-Language", $_COOKIE) === FALSE || is_string($_COOKIE["__Host-Language"]) === FALSE || mb_strlen($_COOKIE["__Host-Language"]) === 0) ? [
+			
+				// Language parameter
+				$languageParameter,
+				
+				// Locale language with variant
+				preg_replace('/_/u', "-", $localeLanguage),
+				
+				// Locale language without variant
+				preg_split('/_/u', $localeLanguage)[0],
+				
+				// Default language
+				DEFAULT_LANGUAGE
+			
+			] : [
+			
+				// Choosen language
+				$_COOKIE["__Host-Language"],
+			
+				// Language parameter
+				$languageParameter,
+				
+				// Locale language with variant
+				preg_replace('/_/u', "-", $localeLanguage),
+				
+				// Locale language without variant
+				preg_split('/_/u', $localeLanguage)[0],
+				
+				// Default language
+				DEFAULT_LANGUAGE
+			])));
 			
 			// Get available languages
 			$availableLanguages = getAvailableLanguages();
