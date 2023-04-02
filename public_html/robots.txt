@@ -6,7 +6,7 @@
 	header("Content-Type: text/plain; charset=" . mb_internal_encoding());
 
 ?># Sitemap
-Sitemap: http://<?= rawurlencode($_SERVER["SERVER_NAME"]); ?>/sitemap.xml
+Sitemap: https://<?= rawurlencode($_SERVER["SERVER_NAME"]); ?>/sitemap.xml
 
 # Prevent and allow access
 User-agent: *
