@@ -1339,7 +1339,7 @@ class SendPaymentSection extends Section {
 						catch(error) {
 						
 							// Check if sending to self
-							if((parsedUrl["origin"] === HTTP_SERVER_ADDRESS || parsedUrl["origin"] === TOR_SERVER_ADDRESS) && Common.removeTrailingSlashes(Common.removeDuplicateSlashes(parsedUrl["pathname"])) === "/wallet/" + wallet.getAddressSuffix()) {
+							if((parsedUrl["origin"] === HTTPS_SERVER_ADDRESS || parsedUrl["origin"] === TOR_SERVER_ADDRESS) && Common.removeTrailingSlashes(Common.removeDuplicateSlashes(parsedUrl["pathname"])) === "/wallet/" + wallet.getAddressSuffix()) {
 							
 								// Show send error
 								showSendError(Message.createText(Language.getDefaultTranslation('A wallet can\'t send payments to itself.')));

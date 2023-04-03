@@ -20,7 +20,7 @@
 	$path = $_SERVER["REQUEST_URI"];
 	
 	// Check if referrer does exists
-	if(array_key_exists("HTTP_REFERER", $_SERVER) === TRUE) {
+	if(array_key_exists("HTTP_REFERER", $_SERVER) === TRUE && is_string($_SERVER["HTTP_REFERER"]) === TRUE) {
 	
 		// Parse referrer as a URL
 		$url = parse_url($_SERVER["HTTP_REFERER"]);

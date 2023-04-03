@@ -11,7 +11,7 @@
 	const SECONDS_BEFORE_REFRESH = 5;
 	
 	// Check if referrer doesn't exist
-	if(array_key_exists("HTTP_REFERER", $_SERVER) === FALSE) {
+	if(array_key_exists("HTTP_REFERER", $_SERVER) === FALSE || is_string($_SERVER["HTTP_REFERER"]) === FALSE) {
 	
 		// Require 404 error page
 		require __DIR__ . "/404.html";

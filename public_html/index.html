@@ -15,7 +15,7 @@
 	$year = getYear();
 	
 	// Is crawler
-	$isCrawler = array_key_exists("HTTP_USER_AGENT", $_SERVER) === TRUE && mb_stristr($_SERVER["HTTP_USER_AGENT"], "googlebot") !== FALSE;
+	$isCrawler = array_key_exists("HTTP_USER_AGENT", $_SERVER) === TRUE && is_string($_SERVER["HTTP_USER_AGENT"]) === TRUE && mb_stristr($_SERVER["HTTP_USER_AGENT"], "googlebot") !== FALSE;
 	
 	
 	// Main function
@@ -1896,7 +1896,7 @@
 													</button>
 												</div>
 											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("No Interaction Lock Timeout Minutes"); ?>" data-dependencies='<?= escapeData([["Enable Automatic Lock", true]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the duration of inactivity required for the automatic lock to occur')); ?>" title="<?= encodeString(getTranslation('Sets the duration of inactivity required for the automatic lock to occur')); ?>">
+											<div class="setting translatable" data-setting="<?= encodeString("No Interaction Lock Timeout Minutes"); ?>" data-dependencies='<?= escapeData([["Enable Automatic Lock", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the duration of inactivity required for the automatic lock to occur')); ?>" title="<?= encodeString(getTranslation('Sets the duration of inactivity required for the automatic lock to occur')); ?>">
 												<p>
 													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Minutes of inactivity required for automatic lock')); ?>"><?= encodeString(getTranslation('Minutes of inactivity required for automatic lock')); ?></span>
 												</p>
@@ -1928,7 +1928,7 @@
 													</button>
 												</div>
 											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Currency Display"); ?>" data-dependencies='<?= escapeData([["Enable Price", true]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the currency of the displayed prices')); ?>" title="<?= encodeString(getTranslation('Sets the currency of the displayed prices')); ?>">
+											<div class="setting translatable" data-setting="<?= encodeString("Currency Display"); ?>" data-dependencies='<?= escapeData([["Enable Price", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the currency of the displayed prices')); ?>" title="<?= encodeString(getTranslation('Sets the currency of the displayed prices')); ?>">
 												<p>
 													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Currency of the displayed prices')); ?>"><?= encodeString(getTranslation('Currency of the displayed prices')); ?></span>
 												</p>
@@ -1951,7 +1951,7 @@
 													<span></span>
 												</div>
 											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Update Price Interval Minutes"); ?>" data-dependencies='<?= escapeData([["Enable Price", true]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the duration of time between price updates')); ?>" title="<?= encodeString(getTranslation('Sets the duration of time between price updates')); ?>">
+											<div class="setting translatable" data-setting="<?= encodeString("Update Price Interval Minutes"); ?>" data-dependencies='<?= escapeData([["Enable Price", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the duration of time between price updates')); ?>" title="<?= encodeString(getTranslation('Sets the duration of time between price updates')); ?>">
 												<p>
 													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Minutes between price updates')); ?>"><?= encodeString(getTranslation('Minutes between price updates')); ?></span>
 												</p>
@@ -1961,7 +1961,7 @@
 													<span></span>
 												</div>
 											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Displayed Address Type"); ?>" data-dependencies='<?= escapeData([["Use Custom Listener", false]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address type to display for each wallet')); ?>" title="<?= encodeString(getTranslation('Sets the address type to display for each wallet')); ?>">
+											<div class="setting translatable" data-setting="<?= encodeString("Displayed Address Type"); ?>" data-dependencies='<?= escapeData([["Use Custom Listener", FALSE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address type to display for each wallet')); ?>" title="<?= encodeString(getTranslation('Sets the address type to display for each wallet')); ?>">
 												<p>
 													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Displayed address type')); ?>"><?= encodeString(getTranslation('Displayed address type')); ?></span>
 												</p>
@@ -2022,7 +2022,7 @@
 													</button>
 												</div>
 											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Custom Node Address"); ?>" data-dependencies='<?= escapeData([["Use Custom Node", true]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address for the custom node')); ?>" title="<?= encodeString(getTranslation('Sets the address for the custom node')); ?>">
+											<div class="setting translatable" data-setting="<?= encodeString("Custom Node Address"); ?>" data-dependencies='<?= escapeData([["Use Custom Node", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address for the custom node')); ?>" title="<?= encodeString(getTranslation('Sets the address for the custom node')); ?>">
 												<p>
 													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Custom node address')); ?>"><?= encodeString(getTranslation('Custom node address')); ?></span>
 												</p>
@@ -2033,7 +2033,7 @@
 													<span class="capsLock hide"></span>
 												</div>
 											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Custom Node Secret"); ?>" data-sensitive data-dependencies='<?= escapeData([["Use Custom Node", true]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the foreign API secret for the custom node. Leave this empty if the custom node doesn\'t require a foreign API secret')); ?>" title="<?= encodeString(getTranslation('Sets the foreign API secret for the custom node. Leave this empty if the custom node doesn\'t require a foreign API secret')); ?>">
+											<div class="setting translatable" data-setting="<?= encodeString("Custom Node Secret"); ?>" data-sensitive data-dependencies='<?= escapeData([["Use Custom Node", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the foreign API secret for the custom node. Leave this empty if the custom node doesn\'t require a foreign API secret')); ?>" title="<?= encodeString(getTranslation('Sets the foreign API secret for the custom node. Leave this empty if the custom node doesn\'t require a foreign API secret')); ?>">
 												<p>
 													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Custom node foreign API secret')); ?>"><?= encodeString(getTranslation('Custom node foreign API secret')); ?></span>
 												</p>
@@ -2090,7 +2090,7 @@
 													</button>
 												</div>
 											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Custom Tor Proxy Address"); ?>" data-dependencies='<?= escapeData([["Use Custom Tor Proxy", true]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address for the custom Tor proxy')); ?>" title="<?= encodeString(getTranslation('Sets the address for the custom Tor proxy')); ?>">
+											<div class="setting translatable" data-setting="<?= encodeString("Custom Tor Proxy Address"); ?>" data-dependencies='<?= escapeData([["Use Custom Tor Proxy", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address for the custom Tor proxy')); ?>" title="<?= encodeString(getTranslation('Sets the address for the custom Tor proxy')); ?>">
 												<p>
 													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Custom Tor proxy address')); ?>"><?= encodeString(getTranslation('Custom Tor proxy address')); ?></span>
 												</p>
@@ -2113,7 +2113,7 @@
 													</button>
 												</div>
 											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Custom Listener Address"); ?>" data-dependencies='<?= escapeData([["Use Custom Listener", true]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address for the custom listener')); ?>" title="<?= encodeString(getTranslation('Sets the address for the custom listener')); ?>">
+											<div class="setting translatable" data-setting="<?= encodeString("Custom Listener Address"); ?>" data-dependencies='<?= escapeData([["Use Custom Listener", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address for the custom listener')); ?>" title="<?= encodeString(getTranslation('Sets the address for the custom listener')); ?>">
 												<p>
 													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Custom listener address')); ?>"><?= encodeString(getTranslation('Custom listener address')); ?></span>
 												</p>
@@ -2389,8 +2389,8 @@
 		
 		// Constants
 		
-		// HTTP server address
-		var HTTP_SERVER_ADDRESS = <?= (array_key_exists("HTTP_SERVER_ADDRESS", $_SERVER) === TRUE) ? "\"" . escapeString($_SERVER["HTTP_SERVER_ADDRESS"]) . "\"" : "\"http\" + ((location[\"protocol\"] === \"https:\") ? \"s\" : \"\") + \"://\" + location[\"hostname\"]"; ?>;
+		// HTTPS server address
+		var HTTPS_SERVER_ADDRESS = <?= (array_key_exists("HTTPS_SERVER_ADDRESS", $_SERVER) === TRUE) ? "\"" . escapeString($_SERVER["HTTPS_SERVER_ADDRESS"]) . "\"" : "\"http\" + ((location[\"protocol\"] === \"https:\") ? \"s\" : \"\") + \"://\" + location[\"hostname\"]"; ?>;
 		
 		// Tor server address
 		var TOR_SERVER_ADDRESS = <?= (array_key_exists("TOR_SERVER_ADDRESS", $_SERVER) === TRUE) ? "\"" . escapeString($_SERVER["TOR_SERVER_ADDRESS"]) . "\"" : "\"http\" + ((location[\"protocol\"] === \"https:\") ? \"s\" : \"\") + \"://\" + location[\"hostname\"]"; ?>;

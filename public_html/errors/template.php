@@ -15,7 +15,7 @@
 	$year = getYear();
 	
 	// Is crawler
-	$isCrawler = array_key_exists("HTTP_USER_AGENT", $_SERVER) === TRUE && mb_stristr($_SERVER["HTTP_USER_AGENT"], "googlebot") !== FALSE;
+	$isCrawler = array_key_exists("HTTP_USER_AGENT", $_SERVER) === TRUE && is_string($_SERVER["HTTP_USER_AGENT"]) === TRUE && mb_stristr($_SERVER["HTTP_USER_AGENT"], "googlebot") !== FALSE;
 	
 	
 	// Main function

@@ -29,6 +29,9 @@ class Prices {
 			
 			// Set update price interval minutes to setting's default value
 			this.updatePriceIntervalMinutes = Prices.SETTINGS_UPDATE_PRICE_INTERVAL_MINUTES_DEFAULT_VALUE;
+			
+			// Can get prices
+			this.canGetPrices = false;
 		
 			// Create database
 			Database.createDatabase(function(database, currentVersion) {
@@ -105,6 +108,9 @@ class Prices {
 							
 							// Return getting all prices with the wallet type in the database
 							return Database.getResults(Prices.OBJECT_STORE_NAME, Database.GET_ALL_RESULTS, Database.GET_ALL_RESULTS, Prices.DATABASE_WALLET_TYPE_NAME, Consensus.getWalletType()).then(function(results) {
+							
+								// Set can get prices
+								self.canGetPrices = true;
 							
 								// Go through all prices
 								for(var i = 0; i < results["length"]; ++i) {
@@ -350,147 +356,158 @@ class Prices {
 		// Update prices
 		updatePrices() {
 		
-			// Log message
-			Log.logMessage(Language.getDefaultTranslation('Trying to connect to the prices server at %1$y.'), [
-			
-				// Address
-				Prices.API_URL
-			]);
+			// Check if can get prices
+			if(this.canGetPrices === true) {
 		
-			// Initialize unique currencies to include default currencies
-			var uniqueCurrencies = new Set(Prices.DEFAULT_CURRENCIES);
-			
-			// Go through all currencies
-			var allCurrencies = Prices.getAllCurrencies();
-			
-			Object.keys(allCurrencies).forEach(function(language) {
-			
-				// Append currency to list of unique currencies
-				uniqueCurrencies.add(allCurrencies[language].toUpperCase());
-			});
-			
-			// Set self
-			var self = this;
-			
-			// Get price for each currency
-			$.ajax({
-			
-				// URL
-				"url": Prices.getApiRequest(uniqueCurrencies),
-				
-				// Data type
-				"dataType": "text"
-			
-			// Done
-			}).done(function(response) {
-			
 				// Log message
-				Log.logMessage(Language.getDefaultTranslation('Successfully connected to the prices server.'));
+				Log.logMessage(Language.getDefaultTranslation('Trying to connect to the prices server at %1$y.'), [
+				
+					// Address
+					Prices.API_URL
+				]);
 			
-				// Try
-				try {
+				// Initialize unique currencies to include default currencies
+				var uniqueCurrencies = new Set(Prices.DEFAULT_CURRENCIES);
 				
-					// Parse response as JSON
-					response = JSONBigNumber.parse(response);
-				}
+				// Go through all currencies
+				var allCurrencies = Prices.getAllCurrencies();
 				
-				// Catch errors
-				catch(error) {
+				Object.keys(allCurrencies).forEach(function(language) {
 				
-					// Log message
-					Log.logMessage(Language.getDefaultTranslation('Received an invalid response from the prices server.'));
+					// Append currency to list of unique currencies
+					uniqueCurrencies.add(allCurrencies[language].toUpperCase());
+				});
 				
-					// Return
-					return;
-				}
+				// Set self
+				var self = this;
 				
-				// Initialize new prices
-				var newPrices = [];
+				// Get price for each currency
+				$.ajax({
 				
-				// Check if response is valid
-				if(Object.isObject(response) === true && Prices.API_CURRENCY_ID in response === true && Object.isObject(response[Prices.API_CURRENCY_ID]) === true) {
-				
-					// Go through price for each currency
-					Object.keys(response[Prices.API_CURRENCY_ID]).forEach(function(currency) {
+					// URL
+					"url": Prices.getApiRequest(uniqueCurrencies),
 					
-						// Check if currency and price are valid
-						if(typeof currency === "string" && uniqueCurrencies.has(currency.toUpperCase()) === true && response[Prices.API_CURRENCY_ID][currency] instanceof BigNumber === true && response[Prices.API_CURRENCY_ID][currency].isPositive() === true && response[Prices.API_CURRENCY_ID][currency].isFinite() === true) {
-					
-							// Append new price to list
-							newPrices.push({
-							
-								// Wallet type
-								[Database.toKeyPath(Prices.DATABASE_WALLET_TYPE_NAME)]: Consensus.getWalletType(),
-							
-								// Currency
-								[Database.toKeyPath(Prices.DATABASE_CURRENCY_NAME)]: currency.toUpperCase(),
-								
-								// Price
-								[Database.toKeyPath(Prices.DATABASE_PRICE_NAME)]: response[Prices.API_CURRENCY_ID][currency].toFixed()
-							});
-							
-							// Update prices in list
-							self.prices[currency.toUpperCase()] = response[Prices.API_CURRENCY_ID][currency];
-						}
-					});
-				}
+					// Data type
+					"dataType": "text"
 				
-				// Check if new prices exist
-				if(newPrices["length"] !== 0) {
-				
-					// Set prices obtained
-					self.pricesObtained = true;
-				
-					// Save new prices in the database
-					Database.saveResults(Prices.OBJECT_STORE_NAME, newPrices, [], Database.CREATE_NEW_TRANSACTION, Database.STRICT_DURABILITY).then(function() {
-					
-						// Log message
-						Log.logMessage(Language.getDefaultTranslation('Successfully updated the prices.'));
-					
-						// Trigger change event
-						$(self).trigger(Prices.CHANGE_EVENT, self.prices);
-					
-					// Catch errors
-					}).catch(function(error) {
-					
-						// Log message
-						Log.logMessage(Language.getDefaultTranslation('Updating the prices failed.'));
-					});
-				}
-				
-				// Otherwise
-				else {
-				
-					// Log message
-					Log.logMessage(Language.getDefaultTranslation('Received an invalid response from the prices server.'));
-				}
-			
-			// Catch errors
-			}).fail(function(request) {
-			
-				// Check if connecting to the prices server failed
-				if(request["status"] === Common.HTTP_NO_RESPONSE_STATUS) {
-			
-					// Log message
-					Log.logMessage(Language.getDefaultTranslation('Connecting to the prices server failed.'));
-				}
-				
-				// Otherwise
-				else {
+				// Done
+				}).done(function(response) {
 				
 					// Log message
 					Log.logMessage(Language.getDefaultTranslation('Successfully connected to the prices server.'));
 				
-					// Log message
-					Log.logMessage(Language.getDefaultTranslation('Received an invalid response from the prices server.'));
-				}
+					// Try
+					try {
+					
+						// Parse response as JSON
+						response = JSONBigNumber.parse(response);
+					}
+					
+					// Catch errors
+					catch(error) {
+					
+						// Log message
+						Log.logMessage(Language.getDefaultTranslation('Received an invalid response from the prices server.'));
+					
+						// Return
+						return;
+					}
+					
+					// Initialize new prices
+					var newPrices = [];
+					
+					// Check if response is valid
+					if(Object.isObject(response) === true && Prices.API_CURRENCY_ID in response === true && Object.isObject(response[Prices.API_CURRENCY_ID]) === true) {
+					
+						// Go through price for each currency
+						Object.keys(response[Prices.API_CURRENCY_ID]).forEach(function(currency) {
+						
+							// Check if currency and price are valid
+							if(typeof currency === "string" && uniqueCurrencies.has(currency.toUpperCase()) === true && response[Prices.API_CURRENCY_ID][currency] instanceof BigNumber === true && response[Prices.API_CURRENCY_ID][currency].isPositive() === true && response[Prices.API_CURRENCY_ID][currency].isFinite() === true) {
+						
+								// Append new price to list
+								newPrices.push({
+								
+									// Wallet type
+									[Database.toKeyPath(Prices.DATABASE_WALLET_TYPE_NAME)]: Consensus.getWalletType(),
+								
+									// Currency
+									[Database.toKeyPath(Prices.DATABASE_CURRENCY_NAME)]: currency.toUpperCase(),
+									
+									// Price
+									[Database.toKeyPath(Prices.DATABASE_PRICE_NAME)]: response[Prices.API_CURRENCY_ID][currency].toFixed()
+								});
+								
+								// Update prices in list
+								self.prices[currency.toUpperCase()] = response[Prices.API_CURRENCY_ID][currency];
+							}
+						});
+					}
+					
+					// Check if new prices exist
+					if(newPrices["length"] !== 0) {
+					
+						// Set prices obtained
+						self.pricesObtained = true;
+					
+						// Save new prices in the database
+						Database.saveResults(Prices.OBJECT_STORE_NAME, newPrices, [], Database.CREATE_NEW_TRANSACTION, Database.STRICT_DURABILITY).then(function() {
+						
+							// Log message
+							Log.logMessage(Language.getDefaultTranslation('Successfully updated the prices.'));
+						
+							// Trigger change event
+							$(self).trigger(Prices.CHANGE_EVENT, self.prices);
+						
+						// Catch errors
+						}).catch(function(error) {
+						
+							// Log message
+							Log.logMessage(Language.getDefaultTranslation('Updating the prices failed.'));
+						});
+					}
+					
+					// Otherwise
+					else {
+					
+						// Log message
+						Log.logMessage(Language.getDefaultTranslation('Received an invalid response from the prices server.'));
+					}
+				
+				// Catch errors
+				}).fail(function(request) {
+				
+					// Check if connecting to the prices server failed
+					if(request["status"] === Common.HTTP_NO_RESPONSE_STATUS) {
+				
+						// Log message
+						Log.logMessage(Language.getDefaultTranslation('Connecting to the prices server failed.'));
+					}
+					
+					// Otherwise
+					else {
+					
+						// Log message
+						Log.logMessage(Language.getDefaultTranslation('Successfully connected to the prices server.'));
+					
+						// Log message
+						Log.logMessage(Language.getDefaultTranslation('Received an invalid response from the prices server.'));
+					}
+				
+				// Always
+				}).always(function() {
+				
+					// Refresh prices timeout
+					self.refreshPricesTimeout();
+				});
+			}
 			
-			// Always
-			}).always(function() {
+			// Otherwise
+			else {
 			
 				// Refresh prices timeout
-				self.refreshPricesTimeout();
-			});
+				this.refreshPricesTimeout();
+			}
 		}
 		
 		// Refresh prices timeout

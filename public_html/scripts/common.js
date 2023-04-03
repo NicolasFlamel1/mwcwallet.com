@@ -349,8 +349,8 @@ class Common {
 			// Try
 			try {
 		
-				// Parse HTTP server address as a URL
-				var parsedHttpServerUrl = new URL(HTTP_SERVER_ADDRESS);
+				// Parse HTTPS server address as a URL
+				var parsedHttpsServerUrl = new URL(HTTPS_SERVER_ADDRESS);
 				
 				// Parse Tor server address as a URL
 				var parsedTorServerUrl = new URL(TOR_SERVER_ADDRESS);
@@ -366,8 +366,8 @@ class Common {
 				return url;
 			}
 				
-			// Check if URL's protocol is HTTP, the HTTP server address's protocol is HTTPS, and the URL is the same site as the HTTP server address
-			if(parsedUrl["protocol"] === Common.HTTP_PROTOCOL && parsedHttpServerUrl["protocol"] === Common.HTTPS_PROTOCOL && parsedUrl["hostname"] === parsedHttpServerUrl["hostname"]) {
+			// Check if URL's protocol is HTTP, the HTTPS server address's protocol is HTTPS, and the URL is the same site as the HTTPS server address
+			if(parsedUrl["protocol"] === Common.HTTP_PROTOCOL && parsedHttpsServerUrl["protocol"] === Common.HTTPS_PROTOCOL && parsedUrl["hostname"] === parsedHttpsServerUrl["hostname"]) {
 			
 				// Create an HTTPS URL from the URL
 				var httpsUrl = Common.HTTPS_PROTOCOL + url.substring(Common.HTTP_PROTOCOL["length"]);
@@ -376,8 +376,8 @@ class Common {
 				return httpsUrl;
 			}
 			
-			// Otherwise check if URL's protocol is WebSocket, the HTTP server address's protocol is HTTPS, and the URL is the same site as the HTTP server address
-			else if(parsedUrl["protocol"] === Common.WEBSOCKET_PROTOCOL && parsedHttpServerUrl["protocol"] === Common.HTTPS_PROTOCOL && parsedUrl["hostname"] === parsedHttpServerUrl["hostname"]) {
+			// Otherwise check if URL's protocol is WebSocket, the HTTPS server address's protocol is HTTPS, and the URL is the same site as the HTTPS server address
+			else if(parsedUrl["protocol"] === Common.WEBSOCKET_PROTOCOL && parsedHttpsServerUrl["protocol"] === Common.HTTPS_PROTOCOL && parsedUrl["hostname"] === parsedHttpsServerUrl["hostname"]) {
 			
 				// Create an WebSocket secure URL from the URL
 				var wssUrl = Common.WEBSOCKET_SECURE_PROTOCOL + url.substring(Common.WEBSOCKET_PROTOCOL["length"]);

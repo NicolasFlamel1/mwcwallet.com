@@ -7363,7 +7363,7 @@ class Api {
 										try {
 										
 											// Get receiver's Tor address from URL
-											var receiverTorAddress = Tor.getTorAddressFromUrl(url);
+											Tor.getTorAddressFromUrl(url);
 										}
 										
 										// Catch errors
