@@ -128,6 +128,16 @@ class Prices {
 								// Check if price is enabled and network type is mainnet
 								if(self.enablePrice === true && Consensus.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE) {
 								
+									// Check if update prices timeout exists
+									if(self.updatePricesTimeout !== Prices.NO_TIMEOUT) {
+									
+										// Clear update prices timeout
+										clearTimeout(self.updatePricesTimeout);
+										
+										// Set updates prices timeout to no timeout
+										self.updatePricesTimeout = Prices.NO_TIMEOUT;
+									}
+								
 									// Update prices
 									self.updatePrices();
 								}

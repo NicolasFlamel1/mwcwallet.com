@@ -27,7 +27,7 @@
 				if(count($appIcon) === count(APP_ICON_PARTS)) {
 				
 					// Check if app icon isn't platform dependant or the platform is applicable
-					if($appIcon[APP_ICON_PARTS["Mobile Only"]] === NULL || (array_key_exists("HTTP_USER_AGENT", $_SERVER) === TRUE && is_string($_SERVER["HTTP_USER_AGENT"]) === TRUE && mb_strpos(mb_strtolower($_SERVER["HTTP_USER_AGENT"]), "mobile") !== FALSE) === $appIcon[APP_ICON_PARTS["Mobile Only"]]) {
+					if($appIcon[APP_ICON_PARTS["Mobile Only"]] === NULL || (array_key_exists("HTTP_USER_AGENT", $_SERVER) === TRUE && is_string($_SERVER["HTTP_USER_AGENT"]) === TRUE && mb_stristr($_SERVER["HTTP_USER_AGENT"], "mobile") !== FALSE) === $appIcon[APP_ICON_PARTS["Mobile Only"]]) {
 			
 						// Display app icon
 						echo (($firstMatch === TRUE) ? "" : ",") . PHP_EOL . "\t\t{" . PHP_EOL;
