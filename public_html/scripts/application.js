@@ -5665,6 +5665,9 @@ class Application {
 				// Set timeout
 				setTimeout(function() {
 				
+					// Trigger input on display to show's inputs
+					displayToShow.find("input:not(.hide)").trigger("input");
+				
 					// Show display to show children
 					displayToShow.children().removeClass("hide");
 					
