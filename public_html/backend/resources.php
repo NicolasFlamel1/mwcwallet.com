@@ -825,10 +825,10 @@
 			"Checksum" => "jVJh75bMO5jvvuYBEjIahWrig9bAAw7uezAgUed6GobDyIOO/dsO6XpBoeOO/gjfNIfxEOGv+CjFs7G06bzMjw=="
 		],
 		"./scripts/wallet_section.js" => [
-			"Version" => 33,
+			"Version" => 34,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "vwkbq+BrO6NNg4j3bLT4he3KEHDBTiCfN4Zp13D9gm1ljzAO4Yc6HQCXlBCvab1CBqRz8lHaTz0QJcxj6PCI0w=="
+			"Checksum" => "elTbSL2c+lHv6YQpPLiAy9o+SyaAdCb0JJMZ5bF4hxEtc5EV95OPFs55B5l29llEaxVCx2WDlbEADpcFrst1Eg=="
 		],
 		"./scripts/send_payment_section.js" => [
 			"Version" => 38,
