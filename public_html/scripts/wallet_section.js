@@ -182,9 +182,6 @@ class WalletSection extends Section {
 										// No transactions display transition ended event
 										self.transactionsDisplay.next().transitionEnded(function() {
 										
-											// Clear no transactions display transition timeout
-											clearTimeout(noTransactionsDisplayTransitionTimeout);
-										
 											// Check if shown
 											if(self.isShown() === true) {
 										
