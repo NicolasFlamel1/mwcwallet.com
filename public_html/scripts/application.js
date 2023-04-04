@@ -354,8 +354,8 @@ class Application {
 					// Hide unlocked display children
 					self.unlockedDisplay.children().addClass("hide");
 					
-					// Unlocked display children transition end event
-					self.unlockedDisplay.children().one("transitionend", function() {
+					// Unlocked display children transition ended event
+					self.unlockedDisplay.children().transitionEnded(function() {
 					
 						// Hide unlocked display
 						self.unlockedDisplay.addClass("hide");
@@ -368,7 +368,7 @@ class Application {
 						
 						// Reset unlocked
 						self.unlocked.reset();
-					});
+					}, "opacity");
 				}
 				
 				// Otherwise
@@ -2145,8 +2145,8 @@ class Application {
 										// Hide logo
 										self.logo.hide();
 										
-										// Create display form transition end event
-										self.createDisplay.children("form").one("transitionend", function() {
+										// Create display form transition ended event
+										self.createDisplay.children("form").transitionEnded(function() {
 										
 											// Hide create display
 											self.createDisplay.addClass("hide");
@@ -2241,7 +2241,7 @@ class Application {
 													}
 												});
 											}, 0);
-										});
+										}, "opacity");
 									}, Application.SHOW_UNLOCKED_DISPLAY_DELAY_MILLISECONDS);
 								
 								// Catch errors
@@ -2420,8 +2420,8 @@ class Application {
 								// Hide logo
 								self.logo.hide();
 
-								// Unlock display form transition end event
-								self.unlockDisplay.children("form").one("transitionend", function() {
+								// Unlock display form transition ended event
+								self.unlockDisplay.children("form").transitionEnded(function() {
 
 									// Hide unlock display
 									self.unlockDisplay.addClass("hide");
@@ -2490,15 +2490,15 @@ class Application {
 											ProtocolHandler.register();
 										}
 										
-										// Unlocked display children transition end event
-										self.unlockedDisplay.children().one("transitionend", function() {
-										
-											// Allow automatic lock
-											self.automaticLock.allow();
-										});
-										
 										// Check if message is not shown
 										if(self.message.isShown() === false) {
+										
+											// Unlocked display children transition ended event
+											self.unlockedDisplay.children().transitionEnded(function() {
+											
+												// Allow automatic lock
+												self.automaticLock.allow();
+											}, "opacity");
 										
 											// Enable unlocked
 											self.unlocked.enable();
@@ -2513,8 +2513,11 @@ class Application {
 										// Otherwise
 										else {
 										
-											// Unlocked display children transition end event
-											self.unlockedDisplay.children().one("transitionend", function() {
+											// Unlocked display children transition ended event
+											self.unlockedDisplay.children().transitionEnded(function() {
+											
+												// Allow automatic lock
+												self.automaticLock.allow();
 											
 												// Check if message is not shown
 												if(self.message.isShown() === false) {
@@ -2528,7 +2531,7 @@ class Application {
 													// Trigger section focus event on the current section
 													$(self.sections.getCurrentSection()).trigger(Section.FOCUS_EVENT);
 												}
-											});
+											}, "opacity");
 										}
 										
 										// Allow showing messages
@@ -2546,7 +2549,7 @@ class Application {
 											}, Common.randomNumber(Application.SHOW_INSTALL_APP_MINIMUM_DELAY_SECONDS, Application.SHOW_INSTALL_APP_MAXIMUM_DELAY_SECONDS) * Common.MILLISECONDS_IN_A_SECOND);
 										}
 									}, 0);
-								});
+								}, "opacity");
 							}, Application.SHOW_UNLOCKED_DISPLAY_DELAY_MILLISECONDS);
 							
 						// Catch errors
@@ -2659,8 +2662,8 @@ class Application {
 										// Hide message
 										self.message.hide();
 										
-										// Unlock display delete all wallets button transition end event
-										self.unlockDisplay.find("div.deleteAllWallets").one("transitionend", function() {
+										// Unlock display delete all wallets button transition ended event
+										self.unlockDisplay.find("div.deleteAllWallets").transitionEnded(function() {
 										
 											// Hide unlock display
 											self.unlockDisplay.addClass("hide");
@@ -2704,7 +2707,7 @@ class Application {
 												// Allow showing messages
 												self.message.allow();
 											}, 0);
-										});
+										}, "opacity");
 									
 									// Catch errors
 									}).catch(function(error) {
@@ -5647,8 +5650,8 @@ class Application {
 			// Set self
 			var self = this;
 			
-			// Loading display spinner transition end
-			this.loadingDisplay.children("div.spinner").one("transitionend", function() {
+			// Loading display spinner transition ended event
+			this.loadingDisplay.children("div.spinner").transitionEnded(function() {
 			
 				// Hide loading display
 				self.loadingDisplay.addClass("hide");
@@ -5687,8 +5690,8 @@ class Application {
 					// Show maintenance notification
 					self.maintenanceNotification.show();
 					
-					// Display to show form transition end event
-					displayToShow.children("form").one("transitionend", function() {
+					// Display to show form transition ended event
+					displayToShow.children("form").transitionEnded(function() {
 					
 						// Set everything to transition at normal speed
 						self.mainDisplay.addClass("normalTransitionSpeed");
@@ -5723,9 +5726,9 @@ class Application {
 						
 						// Allow showing messages
 						self.message.allow();
-					});
+					}, "opacity");
 				}, 0);
-			});
+			}, "opacity");
 		}
 		
 		// Show display
@@ -5853,8 +5856,8 @@ class Application {
 			// Hide display to show display logo
 			displayToShow.children("div.logo").addClass("hide");
 				
-			// Unlocked display children transition end event
-			this.unlockedDisplay.children().one("transitionend", function() {
+			// Unlocked display children transition ended event
+			this.unlockedDisplay.children().transitionEnded(function() {
 			
 				// Hide unlocked display
 				self.unlockedDisplay.addClass("hide");
@@ -5902,8 +5905,8 @@ class Application {
 					// Otherwise
 					else {
 					
-						// Display to show form transition end event
-						displayToShow.children("form").one("transitionend", function() {
+						// Display to show form transition ended event
+						displayToShow.children("form").transitionEnded(function() {
 						
 							// Check if message is not shown
 							if(self.message.isShown() === false) {
@@ -5914,13 +5917,13 @@ class Application {
 								// Focus on display to show
 								displayToShow.focus();
 							}
-						});
+						}, "opacity");
 					}
 					
 					// Allow showing messages
 					self.message.allow();
 				}, 0);
-			});
+			}, "opacity");
 		}
 		
 		// Reset

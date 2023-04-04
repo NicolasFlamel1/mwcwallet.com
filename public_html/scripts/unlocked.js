@@ -1146,47 +1146,8 @@ class Unlocked {
 									// Hide address display's text
 									addressDisplayText.addClass("hide");
 								
-									// Create address display text transition timeout
-									var addressDisplayTextTransitionTimeout = setTimeout(function() {
-									
-										// Turn off address display text transition end event
-										addressDisplayText.off("transitionend");
-										
-										// Check if unlocked display is shown
-										if(self.application.isUnlockedDisplayShown() === true) {
-										
-											// Check if address didn't change
-											if(address === wallet.getAddress(self.displayedAddressType)) {
-										
-												// Set address display's address
-												addressDisplay.attr(Common.DATA_ATTRIBUTE_PREFIX + "address", address);
-												
-												// Set timeout
-												setTimeout(function() {
-												
-													// Check if unlocked display is shown
-													if(self.application.isUnlockedDisplayShown() === true) {
-													
-														// Check if address didn't change
-														if(address === wallet.getAddress(self.displayedAddressType)) {
-											
-															// Set address display's text and show it
-															addressDisplayText.text(address).removeClass("hide");
-															
-															// Update address display
-															Unlocked.updateAddressDisplay(addressDisplayText);
-														}
-													}
-												}, Unlocked.SHOW_ADDRESS_DELAY_MILLISECONDS);
-											}
-										}
-									}, Unlocked.ADDRESS_DISPLAY_TEXT_TRANSITION_DURATION_MILLISECONDS);
-								
-									// Address display's text transition end event
-									addressDisplayText.one("transitionend", function() {
-									
-										// Clear address display text transition timeout
-										clearTimeout(addressDisplayTextTransitionTimeout);
+									// Address display's text transition ended event
+									addressDisplayText.transitionEnded(function() {
 									
 										// Check if unlocked display is shown
 										if(self.application.isUnlockedDisplayShown() === true) {
@@ -1216,7 +1177,7 @@ class Unlocked {
 												}, Unlocked.SHOW_ADDRESS_DELAY_MILLISECONDS);
 											}
 										}
-									});
+									}, "opacity");
 								}
 								
 								// Otherwise
@@ -2930,8 +2891,8 @@ class Unlocked {
 						// Collapse wallets display
 						self.walletsDisplay.removeClass("expand");
 						
-						// Wallets display transition end event
-						self.walletsDisplay.one("transitionend", function() {
+						// Wallets display transition ended event
+						self.walletsDisplay.transitionEnded(function() {
 						
 							// Hide wallets display section
 							self.walletsDisplay.children("div").addClass("hide");
@@ -2955,7 +2916,7 @@ class Unlocked {
 							
 							// Resolve
 							resolve();
-						});
+						}, "width");
 					}, 0);
 				});
 			}
@@ -3016,41 +2977,8 @@ class Unlocked {
 						// Check if button is visible
 						if(self.walletsDisplay.find("button.expand").is(":visible") === false) {
 						
-							// Create button transition timeout
-							var buttonTransitionTimeout = setTimeout(function() {
-							
-								// Turn off button transition end event
-								button.off("transitionend");
-								
-								// Set timeout
-								setTimeout(function() {
-							
-									// Remove button
-									button.remove();
-									
-									// Update wallets order buttons
-									self.updateWalletsOrderButtons();
-									
-									// Set timeout
-									setTimeout(function() {
-								
-										// Hide wallet's loading
-										self.walletsDisplay.find("div.loading").addClass("hide");
-										
-										// Resolve
-										resolve();
-										
-									}, Unlocked.REMOVE_WALLET_BUTTON_DELAY_ENDING_MILLISECONDS);
-									
-								}, Unlocked.REMOVE_WALLET_BUTTON_DELAY_AFTER_MILLISECONDS);
-								
-							}, Unlocked.WALLET_BUTTON_TRANSITION_DURATION_MILLISECONDS);
-						
-							// Button transition end event
-							button.one("transitionend", function() {
-							
-								// Clear button transition timeout
-								clearTimeout(buttonTransitionTimeout);
+							// Button transition ended event
+							button.transitionEnded(function() {
 							
 								// Set timeout
 								setTimeout(function() {
@@ -3073,7 +3001,7 @@ class Unlocked {
 									}, Unlocked.REMOVE_WALLET_BUTTON_DELAY_ENDING_MILLISECONDS);
 									
 								}, Unlocked.REMOVE_WALLET_BUTTON_DELAY_AFTER_MILLISECONDS);
-							});
+							}, "opacity");
 						}
 						
 						// Otherwise
@@ -3220,8 +3148,8 @@ class Unlocked {
 							});
 						});
 					
-					// Wallets display transition end event
-					}).one("transitionend", function() {
+					// Wallets display transition ended event
+					}).transitionEnded(function() {
 					
 						// Set that unlocked display has the wallets expanded
 						self.unlockedDisplay.addClass("walletsExpanded");
@@ -3246,7 +3174,7 @@ class Unlocked {
 							resolve();
 							
 						}, Unlocked.SHOW_WALLETS_AFTER_DELAY_MILLISECONDS);
-					});
+					}, "width");
 				}, 0);
 			});
 		}
@@ -3946,20 +3874,6 @@ class Unlocked {
 		
 			// Return wallet button height tolerance
 			return 1;
-		}
-		
-		// Address display text transition duration milliseconds
-		static get ADDRESS_DISPLAY_TEXT_TRANSITION_DURATION_MILLISECONDS() {
-		
-			// Return address display text transition duration milliseconds
-			return 250;
-		}
-		
-		// Wallet button transition duration milliseconds
-		static get WALLET_BUTTON_TRANSITION_DURATION_MILLISECONDS() {
-		
-			// Return wallet button transition duration milliseconds
-			return 150;
 		}
 		
 		// Show address delay milliseconds

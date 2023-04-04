@@ -357,8 +357,8 @@ class Message {
 							// Return promise
 							return new Promise(function(resolve, reject) {
 						
-								// Message display transition end event
-								self.messageDisplay.one("transitionend", function() {
+								// Message display transition ended event
+								self.messageDisplay.transitionEnded(function() {
 								
 									// Check if message display is still hidden
 									if(self.isShown() === false) {
@@ -378,7 +378,7 @@ class Message {
 								
 									// Resolve not displayed result
 									resolve(Message.NOT_DISPLAYED_RESULT);
-								});
+								}, "opacity");
 							});
 						}
 						
@@ -454,8 +454,8 @@ class Message {
 										// Hide message display
 										self.messageDisplay.addClass("hide");
 										
-										// Message display transition end event
-										self.messageDisplay.one("transitionend", function() {
+										// Message display transition ended event
+										self.messageDisplay.transitionEnded(function() {
 										
 											// Check if message display is still hidden
 											if(self.isShown() === false) {
@@ -475,7 +475,7 @@ class Message {
 										
 											// Resolve not displayed result
 											resolve(Message.NOT_DISPLAYED_RESULT);
-										});
+										}, "opacity");
 									}
 									
 									// Otherwise
@@ -710,26 +710,12 @@ class Message {
 									// Allow message display arrows to fade
 									self.messageDisplay.removeClass("noArrowTransition");
 									
-									// Set after show message timeout
-									var afterShowMessageTimeout = setTimeout(function() {
+									// Message display transition ended event
+									self.messageDisplay.transitionEnded(function() {
 									
-										// Turn off message display transition end message event
-										self.messageDisplay.off("transitionend.message");
-										
 										// After message shown
 										afterMessageShown();
-									
-									}, Message.MESSAGE_DISPLAY_TRANSITION_MILLISECONDS);
-									
-									// Message display transition end message event
-									self.messageDisplay.one("transitionend.message", function() {
-									
-										// Clear after show message timeout
-										clearTimeout(afterShowMessageTimeout);
-										
-										// After message shown
-										afterMessageShown();
-									});
+									}, "opacity");
 								}
 								
 								// Otherwise
@@ -747,12 +733,12 @@ class Message {
 									// Allow message display arrows to fade
 									self.messageDisplay.removeClass("noArrowTransition");
 									
-									// Message display message transition end event
-									self.messageDisplay.children("div").one("transitionend", function() {
+									// Message display message transition ended event
+									self.messageDisplay.children("div").transitionEnded(function() {
 									
 										// After message shown
 										afterMessageShown();
-									});
+									}, "opacity");
 								}
 							}
 						};
@@ -767,7 +753,7 @@ class Message {
 							self.messageDisplay.addClass("noMessage");
 							
 							// Message display message transition end event
-							self.messageDisplay.children("div").one("transitionend", function() {
+							self.messageDisplay.children("div").transitionEnded(function() {
 							
 								// Reset
 								self.reset();
@@ -778,7 +764,7 @@ class Message {
 									// Show message
 									showMessage();
 								}, 0);
-							});
+							}, "opacity");
 						}
 						
 						// Otherwise
@@ -852,8 +838,8 @@ class Message {
 					// Hide message display message
 					self.messageDisplay.addClass("noMessage");
 					
-					// Message display message transition end event
-					self.messageDisplay.children("div").one("transitionend", function() {
+					// Message display message transition ended event
+					self.messageDisplay.children("div").transitionEnded(function() {
 					
 						// Reset
 						self.reset();
@@ -870,7 +856,7 @@ class Message {
 							// Resolve
 							resolve();
 						}, 0);
-					});
+					}, "opacity");
 				}
 				
 				// Otherwise
@@ -879,8 +865,8 @@ class Message {
 					// Hide message display
 					self.messageDisplay.addClass("hide");
 					
-					// Message display transition end event
-					self.messageDisplay.one("transitionend", function() {
+					// Message display transition ended event
+					self.messageDisplay.transitionEnded(function() {
 					
 						// Check if message display is still hidden
 						if(self.isShown() === false) {
@@ -897,7 +883,7 @@ class Message {
 					
 						// Resolve
 						resolve();
-					});
+					}, "opacity");
 				}
 			});
 		}
@@ -992,17 +978,6 @@ class Message {
 			
 			// Set that button element is loading
 			buttonElement.addClass("loading");
-			
-			// Return promise
-			return new Promise(function(resolve, reject) {
-			
-				// Button element on transition end
-				buttonElement.one("transitionend", function() {
-				
-					// Resolve
-					resolve();
-				});
-			});
 		}
 		
 		// Prevent
@@ -1586,13 +1561,6 @@ class Message {
 				"<path class=\"cross\" d=\"M" + ((100 - 35) / 2).toFixed() + " " + ((100 - 35) / 2).toFixed() + " l35 35\" pathLength=\"100\"/>" +
 				"<path class=\"cross\" d=\"M" + ((100 + 35) / 2).toFixed() + " " + ((100 - 35) / 2).toFixed() + " l-35 35\" pathLength=\"100\"/>" +
 			"</svg>";
-		}
-		
-		// Message display transition milliseconds
-		static get MESSAGE_DISPLAY_TRANSITION_MILLISECONDS() {
-		
-			// Return message display transition milliseconds
-			return 150;
 		}
 		
 		// No message type

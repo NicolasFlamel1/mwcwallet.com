@@ -204,8 +204,8 @@ class SettingsSection extends Section {
 					
 					});
 					
-					// Button transition end event
-					button.one("transitionend", function() {
+					// Button transition ended event
+					button.transitionEnded(function() {
 					
 						// Allow automatic lock
 						self.getAutomaticLock().allow();
@@ -228,7 +228,7 @@ class SettingsSection extends Section {
 							// Allow showing messages
 							self.getMessage().allow();
 						}
-					});
+					}, "background");
 				
 				// Catch errors
 				}).catch(function(error) {

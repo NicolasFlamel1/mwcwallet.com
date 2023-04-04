@@ -263,15 +263,15 @@ class Tetris {
 			// Set self
 			var self = this;
 			
-			// Tetris display transition end event
-			this.tetrisDisplay.one("transitionend", function() {
+			// Tetris display transition ended event
+			this.tetrisDisplay.transitionEnded(function() {
 			
 				// Hide loading
 				self.application.hideLoading();
 				
 				// Set running
 				self.running = true;
-			});
+			}, "opacity");
 		}
 		
 		// Is shown
@@ -295,8 +295,8 @@ class Tetris {
 			// Set self
 			var self = this;
 			
-			// Tetris display transition end event
-			this.tetrisDisplay.one("transitionend", function() {
+			// Tetris display transition ended event
+			this.tetrisDisplay.transitionEnded(function() {
 			
 				// Set that body display isn't showing Tetris
 				self.bodyDisplay.removeClass("tetris");
@@ -330,7 +330,7 @@ class Tetris {
 					// Allow showing messages
 					self.message.allow();
 				});
-			});
+			}, "opacity");
 		}
 		
 		// Update size

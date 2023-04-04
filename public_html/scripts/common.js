@@ -1512,14 +1512,73 @@ if(typeof jQuery === "function") {
 			// Set self
 			var self = $(this);
 			
-			// Self scroll event
-			self.on("scroll", function(event) {
+			// Self scroll common event
+			self.on("scroll.common", function(event) {
 			
 				// Clear scroll timeout
 				clearTimeout(self.data("scrollTimeout"));
 				
 				// Set scroll timeout
 				self.data("scrollTimeout", setTimeout(callback.bind(self), SCROLL_IDLE_DURATION_MILLISECONDS, event));
+			});
+		});
+		
+		// Return elements
+		return this;
+	};
+	
+	// Transition ended
+	$["fn"].transitionEnded = function(callback, property) {
+	
+		// Go through each element
+		this.each(function() {
+		
+			// Set self
+			var self = $(this);
+			
+			// Set timeout to zero
+			var timeout = 0;
+			
+			// Go through all of the element's transition properties
+			var properties = self.css("transition-property").split(",");
+			for(var i = 0; i < properties["length"]; ++i) {
+			
+				// Check if property was found
+				if(properties[i].trim() === property) {
+				
+					// Get transition's duration
+					var duration = self.css("transition-duration").split(",")[i].trim();
+					
+					// Get transition's delay
+					var delay = self.css("transition-delay").split(",")[i].trim();
+					
+					// Set timeout to the duration
+					timeout = parseFloat(duration) * ((duration.indexOf("ms") !== Common.INDEX_NOT_FOUND) ? 1 : Common.MILLISECONDS_IN_A_SECOND) + parseFloat(delay) * ((delay.indexOf("ms") !== Common.INDEX_NOT_FOUND) ? 1 : Common.MILLISECONDS_IN_A_SECOND);
+					
+					// Break
+					break;
+				}
+			}
+			
+			// Set transition end timeout
+			self.data("transitionEndTimeout", setTimeout(function() {
+			
+				// Turn off transition end common event
+				self.off("transitionend.common");
+				
+				// Run callback
+				callback.bind(self)();
+				
+			}, timeout));
+			
+			// Self transition end common event
+			self.one("transitionend.common", function(event) {
+			
+				// Clear transition end timeout
+				clearTimeout(self.data("transitionEndTimeout"));
+				
+				// Run callback
+				callback.bind(self)(event);
 			});
 		});
 		

@@ -409,20 +409,12 @@ class Logo {
 			// Show logo display
 			this.logoDisplay.removeClass("hide");
 			
-			// Logo display transition end event
-			this.logoDisplay.one("transitionend", function() {
+			// Logo display transition ended event
+			this.logoDisplay.transitionEnded(function() {
 			
 				// Set logo display to transition at the correct speed
 				self.logoDisplay.addClass("normalTransitionSpeed");
-			});
-			
-			// Set normal transition speed timeout
-			setTimeout(function() {
-			
-				// Set logo display to transition at the correct speed
-				self.logoDisplay.addClass("normalTransitionSpeed");
-				
-			}, Logo.TRANSITION_DURATION_MILLISECONDS);
+			}, "opacity");
 		}
 		
 		// Hide
@@ -1900,13 +1892,6 @@ class Logo {
 		
 			// Return initial show delay milliseconds
 			return 70;
-		}
-		
-		// Transition duration milliseconds
-		static get TRANSITION_DURATION_MILLISECONDS() {
-		
-			// Return transition duration milliseconds
-			return 450;
 		}
 		
 		// No restore context frame

@@ -193,12 +193,12 @@ class Language {
 							// Set that language display button isn't clicked
 							languageDisplayButton.removeClass("clicked").blur();
 							
-							// Language display list transition end event
-							languageDisplayList.one("transitionend", function() {
+							// Language display list transition ended event
+							languageDisplayList.transitionEnded(function() {
 							
 								// Make language display button not transition
 								languageDisplayButton.removeClass("transition");
-							});
+							}, "opacity");
 						}
 					}
 				});
@@ -259,15 +259,15 @@ class Language {
 								// Trigger langauge display focus out event
 								languageDisplay.trigger("focusout");
 								
-								// Language display list transition end event
-								languageDisplayList.one("transitionend", function() {
+								// Language display list transition ended event
+								languageDisplayList.transitionEnded(function() {
 								
 									// Disable button and enable its siblings
 									button.disable().siblings().enable();
 									
 									// Set that button isn't clicked
 									button.removeClass("clicked");
-								});
+								}, "opacity");
 							});
 						}, ("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") ? 0 : Language.CHANGE_LANGUAGE_DELAY_MILLISECONDS);
 					}
