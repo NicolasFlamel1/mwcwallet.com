@@ -1812,7 +1812,7 @@ class WalletSection extends Section {
 								self.getAutomaticLock().prevent();
 								
 								// Show message and allow showing messages
-								self.getMessage().show(Language.getDefaultTranslation('Payment Proof Address'), text, false, function() {
+								self.getMessage().show(Language.getDefaultTranslation('Payment Proof Address'), Message.createPendingResult() + Message.createLineBreak() + text, false, function() {
 								
 									// Hide loading
 									self.getApplication().hideLoading();
@@ -1830,7 +1830,7 @@ class WalletSection extends Section {
 											if(canceled === false) {
 											
 												// Show message immediately and allow showing messages
-												self.getMessage().show(Language.getDefaultTranslation('Payment Proof Address'), text, true, function() {
+												self.getMessage().show(Language.getDefaultTranslation('Payment Proof Address'), Message.createPendingResult() + Message.createLineBreak() + text, true, function() {
 												
 													// Check if canceled
 													if(canceled === true) {

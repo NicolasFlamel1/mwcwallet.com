@@ -599,6 +599,7 @@
 			'You may need to specify a node address that is served over HTTPS or as an Onion Service to connect to the node.' => 'Il se peut que vous deviez spécifier une adresse de noeud desservie par HTTPS ou en tant que service en oignon pour vous connecter au noeud.',
 			'You may need to specify a recipient address that is served over HTTPS or as an Onion Service to connect to the recipient.' => 'Il se peut que vous deviez spécifier une adresse de destinataire qui est servie via HTTPS ou en tant que service en oignon pour vous connecter au destinataire.',
 			'Your browser doesn\'t allow using a camera.' => 'Votre navigateur ne permet pas l\'utilisation d\'un appareil photo.',
+			'Your browser doesn\'t allow using HID or Bluetooth devices.' => 'Votre navigateur n\'autorise pas l\'utilisation de périphériques HID ou Bluetooth.',
 			'Your browser doesn\'t allow using USB or Bluetooth devices.' => 'Votre navigateur n\'autorise pas l\'utilisation de périphériques USB ou Bluetooth.',
 			'Your browser doesn\'t support JavaScript. Update your browser and/or enable JavaScript to continue.' => 'Votre navigateur ne prend pas en charge JavaScript. Mettez à jour votre navigateur et/ou activez JavaScript pour continuer.',
 			'Your browser isn\'t compatible. Update your browser to continue.' => 'Votre navigateur n\'est pas compatible. Mettez à jour votre navigateur pour continuer.',
