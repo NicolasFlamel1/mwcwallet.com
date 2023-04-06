@@ -354,8 +354,8 @@ class Application {
 					// Hide unlocked display children
 					self.unlockedDisplay.children().addClass("hide");
 					
-					// Unlocked display children transition ended event
-					self.unlockedDisplay.children().transitionEnded(function() {
+					// Unlocked display children transition end or timeout event
+					self.unlockedDisplay.children().transitionEndOrTimeout(function() {
 					
 						// Hide unlocked display
 						self.unlockedDisplay.addClass("hide");
@@ -368,6 +368,7 @@ class Application {
 						
 						// Reset unlocked
 						self.unlocked.reset();
+						
 					}, "opacity");
 				}
 				
@@ -2145,8 +2146,8 @@ class Application {
 										// Hide logo
 										self.logo.hide();
 										
-										// Create display form transition ended event
-										self.createDisplay.children("form").transitionEnded(function() {
+										// Create display form transition end or timeout event
+										self.createDisplay.children("form").transitionEndOrTimeout(function() {
 										
 											// Hide create display
 											self.createDisplay.addClass("hide");
@@ -2241,7 +2242,9 @@ class Application {
 													}
 												});
 											}, 0);
+											
 										}, "opacity");
+										
 									}, Application.SHOW_UNLOCKED_DISPLAY_DELAY_MILLISECONDS);
 								
 								// Catch errors
@@ -2420,8 +2423,8 @@ class Application {
 								// Hide logo
 								self.logo.hide();
 
-								// Unlock display form transition ended event
-								self.unlockDisplay.children("form").transitionEnded(function() {
+								// Unlock display form transition end or timeout event
+								self.unlockDisplay.children("form").transitionEndOrTimeout(function() {
 
 									// Hide unlock display
 									self.unlockDisplay.addClass("hide");
@@ -2493,11 +2496,12 @@ class Application {
 										// Check if message is not shown
 										if(self.message.isShown() === false) {
 										
-											// Unlocked display children transition ended event
-											self.unlockedDisplay.children().transitionEnded(function() {
+											// Unlocked display children transition end or timeout event
+											self.unlockedDisplay.children().transitionEndOrTimeout(function() {
 											
 												// Allow automatic lock
 												self.automaticLock.allow();
+												
 											}, "opacity");
 										
 											// Enable unlocked
@@ -2513,8 +2517,8 @@ class Application {
 										// Otherwise
 										else {
 										
-											// Unlocked display children transition ended event
-											self.unlockedDisplay.children().transitionEnded(function() {
+											// Unlocked display children transition end or timeout event
+											self.unlockedDisplay.children().transitionEndOrTimeout(function() {
 											
 												// Allow automatic lock
 												self.automaticLock.allow();
@@ -2549,7 +2553,9 @@ class Application {
 											}, Common.randomNumber(Application.SHOW_INSTALL_APP_MINIMUM_DELAY_SECONDS, Application.SHOW_INSTALL_APP_MAXIMUM_DELAY_SECONDS) * Common.MILLISECONDS_IN_A_SECOND);
 										}
 									}, 0);
+									
 								}, "opacity");
+								
 							}, Application.SHOW_UNLOCKED_DISPLAY_DELAY_MILLISECONDS);
 							
 						// Catch errors
@@ -2662,8 +2668,8 @@ class Application {
 										// Hide message
 										self.message.hide();
 										
-										// Unlock display delete all wallets button transition ended event
-										self.unlockDisplay.find("div.deleteAllWallets").transitionEnded(function() {
+										// Unlock display delete all wallets button transition end or timeout event
+										self.unlockDisplay.find("div.deleteAllWallets").transitionEndOrTimeout(function() {
 										
 											// Hide unlock display
 											self.unlockDisplay.addClass("hide");
@@ -2707,6 +2713,7 @@ class Application {
 												// Allow showing messages
 												self.message.allow();
 											}, 0);
+											
 										}, "opacity");
 									
 									// Catch errors
@@ -5650,8 +5657,8 @@ class Application {
 			// Set self
 			var self = this;
 			
-			// Loading display spinner transition ended event
-			this.loadingDisplay.children("div.spinner").transitionEnded(function() {
+			// Loading display spinner transition end or timeout event
+			this.loadingDisplay.children("div.spinner").transitionEndOrTimeout(function() {
 			
 				// Hide loading display
 				self.loadingDisplay.addClass("hide");
@@ -5690,8 +5697,8 @@ class Application {
 					// Show maintenance notification
 					self.maintenanceNotification.show();
 					
-					// Display to show form transition ended event
-					displayToShow.children("form").transitionEnded(function() {
+					// Display to show form transition end or timeout event
+					displayToShow.children("form").transitionEndOrTimeout(function() {
 					
 						// Set everything to transition at normal speed
 						self.mainDisplay.addClass("normalTransitionSpeed");
@@ -5726,8 +5733,10 @@ class Application {
 						
 						// Allow showing messages
 						self.message.allow();
+						
 					}, "opacity");
 				}, 0);
+				
 			}, "opacity");
 		}
 		
@@ -5856,8 +5865,8 @@ class Application {
 			// Hide display to show display logo
 			displayToShow.children("div.logo").addClass("hide");
 				
-			// Unlocked display children transition ended event
-			this.unlockedDisplay.children().transitionEnded(function() {
+			// Unlocked display children transition end or timeout event
+			this.unlockedDisplay.children().transitionEndOrTimeout(function() {
 			
 				// Hide unlocked display
 				self.unlockedDisplay.addClass("hide");
@@ -5905,8 +5914,8 @@ class Application {
 					// Otherwise
 					else {
 					
-						// Display to show form transition ended event
-						displayToShow.children("form").transitionEnded(function() {
+						// Display to show form transition end or timeout event
+						displayToShow.children("form").transitionEndOrTimeout(function() {
 						
 							// Check if message is not shown
 							if(self.message.isShown() === false) {
@@ -5923,6 +5932,7 @@ class Application {
 					// Allow showing messages
 					self.message.allow();
 				}, 0);
+				
 			}, "opacity");
 		}
 		

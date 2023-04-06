@@ -409,11 +409,12 @@ class Logo {
 			// Show logo display
 			this.logoDisplay.removeClass("hide");
 			
-			// Logo display transition ended event
-			this.logoDisplay.transitionEnded(function() {
+			// Logo display transition end or timeout event
+			this.logoDisplay.transitionEndOrTimeout(function() {
 			
 				// Set logo display to transition at the correct speed
 				self.logoDisplay.addClass("normalTransitionSpeed");
+				
 			}, "opacity");
 		}
 		

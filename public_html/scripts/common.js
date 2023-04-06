@@ -1550,14 +1550,14 @@ if(typeof jQuery === "function") {
 			// Get index
 			var index = (typeof self.data("scrollStoppedIndex") === "undefined") ? 0 : self.data("scrollStoppedIndex");
 			
-			// Self scroll common event
-			self.on("scroll.common", function(event) {
+			// Self scroll scroll stopped index event
+			self.on("scroll.scrollStopped" + index.toFixed(), function(event) {
 			
-				// Clear scroll timeout index
-				clearTimeout(self.data("scrollTimeout" + index.toFixed()));
+				// Clear scroll stopped timeout index
+				clearTimeout(self.data("scrollStoppedTimeout" + index.toFixed()));
 				
-				// Set scroll timeout index
-				self.data("scrollTimeout" + index.toFixed(), setTimeout(callback.bind(self), SCROLL_IDLE_DURATION_MILLISECONDS, event));
+				// Set scroll stopped timeout index
+				self.data("scrollStoppedTimeout" + index.toFixed(), setTimeout(callback.bind(self), SCROLL_IDLE_DURATION_MILLISECONDS, event));
 			});
 			
 			// Increment index
@@ -1571,8 +1571,8 @@ if(typeof jQuery === "function") {
 	// Transition end timeout milliseconds
 	var TRANSITION_END_TIMEOUT_MILLISECONDS = 50;
 	
-	// Transition ended
-	$["fn"].transitionEnded = function(callback, property) {
+	// Transition end or timeout
+	$["fn"].transitionEndOrTimeout = function(callback, property) {
 	
 		// Go through each element
 		this.each(function() {
@@ -1605,31 +1605,31 @@ if(typeof jQuery === "function") {
 			}
 			
 			// Get index
-			var index = (typeof self.data("transitionEndedIndex") === "undefined") ? 0 : self.data("transitionEndedIndex");
+			var index = (typeof self.data("transitionEndOrTimeoutIndex") === "undefined") ? 0 : self.data("transitionEndOrTimeoutIndex");
 			
-			// Set transition end timeout index
-			self.data("transitionEndTimeout" + index.toFixed(), setTimeout(function() {
+			// Set transition end or timeout timeout index
+			self.data("transitionEndOrTimeoutTimeout" + index.toFixed(), setTimeout(function() {
 			
-				// Turn off transition end common index event
-				self.off("transitionend.common" + index.toFixed());
+				// Turn off transition end transition end or timeout index event
+				self.off("transitionend.transitionEndOrTimeout" + index.toFixed());
 				
 				// Run callback
 				callback.bind(self)();
 				
 			}, timeout));
 			
-			// Self transition end common index event
-			self.one("transitionend.common" + index.toFixed(), function(event) {
+			// Self transition end transition end or timeout index event
+			self.one("transitionend.transitionEndOrTimeout" + index.toFixed(), function(event) {
 			
-				// Clear transition end timeout index
-				clearTimeout(self.data("transitionEndTimeout" + index.toFixed()));
+				// Clear transition end or timeout timeout index
+				clearTimeout(self.data("transitionEndOrTimeoutTimeout" + index.toFixed()));
 				
 				// Run callback
 				callback.bind(self)(event);
 			});
 			
 			// Increment index
-			self.data("transitionEndedIndex", (index === Number.MAX_SAFE_INTEGER) ? 0 : index + 1);
+			self.data("transitionEndOrTimeoutIndex", (index === Number.MAX_SAFE_INTEGER) ? 0 : index + 1);
 		});
 		
 		// Return elements

@@ -447,8 +447,8 @@ class Section {
 										// Trigger shown event
 										$(self).trigger(Section.SHOWN_EVENT);
 										
-										// Display transition ended event
-										self.display.transitionEnded(function() {
+										// Display transition end or timeout event
+										self.display.transitionEndOrTimeout(function() {
 										
 											// Check if enabling after initializing
 											if(enableAfterInitializing === true) {
@@ -478,6 +478,7 @@ class Section {
 											
 											// Resolve
 											resolve();
+											
 										}, "opacity");
 									}
 									
@@ -499,8 +500,8 @@ class Section {
 										// Trigger unlocked show event
 										$(self.unlocked).trigger(Unlocked.SHOW_EVENT);
 										
-										// Unlocked display's children transition ended event
-										unlockedDisplay.children().transitionEnded(function() {
+										// Unlocked display's children transition end or timeout event
+										unlockedDisplay.children().transitionEndOrTimeout(function() {
 										
 											// Allow display to transition
 											self.display.removeClass("noTransition");
@@ -533,6 +534,7 @@ class Section {
 											
 											// Resolve
 											resolve();
+											
 										}, "opacity");
 									}
 								
@@ -588,8 +590,8 @@ class Section {
 										// Trigger shown event
 										$(self).trigger(Section.SHOWN_EVENT);
 										
-										// Display transition ended event
-										self.display.transitionEnded(function() {
+										// Display transition end or timeout event
+										self.display.transitionEndOrTimeout(function() {
 										
 											// Check if enabling after initializing
 											if(enableAfterInitializing === true) {
@@ -619,6 +621,7 @@ class Section {
 											
 											// Resolve
 											resolve();
+											
 										}, "opacity");
 									}
 									
@@ -640,8 +643,8 @@ class Section {
 										// Trigger unlocked show event
 										$(self.unlocked).trigger(Unlocked.SHOW_EVENT);
 										
-										// Unlocked display's children ended event
-										unlockedDisplay.children().transitionEnded(function() {
+										// Unlocked display's children transition end or timeout event
+										unlockedDisplay.children().transitionEndOrTimeout(function() {
 										
 											// Allow display to transition
 											self.display.removeClass("noTransition");
@@ -674,6 +677,7 @@ class Section {
 											
 											// Resolve
 											resolve();
+											
 										}, "opacity");
 									}
 								
@@ -723,8 +727,8 @@ class Section {
 							// Check if unlocked display's children is visible
 							if(unlockedDisplay.children().is(":visible") === true) {
 							
-								// Temporarily hide unlocked display's children and transition ended event
-								unlockedDisplay.children().addClass("temporaryHide").transitionEnded(function() {
+								// Temporarily hide unlocked display's children and transition end or timeout event
+								unlockedDisplay.children().addClass("temporaryHide").transitionEndOrTimeout(function() {
 								
 									// Set timeout
 									setTimeout(function() {
@@ -733,6 +737,7 @@ class Section {
 										showSectionDisplay();
 									
 									}, Section.SHOW_CURRENT_SECTION_DELAY_MILLISECONDS);
+									
 								}, "opacity");
 							}
 							
@@ -762,8 +767,8 @@ class Section {
 							// Check if shown display is visible
 							if(shownDisplay.is(":visible") === true) {
 							
-								// Hide shown display and transition end event
-								shownDisplay.addClass("hide").transitionEnded(function() {
+								// Hide shown display and transition end or timeout event
+								shownDisplay.addClass("hide").transitionEndOrTimeout(function() {
 								
 									// Get current section
 									var currentSection = self.sections.getSection(shownDisplay);
@@ -782,6 +787,7 @@ class Section {
 										showSectionDisplay();
 									
 									}, Section.SHOW_CURRENT_SECTION_DELAY_MILLISECONDS);
+									
 								}, "opacity");
 							}
 							
@@ -817,8 +823,8 @@ class Section {
 							// Check if unlocked display's children is visible
 							if(unlockedDisplay.children().is(":visible") === true) {
 							
-								// Temporarily hide unlocked display's children and transition ended event
-								unlockedDisplay.children().addClass("temporaryHide").transitionEnded(function() {
+								// Temporarily hide unlocked display's children and transition end or timeout event
+								unlockedDisplay.children().addClass("temporaryHide").transitionEndOrTimeout(function() {
 								
 									// Hide shown display without transitioning
 									shownDisplay.addClass("hide noTransition");
@@ -843,6 +849,7 @@ class Section {
 										showSectionDisplay();
 									
 									}, Section.SHOW_CURRENT_SECTION_DELAY_MILLISECONDS);
+									
 								}, "opacity");
 							}
 							

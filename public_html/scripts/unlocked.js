@@ -1146,8 +1146,8 @@ class Unlocked {
 									// Hide address display's text
 									addressDisplayText.addClass("hide");
 								
-									// Address display's text transition ended event
-									addressDisplayText.transitionEnded(function() {
+									// Address display's text transition end or timeout event
+									addressDisplayText.transitionEndOrTimeout(function() {
 									
 										// Check if unlocked display is shown
 										if(self.application.isUnlockedDisplayShown() === true) {
@@ -2891,8 +2891,8 @@ class Unlocked {
 						// Collapse wallets display
 						self.walletsDisplay.removeClass("expand");
 						
-						// Wallets display transition ended event
-						self.walletsDisplay.transitionEnded(function() {
+						// Wallets display transition end or timeout event
+						self.walletsDisplay.transitionEndOrTimeout(function() {
 						
 							// Hide wallets display section
 							self.walletsDisplay.children("div").addClass("hide");
@@ -2916,6 +2916,7 @@ class Unlocked {
 							
 							// Resolve
 							resolve();
+							
 						}, "width");
 					}, 0);
 				});
@@ -2977,8 +2978,8 @@ class Unlocked {
 						// Check if button is visible
 						if(self.walletsDisplay.find("button.expand").is(":visible") === false) {
 						
-							// Button transition ended event
-							button.transitionEnded(function() {
+							// Button transition end or timeout event
+							button.transitionEndOrTimeout(function() {
 							
 								// Set timeout
 								setTimeout(function() {
@@ -3001,6 +3002,7 @@ class Unlocked {
 									}, Unlocked.REMOVE_WALLET_BUTTON_DELAY_ENDING_MILLISECONDS);
 									
 								}, Unlocked.REMOVE_WALLET_BUTTON_DELAY_AFTER_MILLISECONDS);
+								
 							}, "opacity");
 						}
 						
@@ -3148,8 +3150,8 @@ class Unlocked {
 							});
 						});
 					
-					// Wallets display transition ended event
-					}).transitionEnded(function() {
+					// Wallets display transition end or timeout event
+					}).transitionEndOrTimeout(function() {
 					
 						// Set that unlocked display has the wallets expanded
 						self.unlockedDisplay.addClass("walletsExpanded");
@@ -3174,6 +3176,7 @@ class Unlocked {
 							resolve();
 							
 						}, Unlocked.SHOW_WALLETS_AFTER_DELAY_MILLISECONDS);
+						
 					}, "width");
 				}, 0);
 			});

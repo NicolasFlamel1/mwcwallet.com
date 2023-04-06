@@ -263,14 +263,15 @@ class Tetris {
 			// Set self
 			var self = this;
 			
-			// Tetris display transition ended event
-			this.tetrisDisplay.transitionEnded(function() {
+			// Tetris display transition end or timeout event
+			this.tetrisDisplay.transitionEndOrTimeout(function() {
 			
 				// Hide loading
 				self.application.hideLoading();
 				
 				// Set running
 				self.running = true;
+				
 			}, "opacity");
 		}
 		
@@ -295,8 +296,8 @@ class Tetris {
 			// Set self
 			var self = this;
 			
-			// Tetris display transition ended event
-			this.tetrisDisplay.transitionEnded(function() {
+			// Tetris display transition end or timeout event
+			this.tetrisDisplay.transitionEndOrTimeout(function() {
 			
 				// Set that body display isn't showing Tetris
 				self.bodyDisplay.removeClass("tetris");

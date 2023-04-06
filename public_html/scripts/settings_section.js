@@ -204,8 +204,8 @@ class SettingsSection extends Section {
 					
 					});
 					
-					// Button transition ended event
-					button.transitionEnded(function() {
+					// Button transition end or timeout event
+					button.transitionEndOrTimeout(function() {
 					
 						// Allow automatic lock
 						self.getAutomaticLock().allow();

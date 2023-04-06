@@ -179,8 +179,8 @@ class WalletSection extends Section {
 									// Check if no transaction display is visible
 									if(self.transactionsDisplay.next().is(":visible") === true) {
 									
-										// No transactions display transition ended event
-										self.transactionsDisplay.next().transitionEnded(function() {
+										// No transactions display transition end or timeout event
+										self.transactionsDisplay.next().transitionEndOrTimeout(function() {
 										
 											// Check if shown
 											if(self.isShown() === true) {
@@ -701,11 +701,12 @@ class WalletSection extends Section {
 								// Check if balance syncing status is visible
 								if(self.balanceDisplay.find("div.syncStatus").is(":visible") === true) {
 								
-									// Balance syncing status transition ended event
-									self.balanceDisplay.find("div.syncStatus").transitionEnded(function() {
+									// Balance syncing status transition end or timeout event
+									self.balanceDisplay.find("div.syncStatus").transitionEndOrTimeout(function() {
 									
 										// Allow balance display to transition
 										self.balanceDisplay.removeClass("instant");
+										
 									}, "opacity");
 								}
 								
@@ -729,8 +730,8 @@ class WalletSection extends Section {
 								// Check if shown syncing percent is visible
 								if(self.balanceDisplay.find("circle.foreground").is(":visible") === true) {
 								
-									// Shown syncing percent transition ended event
-									self.balanceDisplay.find("circle.foreground").transitionEnded(function() {
+									// Shown syncing percent transition end or timeout event
+									self.balanceDisplay.find("circle.foreground").transitionEndOrTimeout(function() {
 									
 										// Check if not showing sync done
 										if(self.showingSyncDone === false) {
@@ -738,6 +739,7 @@ class WalletSection extends Section {
 											// Allow shown syncing percent to transition
 											self.balanceDisplay.find("circle.foreground").removeClass("noTransition");
 										}
+										
 									}, "stroke-dashoffset");
 								}
 								
@@ -803,8 +805,8 @@ class WalletSection extends Section {
 									// Check if shown syncing percent is visible
 									if(self.balanceDisplay.find("circle.foreground").is(":visible") === true) {
 									
-										// Shown syncing percent transition ended event
-										self.balanceDisplay.find("circle.foreground").transitionEnded(function() {
+										// Shown syncing percent transition end or timeout event
+										self.balanceDisplay.find("circle.foreground").transitionEndOrTimeout(function() {
 										
 											// Set timeout
 											setTimeout(function() {
@@ -818,8 +820,8 @@ class WalletSection extends Section {
 													// Check if balance syncing status is visible
 													if(self.balanceDisplay.find("div.syncStatus").is(":visible") === true) {
 													
-														// Balance syncing status transition ended event
-														self.balanceDisplay.find("div.syncStatus").transitionEnded(function() {
+														// Balance syncing status transition end or timeout event
+														self.balanceDisplay.find("div.syncStatus").transitionEndOrTimeout(function() {
 														
 															// Reset shown syncing percent
 															self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toFixed());
@@ -829,6 +831,7 @@ class WalletSection extends Section {
 															
 															// Clear showing sync done
 															self.showingSyncDone = false;
+															
 														}, "opacity");
 													}
 													
@@ -847,6 +850,7 @@ class WalletSection extends Section {
 												}
 												
 											}, WalletSection.SYNC_DONE_DELAY_MILLISECONDS);
+											
 										}, "stroke-dashoffset");
 									}
 									
@@ -859,8 +863,8 @@ class WalletSection extends Section {
 										// Check if balance syncing status is visible
 										if(self.balanceDisplay.find("div.syncStatus").is(":visible") === true) {
 										
-											// Balance syncing status transition ended event
-											self.balanceDisplay.find("div.syncStatus").transitionEnded(function() {
+											// Balance syncing status transition end or timeout event
+											self.balanceDisplay.find("div.syncStatus").transitionEndOrTimeout(function() {
 											
 												// Reset shown syncing percent
 												self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toFixed());
@@ -870,6 +874,7 @@ class WalletSection extends Section {
 												
 												// Clear showing sync done
 												self.showingSyncDone = false;
+												
 											}, "opacity");
 										}
 										
@@ -903,8 +908,8 @@ class WalletSection extends Section {
 											// Check if balance syncing status is visible
 											if(self.balanceDisplay.find("div.syncStatus").is(":visible") === true) {
 											
-												// Balance syncing status transition ended event
-												self.balanceDisplay.find("div.syncStatus").transitionEnded(function() {
+												// Balance syncing status transition end or timeout event
+												self.balanceDisplay.find("div.syncStatus").transitionEndOrTimeout(function() {
 												
 													// Reset shown syncing percent
 													self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toFixed());
@@ -914,6 +919,7 @@ class WalletSection extends Section {
 													
 													// Clear showing sync done
 													self.showingSyncDone = false;
+													
 												}, "opacity");
 											}
 											
@@ -973,11 +979,12 @@ class WalletSection extends Section {
 								// Check if balance syncing status
 								if(self.balanceDisplay.find("div.syncStatus").is(":visible") === true) {
 								
-									// Balance syncing status transition end event
-									self.balanceDisplay.find("div.syncStatus").transitionEnded(function() {
+									// Balance syncing status transition end or timeout event
+									self.balanceDisplay.find("div.syncStatus").transitionEndOrTimeout(function() {
 									
 										// Allow balance display to transition
 										self.balanceDisplay.removeClass("instant");
+										
 									}, "opacity");
 								}
 								
@@ -3499,8 +3506,8 @@ class WalletSection extends Section {
 					// Set self
 					var self = this;
 					
-					// Address display loading transition ended event
-					this.addressDisplay.find("div.loading").transitionEnded(function() {
+					// Address display loading transition end or timeout event
+					this.addressDisplay.find("div.loading").transitionEndOrTimeout(function() {
 					
 						// Check if shown
 						if(self.isShown() === true) {
