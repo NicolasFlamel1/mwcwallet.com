@@ -28,10 +28,10 @@ class SettingsSection extends Section {
 					self.getDisplay().find("div.setting").each(function() {
 					
 						// Set setting's display
-						let settingDisplay = $(this);
+						var settingDisplay = $(this);
 						
 						// Get setting's dependencies
-						let settingDependencies = settingDisplay.attr(Common.DATA_ATTRIBUTE_PREFIX + "dependencies");
+						var settingDependencies = settingDisplay.attr(Common.DATA_ATTRIBUTE_PREFIX + "dependencies");
 						
 						// Check if setting's dependencies don't exist
 						if(settingDependencies === Common.NO_ATTRIBUTE)

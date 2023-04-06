@@ -1552,7 +1552,7 @@ class Section {
 			text.addClass("overflow");
 			
 			// Get the width of its child
-			var width = Math.ceil(text.children("span")[0].getBoundingClientRect()["width"]) + "px";
+			var width = Math.ceil(text.children("span").get(0).getBoundingClientRect()["width"]) + "px";
 			
 			// Set text's width and minimum width to the width of its child
 			text.css("width", width);
@@ -1568,7 +1568,7 @@ class Section {
 			dots.removeClass("hide");
 			
 			// Check if dot's width is too small
-			if(dots[0].getBoundingClientRect()["width"] < parseFloat(dots.css("font-size")) * Section.SETTINGS_DOTS_MINIMUM_WIDTH) {
+			if(dots.get(0).getBoundingClientRect()["width"] < parseFloat(dots.css("font-size")) * Section.SETTINGS_DOTS_MINIMUM_WIDTH) {
 			
 				// Hide dots
 				dots.addClass("hide");

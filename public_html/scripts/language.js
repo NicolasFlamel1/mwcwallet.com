@@ -250,8 +250,8 @@ class Language {
 							// Update language display select options
 							languageDisplaySelect.children().enable().filter(":selected").disable();
 							
-							// Request animation frame
-							requestAnimationFrame(function() {
+							// Request animation frame or timeout
+							Common.requestAnimationFrameOrTimeout(function() {
 							
 								// Unblock input
 								bodyDisplay.removeClass("blockInput");
@@ -1172,7 +1172,7 @@ class Language {
 					try {
 				
 						// Trigger language change event on the element
-						element[0].dispatchEvent(new Event(Language.CHANGE_EVENT));
+						element.get(0).dispatchEvent(new Event(Language.CHANGE_EVENT));
 					}
 					
 					// Catch errors

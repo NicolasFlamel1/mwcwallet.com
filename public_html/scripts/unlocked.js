@@ -2846,7 +2846,7 @@ class Unlocked {
 		isDisabled() {
 		
 			// Return if unlocked display is disabled
-			return this.unlockedDisplay.children("div").eq(0).attr("tabindex") === Common.NO_TAB_INDEX;
+			return this.unlockedDisplay.children("div").attr("tabindex") === Common.NO_TAB_INDEX;
 		}
 		
 		// Hide wallets
@@ -3387,8 +3387,8 @@ class Unlocked {
 					
 					if(buttonTop >= 0 && (buttonTop + button.height()) <= walletsDisplayList.height()) {
 					
-						// Request animation frame
-						requestAnimationFrame(function() {
+						// Request animation frame or timeout
+						Common.requestAnimationFrameOrTimeout(function() {
 						
 							// Show button
 							button.removeClass("hide");

@@ -31,6 +31,9 @@
 	// Grace accent HTML entity
 	const GRAVE_ACCENT_HTML_ENTITY = "&#x60;";
 	
+	// Seconds in a minute
+	const SECONDS_IN_A_MINUTE = 60;
+	
 	// Minutes in an hour
 	const MINUTES_IN_AN_HOUR = 60;
 	

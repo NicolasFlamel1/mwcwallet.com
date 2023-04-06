@@ -11,7 +11,7 @@
 	// Extension catalog text
 	getDefaultTranslation('MWC Wallet is an extension that allows you to manage your MimbleWimble Coin in your web browser.');
 	getDefaultTranslation('This extension injects an API into every website you visit making it possible for those websites to interact with MWC Wallet.');
-	getDefaultTranslation('MANAGE YOUR MIMBLEWIMBLE COIN');
-	getDefaultTranslation('WEBSITE API INTEGRATION');
-	getDefaultTranslation('HARDWARE WALLET SUPPORT');
+	getDefaultTranslation('Manage your MimbleWimble Coin');
+	getDefaultTranslation('Website API integration');
+	getDefaultTranslation('Hardware wallet support');
 ?>

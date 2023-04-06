@@ -754,7 +754,7 @@ class TransactionSection extends Section {
 							else {
 							
 								// Show transaction index in the navigation display
-								self.navigationDisplay.children("button").eq(0).after(Language.createTranslatableContainer("<h2>", Language.getDefaultTranslation('Transaction %1$s'), [self.transactionIndex.toFixed()]));
+								self.navigationDisplay.children("button").first().after(Language.createTranslatableContainer("<h2>", Language.getDefaultTranslation('Transaction %1$s'), [self.transactionIndex.toFixed()]));
 							
 								// Update transaction display
 								self.updateTransactionDisplay(false);

@@ -76,7 +76,7 @@ class WalletSection extends Section {
 							if(changedTransaction.getDisplay() === true && changedTransaction.getWalletKeyPath() === self.walletKeyPath) {
 							
 								// Get transaction button
-								let transactionButton = self.transactionsDisplay.find("button[" + Common.DATA_ATTRIBUTE_PREFIX + "keyPath=\"" + changedTransaction.getKeyPath().toFixed() + "\"]");
+								var transactionButton = self.transactionsDisplay.find("button[" + Common.DATA_ATTRIBUTE_PREFIX + "keyPath=\"" + changedTransaction.getKeyPath().toFixed() + "\"]");
 								
 								// Check if transaction's button exists
 								if(transactionButton["length"] !== 0) {
@@ -2716,6 +2716,12 @@ class WalletSection extends Section {
 									// Remove wallet
 									self.getWallets().removeWallet(self.walletKeyPath).then(function() {
 									
+										// Get wallet button
+										var walletButton = self.getUnlocked().walletsDisplay.find("div.list").find("button[" + Common.DATA_ATTRIBUTE_PREFIX + "keyPath=\"" + self.walletKeyPath.toFixed() + "\"]");
+										
+										// Get next wallet button
+										var nextWalletButton = (walletButton.prev()["length"] !== 0) ? walletButton.prev() : walletButton.next();
+									
 										// Remove unlocked wallet button
 										self.getUnlocked().removeWalletButton(self.walletKeyPath).then(function() {
 										
@@ -2750,17 +2756,19 @@ class WalletSection extends Section {
 													// Hide message
 													self.getMessage().hide();
 													
-													// Get about button
-													var aboutButton = self.getUnlocked().menuDisplay.find("button.about");
+													// Set that next wallet button is clicked
+													nextWalletButton.addClass("clicked");
 													
-													// Set that button is clicked
-													aboutButton.addClass("clicked");
+													// Show wallet section and catch errors
+													self.getSections().showSection(WalletSection.NAME, false, {
 													
-													// Show about section and catch errors
-													self.getSections().showSection(AboutSection.NAME).catch(function(error) {
+														// Wallet key path
+														[WalletSection.STATE_WALLET_KEY_PATH_NAME]: parseInt(nextWalletButton.attr(Common.DATA_ATTRIBUTE_PREFIX + "keyPath"), Common.DECIMAL_NUMBER_BASE)
+														
+													}).catch(function(error) {
 													
-														// Set that about button isn't clicked
-														aboutButton.removeClass("clicked");
+														// Set that next wallet button isn't clicked
+														nextWalletButton.removeClass("clicked");
 													});
 												}
 											}
@@ -3216,13 +3224,13 @@ class WalletSection extends Section {
 						if(wallet.getName() === Wallet.NO_NAME)
 						
 							// Show wallets name to default name in the navigation display
-							self.navigationDisplay.children("button").eq(0).after(Language.createTranslatableContainer("<h2>", Language.getDefaultTranslation('Wallet %1$s'), [self.walletKeyPath.toFixed()]));
+							self.navigationDisplay.children("button").first().after(Language.createTranslatableContainer("<h2>", Language.getDefaultTranslation('Wallet %1$s'), [self.walletKeyPath.toFixed()]));
 						
 						// Otherwise
 						else
 						
 							// Show wallet's name in the navigation display
-							self.navigationDisplay.children("button").eq(0).after("<h2>" + Common.htmlEncode(wallet.getName()) + "</h2>");
+							self.navigationDisplay.children("button").first().after("<h2>" + Common.htmlEncode(wallet.getName()) + "</h2>");
 						
 						// Try
 						try {

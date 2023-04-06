@@ -191,6 +191,11 @@ class AccountSection extends Section {
 							
 								// Clear current password, new password, and confirm new password values
 								self.getDisplay().find("input.currentPassword, input.newPassword, input.confirmNewPassword").val("").closest("div").parent().closest("div").removeClass("error");
+								
+								// Update state and catch errors
+								self.updateState().catch(function(error) {
+								
+								});
 							}
 						
 						// Catch errors

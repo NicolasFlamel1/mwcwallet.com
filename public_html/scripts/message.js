@@ -780,23 +780,69 @@ class Message {
 			// Otherwise
 			else {
 			
-				// Set self
-				var self = this;
-			
-				// Return promise
-				return new Promise(function(resolve, reject) {
-			
-					// Append message to queue
-					self.messageQueue.push(function() {
+				// Check if shown and message display message is hidden
+				if(this.isShown() === true && this.messageDisplay.hasClass("noMessage") === true) {
+				
+					// Hide message display
+					this.messageDisplay.addClass("hide");
 					
-						// Return showing message
-						return self.show(header, text, true, beforeShow, firstButton, secondButton, allowIfShown, visibleState).then(function(result) {
+					// Set self
+					var self = this;
+					
+					// Return promise
+					return new Promise(function(resolve, reject) {
+				
+						// Message display transition ended event
+						self.messageDisplay.transitionEnded(function() {
 						
-							// Resolve result
-							resolve(result);
+							// Check if message display is still hidden
+							if(self.isShown() === false) {
+							
+								// Set that body display isn't showing a message
+								self.bodyDisplay.removeClass("message");
+						
+								// Reset
+								self.reset();
+								
+								// Set that message can show display message
+								self.messageDisplay.removeClass("noMessage");
+							}
+							
+							// Append message to queue
+							self.messageQueue.push(function() {
+							
+								// Return showing message
+								return self.show(header, text, true, beforeShow, firstButton, secondButton, allowIfShown, visibleState).then(function(result) {
+								
+									// Resolve result
+									resolve(result);
+								});
+							});
+						}, "opacity");
+					});
+				}
+				
+				// Otherwise
+				else {
+				
+					// Set self
+					var self = this;
+				
+					// Return promise
+					return new Promise(function(resolve, reject) {
+					
+						// Append message to queue
+						self.messageQueue.push(function() {
+						
+							// Return showing message
+							return self.show(header, text, true, beforeShow, firstButton, secondButton, allowIfShown, visibleState).then(function(result) {
+							
+								// Resolve result
+								resolve(result);
+							});
 						});
 					});
-				});
+				}
 			}
 		}
 		
@@ -992,21 +1038,50 @@ class Message {
 		
 			// Check if messages aren't allowed
 			if(this.messagesAllowed === false) {
-		
+			
 				// Set messages allowed
 				this.messagesAllowed = true;
 				
 				// Check if message display is hidden
 				if(this.isShown() === false) {
 				
-					// Check if message queue isn't empty
-					if(this.messageQueue["length"] !== 0) {
+					// Check if message display message is hidden
+					if(this.messageDisplay.hasClass("noMessage") === true) {
 					
-						// Get next message
-						var nextMessage = this.messageQueue.shift();
-							
-						// Show next message
-						nextMessage();
+						// Set self
+						var self = this;
+					
+						// Message display transition ended event
+						this.messageDisplay.transitionEnded(function() {
+						
+							// Check if message display is still hidden
+							if(self.isShown() === false) {
+						
+								// Check if message queue isn't empty
+								if(self.messageQueue["length"] !== 0) {
+								
+									// Get next message
+									var nextMessage = self.messageQueue.shift();
+										
+									// Show next message
+									nextMessage();
+								}
+							}
+						}, "opacity");
+					}
+					
+					// Otherwise
+					else {
+					
+						// Check if message queue isn't empty
+						if(this.messageQueue["length"] !== 0) {
+						
+							// Get next message
+							var nextMessage = this.messageQueue.shift();
+								
+							// Show next message
+							nextMessage();
+						}
 					}
 				}
 			}

@@ -2017,6 +2017,11 @@ class SendPaymentSection extends Section {
 																				
 																				// Set base fee to the default base fee and have it not show an error
 																				self.getDisplay().find("input.baseFee").val(Api.DEFAULT_BASE_FEE.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed()).closest("div").parent().closest("div").removeClass("error");
+																				
+																				// Update state and catch errors
+																				self.updateState().catch(function(error) {
+																				
+																				});
 																			}
 																		});
 																		
