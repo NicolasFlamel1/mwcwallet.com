@@ -78,7 +78,7 @@ class Language {
 					else {
 					
 						// Change language to current language
-						Language.changeLanguage(Language.currentLanguage);
+						Language.changeLanguage(Language.currentLanguage, false);
 					}
 				}
 				
@@ -127,7 +127,7 @@ class Language {
 					else {
 					
 						// Change language to current language
-						Language.changeLanguage(Language.currentLanguage);
+						Language.changeLanguage(Language.currentLanguage, false);
 					}
 				}
 				
@@ -138,7 +138,7 @@ class Language {
 					Language.currentLanguage = $("html").attr("lang");
 					
 					// Change language to current language
-					Language.changeLanguage(Language.currentLanguage);
+					Language.changeLanguage(Language.currentLanguage, false);
 				}
 				
 				// Set cookie
@@ -1047,7 +1047,7 @@ class Language {
 	// Private
 	
 		// Change language
-		static changeLanguage(newLanguage) {
+		static changeLanguage(newLanguage, languageIsDifferent = true) {
 		
 			// Trigger language before change event
 			$(document).trigger(Language.BEFORE_CHANGE_EVENT);
@@ -1085,20 +1085,24 @@ class Language {
 					// Link
 					case "LINK":
 					
-						// Check if element has an href
-						var href = element.attr("href");
-						
-						if(href !== Common.NO_ATTRIBUTE) {
+						// Check if language is different
+						if(languageIsDifferent === true) {
 					
-							// Set element's href
-							element.removeAttr("href");
+							// Check if element has an href
+							var href = element.attr("href");
 							
-							// Set timeout
-							setTimeout(function() {
-							
-								// Restore element's href
-								element.attr("href", href);
-							}, 0);
+							if(href !== Common.NO_ATTRIBUTE) {
+						
+								// Set element's href
+								element.removeAttr("href");
+								
+								// Set timeout
+								setTimeout(function() {
+								
+									// Restore element's href
+									element.attr("href", href);
+								}, 0);
+							}
 						}
 						
 						// Break
