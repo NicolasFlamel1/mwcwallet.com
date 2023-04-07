@@ -453,10 +453,10 @@
 			"Checksum" => "WWrHw7TzCNscPmJbc80xUfy489yUi4N+Q8ZSwlu8ZtokUGL3TUkm+h3QccgB+lhcmGA0uLNGDLmp0/fWyNXfUg=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 42,
+			"Version" => 43,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "eUmnp2ulu+Cky6/NrOumBG/i1xhZFg+mfAROzKUkYqFD0hS4H1IBqGt3SxcdbXB2mROYOk0h9+cC0SLFhO2ozw=="
+			"Checksum" => "+c+mQqLQBMRydgX2aAideEdT932GRkTCz9ZPO+ivEmAPNyIzwjzkTKlXeX0OSSeH+zGurNIG7qBNNhSdvRZCbQ=="
 		],
 		"./scripts/proof_builder.js" => [
 			"Version" => 5,
@@ -531,13 +531,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 53,
+			"Version" => 54,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 121,
+			"Version" => 122,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -549,7 +549,7 @@
 			"Checksum" => "fgXcToDtI6wmtS0RjZW5pbWUYkBBkENvqM+gtInk+grrPOQxx37PqgMCyjDm5JTlC3fMvdWSeNrWv1T1CZ0a3g=="
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 48,
+			"Version" => 49,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL

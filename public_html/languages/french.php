@@ -595,6 +595,7 @@
 			'You may need to be already paired with the device before this app can connect to it.' => 'Il se peut que vous deviez être déjà associé à l\'appareil pour que cette application puisse s\'y connecter.',
 			'You may need to be already paired with the device before this extension can connect to it.' => 'Il se peut que vous deviez être déjà apparié à l\'appareil pour que cette extension puisse s\'y connecter.',
 			'You may need to be already paired with the device before this site can connect to it.' => 'Il se peut que vous deviez être déjà associé à l\'appareil pour que ce site puisse s\'y connecter.',
+			'You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.' => 'Il se peut que vous deviez ouvrir cette extension dans un onglet ou une fenêtre si elle ne parvient pas à se connecter à un portefeuille matériel.',
 			'You may need to specify a different Tor proxy address to connect to the node.' => 'Il se peut que vous deviez spécifier une adresse proxy Tor différente pour vous connecter au nœud.',
 			'You may need to specify a different Tor proxy address to connect to the recipient.' => 'Il se peut que vous deviez spécifier une adresse proxy Tor différente pour vous connecter au destinataire.',
 			'You may need to specify a listener address that is served over HTTPS to connect to the listener.' => 'Il se peut que vous deviez spécifier une adresse d\'auditeur desservie par HTTPS pour vous connecter à l\'auditeur.',

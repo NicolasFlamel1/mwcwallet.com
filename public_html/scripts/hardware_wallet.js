@@ -227,7 +227,7 @@ class HardwareWallet {
 														if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && error["name"] === "NotFoundError"))) {
 														
 															// Reject error
-															reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')));
+															reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? " " + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
 														}
 														
 														// Otherwise check if error was a connection error
@@ -268,7 +268,7 @@ class HardwareWallet {
 												else {
 												
 													// Reject error
-													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')));
+													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? " " + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
 												}
 											}
 											
@@ -300,7 +300,7 @@ class HardwareWallet {
 											if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && error["name"] === "NotFoundError"))) {
 											
 												// Reject error
-												reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')));
+												reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? " " + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
 											}
 											
 											// Otherwise check if error was a connection error
