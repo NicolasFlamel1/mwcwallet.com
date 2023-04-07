@@ -335,6 +335,8 @@
 			'Only one instance of this app can be open at once. Close all other instances to continue.' => 'Une seule instance de cette application peut être ouverte à la fois. Fermez toutes les autres instances pour continuer.',
 			'Only one instance of this extension can be open at once. Close all other instances to continue.' => 'Une seule instance de cette extension peut être ouverte à la fois. Fermez toutes les autres instances pour continuer.',
 			'Only one instance of this site can be open at once. Close all other instances to continue.' => 'Une seule instance de ce site peut être ouverte à la fois. Fermez toutes les autres instances pour continuer.',
+			'Open in New Tab' => 'Ouvrir dans un nouvel onglet',
+			'Open in New Window' => 'Ouvrir dans une nouvelle fenêtre',
 			'Optional message' => 'Message facultatif',
 			'Order Error' => 'Erreur de commande',
 			'Output commitment:' => 'Engagement de sortie :',
