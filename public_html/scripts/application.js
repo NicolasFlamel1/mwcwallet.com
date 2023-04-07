@@ -3458,7 +3458,7 @@ class Application {
 										else {
 										
 											// Return showing hardware wallet error
-											return showHardwareWalletError(Message.createText((Common.isExtension() === true) ? Language.getDefaultTranslation('Your browser doesn\'t allow using HID or Bluetooth devices.') : Language.getDefaultTranslation('Your browser doesn\'t allow using USB or Bluetooth devices.')) + " " + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.'))).then(function() {
+											return showHardwareWalletError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using USB or Bluetooth devices.')) + " " + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.'))).then(function() {
 																	
 												// Resolve
 												resolve();

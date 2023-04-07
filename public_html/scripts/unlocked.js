@@ -2319,7 +2319,7 @@ class Unlocked {
 				else {
 				
 					// Show hardware wallet error
-					showHardwareWalletError(Message.createText((Common.isExtension() === true) ? Language.getDefaultTranslation('Your browser doesn\'t allow using HID or Bluetooth devices.') : Language.getDefaultTranslation('Your browser doesn\'t allow using USB or Bluetooth devices.')) + " " + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.')), false);
+					showHardwareWalletError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using USB or Bluetooth devices.')) + " " + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.')), false);
 				}
 			});
 			

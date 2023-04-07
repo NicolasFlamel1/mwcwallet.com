@@ -66,133 +66,123 @@ class Wallets {
 			// Check if hardware wallets are supported
 			if(HardwareWallet.isSupported() === true) {
 			
-				// Connect to hardware wallet
-				var connectToHardwareWallet = function(event) {
+				// Check if USB is supported
+				if("usb" in navigator === true) {
 				
-					// Obtain exclusive hardware lock
-					self.obtainExclusiveHardwareLock().then(function() {
-					
-						// Check if device isn't opened
-						if(event["originalEvent"]["device"]["opened"] === false) {
+					// USB connect event
+					$(navigator["usb"]).on("connect", function(event) {
+				
+						// Obtain exclusive hardware lock
+						self.obtainExclusiveHardwareLock().then(function() {
 						
-							// Initialize hardware wallet found
-							var hardwareWalletFound = false;
-					
-							// Go through all wallets
-							for(var keyPath in self.wallets) {
-										
-								if(self.wallets.hasOwnProperty(keyPath) === true) {
+							// Check if device isn't opened
+							if(event["originalEvent"]["device"]["opened"] === false) {
 							
-									// Get wallet
-									var wallet = self.wallets[keyPath];
-									
-									// Check if wallet is open, it's a hardware wallet, and its hardware isn't connected
-									if(wallet.isOpen() === true && wallet.getHardwareType() !== Wallet.NO_HARDWARE_TYPE && wallet.isHardwareConnected() === false) {
-									
-										// Set hardware wallet found
-										hardwareWalletFound = true;
+								// Initialize hardware wallet found
+								var hardwareWalletFound = false;
+						
+								// Go through all wallets
+								for(var keyPath in self.wallets) {
+											
+									if(self.wallets.hasOwnProperty(keyPath) === true) {
+								
+										// Get wallet
+										var wallet = self.wallets[keyPath];
 										
-										// Break
-										break;
+										// Check if wallet is open, it's a hardware wallet, and its hardware isn't connected
+										if(wallet.isOpen() === true && wallet.getHardwareType() !== Wallet.NO_HARDWARE_TYPE && wallet.isHardwareConnected() === false) {
+										
+											// Set hardware wallet found
+											hardwareWalletFound = true;
+											
+											// Break
+											break;
+										}
 									}
 								}
-							}
-							
-							// Check if a hardware wallet was found
-							if(hardwareWalletFound === true) {
-				
-								// Create hardware wallet
-								var hardwareWallet = new HardwareWallet(self.application);
 								
-								// Connect to hardware wallet
-								hardwareWallet.connect(event["originalEvent"]["device"], true).then(function() {
-								
-									// Initialize connect wallets to hardware
-									var connectWalletsToHardware = [];
-								
-									// Go through all wallets
-									for(var keyPath in self.wallets) {
-												
-										if(self.wallets.hasOwnProperty(keyPath) === true) {
+								// Check if a hardware wallet was found
+								if(hardwareWalletFound === true) {
+					
+									// Create hardware wallet
+									var hardwareWallet = new HardwareWallet(self.application);
 									
-											// Get wallet
-											let wallet = self.wallets[keyPath];
-											
-											// Check if wallet is a hardware wallet
-											if(wallet.getHardwareType() !== Wallet.NO_HARDWARE_TYPE) {
-											
-												// Append connecting wallet to hardware to list
-												connectWalletsToHardware.push(new Promise(function(resolve, reject) {
+									// Connect to hardware wallet
+									hardwareWallet.connect(event["originalEvent"]["device"], true).then(function() {
+									
+										// Initialize connect wallets to hardware
+										var connectWalletsToHardware = [];
+									
+										// Go through all wallets
+										for(var keyPath in self.wallets) {
+													
+											if(self.wallets.hasOwnProperty(keyPath) === true) {
+										
+												// Get wallet
+												let wallet = self.wallets[keyPath];
 												
-													// Return connecting wallet to the applicable hardware wallet
-													return wallet.connectToApplicableHardware([hardwareWallet]).then(function() {
+												// Check if wallet is a hardware wallet
+												if(wallet.getHardwareType() !== Wallet.NO_HARDWARE_TYPE) {
+												
+													// Append connecting wallet to hardware to list
+													connectWalletsToHardware.push(new Promise(function(resolve, reject) {
 													
-														// Resolve
-														resolve();
-													
-													// Catch errors
-													}).catch(function(error) {
-													
-														// Reject error
-														reject(error);
-													});
-												}));
+														// Return connecting wallet to the applicable hardware wallet
+														return wallet.connectToApplicableHardware([hardwareWallet]).then(function() {
+														
+															// Resolve
+															resolve();
+														
+														// Catch errors
+														}).catch(function(error) {
+														
+															// Reject error
+															reject(error);
+														});
+													}));
+												}
 											}
 										}
-									}
-									
-									// Connect wallets to hardware
-									Promise.allSettled(connectWalletsToHardware).then(function() {
-									
-										// Check if hardware wallet isn't in use
-										if(hardwareWallet.getInUse() === false) {
 										
-											// Close hardware wallet
-											hardwareWallet.close();
-										}
+										// Connect wallets to hardware
+										Promise.allSettled(connectWalletsToHardware).then(function() {
 										
+											// Check if hardware wallet isn't in use
+											if(hardwareWallet.getInUse() === false) {
+											
+												// Close hardware wallet
+												hardwareWallet.close();
+											}
+											
+											// Release exclusive hardware lock
+											self.releaseExclusiveHardwareLock();
+										});
+										
+									// Catch errors
+									}).catch(function(error) {
+									
 										// Release exclusive hardware lock
 										self.releaseExclusiveHardwareLock();
 									});
-									
-								// Catch errors
-								}).catch(function(error) {
+								}
+								
+								// Otherwise
+								else {
 								
 									// Release exclusive hardware lock
 									self.releaseExclusiveHardwareLock();
-								});
-							}
+								}
 							
+							}
+								
 							// Otherwise
 							else {
 							
 								// Release exclusive hardware lock
 								self.releaseExclusiveHardwareLock();
 							}
-						
-						}
-							
-						// Otherwise
-						else {
-						
-							// Release exclusive hardware lock
-							self.releaseExclusiveHardwareLock();
-						}
+						});
 					});
-				};
-			
-				// Check if not extension and USB is supported
-				if(Common.isExtension() === false && "usb" in navigator === true) {
-				
-					// USB connect event
-					$(navigator["usb"]).on("connect", connectToHardwareWallet);
-				}
-				
-				// Otherwise check if extension and HID is supported
-				else if(Common.isExtension() === true && "hid" in navigator === true) {
-				
-					// HID connect event
-					$(navigator["hid"]).on("connect", connectToHardwareWallet);
 				}
 			}
 			
@@ -9283,8 +9273,8 @@ class Wallets {
 						// Check if hardware wallets are supported
 						if(HardwareWallet.isSupported() === true) {
 						
-							// Check if is not extension and USB is supported or is extension and HID is supported
-							if((Common.isExtension() === false && "usb" in navigator === true) || (Common.isExtension() === true && "hid" in navigator === true)) {
+							// Check if USB is supported
+							if("usb" in navigator === true) {
 						
 								// Return obtain exclusive hardware lock
 								return self.obtainExclusiveHardwareLock().then(function() {

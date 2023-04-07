@@ -187,20 +187,14 @@ class HardwareWallet {
 							// Return promise
 							return new Promise(function(resolve, reject) {
 							
-								// Set transport method
-								var transportMethod = (Common.isExtension() === true) ? TransportWebHID : TransportWebUSB;
-							
 								// Check if connecting to any hardware wallet descriptor
 								if(hardwareWalletDescriptor === HardwareWallet.ANY_HARDWARE_WALLET_DESCRIPTOR) {
 								
-									// Set connection method
-									var connectionMethod = (Common.isExtension() === true) ? "hid" : "usb";
+									// Check if USB is supported
+									if("usb" in navigator === true) {
 								
-									// Check if connection method is supported
-									if(connectionMethod in navigator === true) {
-								
-										// Return connecting to any hardware wallet
-										return transportMethod.request().then(function(transport) {
+										// Return connecting to any USB hardware wallet
+										return TransportWebUSB.request().then(function(transport) {
 										
 											// Set connection type to USB connection type
 											self.connectionType = HardwareWallet.USB_CONNECTION_TYPE;
@@ -330,7 +324,7 @@ class HardwareWallet {
 								else {
 								
 									// Return connecting to provided hardware wallet descriptor
-									return transportMethod.open(hardwareWalletDescriptor).then(function(transport) {
+									return TransportWebUSB.open(hardwareWalletDescriptor).then(function(transport) {
 									
 										// Set connection type to USB connection type
 										self.connectionType = HardwareWallet.USB_CONNECTION_TYPE;
@@ -2921,11 +2915,8 @@ class HardwareWallet {
 			// Return promise
 			return new Promise(function(resolve, reject) {
 			
-				// Set transport method
-				var transportMethod = (Common.isExtension() === true) ? TransportWebHID : TransportWebUSB;
-			
 				// Return getting available hardware wallet descriptors
-				return transportMethod.list().then(function(availableHardwareWalletDescriptors) {
+				return TransportWebUSB.list().then(function(availableHardwareWalletDescriptors) {
 				
 					// Resolve available hardware wallet descriptors
 					resolve(availableHardwareWalletDescriptors);
@@ -2942,8 +2933,8 @@ class HardwareWallet {
 		// Is supported
 		static isSupported() {
 		
-			// Return if not extension and USB is supported, or extension and HID is supported, or Bluetooth is supported and BigInt is supported
-			return ((Common.isExtension() === false && "usb" in navigator === true) || (Common.isExtension() === true && "hid" in navigator === true) || "bluetooth" in navigator === true) && typeof BigInt === "function";
+			// Return if USB or Bluetooth and BigInt are supported
+			return ("usb" in navigator === true || "bluetooth" in navigator === true) && typeof BigInt === "function";
 		}
 		
 		// Any hardware wallet descriptor

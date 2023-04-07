@@ -321,16 +321,16 @@
 			"Checksum" => "AaYCKtIK3CfkZgJL+KjqGHbvK+urVTVK0Wagvfi9MQcrVy95oT6vmwR0lkjIA1gO89vuQ15jrW4vjLyLjUihfA=="
 		],
 		"./scripts/wallets.js" => [
-			"Version" => 43,
+			"Version" => 44,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "sIT8TQIJqScFzde/fbfr6FQyglBKlR50btHsXnZSGZKTih3mUPyHnbDEn8fBMYdxPr+FlNIF55xpqg9lvtpAYQ=="
+			"Checksum" => "tgSIYjPdwWhGZ2u82lMp3oewjpg88oavmxVKbze20MoLNMExIh6GyK5Arz6fflOjL76+U9GbQ/O4uuEY6Idh3Q=="
 		],
 		"./scripts/application.js" => [
-			"Version" => 43,
+			"Version" => 44,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "vXYQQMNkunZPP5oefNcoEGcg8LhgXCsjX+Od0PURb7U9V9JJSGT6CztGwElGDnkzwMa2pZMQYSzgPhJ9MYkJCQ=="
+			"Checksum" => "h1JHq2qCnBNIK/Vv58UCo3TWpUrvsdF13pBu5L8EgKj2HkGtbMEW41LrPFffyEmp8gcaFjEjv5cYw7KB/68lAg=="
 		],
 		"./scripts/automatic_lock.js" => [
 			"Version" => 5,
@@ -446,17 +446,17 @@
 			"Minified" => FALSE,
 			"Checksum" => "60J+B4uDEMznn1JBJELxpfKzxANY0ykF7LJM9SuMK/xuSyDSzEIKBIBUEY1qRMexltTqfLULsT10rIyRsXxG2A=="
 		],
-		"./scripts/LedgerJS_Browser-0.0.3.js" => [
+		"./scripts/LedgerJS_Browser-0.0.2.js" => [
 			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "g6hiH8rwc1Kgek0GK6SmNlc+GB20cdVM2/081ZQeriFupWaXRFgk7xZTkKtCaFfl+6aNyXONKUbxNgzauz+aUg=="
+			"Checksum" => "WWrHw7TzCNscPmJbc80xUfy489yUi4N+Q8ZSwlu8ZtokUGL3TUkm+h3QccgB+lhcmGA0uLNGDLmp0/fWyNXfUg=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 41,
+			"Version" => 42,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "ClQvuRTFremSAVTowC2WNKBc1/485bM0mAtC7zAdm4Uk3Y/pHlcduPTi3V4mUPU1fDBAq/3expCLbUWydX1okQ=="
+			"Checksum" => "eUmnp2ulu+Cky6/NrOumBG/i1xhZFg+mfAROzKUkYqFD0hS4H1IBqGt3SxcdbXB2mROYOk0h9+cC0SLFhO2ozw=="
 		],
 		"./scripts/proof_builder.js" => [
 			"Version" => 5,
@@ -867,10 +867,10 @@
 			"Checksum" => "tL8JRuLipT2XAjuSFouO83j4CGsTPvdWE8Co6cKcuhskCdPKA3XquDvo3DgpU4cRhbjc4DrDwTZq27YChQ5IIA=="
 		],
 		"./scripts/unlocked.js" => [
-			"Version" => 42,
+			"Version" => 43,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "KOoXccR1vO4Rw0/cOVG1Wukqga+MU6apkMDRDgjl4legZFKrA/8lNmVzEewoS0aQiOP8dq9AH3/oupUrDIGkoQ=="
+			"Checksum" => "uYofj7Y1PqDGg5+czYZA8wgo+2rstFl2zGb/lHtsURkZFt3OzrGpAzVGEgLxinRVFoTy4l0SnkidO/I0SnA9zQ=="
 		],
 		"./scripts/uuid.js" => [
 			"Version" => 5,

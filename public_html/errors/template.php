@@ -400,7 +400,7 @@
 			background: white;
 			box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.2);
 			width: 100%;
-			max-height: 60%;
+			max-height: 70%;
 			max-width: 51em;
 			overflow: hidden;
 		}
