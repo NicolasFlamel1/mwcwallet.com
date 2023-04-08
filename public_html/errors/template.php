@@ -797,7 +797,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="default">
 	<meta name="msapplication-TileColor" content="<?= encodeString(BACKGROUND_COLOR); ?>">
 	<link rel="mask-icon" color="<?= encodeString(BACKGROUND_COLOR); ?>" href=".<?= encodeString(getResource(MASK_IMAGE)); ?>">
-	<title class="translatable" data-text="<?= encodeString($title); ?>" data-arguments='<?= escapeData([strval($titleArgument)]); ?>'><?= encodeString(getTranslation($title, [getNumberTranslation($titleArgument)])); ?></title>
+	<title class="translatable" data-text="<?= encodeString($title); ?>" data-arguments='<?= escapeData([sprintf("%.0f", $titleArgument)]); ?>'><?= encodeString(getTranslation($title, [getNumberTranslation($titleArgument)])); ?></title>
 	<meta class="translatable" name="apple-mobile-web-app-title" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta class="translatable" name="application-name" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta class="translatable" name="msapplication-tooltip" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
@@ -813,16 +813,16 @@
 		if($year > COPYRIGHT_YEAR) {
 		
 			// Display copyright information with the current year
-			echo "<meta class=\"translatable\" name=\"dcterms.dateCopyrighted\" data-text=\"" . encodeString(getDefaultTranslation('%1$s–%2$s')) . "\" data-arguments='" . escapeData([strval(COPYRIGHT_YEAR), strval($year)]) . "' content=\"" . encodeString(getTranslation('%1$s–%2$s', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "\">";
-			echo "<meta class=\"translatable\" name=\"dcterms.rights\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s–%2$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([strval(COPYRIGHT_YEAR), strval($year)]) . "' content=\"" . encodeString(getTranslation('© %1$s–%2$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "\">";
+			echo "<meta class=\"translatable\" name=\"dcterms.dateCopyrighted\" data-text=\"" . encodeString(getDefaultTranslation('%1$s–%2$s')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR), sprintf("%.0f", $year)]) . "' content=\"" . encodeString(getTranslation('%1$s–%2$s', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "\">";
+			echo "<meta class=\"translatable\" name=\"dcterms.rights\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s–%2$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR), sprintf("%.0f", $year)]) . "' content=\"" . encodeString(getTranslation('© %1$s–%2$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "\">";
 		}
 		
 		// Otherwise
 		else {
 		
 			// Display copyright information with the copyright year
-			echo "<meta class=\"translatable\" name=\"dcterms.dateCopyrighted\" data-text=\"" . encodeString("%1\$s") . "\" data-arguments='" . escapeData([strval(COPYRIGHT_YEAR)]) . "' content=\"" . encodeString(getTranslation("%1\$s", [getNumberTranslation(COPYRIGHT_YEAR)])) . "\">";
-			echo "<meta class=\"translatable\" name=\"dcterms.rights\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([strval(COPYRIGHT_YEAR)]) . "' content=\"" . encodeString(getTranslation('© %1$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR)])) . "\">";
+			echo "<meta class=\"translatable\" name=\"dcterms.dateCopyrighted\" data-text=\"" . encodeString("%1\$s") . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR)]) . "' content=\"" . encodeString(getTranslation("%1\$s", [getNumberTranslation(COPYRIGHT_YEAR)])) . "\">";
+			echo "<meta class=\"translatable\" name=\"dcterms.rights\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR)]) . "' content=\"" . encodeString(getTranslation('© %1$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR)])) . "\">";
 		}
 		
 		// Display theme color
@@ -941,7 +941,7 @@
 			<aside class="message noButtons hide errorShow">
 				<div class="message">
 					<div>
-						<h2 class="translatable" data-text="<?= encodeString($error); ?>" data-arguments='<?= escapeData([strval($errorArgument)]); ?>'><?= encodeString(getTranslation($error, [getNumberTranslation($errorArgument)])); ?></h2>
+						<h2 class="translatable" data-text="<?= encodeString($error); ?>" data-arguments='<?= escapeData([sprintf("%.0f", $errorArgument)]); ?>'><?= encodeString(getTranslation($error, [getNumberTranslation($errorArgument)])); ?></h2>
 						<span class="upArrow"></span>
 						<p class="scrollable">
 							<span class="text">

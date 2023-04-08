@@ -1350,16 +1350,16 @@
 		if($year > COPYRIGHT_YEAR) {
 		
 			// Display copyright information with the current year
-			echo "<meta class=\"translatable\" name=\"dcterms.dateCopyrighted\" data-text=\"" . encodeString(getDefaultTranslation('%1$s–%2$s')) . "\" data-arguments='" . escapeData([strval(COPYRIGHT_YEAR), strval($year)]) . "' content=\"" . encodeString(getTranslation('%1$s–%2$s', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "\">";
-			echo "<meta class=\"translatable\" name=\"dcterms.rights\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s–%2$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([strval(COPYRIGHT_YEAR), strval($year)]) . "' content=\"" . encodeString(getTranslation('© %1$s–%2$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "\">";
+			echo "<meta class=\"translatable\" name=\"dcterms.dateCopyrighted\" data-text=\"" . encodeString(getDefaultTranslation('%1$s–%2$s')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR), sprintf("%.0f", $year)]) . "' content=\"" . encodeString(getTranslation('%1$s–%2$s', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "\">";
+			echo "<meta class=\"translatable\" name=\"dcterms.rights\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s–%2$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR), sprintf("%.0f", $year)]) . "' content=\"" . encodeString(getTranslation('© %1$s–%2$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "\">";
 		}
 		
 		// Otherwise
 		else {
 		
 			// Display copyright information with the copyright year
-			echo "<meta class=\"translatable\" name=\"dcterms.dateCopyrighted\" data-text=\"" . encodeString("%1\$s") . "\" data-arguments='" . escapeData([strval(COPYRIGHT_YEAR)]) . "' content=\"" . encodeString(getTranslation("%1\$s", [getNumberTranslation(COPYRIGHT_YEAR)])) . "\">";
-			echo "<meta class=\"translatable\" name=\"dcterms.rights\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([strval(COPYRIGHT_YEAR)]) . "' content=\"" . encodeString(getTranslation('© %1$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR)])) . "\">";
+			echo "<meta class=\"translatable\" name=\"dcterms.dateCopyrighted\" data-text=\"" . encodeString("%1\$s") . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR)]) . "' content=\"" . encodeString(getTranslation("%1\$s", [getNumberTranslation(COPYRIGHT_YEAR)])) . "\">";
+			echo "<meta class=\"translatable\" name=\"dcterms.rights\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR)]) . "' content=\"" . encodeString(getTranslation('© %1$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR)])) . "\">";
 		}
 		
 		// Display theme color
@@ -2178,14 +2178,14 @@
 													if($year > COPYRIGHT_YEAR) {
 													
 														// Display copyright information with the current year
-														echo "<p class=\"copyright translatable\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s–%2$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([strval(COPYRIGHT_YEAR), strval($year)]) . "'>" . encodeString(getTranslation('© %1$s–%2$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "</p>";
+														echo "<p class=\"copyright translatable\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s–%2$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR), sprintf("%.0f", $year)]) . "'>" . encodeString(getTranslation('© %1$s–%2$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "</p>";
 													}
 													
 													// Otherwise
 													else {
 													
 														// Display copyright information with the copyright year
-														echo "<p class=\"copyright translatable\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([strval(COPYRIGHT_YEAR)]) . "'>" . encodeString(getTranslation('© %1$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR)])) . "</p>";
+														echo "<p class=\"copyright translatable\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR)]) . "'>" . encodeString(getTranslation('© %1$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR)])) . "</p>";
 													}
 												?>
 												

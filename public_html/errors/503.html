@@ -73,7 +73,7 @@
 	header("Retry-After: " . gmdate("D, d M Y H:i:s T", time() + RETRY_AFTER_SECONDS));
 	
 	// Set refresh header
-	header("Refresh: " . strval(RETRY_AFTER_SECONDS) . "; URL=" . ((isset($hideUrl) === TRUE) ? $_SERVER["HTTP_REFERER"] : ("http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]) . $_SERVER["REQUEST_URI"])));
+	header("Refresh: " . sprintf("%.0f", RETRY_AFTER_SECONDS) . "; URL=" . ((isset($hideUrl) === TRUE) ? $_SERVER["HTTP_REFERER"] : ("http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]) . $_SERVER["REQUEST_URI"])));
 	
 	// Set title, title argument, error, error argument, and message
 	$title = getDefaultTranslation('MWC Wallet — Maintenance');

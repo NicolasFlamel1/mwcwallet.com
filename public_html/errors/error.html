@@ -44,7 +44,7 @@
 	}
 	
 	// Set refresh header
-	header("Refresh: " . strval(SECONDS_BEFORE_REFRESH) . "; URL=" . $_SERVER["HTTP_REFERER"]);
+	header("Refresh: " . sprintf("%.0f", SECONDS_BEFORE_REFRESH) . "; URL=" . $_SERVER["HTTP_REFERER"]);
 
 	// Set title, title argument, error, error argument, and message
 	$title = getDefaultTranslation('MWC Wallet — Error');
