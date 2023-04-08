@@ -153,6 +153,9 @@ class Language {
 					// Check if language display list is hidden
 					if(languageDisplayList.hasClass("hide") === true) {
 					
+						// Reset language display list scroll position
+						languageDisplayList.scrollTop(0);
+					
 						// Show language display list
 						languageDisplayList.removeClass("hide").parent().addClass("shadow");
 						
