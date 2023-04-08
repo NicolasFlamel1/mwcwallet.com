@@ -3690,13 +3690,6 @@ class HardwareWallet {
 			// Return request get MQS timestamp signature instruction
 			return HardwareWallet.REQUEST_FINISH_TRANSACTION_INSTRUCTION + 1;
 		}
-
-		// Request get Tor certificate signature instruction
-		static get REQUEST_GET_TOR_CERTIFICATE_SIGNATURE_INSTRUCTION() {
-
-			// Return request get Tor certificate signature instruction
-			return HardwareWallet.REQUEST_GET_MQS_TIMESTAMP_SIGNATURE_INSTRUCTION + 1;
-		}
 		
 		// Response delimiter length
 		static get RESPONSE_DELIMITER_LENGTH() {
