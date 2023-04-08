@@ -425,7 +425,7 @@ class Api {
 																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																				
 																							// Return waiting for wallet's hardware wallet to approve
-																							return self.wallets.waitForHardwareWalletToApprove(wallet.getKeyPath(), Message.createPendingResult() + Message.createLineBreak() + Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for Wallet %1$s to continue mining.') : Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for %1$y to continue mining.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + " " + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$y, and that there\'s no sender payment proof address displayed.'), [
+																							return self.wallets.waitForHardwareWalletToApprove(wallet.getKeyPath(), Message.createPendingResult() + Message.createLineBreak() + Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for Wallet %1$s to continue mining.') : Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for %1$y to continue mining.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + " " + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and that there\'s no sender payment proof address displayed.'), [
 																														
 																								[
 												
@@ -446,7 +446,7 @@ class Api {
 																								],
 																								
 																								// Kernel features
-																								"coinbase"
+																								Language.getDefaultTranslation('coinbase')
 																								
 																							]), cancelOccurred).then(function(canceled) {
 																							
@@ -2970,7 +2970,7 @@ class Api {
 																																											else {
 																																										
 																																												// Return waiting for wallet's hardware wallet to approve
-																																												return self.wallets.waitForHardwareWalletToApprove(wallet.getKeyPath(), Message.createPendingResult() + Message.createLineBreak() + Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + " " + Message.createText((slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$y, and the sender payment proof address displayed matches the following payment proof address.') : Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$y, and that there\'s no sender payment proof address displayed.'), [
+																																												return self.wallets.waitForHardwareWalletToApprove(wallet.getKeyPath(), Message.createPendingResult() + Message.createLineBreak() + Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + " " + Message.createText((slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and the sender payment proof address displayed matches the following payment proof address.') : Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and that there\'s no sender payment proof address displayed.'), [
 																																																			
 																																													[
 																																	

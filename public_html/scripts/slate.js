@@ -2022,25 +2022,25 @@ class Slate {
 				case SlateKernel.PLAIN_FEATURES:
 				
 					// Return display kernel features
-					return "plain";
+					return Language.getDefaultTranslation('plain');
 				
 				// Coinbase features
 				case SlateKernel.COINBASE_FEATURES:
 				
 					// Return display kernel features
-					return "coinbase";
+					return Language.getDefaultTranslation('coinbase');
 				
 				// Height locked features
 				case SlateKernel.HEIGHT_LOCKED_FEATURES:
 				
 					// Return display kernel features
-					return "height locked";
+					return Language.getDefaultTranslation('height locked');
 				
 				// No recent duplicate features
 				case SlateKernel.NO_RECENT_DUPLICATE_FEATURES:
 				
 					// Return display kernel features
-					return "no recent duplicate";
+					return Language.getDefaultTranslation('no recent duplicate');
 			}
 		}
 		
