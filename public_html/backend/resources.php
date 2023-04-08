@@ -327,10 +327,10 @@
 			"Checksum" => "tgSIYjPdwWhGZ2u82lMp3oewjpg88oavmxVKbze20MoLNMExIh6GyK5Arz6fflOjL76+U9GbQ/O4uuEY6Idh3Q=="
 		],
 		"./scripts/application.js" => [
-			"Version" => 44,
+			"Version" => 45,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "h1JHq2qCnBNIK/Vv58UCo3TWpUrvsdF13pBu5L8EgKj2HkGtbMEW41LrPFffyEmp8gcaFjEjv5cYw7KB/68lAg=="
+			"Checksum" => "1EkdGsEjwfKTjAXX8HpcUDkEFylJh5Axa6ajR/kYhLfDdYqv7qEXbs2rxzVIgP8J4dM9XgfVX9n11rklcnfa0A=="
 		],
 		"./scripts/automatic_lock.js" => [
 			"Version" => 5,

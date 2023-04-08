@@ -1862,46 +1862,42 @@ class Application {
 			// Is not iframe
 			this.isNotIframe().then(function() {
 			
-				// Is not private mode
-				self.isNotPrivateMode().then(function() {
-			
-					// If browser is compatible
-					self.browserIsCompatible().then(function() {
+				// If browser is compatible
+				self.browserIsCompatible().then(function() {
+				
+					// Install service worker
+					self.installServiceWorker().then(function() {
+				
+						// Show version changes
+						self.version.showChanges().then(function() {
 					
-						// Install service worker
-						self.installServiceWorker().then(function() {
-					
-							// Show version changes
-							self.version.showChanges().then(function() {
-						
-								// Show private browsing message
-								self.showPrivateBrowsingMessage().then(function() {
-								
-									// Show third-party cookies message
-									self.showThirdPartyCookiesMessage().then(function() {
-								
-										// Is primary instance
-										self.isPrimaryInstance().then(function() {
-										
-											// Set timeout
-											setTimeout(function() {
-										
-												// Show reset settings
-												self.showResetSettings().then(function() {
-										
-													// Initialize dependencies
-													self.initializeDependencies().then(function() {
-													
-														// Initialize extension
-														self.initializeExtension().then(function() {
+							// Show private browsing message
+							self.showPrivateBrowsingMessage().then(function() {
+							
+								// Show third-party cookies message
+								self.showThirdPartyCookiesMessage().then(function() {
+							
+									// Is primary instance
+									self.isPrimaryInstance().then(function() {
+									
+										// Set timeout
+										setTimeout(function() {
+									
+											// Show reset settings
+											self.showResetSettings().then(function() {
+									
+												// Initialize dependencies
+												self.initializeDependencies().then(function() {
 												
-															// Show create or unlock
-															self.showCreateOrUnlock();
-														});
+													// Initialize extension
+													self.initializeExtension().then(function() {
+											
+														// Show create or unlock
+														self.showCreateOrUnlock();
 													});
 												});
-											}, 0);
-										});
+											});
+										}, 0);
 									});
 								});
 							});
@@ -4420,39 +4416,6 @@ class Application {
 						self.loadingDisplay.children("div.spinner").addClass("hide");
 					
 					}, Message.NO_BUTTON, Message.NO_BUTTON, true);
-				}
-			});
-		}
-		
-		// Is not private mode
-		isNotPrivateMode() {
-
-			// Set self
-			var self = this;
-			
-			// Return promise
-			return new Promise(function(resolve, reject) {
-			
-				// Check if is an extension and running in private mode
-				if(Common.isExtension() === true && ((typeof browser !== "undefined" && browser["extension"]["inIncognitoContext"] === true) || (typeof chrome !== "undefined" && chrome["extension"]["inIncognitoContext"] === true))) {
-				
-					// Show message and allow showing messages
-					self.message.show(Language.getDefaultTranslation('Error'), Message.createText(Language.getDefaultTranslation('This extension won\'t run in private or incognito browsing modes.')), false, function() {
-					
-						// Hide loading
-						self.hideLoading();
-					
-						// Hide loading display spinner
-						self.loadingDisplay.children("div.spinner").addClass("hide");
-					
-					}, Message.NO_BUTTON, Message.NO_BUTTON, true);
-				}
-				
-				// Otherwise
-				else {
-				
-					// Resolve
-					resolve();
 				}
 			});
 		}
