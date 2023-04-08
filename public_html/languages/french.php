@@ -6,7 +6,7 @@
 		// Constants
 		"Constants" => [
 		
-			// Languageh
+			// Language
 			"Language" => "Français",
 			
 			// Direction
