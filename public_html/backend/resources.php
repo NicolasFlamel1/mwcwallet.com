@@ -1029,22 +1029,22 @@
 			"Checksum" => "Gm8PRw90oQAoT7ziuw9aTpq5NXkAU9IRrHGsmwDnBuF6fU8SvZbVrtHVqZdKFBoOiiiTZPPJ57hY5IWa3I1qvg=="
 		],
 		"./images/tile_images/tile_image-70x70.png" => [
-			"Version" => 3,
+			"Version" => 4,
 			"Cache" => FALSE,
 			"Minified" => FALSE,
-			"Checksum" => "3RoZpKcR4dlgH30gxLGfoJQp9VZS4/iTJQvOd2eUlobVq05q33cTnrbZy+umrk5VqbvG4GVrfDA/gC169+SqTA=="
+			"Checksum" => "uj+AdzNHPcPrmPwG4r06U4rwIlSuL0hmwG0p3TJ/2IybdI/uDUbNV12QUY+0+D9JFZX04jm9OH1VmRK1bwu72A=="
 		],
 		"./images/tile_images/tile_image-150x150.png" => [
-			"Version" => 3,
+			"Version" => 4,
 			"Cache" => FALSE,
 			"Minified" => FALSE,
-			"Checksum" => "BNSvGxLbPTDZgL1VXGgOBnCdrfwywbKN2bGe9/vVMa8Ibqwh2YnACapz7FuaDbC+tUaF+P1V+9Ps43zTuaPVtg=="
+			"Checksum" => "gD4yr31lazkNynmrykbL74WdKF1dSBUU3Zpcpa3joirzrLsSjG4EFveMb6CRy9iQi0QlHCoNGLx5jyid7D1bYA=="
 		],
 		"./images/tile_images/tile_image-310x310.png" => [
-			"Version" => 3,
+			"Version" => 4,
 			"Cache" => FALSE,
 			"Minified" => FALSE,
-			"Checksum" => "6Nia7Q+boUiVXSx5EK1zK2mU/90zzklSv5romPkxD4ki0vEhrqBT2S66d4ZfqnjiBvMLIdix5TeCc/GEN1Rgwg=="
+			"Checksum" => "c/rHxGePwbGtTB4jCqfpiWHhxeBxhJ3o15p2hJz4IisjjhyPwdpe40EWpmbY+qAoCCsYX5lFkcSfpiSj5RMQ/g=="
 		],
 		"./images/app_icons/app_icon-114x114.png" => [
 			"Version" => 5,
@@ -1077,10 +1077,10 @@
 			"Checksum" => "7KiOW6LBbVa665HD5GqGvvCdcSx8x8NSFYqn/kScISnDLWq/p69Ub21sFiTFdYERwkLzg1jfku4ny3uiem1smQ=="
 		],
 		"./images/tile_images/tile_image-310x150.png" => [
-			"Version" => 3,
+			"Version" => 4,
 			"Cache" => FALSE,
 			"Minified" => FALSE,
-			"Checksum" => "a4zlL6GXGWx+CkscTdtb4db0GnBH9CtvmbYsLgv3xTNZ8B7pj86woeSd6OukA6HWivVga6U4FMjaDLUVlLVo8Q=="
+			"Checksum" => "ymJVYV0wF6wdYqsDw2CgWDBrzBp87YY4cI9yKljJyd7hVGOfvpwIjMdGlI5mnHJpkr8yP3fSERmw6ckq1roXog=="
 		],
 		"./images/touch_icons/touch_icon-167x167.png" => [
 			"Version" => 6,
