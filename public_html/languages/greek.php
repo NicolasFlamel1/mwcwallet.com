@@ -1,7 +1,7 @@
 <?php
 
 	// Append French to available languages
-	$availableLanguages["gr"] = [
+	$availableLanguages["el-GR"] = [
 	
 		// Contributors
 		"Contributors" => [

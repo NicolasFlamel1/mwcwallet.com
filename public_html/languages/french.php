@@ -1,7 +1,7 @@
 <?php
 
 	// Append French to available languages
-	$availableLanguages["fr"] = [
+	$availableLanguages["fr-FR"] = [
 	
 		// Constants
 		"Constants" => [
@@ -16,7 +16,10 @@
 			"Image" => "./images/countries/france.svg",
 			
 			// Currency
-			"Currency" => "EUR"
+			"Currency" => "EUR",
+			
+			// Fallback
+			"Fallback" => "fr"
 		],
 		
 		// Text
