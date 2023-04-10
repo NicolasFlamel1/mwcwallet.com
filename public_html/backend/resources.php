@@ -1022,6 +1022,12 @@
 			"Minified" => FALSE,
 			"Checksum" => "cW+hGTINEt40IUJmxVL33jY1NVh32p8tTB4UYaiZSx/NiIhnIy0ox+a1ioNWSUS43X+mTqHu9BaOeSxkZaB2zQ=="
 		],
+		"./images/countries/greece.svg" => [
+			"Version" => 1,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "G77foDMhtN8Gh7XXBg/D5EJ9DwiWT//UvPqq9pfJcrj13u92Luwi2cYssnqqVwe4gRkRyoMOv8TX8iQniKN+aQ=="
+		],
 		"./images/app_icons/app_icon-152x152.png" => [
 			"Version" => 4,
 			"Cache" => FALSE,
