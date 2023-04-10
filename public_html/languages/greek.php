@@ -1,6 +1,6 @@
 <?php
 
-	// Append French to available languages
+	// Append Greek to available languages
 	$availableLanguages["el-GR"] = [
 	
 		// Contributors
@@ -111,7 +111,7 @@
 			'Change Address Suffix Error' => 'Σφάλμα επιθήματος αλλαγής διεύθυνσης',
 			'Changed %1$y setting.' => 'Άλλαξε η ρύθμιση %1$y.',
 			'Changed %1$y setting to %2$y.' => 'Η ρύθμιση %1$y άλλαξε σε %2$y.',
-			'Changed password.' => 'Αλλαγμένος κωδικός πρόσβασης',
+			'Changed password.' => 'Αλλαγμένος κωδικός πρόσβασης.',
 			'Change Password' => 'Αλλάξτε κωδικό',
 			'Change Password Error' => 'Σφάλμα αλλαγής κωδικού πρόσβασης',
 			'Changing the address suffix failed.' => 'Η αλλαγή του επιθέματος διεύθυνσης απέτυχε.',
@@ -255,7 +255,7 @@
 			'Incorrect password.' => 'Λάθος κωδικός.',
 			'Install Now' => 'Εγκατάσταση τώρα',
 			'Install the MWC Wallet app?' => 'Εγκατάσταση της εφαρμογής MWC Wallet;',
-			'Insufficient balance.' => 'Ανεπαρκές Υπόλοιπο',
+			'Insufficient balance.' => 'Ανεπαρκές Υπόλοιπο.',
 			'Interface Settings' => 'Ρυθμίσεις διεπαφής',
 			'Internal error' => 'Εσωτερικό σφάλμα',
 			'Internal Server Error' => 'Εσωτερικό Σφάλμα Διακομιστή',
@@ -624,7 +624,7 @@
 			'You\'re sending %1$c for a fee of %2$c, and the recipient\'s payment proof address is the following payment proof address.' => 'Στέλνετε %1$c με τέλος πληρωμής %2$c και η διεύθυνση απόδειξης πληρωμής του παραλήπτη είναι η ακόλουθη διεύθυνση απόδειξης πληρωμής.',
 			'You\'re sending %1$c for a fee of %2$c, and this transaction doesn\'t have a payment proof.' => 'Στέλνετε %1$c με τέλος πληρωμής %2$c και αυτή η συναλλαγή δεν διαθέτει απόδειξη πληρωμής.',
 			'Your password was successfully changed.' => 'Ο κωδικός πρόσβασής σας άλλαξε με επιτυχία.',
-			'You shouldn\'t consider this payment to be legitimate until it\'s been confirmed on the blockchain.' => 'Δεν θα πρέπει να θεωρείτε νόμιμη αυτή την πληρωμή μέχρι να γίνει',
+			'You shouldn\'t consider this payment to be legitimate until it\'s been confirmed on the blockchain.' => 'Δεν θα πρέπει να θεωρείτε νόμιμη αυτή την πληρωμή μέχρι να γίνει.',
 			'You were sent %1$c to %2$y.' => 'Έχετε σταλεί %1$c στο %2$y.',
 			'You were sent %1$c to %2$y with a message.' => 'Σας εστάλη %1$c στο %2$y με ένα μήνυμα.',
 			'You were sent %1$c to Wallet %2$s.' => 'Στείλατε %1$c στο Πορτοφόλι %2$s.',

@@ -1,11 +1,11 @@
 <?php
 
-	// Append French to available languages
+	// Append simplified Chinese to available languages
 	$availableLanguages["zh-CN"] = [
 	
 		// Contributors
 		"Contributors" => [
-			"QF D"
+			"grincalf" => "https://twitter.com/@grincalf1"
 		],
 		
 		// Constants

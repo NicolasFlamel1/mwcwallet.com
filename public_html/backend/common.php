@@ -15,7 +15,7 @@
 		"Fixed detecting when a hardware wallet is locked.",
 		"Added options to open the extension version of this service in a tab or window.",
 		"Changed standalone version of this service to use WASM instead of asm.js.",
-		"Added Chinese translation by QF D.",
+		"Added Chinese translation by grincalf.",
 		"Added Greek translation by NickTheG."
 	];
 	

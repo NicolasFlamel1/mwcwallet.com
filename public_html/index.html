@@ -2208,12 +2208,23 @@
 														
 														// Otherwise
 														else {
-			
+														
 															// Go through all translation contributors
-															foreach(getTransactionContributors() as $translationContributor) {
+															foreach(getTransactionContributors() as $link => $translationContributor) {
 															
-																// Display translation contributor
-																echo "<li><span>" . encodeString($translationContributor) . "</span></li>";
+																// Check if contributor doesn't have a link
+																if(is_int($link) === TRUE) {
+																
+																	// Display translation contributor
+																	echo "<li><span>" . encodeString($translationContributor) . "</span></li>";
+																}
+																
+																// Otherwise
+																else {
+																
+																	// Display translation contributor
+																	echo "<li><a href=\"" . encodeString($link) . "\" referrerpolicy=\"same-origin\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">" . encodeString($translationContributor) . "</a></li>";
+																}
 															}
 														}
 													?>

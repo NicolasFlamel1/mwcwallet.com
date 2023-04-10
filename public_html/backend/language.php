@@ -286,18 +286,33 @@
 					$contributors = $availableLanguage["Contributors"];
 					
 					// Go through all contributors
-					foreach($contributors as $contributor)
+					foreach($contributors as $contributor => $link) {
 					
-						// Check if contributor isn't already in the list of translation contributors
-						if(in_array($contributor, $translationContributors, TRUE) === FALSE)
+						// Check if contributor doesn't have a link
+						if(is_int($contributor) === True) {
 						
-							// Append contributor to list of translation contributors
-							array_push($translationContributors, $contributor);
+							// Check if contributor isn't already in the list of translation contributors
+							if(in_array($link, $translationContributors, TRUE) === FALSE)
+							
+								// Append contributor to list of translation contributors
+								array_push($translationContributors, $link);
+						}
+						
+						// Otherwise
+						else {
+						
+							// Check if contributor isn't already in the list of translation contributors
+							if(in_array($contributor, $translationContributors, TRUE) === FALSE)
+							
+								// Append contributor to list of translation contributors
+								$translationContributors[$link] = $contributor;
+						}
+					}
 				}
 			}
 			
 			// Sort translation contributors by contributor name
-			usort($translationContributors, function($firstValue, $secondValue) {
+			uasort($translationContributors, function($firstValue, $secondValue) {
 				
 				return strcoll($firstValue, $secondValue);
 			});
