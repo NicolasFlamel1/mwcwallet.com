@@ -87,7 +87,7 @@ section.maintenanceNotification > div > p {
 
 section.maintenanceNotification > div > button {
 	margin: 0 1.5em 0 0;
-	flex-shrink: 1;
+	flex-shrink: 0;
 	background: rgba(12, 12, 13, 0.1);
 	font-size: 11pt;
 	border-radius: 2px;
