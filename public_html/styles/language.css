@@ -255,7 +255,8 @@ main > div.language > div > div > button > span {
 
 main > div.language > div > div > button > img {
 	width: 1.5em;
-	height: auto;
+	height: calc(190 / 300 * 1.5em);
+	object-fit: cover;
 	margin-right: 0.5em;
 	-webkit-user-drag: none;
 	-moz-user-drag: none;

@@ -3856,7 +3856,7 @@ class Wallets {
 				else {
 				
 					// Reject error
-					reject(Message.createText(Language.getDefaultTranslation('You aren\'t connected to a listener.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to change address suffixes without being connected to a listener.')));
+					reject(Message.createText(Language.getDefaultTranslation('You aren\'t connected to a listener.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to change address suffixes without being connected to a listener.')));
 				}
 			});
 		}

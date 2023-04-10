@@ -12,9 +12,10 @@
 	const VERSION_CHANGES = [
 		"Fixed bold fonts being displayed inconsistently across different browsers.",
 		"Fixed error response messages not being displayed if they contained certain characters.",
-		"Improved localization support.",
 		"Fixed detecting when a hardware wallet is locked.",
-		"Added options to open the extension version of this service in a tab or window."
+		"Added options to open the extension version of this service in a tab or window.",
+		"Changed standalone version of this service to use WASM instead of asm.js.",
+		"Added Chinese translation by QF D."
 	];
 	
 	// Maintenance start time

@@ -702,14 +702,14 @@ class Application {
 						if(self.node.getSecret() === Node.NO_SECRET) {
 						
 							// Set message
-							var message = Message.createText(Language.getDefaultTranslation('The node returned an unauthorized response.')) + " " + Message.createText(Language.getDefaultTranslation('The node may require a foreign API secret.'));
+							var message = Message.createText(Language.getDefaultTranslation('The node returned an unauthorized response.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('The node may require a foreign API secret.'));
 						}
 						
 						// Otherwise
 						else {
 						
 							// Set message
-							var message = Message.createText(Language.getDefaultTranslation('The node returned an unauthorized response.')) + " " + Message.createText(Language.getDefaultTranslation('Verify that the node\'s foreign API secret is correct.'));
+							var message = Message.createText(Language.getDefaultTranslation('The node returned an unauthorized response.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the node\'s foreign API secret is correct.'));
 						}
 					
 						// Show message
@@ -886,14 +886,14 @@ class Application {
 														if(Common.isApp() === true) {
 													
 															// Set message with insecure content information
-															var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + " " + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from an app that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a node address that is served over HTTPS or as an Onion Service to connect to the node.'));
+															var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from an app that is served securely.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to specify a node address that is served over HTTPS or as an Onion Service to connect to the node.'));
 														}
 														
 														// Otherwise
 														else {
 														
 															// Set message with insecure content information
-															var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + " " + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from a site that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a node address that is served over HTTPS or as an Onion Service to connect to the node.'));
+															var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from a site that is served securely.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to specify a node address that is served over HTTPS or as an Onion Service to connect to the node.'));
 														}
 													}
 												}
@@ -904,7 +904,7 @@ class Application {
 										else {
 										
 											// Set message
-											var message = Message.createText(Language.getDefaultTranslation('A node address hasn\'t been provided.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.'));
+											var message = Message.createText(Language.getDefaultTranslation('A node address hasn\'t been provided.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.'));
 										}
 									}
 									
@@ -947,14 +947,14 @@ class Application {
 														if(self.torProxy.getAddress()["length"] === 0) {
 														
 															// Set message
-															var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + " " + Message.createText(Language.getDefaultTranslation('You\'ll need to provide a Tor proxy address to connect to the node.'));
+															var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You\'ll need to provide a Tor proxy address to connect to the node.'));
 														}
 														
 														// Otherwise
 														else {
 													
 															// Set message
-															var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a different Tor proxy address to connect to the node.'));
+															var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to specify a different Tor proxy address to connect to the node.'));
 														}
 													}
 												}
@@ -964,7 +964,7 @@ class Application {
 											if(typeof message === "undefined") {
 											
 												// Set message
-												var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.'));
+												var message = Message.createText(Language.getDefaultTranslation('Connecting to the node failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.'));
 											}
 										}
 									}
@@ -973,7 +973,7 @@ class Application {
 									if(typeof message === "undefined") {
 									
 										// Set message
-										var message = Message.createText(Language.getDefaultTranslation('Connecting to a node failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.'));
+										var message = Message.createText(Language.getDefaultTranslation('Connecting to a node failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.'));
 									}
 					
 									// Show message
@@ -1116,14 +1116,14 @@ class Application {
 													if(self.torProxy.getAddress()["length"] === 0) {
 													
 														// Set message
-														var message = Message.createText(Language.getDefaultTranslation('You\'re no longer connected to the node.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + " " + Message.createText(Language.getDefaultTranslation('You\'ll need to provide a Tor proxy address to connect to the node.'));
+														var message = Message.createText(Language.getDefaultTranslation('You\'re no longer connected to the node.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You\'ll need to provide a Tor proxy address to connect to the node.'));
 													}
 													
 													// Otherwise
 													else {
 												
 														// Set message
-														var message = Message.createText(Language.getDefaultTranslation('You\'re no longer connected to the node.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a different Tor proxy address to connect to the node.'));
+														var message = Message.createText(Language.getDefaultTranslation('You\'re no longer connected to the node.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to specify a different Tor proxy address to connect to the node.'));
 													}
 												}
 											}
@@ -1133,7 +1133,7 @@ class Application {
 										if(typeof message === "undefined") {
 										
 											// Set message
-											var message = Message.createText(Language.getDefaultTranslation('You\'re no longer connected to the node.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.'));
+											var message = Message.createText(Language.getDefaultTranslation('You\'re no longer connected to the node.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.'));
 										}
 									}
 									
@@ -1141,7 +1141,7 @@ class Application {
 									if(typeof message === "undefined") {
 									
 										// Set message
-										var message = Message.createText(Language.getDefaultTranslation('You\'re no longer connected to a node.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.'));
+										var message = Message.createText(Language.getDefaultTranslation('You\'re no longer connected to a node.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to send payments without being connected to a node.'));
 									}
 								
 									// Show message
@@ -1372,14 +1372,14 @@ class Application {
 														if(Common.isApp() === true) {
 													
 															// Set message with insecure content information
-															var message = Message.createText(Language.getDefaultTranslation('Connecting to the listener failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.')) + " " + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from an app that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a listener address that is served over HTTPS to connect to the listener.'));
+															var message = Message.createText(Language.getDefaultTranslation('Connecting to the listener failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from an app that is served securely.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to specify a listener address that is served over HTTPS to connect to the listener.'));
 														}
 														
 														// Otherwise
 														else {
 														
 															// Set message with insecure content information
-															var message = Message.createText(Language.getDefaultTranslation('Connecting to the listener failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.')) + " " + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from a site that is served securely.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to specify a listener address that is served over HTTPS to connect to the listener.'));
+															var message = Message.createText(Language.getDefaultTranslation('Connecting to the listener failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Some browsers don\'t allow connecting to content that is served insecurely from a site that is served securely.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to specify a listener address that is served over HTTPS to connect to the listener.'));
 														}
 													}
 												}
@@ -1390,7 +1390,7 @@ class Application {
 										else {
 										
 											// Set message
-											var message = Message.createText(Language.getDefaultTranslation('A listener address hasn\'t been provided.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.'));
+											var message = Message.createText(Language.getDefaultTranslation('A listener address hasn\'t been provided.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.'));
 										}
 									}
 									
@@ -1398,7 +1398,7 @@ class Application {
 									if(typeof message === "undefined") {
 									
 										// Set message
-										var message = Message.createText(Language.getDefaultTranslation('Connecting to the listener failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.'));
+										var message = Message.createText(Language.getDefaultTranslation('Connecting to the listener failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.'));
 									}
 					
 									// Show message
@@ -1506,7 +1506,7 @@ class Application {
 								else if(closeType === Listener.DISCONNECTED_CLOSE_TYPE) {
 								
 									// Show message
-									self.message.show(Language.getDefaultTranslation('Listener Error'), Message.createText(Language.getDefaultTranslation('You\'re no longer connected to the listener.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.')), false, function() {
+									self.message.show(Language.getDefaultTranslation('Listener Error'), Message.createText(Language.getDefaultTranslation('You\'re no longer connected to the listener.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to receive payments without being connected to a listener.')), false, function() {
 									
 										// Check if the listener status isn't showing warning
 										if(listenerStatusDisplay.hasClass("warning") === false && listenerStatusDisplay.hasClass("success") === false) {
@@ -3454,7 +3454,7 @@ class Application {
 										else {
 										
 											// Return showing hardware wallet error
-											return showHardwareWalletError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using USB or Bluetooth devices.')) + " " + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.'))).then(function() {
+											return showHardwareWalletError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using USB or Bluetooth devices.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.'))).then(function() {
 																	
 												// Resolve
 												resolve();
@@ -4832,14 +4832,14 @@ class Application {
 							if(Common.isApp() === true) {
 							
 								// Set message
-								var message = Message.createText(Language.getDefaultTranslation('Failed to install or update the service worker.')) + " " + Message.createText(Language.getDefaultTranslation('Restart this app to try again.'));
+								var message = Message.createText(Language.getDefaultTranslation('Failed to install or update the service worker.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Restart this app to try again.'));
 							}
 							
 							// Otherwise
 							else {
 							
 								// Set message
-								var message = Message.createText(Language.getDefaultTranslation('Failed to install or update the service worker.')) + " " + Message.createText(Language.getDefaultTranslation('Refresh this site to try again.'));
+								var message = Message.createText(Language.getDefaultTranslation('Failed to install or update the service worker.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Refresh this site to try again.'));
 							}
 							
 							// Show message and allow showing messages
@@ -4877,14 +4877,14 @@ class Application {
 						if(Common.isApp() === true) {
 						
 							// Set message
-							var message = Message.createText(Language.getDefaultTranslation('Failed to install or update the service worker.')) + " " + Message.createText(Language.getDefaultTranslation('Restart this app to try again.'));
+							var message = Message.createText(Language.getDefaultTranslation('Failed to install or update the service worker.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Restart this app to try again.'));
 						}
 						
 						// Otherwise
 						else {
 						
 							// Set message
-							var message = Message.createText(Language.getDefaultTranslation('Failed to install or update the service worker.')) + " " + Message.createText(Language.getDefaultTranslation('Refresh this site to try again.'));
+							var message = Message.createText(Language.getDefaultTranslation('Failed to install or update the service worker.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Refresh this site to try again.'));
 						}
 					
 						// Show message and allow showing messages
@@ -5226,21 +5226,21 @@ class Application {
 					if(Common.isExtension() === true) {
 					
 						// Set message
-						var message = Message.createText(Language.getDefaultTranslation('Failed to initialize dependencies.')) + " " + Message.createText(Language.getDefaultTranslation('Restart this extension to try again.'));
+						var message = Message.createText(Language.getDefaultTranslation('Failed to initialize dependencies.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Restart this extension to try again.'));
 					}
 					
 					// Otherwise check if is an app
 					else if(Common.isApp() === true) {
 					
 						// Set message
-						var message = Message.createText(Language.getDefaultTranslation('Failed to initialize dependencies.')) + " " + Message.createText(Language.getDefaultTranslation('Restart this app to try again.'));
+						var message = Message.createText(Language.getDefaultTranslation('Failed to initialize dependencies.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Restart this app to try again.'));
 					}
 					
 					// Otherwise
 					else {
 					
 						// Set message
-						var message = Message.createText(Language.getDefaultTranslation('Failed to initialize dependencies.')) + " " + Message.createText(Language.getDefaultTranslation('Refresh this site to try again.'));
+						var message = Message.createText(Language.getDefaultTranslation('Failed to initialize dependencies.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Refresh this site to try again.'));
 					}
 				
 					// Show message and allow showing messages
@@ -5488,21 +5488,21 @@ class Application {
 					if(Common.isExtension() === true) {
 					
 						// Set message
-						var message = Message.createText(Language.getDefaultTranslation('Failed to determine the primary instance.')) + " " + Message.createText(Language.getDefaultTranslation('Restart this extension to try again.'));
+						var message = Message.createText(Language.getDefaultTranslation('Failed to determine the primary instance.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Restart this extension to try again.'));
 					}
 					
 					// Otherwise check if is an app
 					else if(Common.isApp() === true) {
 					
 						// Set message
-						var message = Message.createText(Language.getDefaultTranslation('Failed to determine the primary instance.')) + " " + Message.createText(Language.getDefaultTranslation('Restart this app to try again.'));
+						var message = Message.createText(Language.getDefaultTranslation('Failed to determine the primary instance.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Restart this app to try again.'));
 					}
 					
 					// Otherwise
 					else {
 					
 						// Set message
-						var message = Message.createText(Language.getDefaultTranslation('Failed to determine the primary instance.')) + " " + Message.createText(Language.getDefaultTranslation('Refresh this site to try again.'));
+						var message = Message.createText(Language.getDefaultTranslation('Failed to determine the primary instance.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Refresh this site to try again.'));
 					}
 				
 					// Show message and allow showing messages

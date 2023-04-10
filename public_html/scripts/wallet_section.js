@@ -471,7 +471,7 @@ class WalletSection extends Section {
 						self.getClipboard().copy(address).then(function() {
 						
 							// Show message and allow showing messages
-							self.getMessage().show(Language.getDefaultTranslation('Address Copied'), ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('The address for Wallet %1$s was successfully copied to your clipboard.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('The address for %1$y was successfully copied to your clipboard.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('Verify that the pasted address matches the following address when you paste it.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(address) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can only receive payments at this address while you\'re online and connected to a listener.')) + "</b>", false, function() {
+							self.getMessage().show(Language.getDefaultTranslation('Address Copied'), ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('The address for Wallet %1$s was successfully copied to your clipboard.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('The address for %1$y was successfully copied to your clipboard.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the pasted address matches the following address when you paste it.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(address) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can only receive payments at this address while you\'re online and connected to a listener.')) + "</b>", false, function() {
 							
 								// Hide loading
 								self.getApplication().hideLoading();
@@ -575,7 +575,7 @@ class WalletSection extends Section {
 					self.getClipboard().copy(id).then(function() {
 					
 						// Show message and allow showing messages
-						self.getMessage().show(Language.getDefaultTranslation('ID Copied'), Message.createText(Language.getDefaultTranslation('The ID for transaction %1$s was successfully copied to your clipboard.'), [index]) + " " + Message.createText(Language.getDefaultTranslation('Verify that the pasted ID matches the following ID when you paste it.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(id) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak(), false, function() {
+						self.getMessage().show(Language.getDefaultTranslation('ID Copied'), Message.createText(Language.getDefaultTranslation('The ID for transaction %1$s was successfully copied to your clipboard.'), [index]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the pasted ID matches the following ID when you paste it.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(id) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak(), false, function() {
 						
 							// Hide loading
 							self.getApplication().hideLoading();
@@ -1793,7 +1793,7 @@ class WalletSection extends Section {
 									case Consensus.MWC_WALLET_TYPE:
 									
 										// Set text
-										var text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Verify the payment proof address on the hardware wallet for Wallet %1$s to continue getting the payment proof address.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Verify the payment proof address on the hardware wallet for %1$y to continue getting the payment proof address.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('Verify that the Tor address displayed on the hardware wallet matches the following payment proof address.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(proofAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak();
+										var text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Verify the payment proof address on the hardware wallet for Wallet %1$s to continue getting the payment proof address.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Verify the payment proof address on the hardware wallet for %1$y to continue getting the payment proof address.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the Tor address displayed on the hardware wallet matches the following payment proof address.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(proofAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak();
 										
 										// Break
 										break;
@@ -1802,7 +1802,7 @@ class WalletSection extends Section {
 									case Consensus.GRIN_WALLET_TYPE:
 									
 										// Set text
-										var text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Verify the payment proof address on the hardware wallet for Wallet %1$s to continue getting the payment proof address.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Verify the payment proof address on the hardware wallet for %1$y to continue getting the payment proof address.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('Verify that the Slatepack address displayed on the hardware wallet matches the following payment proof address.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(proofAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak();
+										var text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Verify the payment proof address on the hardware wallet for Wallet %1$s to continue getting the payment proof address.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Verify the payment proof address on the hardware wallet for %1$y to continue getting the payment proof address.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the Slatepack address displayed on the hardware wallet matches the following payment proof address.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(proofAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak();
 										
 										// Break
 										break;
@@ -2344,7 +2344,7 @@ class WalletSection extends Section {
 				}
 				
 				// Show message
-				self.getMessage().show(Language.getDefaultTranslation('Resync'), Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Are you sure you want to resync Wallet %1$s?') : Language.getDefaultTranslation('Are you sure you want to resync %1$y?'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Resyncing can take a significant amount of time to complete, and you won\'t be able to send payments from this wallet until it\'s finished resyncing.')) + ((Common.onReducedDataConnection() === true) ? " " + Message.createText(Language.getDefaultTranslation('Resyncing can also use a lot of data depending on the number of unspent transaction outputs present in the blockchain.')) : "") + "</b>", false, function() {
+				self.getMessage().show(Language.getDefaultTranslation('Resync'), Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Are you sure you want to resync Wallet %1$s?') : Language.getDefaultTranslation('Are you sure you want to resync %1$y?'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Resyncing can take a significant amount of time to complete, and you won\'t be able to send payments from this wallet until it\'s finished resyncing.')) + ((Common.onReducedDataConnection() === true) ? Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Resyncing can also use a lot of data depending on the number of unspent transaction outputs present in the blockchain.')) : "") + "</b>", false, function() {
 				
 					// Save focus and blur
 					self.getFocus().save(true);
@@ -3523,7 +3523,7 @@ class WalletSection extends Section {
 								}));
 								
 								// Replace address display's address
-								self.addressDisplay.find("p").replaceWith("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Address:')) + " " + "<span class=\"contextMenu\">" + Common.htmlEncode(address) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</p>");
+								self.addressDisplay.find("p").replaceWith("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "<span class=\"contextMenu\">" + Common.htmlEncode(address) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</p>");
 								
 								// Set timeout
 								setTimeout(function() {
@@ -3555,7 +3555,7 @@ class WalletSection extends Section {
 					}));
 					
 					// Replace address display's address
-					this.addressDisplay.find("p").replaceWith("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Address:')) + " " + "<span class=\"contextMenu\">" + Common.htmlEncode(address) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</p>");
+					this.addressDisplay.find("p").replaceWith("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "<span class=\"contextMenu\">" + Common.htmlEncode(address) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</p>");
 					
 					// Have address display not show loading
 					this.addressDisplay.removeClass("loading");
@@ -3600,7 +3600,7 @@ class WalletSection extends Section {
 			var price = this.getPrices().getPrice(currency);
 			
 			// Append spendable amount to balance display
-			this.balanceDisplay.find("button").before("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Spendable amount:')) + " " + Language.createTranslatableContainer("<span>", "%1$c", [
+			this.balanceDisplay.find("button").before("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Spendable amount:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$c", [
 				[
 					// Amount
 					wallet.getUnspentAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
@@ -3608,7 +3608,7 @@ class WalletSection extends Section {
 					// Currency
 					Consensus.CURRENCY_NAME
 				]
-			], "contextMenu") + ((price !== Prices.NO_PRICE_FOUND) ? "," + " " + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value:')) + " " + Language.createTranslatableContainer("<span>", "%1$c", [
+			], "contextMenu") + ((price !== Prices.NO_PRICE_FOUND) ? Language.createTranslatableContainer("<span>", Language.getDefaultTranslation(',(?= )')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=,) ')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$c", [
 				[
 					// Amount
 					wallet.getUnspentAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).multipliedBy(price).toFixed(),
@@ -3619,7 +3619,7 @@ class WalletSection extends Section {
 			], "contextMenu") : "") + "</p>");
 			
 			// Append confirmed amount to balance display
-			this.balanceDisplay.find("button").before("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed amount:')) + " " + Language.createTranslatableContainer("<span>", "%1$c", [
+			this.balanceDisplay.find("button").before("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed amount:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$c", [
 				[
 					// Amount
 					wallet.getUnspentAmount().plus(wallet.getPendingAmount()).dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
@@ -3627,7 +3627,7 @@ class WalletSection extends Section {
 					// Currency
 					Consensus.CURRENCY_NAME
 				]
-			], "contextMenu") + ((price !== Prices.NO_PRICE_FOUND) ? "," + " " + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value:')) + " " + Language.createTranslatableContainer("<span>", "%1$c", [
+			], "contextMenu") + ((price !== Prices.NO_PRICE_FOUND) ? Language.createTranslatableContainer("<span>", Language.getDefaultTranslation(',(?= )')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=,) ')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$c", [
 				[
 					// Amount
 					wallet.getUnspentAmount().plus(wallet.getPendingAmount()).dividedBy(Consensus.VALUE_NUMBER_BASE).multipliedBy(price).toFixed(),
@@ -3638,7 +3638,7 @@ class WalletSection extends Section {
 			], "contextMenu") : "") + "</p>");
 			
 			// Append unconfirmed amount to balance display
-			this.balanceDisplay.find("button").before("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Unconfirmed amount:')) + " " + Language.createTranslatableContainer("<span>", "%1$c", [
+			this.balanceDisplay.find("button").before("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Unconfirmed amount:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$c", [
 				[
 					// Amount
 					wallet.getUnconfirmedAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
@@ -3646,7 +3646,7 @@ class WalletSection extends Section {
 					// Currency
 					Consensus.CURRENCY_NAME
 				]
-			], "contextMenu") + ((price !== Prices.NO_PRICE_FOUND) ? "," + " " + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value:')) + " " + Language.createTranslatableContainer("<span>", "%1$c", [
+			], "contextMenu") + ((price !== Prices.NO_PRICE_FOUND) ? Language.createTranslatableContainer("<span>", Language.getDefaultTranslation(',(?= )')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=,) ')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$c", [
 				[
 					// Amount
 					wallet.getUnconfirmedAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).multipliedBy(price).toFixed(),

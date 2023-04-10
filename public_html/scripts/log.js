@@ -55,7 +55,7 @@ class Log {
 					// Timestamp
 					timestamp.toFixed()
 				
-				], "timestamp") + " " + Language.createTranslatableContainer("<span>", text, textArguments) + "</p>");
+				], "timestamp") + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", text, textArguments) + "</p>");
 				
 				// Check if log display was scrolled to the bottom
 				if(scrollToBottom === true) {

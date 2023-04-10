@@ -210,7 +210,7 @@ class TransactionSection extends Section {
 					self.getClipboard().copy(value).then(function() {
 					
 						// Show message and allow showing messages
-						self.getMessage().show(Language.getDefaultTranslation('Value Copied'), Message.createText(Language.getDefaultTranslation('The value was successfully copied to your clipboard.')) + " " + Message.createText(Language.getDefaultTranslation('Verify that the pasted value matches the following value when you paste it.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(value) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak(), false, function() {
+						self.getMessage().show(Language.getDefaultTranslation('Value Copied'), Message.createText(Language.getDefaultTranslation('The value was successfully copied to your clipboard.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the pasted value matches the following value when you paste it.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(value) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak(), false, function() {
 						
 							// Hide loading
 							self.getApplication().hideLoading();
@@ -460,7 +460,7 @@ class TransactionSection extends Section {
 								else if(Array.isArray(error) === true && error[Node.ERROR_TYPE_INDEX] === Node.CONNECTION_ERROR) {
 								
 									// Show rebroadcast transaction error
-									showRebroadcastTransactionError(Message.createText(Language.getDefaultTranslation('Rebroadcasting the transaction failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to rebroadcast transactions without being connected to a node.')));
+									showRebroadcastTransactionError(Message.createText(Language.getDefaultTranslation('Rebroadcasting the transaction failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to rebroadcast transactions without being connected to a node.')));
 								}
 								
 								// Otherwise
@@ -846,7 +846,7 @@ class TransactionSection extends Section {
 				transactionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Status: %1$x'), [(this.transaction.getCanceled() === true) ? Language.getDefaultTranslation('Canceled') : Language.getDefaultTranslation('Expired')]));
 				
 				// Add number of confirmations to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')], "numberOfConfirmations") + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')], "numberOfConfirmations") + "</p>");
 			}
 			
 			// Otherwise check if transaction's status is unknown
@@ -865,14 +865,14 @@ class TransactionSection extends Section {
 					if(currentHeight === Node.UNKNOWN_HEIGHT || this.transaction.getHeight() === Transaction.UNKNOWN_HEIGHT || currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === true || currentHeight.isLessThan(this.transaction.getHeight()) === true) {
 					
 						// Add number of confirmations to transaction information display
-						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')], "numberOfConfirmations") + "</p>");
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')], "numberOfConfirmations") + "</p>");
 					}
 					
 					// Otherwise
 					else {
 				
 						// Add number of confirmations to transaction information display
-						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + " " + Language.createTranslatableContainer("<span>", "%1$s", [currentHeight.minus(this.transaction.getHeight()).plus(1).toFixed()], "numberOfConfirmations") + "</p>");
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [currentHeight.minus(this.transaction.getHeight()).plus(1).toFixed()], "numberOfConfirmations") + "</p>");
 					}
 				}
 				
@@ -880,7 +880,7 @@ class TransactionSection extends Section {
 				else {
 				
 					// Add number of confirmations to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')], "numberOfConfirmations") + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')], "numberOfConfirmations") + "</p>");
 				}
 			}
 			
@@ -911,14 +911,14 @@ class TransactionSection extends Section {
 					if(currentHeight === Node.UNKNOWN_HEIGHT || this.transaction.getHeight() === Transaction.UNKNOWN_HEIGHT || currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === true || currentHeight.isLessThan(this.transaction.getHeight()) === true) {
 					
 						// Add number of confirmations to transaction information display
-						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')], "numberOfConfirmations") + "</p>");
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')], "numberOfConfirmations") + "</p>");
 					}
 					
 					// Otherwise
 					else {
 				
 						// Add number of confirmations to transaction information display
-						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + " " + Language.createTranslatableContainer("<span>", "%1$s", [currentHeight.minus(this.transaction.getHeight()).plus(1).toFixed()], "numberOfConfirmations") + "</p>");
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [currentHeight.minus(this.transaction.getHeight()).plus(1).toFixed()], "numberOfConfirmations") + "</p>");
 					}
 				}
 				
@@ -926,12 +926,12 @@ class TransactionSection extends Section {
 				else {
 				
 					// Add number of confirmations to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')], "numberOfConfirmations") + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')], "numberOfConfirmations") + "</p>");
 				}
 			}
 			
 			// Create amount display
-			var amountDisplay = $("<p class=\"currency\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Amount:')) + " " + "</p>");
+			var amountDisplay = $("<p class=\"currency\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Amount:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 			
 			// Append transaction's amount to amount display
 			amountDisplay.append(Language.createTranslatableContainer("<span>", "%1$c", [
@@ -958,14 +958,14 @@ class TransactionSection extends Section {
 			if(price === Prices.NO_PRICE_FOUND) {
 			
 				// Add value to transaction information display
-				transactionInformationDisplay.append("<p class=\"currency hide\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')], "value") + "</p>");
+				transactionInformationDisplay.append("<p class=\"currency hide\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')], "value") + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Create value display
-				var valueDisplay = $("<p class=\"currency\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value:')) + " " + "</p>");
+				var valueDisplay = $("<p class=\"currency\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 				
 				// Append transaction's value to value display
 				valueDisplay.append(Language.createTranslatableContainer("<span>", "%1$c", [
@@ -987,21 +987,21 @@ class TransactionSection extends Section {
 			if(this.transaction.getFee() === Transaction.UNKNOWN_FEE && this.transaction.getIsCoinbase() === false) {
 			
 				// Add fee to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 			}
 			
 			// Otherwise check if transaction's fee doesn't exist or transaction is a coinbase transaction
 			else if(this.transaction.getFee() === Transaction.NO_FEE || this.transaction.getIsCoinbase() === true) {
 			
 				// Add fee to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Create fee display
-				var feeDisplay = $("<p class=\"currency\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee:')) + " " + "</p>");
+				var feeDisplay = $("<p class=\"currency\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 				
 				// Append transaction's fee to fee display
 				feeDisplay.append(Language.createTranslatableContainer("<span>", "%1$c", [
@@ -1026,21 +1026,21 @@ class TransactionSection extends Section {
 				if(this.transaction.getAmountReleased() === false) {
 				
 					// Add confirmed height to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 				}
 				
 				// Otherwise check if transaction's height is unknown
 				else if(this.transaction.getHeight() === Transaction.UNKNOWN_HEIGHT) {
 				
 					// Add confirmed height to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 				}
 				
 				// Otherwise
 				else {
 				
 					// Add confirmed height to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + " " + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getHeight().toFixed()]) + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getHeight().toFixed()]) + "</p>");
 				}
 			}
 			
@@ -1051,21 +1051,21 @@ class TransactionSection extends Section {
 				if(this.transaction.getStatus() === Transaction.STATUS_UNCONFIRMED) {
 				
 					// Add confirmed height to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 				}
 				
 				// Otherwise check if transaction's height is unknown
 				else if(this.transaction.getHeight() === Transaction.UNKNOWN_HEIGHT) {
 				
 					// Add confirmed height to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 				}
 				
 				// Otherwise
 				else {
 				
 					// Add confirmed height to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + " " + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getHeight().toFixed()]) + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getHeight().toFixed()]) + "</p>");
 				}
 			}
 			
@@ -1073,49 +1073,49 @@ class TransactionSection extends Section {
 			if(this.transaction.getLockHeight() === Transaction.UNKNOWN_LOCK_HEIGHT && this.transaction.getIsCoinbase() === false) {
 			
 				// Add lock height to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Lock height:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Lock height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 			}
 			
 			// Check if transaction's lock height doesn't exist or transaction is a coinbase transaction
 			else if(this.transaction.getLockHeight() === Transaction.NO_LOCK_HEIGHT || this.transaction.getIsCoinbase() === true) {
 			
 				// Add lock height to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Lock height:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Lock height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Add lock height to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Lock height:')) + " " + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getLockHeight().toFixed()]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Lock height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getLockHeight().toFixed()]) + "</p>");
 			}
 			
 			// Check if transaction's time to live cut off height is unknown and transaction isn't a coinbase transaction
 			if(this.transaction.getTimeToLiveCutOffHeight() === Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && this.transaction.getIsCoinbase() === false) {
 			
 				// Add time to live cut off height to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Expire height:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Expire height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 			}
 			
 			// Check if transaction's time to live cut off height doesn't exist or transaction is a coinbase transaction
 			else if(this.transaction.getTimeToLiveCutOffHeight() === Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT || this.transaction.getIsCoinbase() === true) {
 			
 				// Add time to live cut off height to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Expire height:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Expire height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Add time to live cut off height to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Expire height:')) + " " + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getTimeToLiveCutOffHeight().toFixed()]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Expire height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getTimeToLiveCutOffHeight().toFixed()]) + "</p>");
 			}
 			
 			// Check if transaction was sent
 			if(this.transaction.getReceived() === false) {
 			
 				// Add required number of confirmations to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Required number of confirmations:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Required number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise
@@ -1128,14 +1128,14 @@ class TransactionSection extends Section {
 					if(this.transaction.getIsCoinbase() === true) {
 					
 						// Add required number of confirmations to transaction information display
-						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Required number of confirmations:')) + " " + Language.createTranslatableContainer("<span>", "%1$s", [Consensus.COINBASE_MATURITY.toFixed()]) + "</p>");
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Required number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [Consensus.COINBASE_MATURITY.toFixed()]) + "</p>");
 					}
 					
 					// Otherwise
 					else {
 				
 						// Add required number of confirmations to transaction information display
-						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Required number of confirmations:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Required number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 					}
 				}
 				
@@ -1143,7 +1143,7 @@ class TransactionSection extends Section {
 				else {
 				
 					// Add required number of confirmations to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Required number of confirmations:')) + " " + Language.createTranslatableContainer("<span>", "%1$s", [(this.transaction.getIsCoinbase() === false || this.transaction.getRequiredNumberOfConfirmations().isGreaterThan(Consensus.COINBASE_MATURITY) === true) ? this.transaction.getRequiredNumberOfConfirmations().toFixed() : Consensus.COINBASE_MATURITY.toFixed()]) + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Required number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [(this.transaction.getIsCoinbase() === false || this.transaction.getRequiredNumberOfConfirmations().isGreaterThan(Consensus.COINBASE_MATURITY) === true) ? this.transaction.getRequiredNumberOfConfirmations().toFixed() : Consensus.COINBASE_MATURITY.toFixed()]) + "</p>");
 				}
 			}
 			
@@ -1151,42 +1151,42 @@ class TransactionSection extends Section {
 			if((this.transaction.getReceived() === true && this.transaction.getStatus() === Transaction.STATUS_UNCONFIRMED) || this.transaction.getReceived() === false) {
 			
 				// Add spendable height to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Spendable height:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Spendable height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise heck if transaction's spendable height is unknown
 			else if(this.transaction.getSpendableHeight() === Transaction.UNKNOWN_SPENDABLE_HEIGHT) {
 			
 				// Add spendable height to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Spendable height:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Spendable height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Add spendable height to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Spendable height:')) + " " + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getSpendableHeight().toFixed()]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Spendable height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getSpendableHeight().toFixed()]) + "</p>");
 			}
 			
 			// Check if transaction is a coinbase transaction
 			if(this.transaction.getIsCoinbase() === true) {
 			
 				// Add ID to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('ID:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('ID:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise check if transaction's ID is unknown
 			else if(this.transaction.getId() === Transaction.UNKNOWN_ID) {
 			
 				// Add ID to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('ID:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('ID:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Create ID display
-				var idDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('ID:')) + " " + "</p>");
+				var idDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('ID:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 				
 				// Append transaction's ID to ID display
 				idDisplay.append("<span class=\"rawData contextMenu\">" + Common.htmlEncode(this.transaction.getId().serialize()) + "</span>");
@@ -1202,21 +1202,21 @@ class TransactionSection extends Section {
 			if(this.transaction.getReceived() === true || this.transaction.getIsCoinbase() === true) {
 			
 				// Add destination to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Destination:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Destination:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise check if transaction's destination is unknown
 			else if(this.transaction.getDestination() === Transaction.UNKNOWN_DESTINATION) {
 			
 				// Add destination to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Destination:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Destination:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Create destination display
-				var destinationDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Destination:')) + " " + "</p>");
+				var destinationDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Destination:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 				
 				// Append transaction's destination to destination display
 				destinationDisplay.append("<span class=\"rawData contextMenu\">" + Common.htmlEncode(this.transaction.getDestination()) + "</span>");
@@ -1232,21 +1232,21 @@ class TransactionSection extends Section {
 			if(this.transaction.getIsCoinbase() === true) {
 			
 				// Add kernel excess to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Kernel excess:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Kernel excess:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise check if transaction's kernel excess is unknown
 			else if(this.transaction.getKernelExcess() === Transaction.UNKNOWN_KERNEL_EXCESS) {
 			
 				// Add kernel excess to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Kernel excess:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Kernel excess:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 			}
 			
 			// Otherwise check if explorer kernel excess URL doesn't exist
 			else if(Consensus.EXPLORER_KERNEL_EXCESS_URL === Consensus.NO_EXPLORER_URL) {
 			
 				// Create kernel excess display
-				var kernelExcessDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Kernel excess:')) + " " + "</p>");
+				var kernelExcessDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Kernel excess:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 				
 				// Append transaction's kernel excess to kernel excess display
 				kernelExcessDisplay.append("<span class=\"rawData contextMenu\">" + Common.htmlEncode(Common.toHexString(this.transaction.getKernelExcess())) + "</span>");
@@ -1262,7 +1262,7 @@ class TransactionSection extends Section {
 			else {
 			
 				// Create kernel excess display
-				var kernelExcessDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Kernel excess:')) + " " + "</p>");
+				var kernelExcessDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Kernel excess:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 				
 				// Append transaction's kernel excess to kernel excess display
 				kernelExcessDisplay.append(Language.createTranslatableContainer("<span>", "%1$m", [
@@ -1289,7 +1289,7 @@ class TransactionSection extends Section {
 			if(this.transaction.getReceived() === false) {
 			
 				// Add output commit to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Output commitment:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Output commitment:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise
@@ -1299,14 +1299,14 @@ class TransactionSection extends Section {
 				if(this.transaction.getCommit() === Transaction.UNUSED_COMMIT) {
 				
 					// Add output commit to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Output commitment:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Output commitment:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 				}
 				
 				// Otherwise check if explorer output commitment URL doesn't exist
 				else if(Consensus.EXPLORER_OUTPUT_COMMITMENT_URL === Consensus.NO_EXPLORER_URL) {
 				
 					// Create output commit display
-					var outputCommitDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Output commitment:')) + " " + "</p>");
+					var outputCommitDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Output commitment:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 					
 					// Append transaction's output commit to output commit display
 					outputCommitDisplay.append("<span class=\"rawData contextMenu\">" + Common.htmlEncode(Common.toHexString(this.transaction.getCommit())) + "</span>");
@@ -1322,7 +1322,7 @@ class TransactionSection extends Section {
 				else {
 				
 					// Create output commit display
-					var outputCommitDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Output commitment:')) + " " + "</p>");
+					var outputCommitDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Output commitment:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 					
 					// Append transaction's output commit to output commit display
 					outputCommitDisplay.append(Language.createTranslatableContainer("<span>", "%1$m", [
@@ -1366,21 +1366,21 @@ class TransactionSection extends Section {
 					if(this.transaction.getMessage() === Transaction.UNKNOWN_MESSAGE && this.transaction.getIsCoinbase() === false) {
 					
 						// Add message to transaction information display
-						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Message:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Message:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 					}
 					
 					// Otherwise check if transaction's message is doesn't exist or transaction is a coinbase transaction
 					else if(this.transaction.getMessage() === Transaction.NO_MESSAGE || this.transaction.getIsCoinbase() === true) {
 					
 						// Add message to transaction information display
-						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Message:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Message:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 					}
 					
 					// Otherwise
 					else {
 					
 						// Create message display
-						var messageDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Message:')) + " " + "</p>");
+						var messageDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Message:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 						
 						// Append transaction's message to message display
 						messageDisplay.append("<span class=\"contextMenu\">" + Common.htmlEncode(this.transaction.getMessage()) + "</span>");
@@ -1406,21 +1406,21 @@ class TransactionSection extends Section {
 			if(this.transaction.getReceiverAddress() === Transaction.UNKNOWN_RECEIVER_ADDRESS && this.transaction.getIsCoinbase() === false) {
 			
 				// Add receiver proof address to payment proof display
-				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof address:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 			}
 			
 			// Otherwise check if transaction's receiver address is doesn't exist or transaction is a coinbase transaction
 			else if(this.transaction.getReceiverAddress() === Transaction.NO_RECEIVER_ADDRESS || this.transaction.getIsCoinbase() === true) {
 			
 				// Add receiver proof address to payment proof display
-				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof address:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Create receiver proof address display
-				var receiverproofAddressDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof address:')) + " " + "</p>");
+				var receiverproofAddressDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 				
 				// Append transaction's receiver proof address to receiver proof address display
 				receiverproofAddressDisplay.append("<span class=\"rawData contextMenu\">" + Common.htmlEncode(this.transaction.getReceiverAddress()) + "</span>");
@@ -1436,21 +1436,21 @@ class TransactionSection extends Section {
 			if(this.transaction.getReceiverSignature() === Transaction.UNKNOWN_RECEIVER_SIGNATURE && this.transaction.getIsCoinbase() === false) {
 			
 				// Add receiver proof signature to payment proof display
-				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof signature:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof signature:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 			}
 			
 			// Otherwise check if transaction's receiver signature is doesn't exist or transaction is a coinbase transaction
 			else if(this.transaction.getReceiverSignature() === Transaction.NO_RECEIVER_SIGNATURE || this.transaction.getIsCoinbase() === true) {
 			
 				// Add receiver proof signature to payment proof display
-				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof signature:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof signature:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Create receiver proof signature display
-				var receiverproofSignatureDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof signature:')) + " " + "</p>");
+				var receiverproofSignatureDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof signature:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 				
 				// Append transaction's receiver proof signature to receiver proof signature display
 				receiverproofSignatureDisplay.append("<span class=\"rawData contextMenu\">" + Common.htmlEncode(Common.toHexString(this.transaction.getReceiverSignature())) + "</span>");
@@ -1466,21 +1466,21 @@ class TransactionSection extends Section {
 			if(this.transaction.getSenderAddress() === Transaction.UNKNOWN_SENDER_ADDRESS && this.transaction.getIsCoinbase() === false) {
 			
 				// Add sender proof address to payment proof display
-				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Sender payment proof address:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Sender payment proof address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 			}
 			
 			// Otherwise check if transaction's sender address is doesn't exist or transaction is a coinbase transaction
 			else if(this.transaction.getSenderAddress() === Transaction.NO_SENDER_ADDRESS || this.transaction.getIsCoinbase() === true) {
 			
 				// Add sender proof address to payment proof display
-				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Sender payment proof address:')) + " " + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Sender payment proof address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Create sender proof address display
-				var senderproofAddressDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Sender payment proof address:')) + " " + "</p>");
+				var senderproofAddressDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Sender payment proof address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 				
 				// Append transaction's sender proof address to sender proof address display
 				senderproofAddressDisplay.append("<span class=\"rawData contextMenu\">" + Common.htmlEncode(this.transaction.getSenderAddress()) + "</span>");

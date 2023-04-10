@@ -476,7 +476,7 @@ class Listener {
 							case Listener.CONNECTION_ERROR:
 							
 								// Reject error
-								reject(Message.createText(Language.getDefaultTranslation('Connecting to the listener failed.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to change address suffixes without being connected to a listener.')));
+								reject(Message.createText(Language.getDefaultTranslation('Connecting to the listener failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to change address suffixes without being connected to a listener.')));
 							
 								// Break
 								break;
@@ -507,7 +507,7 @@ class Listener {
 				else {
 				
 					// Reject error
-					reject(Message.createText(Language.getDefaultTranslation('You aren\'t connected to a listener.')) + " " + Message.createText(Language.getDefaultTranslation('You won\'t be able to change address suffixes without being connected to a listener.')));
+					reject(Message.createText(Language.getDefaultTranslation('You aren\'t connected to a listener.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You won\'t be able to change address suffixes without being connected to a listener.')));
 				}
 			});
 		}

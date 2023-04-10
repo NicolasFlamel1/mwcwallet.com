@@ -332,8 +332,8 @@
 				// Check if language is available
 				if(array_key_exists($language, $availableLanguages) === TRUE) {
 			
-					// Check if specified type exist for the language and the specified value exists and isn't empty
-					if(array_key_exists($type, $availableLanguages[$language]) === TRUE && array_key_exists($value, $availableLanguages[$language][$type]) === TRUE && mb_strlen($availableLanguages[$language][$type][$value]) !== 0)
+					// Check if specified type exist for the language and the specified value exists
+					if(array_key_exists($type, $availableLanguages[$language]) === TRUE && array_key_exists($value, $availableLanguages[$language][$type]) === TRUE)
 					
 						// Return value for the language and the language used
 						return [

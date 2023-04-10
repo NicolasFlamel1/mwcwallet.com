@@ -834,7 +834,7 @@ class SendPaymentSection extends Section {
 								else if(error["name"] === "NotSupportedError") {
 								
 									// Show scan error
-									showScanError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using a camera.')) + " " + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.')));
+									showScanError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using a camera.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.')));
 								}
 								
 								// Otherwise an error occurred while trying to access the camera
@@ -858,7 +858,7 @@ class SendPaymentSection extends Section {
 					if(self.getAutomaticLock().isLocking() === false) {
 				
 						// Show scan error
-						showScanError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using a camera.')) + " " + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.')));
+						showScanError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using a camera.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.')));
 					}
 				}
 			});
@@ -1610,7 +1610,7 @@ class SendPaymentSection extends Section {
 																										if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
 																										
 																											// Set text
-																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Finalize the transaction for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Finalize the transaction for %1$y to continue sending the payment.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('You\'re sending %1$c for a fee of %2$c, and this transaction doesn\'t have a payment proof.'), [
+																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Finalize the transaction for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Finalize the transaction for %1$y to continue sending the payment.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You\'re sending %1$c for a fee of %2$c, and this transaction doesn\'t have a payment proof.'), [
 																											
 																												[
 																
@@ -1640,7 +1640,7 @@ class SendPaymentSection extends Section {
 																										else {
 																								
 																											// Set text
-																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for %1$y to continue sending the payment.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and that there\'s no recipient payment proof address displayed.'), [
+																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for %1$y to continue sending the payment.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and that there\'s no recipient payment proof address displayed.'), [
 																											
 																												[
 																
@@ -1677,7 +1677,7 @@ class SendPaymentSection extends Section {
 																										if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
 																										
 																											// Set text
-																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Finalize the transaction for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Finalize the transaction for %1$y to continue sending the payment.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('You\'re sending %1$c for a fee of %2$c, and the recipient\'s payment proof address is the following payment proof address.'), [
+																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Finalize the transaction for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Finalize the transaction for %1$y to continue sending the payment.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You\'re sending %1$c for a fee of %2$c, and the recipient\'s payment proof address is the following payment proof address.'), [
 																											
 																												[
 																
@@ -1707,7 +1707,7 @@ class SendPaymentSection extends Section {
 																										else {
 																									
 																											// Set text
-																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for %1$y to continue sending the payment.'), [wallet.getName()])) + " " + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and the recipient payment proof address displayed matches the following payment proof address.'), [
+																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for %1$y to continue sending the payment.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and the recipient payment proof address displayed matches the following payment proof address.'), [
 																											
 																												[
 																

@@ -126,7 +126,7 @@ section.installApp > div > button > span {
 	min-height: auto;
 	white-space: normal;
 	cursor: pointer !important;
-	min-width: 1.5em;
+	min-width: 2em;
 }
 
 @media only screen and (max-width: 700px) and (any-hover: hover) {

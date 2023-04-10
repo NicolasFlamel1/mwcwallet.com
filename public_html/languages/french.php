@@ -21,6 +21,10 @@
 		
 		// Text
 		"Text" => [
+			'(?<=,) ' => ' ',
+			'(?<=.) ' => ' ',
+			'(?<=:) ' => ' ',
+			',(?= )' => ',',
 			'%1$d at %2$t' => '%1$d à %2$t',
 			'#%1$s' => '#%1$s',
 			'%1$s%%' => '%1$s%%',
@@ -562,10 +566,10 @@
 			'Verifying the payment proof address failed.' => 'La vérification de l\'adresse de la preuve de paiement a échoué.',
 			'Verifying the Slatepack address on the hardware wallet failed.' => 'La vérification de l\'adresse Slatepack sur le hardware wallet a échoué.',
 			'Verifying the Tor address on the hardware wallet failed.' => 'La vérification de l\'adresse Tor sur le hardware wallet a échoué.',
-			'Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$y, and that there\'s no recipient payment proof address displayed.' => 'Vérifiez que le montant affiché sur le porte-monnaie matériel est %1$c, que les frais affichés sont %2$c, que les caractéristiques du noyau affichées sont %3$y et qu\'il n\'y a pas d\'adresse de preuve de paiement affichée pour le destinataire.',
-			'Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$y, and that there\'s no sender payment proof address displayed.' => 'Vérifier que le montant affiché sur le portefeuille matériel est %1$c, que les frais affichés sont %2$c, que les caractéristiques du noyau affichées sont %3$y, et qu\'il n\'y a pas d\'adresse de preuve de paiement de l\'expéditeur affichée.',
-			'Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$y, and the recipient payment proof address displayed matches the following payment proof address.' => 'Vérifiez que le montant affiché sur le portefeuille matériel est %1$c, que les frais affichés sont %2$c, que les caractéristiques du noyau affichées sont %3$y, et que l\'adresse de preuve de paiement du destinataire affichée correspond à l\'adresse de preuve de paiement suivante.',
-			'Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$y, and the sender payment proof address displayed matches the following payment proof address.' => 'Vérifiez que le montant affiché sur le portefeuille matériel est %1$c, que les frais affichés sont %2$c, que les caractéristiques du noyau affichées sont %3$y et que l\'adresse de preuve de paiement de l\'expéditeur affichée correspond à l\'adresse de preuve de paiement suivante.',
+			'Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and that there\'s no recipient payment proof address displayed.' => 'Vérifiez que le montant affiché sur le porte-monnaie matériel est %1$c, que les frais affichés sont %2$c, que les caractéristiques du noyau affichées sont %3$x et qu\'il n\'y a pas d\'adresse de preuve de paiement affichée pour le destinataire.',
+			'Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and that there\'s no sender payment proof address displayed.' => 'Vérifier que le montant affiché sur le portefeuille matériel est %1$c, que les frais affichés sont %2$c, que les caractéristiques du noyau affichées sont %3$x, et qu\'il n\'y a pas d\'adresse de preuve de paiement de l\'expéditeur affichée.',
+			'Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and the recipient payment proof address displayed matches the following payment proof address.' => 'Vérifiez que le montant affiché sur le portefeuille matériel est %1$c, que les frais affichés sont %2$c, que les caractéristiques du noyau affichées sont %3$x, et que l\'adresse de preuve de paiement du destinataire affichée correspond à l\'adresse de preuve de paiement suivante.',
+			'Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and the sender payment proof address displayed matches the following payment proof address.' => 'Vérifiez que le montant affiché sur le portefeuille matériel est %1$c, que les frais affichés sont %2$c, que les caractéristiques du noyau affichées sont %3$x et que l\'adresse de preuve de paiement de l\'expéditeur affichée correspond à l\'adresse de preuve de paiement suivante.',
 			'Verify that the node\'s foreign API secret is correct.' => 'Vérifiez que le secret API étranger du nœud est correct.',
 			'Verify that the pasted address matches the following address when you paste it.' => 'Vérifiez que l\'adresse collée correspond à l\'adresse suivante lorsque vous la collez.',
 			'Verify that the pasted ID matches the following ID when you paste it.' => 'Vérifiez que l\'ID collé correspond à l\'ID suivant lorsque vous le collez.',

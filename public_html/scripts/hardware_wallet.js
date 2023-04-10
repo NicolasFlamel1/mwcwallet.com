@@ -227,7 +227,7 @@ class HardwareWallet {
 														if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && error["name"] === "NotFoundError"))) {
 														
 															// Reject error
-															reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? " " + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
+															reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
 														}
 														
 														// Otherwise check if error was a connection error
@@ -237,21 +237,21 @@ class HardwareWallet {
 															if(Common.isExtension() === true) {
 														
 																// Reject error
-																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this extension can connect to it.')));
+																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this extension can connect to it.')));
 															}
 															
 															// Otherwise check if is an app
 															else if(Common.isApp() === true) {
 															
 																// Reject error
-																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this app can connect to it.')));
+																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this app can connect to it.')));
 															}
 															
 															// Otherwise
 															else {
 															
 																// Reject error
-																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this site can connect to it.')));
+																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this site can connect to it.')));
 															}
 														}
 														
@@ -268,7 +268,7 @@ class HardwareWallet {
 												else {
 												
 													// Reject error
-													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? " " + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
+													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
 												}
 											}
 											
@@ -300,14 +300,14 @@ class HardwareWallet {
 											if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && error["name"] === "NotFoundError"))) {
 											
 												// Reject error
-												reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? " " + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
+												reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
 											}
 											
 											// Otherwise check if error was a connection error
 											else if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NETWORK_ERROR_CODE) || ("name" in error === true && error["name"] === "NetworkError"))) {
 											
 												// Reject error
-												reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + " " + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this site can connect to it.')));
+												reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this site can connect to it.')));
 											}
 											
 											// Otherwise
@@ -449,7 +449,7 @@ class HardwareWallet {
 																	self.releaseExclusiveLock();
 																
 																	// Reject error
-																	reject(Message.createText(Language.getDefaultTranslation('Getting the seed cookie from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+																	reject(Message.createText(Language.getDefaultTranslation('Getting the seed cookie from that %1$x hardware wallet failed.'), [productName]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 																});
 															}
 														
@@ -475,7 +475,7 @@ class HardwareWallet {
 																self.releaseExclusiveLock();
 															
 																// Reject error
-																reject(Message.createText(Language.getDefaultTranslation('Getting the seed cookie from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+																reject(Message.createText(Language.getDefaultTranslation('Getting the seed cookie from that %1$x hardware wallet failed.'), [productName]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 															});
 														});
 													}
@@ -529,7 +529,7 @@ class HardwareWallet {
 														self.releaseExclusiveLock();
 													
 														// Reject error
-														reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+														reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 													});
 												}
 											}
@@ -556,7 +556,7 @@ class HardwareWallet {
 													self.releaseExclusiveLock();
 												
 													// Reject error
-													reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+													reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 												});
 											}
 										}
@@ -583,7 +583,7 @@ class HardwareWallet {
 												self.releaseExclusiveLock();
 											
 												// Reject error
-												reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+												reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 											});
 										}
 									}
@@ -610,7 +610,7 @@ class HardwareWallet {
 											self.releaseExclusiveLock();
 										
 											// Reject error
-											reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+											reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 										});
 									}
 								}
@@ -637,7 +637,7 @@ class HardwareWallet {
 										self.releaseExclusiveLock();
 									
 										// Reject error
-										reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+										reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 									});
 								}
 							
@@ -663,7 +663,7 @@ class HardwareWallet {
 									self.releaseExclusiveLock();
 								
 									// Reject error
-									reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
+									reject(Message.createText(Language.getDefaultTranslation('Getting the app information from that %1$x hardware wallet failed.'), [productName]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText((failOnLock === false) ? Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.') : Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet and that the hardware wallet isn\'t locked.')));
 								});
 							});
 						
@@ -732,7 +732,7 @@ class HardwareWallet {
 								self.releaseExclusiveLock();
 							
 								// Reject error
-								reject(Message.createText(Language.getDefaultTranslation('Getting the root public key from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.')));
+								reject(Message.createText(Language.getDefaultTranslation('Getting the root public key from that %1$x hardware wallet failed.'), [productName]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.')));
 							}
 						
 						// Catch errors
@@ -752,7 +752,7 @@ class HardwareWallet {
 							else {
 						
 								// Reject error
-								reject(Message.createText(Language.getDefaultTranslation('Getting the root public key from that %1$x hardware wallet failed.'), [productName]) + " " + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.')));
+								reject(Message.createText(Language.getDefaultTranslation('Getting the root public key from that %1$x hardware wallet failed.'), [productName]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.')));
 							}
 						});
 					}

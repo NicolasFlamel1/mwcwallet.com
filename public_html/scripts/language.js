@@ -432,8 +432,8 @@ class Language {
 					// Check if applicable language is available
 					if(applicableLanguage in AVAILABLE_LANGUAGES === true) {
 					
-						// Check if text exist for the applicable language and the specified text exists and isn't empty
-						if("Text" in AVAILABLE_LANGUAGES[applicableLanguage] === true && text in AVAILABLE_LANGUAGES[applicableLanguage]["Text"] === true && AVAILABLE_LANGUAGES[applicableLanguage]["Text"][text]["length"] !== 0) {
+						// Check if text exist for the applicable language and the specified text exists
+						if("Text" in AVAILABLE_LANGUAGES[applicableLanguage] === true && text in AVAILABLE_LANGUAGES[applicableLanguage]["Text"] === true) {
 						
 							// Set text to the text for the applicable language
 							text = AVAILABLE_LANGUAGES[applicableLanguage]["Text"][text];
@@ -484,7 +484,7 @@ class Language {
 			while(applicableLanguage !== DEFAULT_LANGUAGE) {
 			
 				// Check if applicable language provides a fallback language
-				if("Constants" in AVAILABLE_LANGUAGES[applicableLanguage] === true && "Fallback" in AVAILABLE_LANGUAGES[applicableLanguage]["Constants"] === true)
+				if(applicableLanguage in AVAILABLE_LANGUAGES === true && "Constants" in AVAILABLE_LANGUAGES[applicableLanguage] === true && "Fallback" in AVAILABLE_LANGUAGES[applicableLanguage]["Constants"] === true)
 				
 					// Set applicable language to the language's fallback language
 					applicableLanguage = AVAILABLE_LANGUAGES[applicableLanguage]["Constants"]["Fallback"];
