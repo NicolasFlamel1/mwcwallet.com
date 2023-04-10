@@ -89,6 +89,13 @@
 			// Get locale language
 			$localeLanguage = (array_key_exists("HTTP_ACCEPT_LANGUAGE", $_SERVER) === TRUE && is_string($_SERVER["HTTP_ACCEPT_LANGUAGE"]) === TRUE && mb_strlen($_SERVER["HTTP_ACCEPT_LANGUAGE"]) !== 0) ? locale_accept_from_http($_SERVER["HTTP_ACCEPT_LANGUAGE"]) : FALSE;
 			
+			// Check if local language is should be simplified Chinese
+			if($localeLanguage === "zh" && mb_strstr($_SERVER["HTTP_ACCEPT_LANGUAGE"], "zh_CN") !== FALSE) {
+			
+				// Set local language to simplified Chinese
+				$localeLanguage = "zh_CN";
+			}
+			
 			// Get language parameter
 			$languageParameter = (array_key_exists("Language", $_GET) === TRUE && is_string($_GET["Language"]) === TRUE && mb_strlen($_GET["Language"]) !== 0) ? $_GET["Language"] : FALSE;
 			
