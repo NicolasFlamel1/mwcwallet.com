@@ -134,7 +134,7 @@
 			'Confirmed transactions can\'t be canceled.' => 'Bestätigte Transaktionen können nicht storniert werden.',
 			'Confirmed transactions can\'t be rebroadcast.' => 'Bestätigte Transaktionen können nicht erneut übertragen werden.',
 			'Confirm new password' => 'Bestätige neues Passwort',
-			/*TODO*/'Confirm new password is empty.' => 'Bestätigen Sie, dass das neue Passwort leer ist.',
+			'Confirm new password is empty.' => 'Neues Passwort Bestätigen ist leer.',
 			'Confirm Password' => 'Bestätige das Passwort',
 			'Confirm password is empty.' => 'Passwort bestätigen ist leer.',
 			'Confirm Payment Details' => 'Zahlungsdetails bestätigen',

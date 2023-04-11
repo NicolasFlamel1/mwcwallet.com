@@ -5,7 +5,7 @@
 	
 		// Contributors
 		"Contributors" => [
-			"NickTheG"
+			"NickTheG" => "https://twitter.com/@progressevakos"
 		],
 		
 		// Constants
@@ -101,7 +101,7 @@
 			'A wallet with the same root public key already exists in your list of wallets.' => 'Ένα πορτοφόλι με το ίδιο ριζικό δημόσιο κλειδί υπάρχει ήδη στη λίστα των πορτοφολιών σας.',
 			'Back' => 'Πίσω',
 			'Bad Gateway' => 'Κακή Πύλη',
-			'Balance' => 'Ισορροπία',
+			'Balance' => 'Υπόλοιπο',
 			'Base fee' => 'Βασικό Τέλος Πληρωμής',
 			'Base fee is empty.' => 'Το Βασικό Τέλος Πληρωμής είναι κενό.',
 			'Base fee is invalid.' => 'Το Βασικό Τέλος Πληρωμής δεν είναι έγκυρο.',
@@ -133,10 +133,10 @@
 			'Confirmed height:' => 'Επιβεβαιωμένο ύψος:',
 			'Confirmed transactions can\'t be canceled.' => 'Δεν είναι δυνατή η ακύρωση των επιβεβαιωμένων συναλλαγών.',
 			'Confirmed transactions can\'t be rebroadcast.' => 'Οι επιβεβαιωμένες συναλλαγές δεν μπορούν να αναμεταδοθούν.',
-			/*TODO*/'Confirm new password' => 'Επιβεβαιώστε τον καινούριο σας κωδικό',
-			/*TODO*/'Confirm new password is empty.' => 'Επιβεβαιώστε ότι ο νέος κωδικός πρόσβασης είναι κενός.',
-			/*TODO*/'Confirm Password' => 'Επιβεβαίωση Κωδικού',
-			/*TODO*/'Confirm password is empty.' => 'Επιβεβαιώστε ότι ο κωδικός πρόσβασης είναι κενός.',
+			'Confirm new password' => 'Επιβεβαίωση Νέου Κωδικού',
+			'Confirm new password is empty.' => 'Το πεδίο Επιβεβαίωση κωδικού είναι κενό.',
+			'Confirm Password' => 'Επιβεβαίωση Κωδικού',
+			'Confirm password is empty.' => 'Το πεδίο Επιβεβαίωση κωδικού είναι κενό.',
 			'Confirm Payment Details' => 'Επιβεβαιώστε τα στοιχεία πληρωμής',
 			'Connect' => 'Σύνδεση',
 			'Connecting to a hardware wallet.' => 'Σύνδεση σε πορτοφόλι υλικού.',
