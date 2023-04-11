@@ -19,7 +19,10 @@
 			"Currency" => "USD",
 			
 			// Extension locale code
-			"Extension Locale Code" => "en"
+			"Extension Locale Code" => "en",
+			
+			// Fallback
+			"Fallback" => "en"
 		],
 		
 		// Text

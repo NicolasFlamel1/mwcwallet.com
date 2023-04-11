@@ -24,7 +24,10 @@
 			"Currency" => "EUR",
 			
 			// Extension locale code
-			"Extension Locale Code" => "de"
+			"Extension Locale Code" => "de",
+			
+			// Fallback
+			"Fallback" => "de"
 		],
 		
 		// Text
