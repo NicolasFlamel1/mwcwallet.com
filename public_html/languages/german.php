@@ -1,6 +1,6 @@
 <?php
 
-	// Append Greek to available languages
+	// Append German to available languages
 	$availableLanguages["de-DE"] = [
 	
 		// Contributors

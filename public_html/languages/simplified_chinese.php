@@ -24,7 +24,7 @@
 			"Currency" => "CNY",
 			
 			// Extension locale code
-			"Extension Locale Code" => "zh_CN"
+			"Extension Locale Code" => "zh-CN"
 		],
 		
 		// Text
