@@ -1028,6 +1028,12 @@
 			"Minified" => FALSE,
 			"Checksum" => "G77foDMhtN8Gh7XXBg/D5EJ9DwiWT//UvPqq9pfJcrj13u92Luwi2cYssnqqVwe4gRkRyoMOv8TX8iQniKN+aQ=="
 		],
+		"./images/countries/germany.svg" => [
+			"Version" => 1,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "TKf6oGmstm1C2dJhgQYarPXKunanjax9M92Wk+FVTGc9ty7lB3UCLpBV2gqJmKk22COauKqa83vQg6+1lQ7FnQ=="
+		],
 		"./images/app_icons/app_icon-152x152.png" => [
 			"Version" => 4,
 			"Cache" => FALSE,

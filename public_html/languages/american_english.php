@@ -16,10 +16,7 @@
 			"Image" => "./images/countries/america.svg",
 			
 			// Currency
-			"Currency" => "USD",
-			
-			// Fallback
-			"Fallback" => "en"
+			"Currency" => "USD"
 		],
 		
 		// Text
