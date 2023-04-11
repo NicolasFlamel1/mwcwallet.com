@@ -19,7 +19,7 @@
 			"Currency" => "USD",
 			
 			// Extension locale code
-			"Extension Locale Code" => "en-US"
+			"Extension Locale Code" => "en"
 		],
 		
 		// Text

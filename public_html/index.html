@@ -37,6 +37,13 @@
 		
 			// Display language alternative page
 			echo "<link rel=\"alternate\" hreflang=\"" . encodeString($languageIdentifier) . "\" href=\"http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]) . "/?" . urlencode("Language") . "=" . urlencode($languageIdentifier) . "\">";
+			
+			// Check if available language has an extension locale code that's not the same as its language identifier
+			if(array_key_exists("Constants", $availableLanguage) === TRUE && array_key_exists("Extension Locale Code", $availableLanguage["Constants"]) === TRUE && $availableLanguage["Constants"]["Extension Locale Code"] !== $languageIdentifier) {
+			
+				// Display language alternative page
+				echo "<link rel=\"alternate\" hreflang=\"" . encodeString($availableLanguage["Constants"]["Extension Locale Code"]) . "\" href=\"http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]) . "/?" . urlencode("Language") . "=" . urlencode($languageIdentifier) . "\">";
+			}
 		}
 	?>
 	
