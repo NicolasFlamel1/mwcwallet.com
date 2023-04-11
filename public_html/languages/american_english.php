@@ -16,7 +16,10 @@
 			"Image" => "./images/countries/america.svg",
 			
 			// Currency
-			"Currency" => "USD"
+			"Currency" => "USD",
+			
+			// Extension locale code
+			"Extension Locale Code" => "en_US"
 		],
 		
 		// Text

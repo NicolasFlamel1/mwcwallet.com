@@ -82,50 +82,87 @@ class Language {
 					}
 				}
 				
-				// Otherwise check if is an extension and extension language exists and is valid
-				else if(Common.isExtension() === true && ((typeof browser !== "undefined" && browser["i18n"].getUILanguage() in AVAILABLE_LANGUAGES === true) || (typeof chrome !== "undefined" && chrome["i18n"].getUILanguage() in AVAILABLE_LANGUAGES === true))) {
+				// Otherwise check if is an extension
+				else if(Common.isExtension() === true && (typeof browser !== "undefined" || typeof chrome !== "undefined")) {
 				
-					// Get extension language
-					var extensionLanguage = (typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage();
+					// Get extension locale code
+					var extensionLocaleCode = (typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage();
 					
-					// Set current language to extension language
-					Language.currentLanguage = extensionLanguage;
-				
-					// Check if HTML language isn't the extension language
-					if(extensionLanguage !== $("html").attr("lang")) {
+					// Set language found to false
+					var languageFound = false;
 					
-						// Change language to extension language
-						Language.changeLanguage(extensionLanguage);
+					// Go through all available laguages
+					for(var availableLanguage in AVAILABLE_LANGUAGES) {
+					
+						if(AVAILABLE_LANGUAGES.hasOwnProperty(availableLanguage) === true) {
 						
-						// Go through all language display list buttons
-						languageDisplayList.children("button").each(function() {
+							// Check if available language's extension locale code matches the extension's
+							if("Constants" in AVAILABLE_LANGUAGES[availableLanguage] === true && "Extension Locale Code" in AVAILABLE_LANGUAGES[availableLanguage]["Constants"] === true && AVAILABLE_LANGUAGES[availableLanguage]["Constants"]["Extension Locale Code"] === extensionLocaleCode) {
+							
+								// Set extension language
+								var extensionLanguage = availableLanguage;
+								
+								// Set language found to true
+								languageFound = true;
+								
+								// Break
+								break;
+							}
+						}
+					}
+					
+					// Check if language was found
+					if(languageFound === true) {
+					
+						// Set current language to extension language
+						Language.currentLanguage = extensionLanguage;
+					
+						// Check if HTML language isn't the extension language
+						if(extensionLanguage !== $("html").attr("lang")) {
 						
-							// Get button
-							var button = $(this);
+							// Change language to extension language
+							Language.changeLanguage(extensionLanguage);
 							
-							// Check if button is the extension language
-							if(button.attr(Common.DATA_ATTRIBUTE_PREFIX + "language") === extensionLanguage)
+							// Go through all language display list buttons
+							languageDisplayList.children("button").each(function() {
 							
-								// Disable button
-								button.disable();
+								// Get button
+								var button = $(this);
+								
+								// Check if button is the extension language
+								if(button.attr(Common.DATA_ATTRIBUTE_PREFIX + "language") === extensionLanguage)
+								
+									// Disable button
+									button.disable();
+								
+								// Otherwise
+								else
+								
+									// Enable button
+									button.enable();
+							});
 							
-							// Otherwise
-							else
+							// Update language display select value
+							languageDisplaySelect.val(extensionLanguage);
 							
-								// Enable button
-								button.enable();
-						});
+							// Update language display select options
+							languageDisplaySelect.children("option").enable().filter(":selected").disable();
+						}
 						
-						// Update language display select value
-						languageDisplaySelect.val(extensionLanguage);
+						// Otherwise
+						else {
 						
-						// Update language display select options
-						languageDisplaySelect.children("option").enable().filter(":selected").disable();
+							// Change language to current language
+							Language.changeLanguage(Language.currentLanguage, false);
+						}
 					}
 					
 					// Otherwise
 					else {
 					
+						// Get current language from HTML language
+						Language.currentLanguage = $("html").attr("lang");
+						
 						// Change language to current language
 						Language.changeLanguage(Language.currentLanguage, false);
 					}

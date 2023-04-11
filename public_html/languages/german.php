@@ -21,7 +21,10 @@
 			"Image" => "./images/countries/germany.svg",
 			
 			// Currency
-			"Currency" => "EUR"
+			"Currency" => "EUR",
+			
+			// Extension locale code
+			"Extension Locale Code" => "de"
 		],
 		
 		// Text

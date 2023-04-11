@@ -345,10 +345,10 @@
 			"Checksum" => "6IoZ640jM4IsPVC0QB7+wiuens2+mcxLasLwGkGoszew+RVumYtcUmdruWbpr2LVG0ntS06TvUrUt5DqIJwVXQ=="
 		],
 		"./scripts/language.js" => [
-			"Version" => 24,
+			"Version" => 25,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "l6nNIfvQ5RjtZLd8TvvmkD2S6+G8m6e8LxSS+JjgI7k1TckN3AoEsRY2G1Hp+lVaPdEhQzJjavHzV16OOgVjOQ=="
+			"Checksum" => "VQZmkWDpWJj7pUx1d6OdEjsvUS72jl3yB3sBKMSGs0f7IHrdSnVZBh9yxmNWsYkAQTkarsaXfLYQXq4Ou8qT/Q=="
 		],
 		"./scripts/protocol_handler.js" => [
 			"Version" => 2,

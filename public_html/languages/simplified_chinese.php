@@ -21,7 +21,10 @@
 			"Image" => "./images/countries/china.svg",
 			
 			// Currency
-			"Currency" => "CNY"
+			"Currency" => "CNY",
+			
+			// Extension locale code
+			"Extension Locale Code" => "zh_CN"
 		],
 		
 		// Text

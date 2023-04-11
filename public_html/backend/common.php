@@ -17,7 +17,7 @@
 		"Changed standalone version of this service to use WASM instead of asm.js.",
 		"Added Chinese translation by grincalf.",
 		"Added Greek translation by NickTheG.",
-		"Added German translation by High ko XMR.",
+		"Added German translation by High ko XMR."
 	];
 	
 	// Maintenance start time
