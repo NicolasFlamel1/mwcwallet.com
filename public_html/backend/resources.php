@@ -1239,10 +1239,10 @@
 			"Checksum" => NULL
 		],
 		"./styles/cookie_acceptance.css" => [
-			"Version" => 14,
+			"Version" => 15,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "nAdoFC7qVKgBUx7Plov8Hwyog3xY97MNO4GANEacEKJ71SBn5dZnn7hArCkRX/tbj+vmR6KkQOnCZ2OC5d8XSw=="
+			"Checksum" => "CU2BP+89yWscQ+dNjXIiKFuXpFr3alKLPWgXf1RCF8btq/asRFJlJrt0a/LCy8KvtjRsbrNE8PoA6XQ/18r+XQ=="
 		],
 		"./styles/language.css" => [
 			"Version" => 9,
@@ -1323,10 +1323,10 @@
 			"Checksum" => "JwKwEq3nloUiDFDlyDhfU7V6cefwuMk/gHnY3mwfDRWLAjSA3ruFfPuwVOmG51PzGVD4x6LChS/HuJ1H2H7xZg=="
 		],
 		"./styles/maintenance_notification.css" => [
-			"Version" => 11,
+			"Version" => 12,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "TC4tGxuGbAhkxFEcvFFw97neSOjB5iuFBPJaBHi7wwwStaTCcC9pVR68ur74Ijw5w8bQTmHu3XLeOx7FqCsT7w=="
+			"Checksum" => "c0zLs+BImhzDivsXXu1U+VSj6AHPYE77UHRZdX7sjQAXv9NTVqc5msd32c4yWGhcE8aPTeuQFAeW44xp+qf/9g=="
 		],
 		"./styles/install_app.css" => [
 			"Version" => 10,
