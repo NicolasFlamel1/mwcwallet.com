@@ -1034,6 +1034,12 @@
 			"Minified" => FALSE,
 			"Checksum" => "TKf6oGmstm1C2dJhgQYarPXKunanjax9M92Wk+FVTGc9ty7lB3UCLpBV2gqJmKk22COauKqa83vQg6+1lQ7FnQ=="
 		],
+		"./images/countries/netherlands.svg" => [
+			"Version" => 1,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "9Mlm0FJ9BE+0uNazl1mggjzqHviixc5LO0lKPbwKQcOaY7+tGvL2OCyPPQ6+XSWrrOq4dc8FUPCMF0BoJUikXw=="
+		],
 		"./images/app_icons/app_icon-152x152.png" => [
 			"Version" => 4,
 			"Cache" => FALSE,
