@@ -18,7 +18,7 @@
 		"Added Chinese translation by grincalf.",
 		"Added Greek translation by NickTheG.",
 		"Added German translation by High ko XMR.",
-		"Added Dutch translation by Olaf."
+		"Added Dutch translation by Ollebollegijs."
 	];
 	
 	// Maintenance start time

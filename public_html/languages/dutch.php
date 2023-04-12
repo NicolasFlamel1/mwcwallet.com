@@ -5,7 +5,7 @@
 	
 		// Contributors
 		"Contributors" => [
-			"Olaf"
+			"Ollebollegijs"
 		],
 		
 		// Constants
@@ -522,7 +522,7 @@
 			'This site will be down for scheduled maintenance starting on %1$d at %2$t.' => 'Deze site zal buiten gebruik zijn wegens gepland onderhoud aanvangend op %1$d om %2$t.',
 			'This site won\'t function correctly if you have private or incognito browsing modes enabled or if your browser is configured to automatically delete cookies and site data. Make sure that private and incognito browsing modes are disabled and that your browser is configured to retain cookies and site data before continuing.' => 'Deze site zal niet juist functioneren indien u private of incognito browsing modus heeft geactiveerd of indien uw browser zo geconfigureerd is om automatisch cookies en site data te verwijderen. Zorg ervoor dat private en incognito browsing modus uitgeschakeld zijn en dat uw browser geconfigureerd is om cookies en site data te bewaren voordat u verdergaat.',
 			'This site won\'t function correctly if your browser is configured to block third-party cookies. Make sure that your browser is configured to allow third-party cookies before continuing.' => 'Deze site zal niet juist functioneren indien uw browser geconfigureerd is om cookies van derder te blokkeren. Zorg ervoor dat uw browser zo geconfigureerd is dat het cookies van derder toestaat voordat u verdergaat.',
-			/*TODO*/'This site won\'t run when it\'s embedded in a site. Visit %1$l to continue.' => 'Deze site zal niet werken indien deze is opgenomen in een site.',
+			'This site won\'t run when it\'s embedded in a site. Visit %1$l to continue.' => 'Deze site zal niet werken indien deze is opgenomen in een site. Bezoek %1$l om verder te gaan.',
 			'This wallet can only be recovered by using its passphrase once it\'s been deleted.' => 'Deze portemonnaie kan alleen hersteld worden door gebruik te maken van bijbehorende wachtwoordzin indien deze verwijderd wordt.',
 			'Time to live cut off height must be greater than or equal to the lock height.' => 'Time to live afkap hoogte moet groter of gelijk zijn aan de versleutelde hoogte.',
 			'Time to live cut off height must be greater than the current height.' => 'Time to live afkap hoogte moet groter of gelijk zijn aan de huidige hoogte.',
