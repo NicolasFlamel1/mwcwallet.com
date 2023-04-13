@@ -12,8 +12,8 @@ class Language {
 		// Initialize
 		static initialize() {
 		
-			// Check if language hasn't already been initialized
-			if(typeof Language.currentLanguage === "undefined") {
+			// Check if language hasn't already been initialized and available languages exist
+			if(typeof Language.currentLanguage === "undefined" && typeof AVAILABLE_LANGUAGES !== "undefined") {
 			
 				// Get language display
 				var languageDisplay = $("div.language");
@@ -467,7 +467,7 @@ class Language {
 				while(true) {
 				
 					// Check if applicable language is available
-					if(applicableLanguage in AVAILABLE_LANGUAGES === true) {
+					if(typeof AVAILABLE_LANGUAGES !== "undefined" && applicableLanguage in AVAILABLE_LANGUAGES === true) {
 					
 						// Check if text exist for the applicable language and the specified text exists
 						if("Text" in AVAILABLE_LANGUAGES[applicableLanguage] === true && text in AVAILABLE_LANGUAGES[applicableLanguage]["Text"] === true) {
@@ -521,7 +521,7 @@ class Language {
 			while(applicableLanguage !== DEFAULT_LANGUAGE) {
 			
 				// Check if applicable language provides a fallback language
-				if(applicableLanguage in AVAILABLE_LANGUAGES === true && "Constants" in AVAILABLE_LANGUAGES[applicableLanguage] === true && "Fallback" in AVAILABLE_LANGUAGES[applicableLanguage]["Constants"] === true)
+				if(typeof AVAILABLE_LANGUAGES !== "undefined" && applicableLanguage in AVAILABLE_LANGUAGES === true && "Constants" in AVAILABLE_LANGUAGES[applicableLanguage] === true && "Fallback" in AVAILABLE_LANGUAGES[applicableLanguage]["Constants"] === true)
 				
 					// Set applicable language to the language's fallback language
 					applicableLanguage = AVAILABLE_LANGUAGES[applicableLanguage]["Constants"]["Fallback"];
@@ -939,7 +939,7 @@ class Language {
 			while(true) {
 			
 				// Check if applicable language is available
-				if(applicableLanguage in AVAILABLE_LANGUAGES === true) {
+				if(typeof AVAILABLE_LANGUAGES !== "undefined" && applicableLanguage in AVAILABLE_LANGUAGES === true) {
 				
 					// Check if constants exist for the applicable language and the specified constant exists
 					if("Constants" in AVAILABLE_LANGUAGES[applicableLanguage] === true && constant in AVAILABLE_LANGUAGES[applicableLanguage]["Constants"] === true)
@@ -1033,7 +1033,7 @@ class Language {
 		static showDisplay(delayShow = false) {
 		
 			// Check if more than one language exists
-			if(Object.keys(AVAILABLE_LANGUAGES)["length"] > 1) {
+			if(typeof AVAILABLE_LANGUAGES !== "undefined" && Object.keys(AVAILABLE_LANGUAGES)["length"] > 1) {
 			
 				// Check if delay show
 				if(delayShow === true)

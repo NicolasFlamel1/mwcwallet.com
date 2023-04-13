@@ -2422,9 +2422,6 @@
 		// Default language
 		var DEFAULT_LANGUAGE = "<?= escapeString(DEFAULT_LANGUAGE); ?>";
 		
-		// Available languages
-		var AVAILABLE_LANGUAGES = <?= json_encode(getAvailableLanguages()); ?>;
-		
 		// Maintenance start time
 		var MAINTENANCE_START_TIME = "<?= escapeString(MAINTENANCE_START_TIME); ?>";
 		
@@ -2520,6 +2517,7 @@
 	<script src="<?= encodeString(getResource("./scripts/bignumber.js-9.1.1.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/bignumber.js-9.1.1.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
 	<script src="<?= encodeString(getResource("./scripts/common.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/common.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
 	<script src="<?= encodeString(getResource("./scripts/consensus.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/consensus.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
+	<script src="<?= encodeString(getResource("./scripts/languages.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/languages.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
 	<script src="<?= encodeString(getResource("./scripts/language.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/language.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
 	<script src="<?= encodeString(getResource("./scripts/extension.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/extension.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
 	<script src="<?= encodeString(getResource("./scripts/JSONBigNumber-1.1.1.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/JSONBigNumber-1.1.1.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>

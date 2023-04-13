@@ -996,9 +996,6 @@
 		// Default language
 		var DEFAULT_LANGUAGE = "<?= escapeString(DEFAULT_LANGUAGE); ?>";
 		
-		// Available languages
-		var AVAILABLE_LANGUAGES = <?= json_encode(getAvailableLanguages()); ?>;
-		
 		// Index not found
 		var INDEX_NOT_FOUND = -1;
 		
@@ -1310,6 +1307,7 @@
 	<script src=".<?= encodeString(getResource("./scripts/jQuery-3.6.4.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/jQuery-3.6.4.js")); ?>" type="application/javascript" charset="UTF-8"></script>
 	<script src=".<?= encodeString(getResource("./scripts/common.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/common.js")); ?>" type="application/javascript" charset="UTF-8"></script>
 	<script src=".<?= encodeString(getResource("./scripts/consensus.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/consensus.js")); ?>" type="application/javascript" charset="UTF-8"></script>
+	<script src=".<?= encodeString(getResource("./scripts/languages.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/languages.js")); ?>" type="application/javascript" charset="UTF-8"></script>
 	<script src=".<?= encodeString(getResource("./scripts/language.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/language.js")); ?>" type="application/javascript" charset="UTF-8"></script>
 	<script src=".<?= encodeString(getResource("./scripts/startup_images_creator.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/startup_images_creator.js")); ?>" type="application/javascript" charset="UTF-8" defer="true"></script>
 	<script src=".<?= encodeString(getResource("./scripts/copyright.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/copyright.js")); ?>" type="application/javascript" charset="UTF-8" defer="true"></script>

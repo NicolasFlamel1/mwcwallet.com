@@ -561,13 +561,17 @@ class Prices {
 		
 			// Initialize currencies
 			var currencies = {};
-		
-			// Go through all available languages
-			Object.keys(AVAILABLE_LANGUAGES).forEach(function(availableLanguage) {
 			
-				// Append currency for the available language to list of currencies
-				currencies[availableLanguage] = Language.getConstant(Language.CURRENCY_CONSTANT, availableLanguage);
-			});
+			// Check if available languages exist
+			if(typeof AVAILABLE_LANGUAGES !== "undefined") {
+		
+				// Go through all available languages
+				Object.keys(AVAILABLE_LANGUAGES).forEach(function(availableLanguage) {
+				
+					// Append currency for the available language to list of currencies
+					currencies[availableLanguage] = Language.getConstant(Language.CURRENCY_CONSTANT, availableLanguage);
+				});
+			}
 			
 			// Return currencies
 			return currencies;
