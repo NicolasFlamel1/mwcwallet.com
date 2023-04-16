@@ -1235,8 +1235,8 @@ class Logo {
 							// Reset recorded rotation
 							this.recordedRotation = 0;
 							
-							// Check if logo is showing, message display isn't shown, and application isn't showing loading
-							if(this.logoDisplay.hasClass("notLoaded") === false && this.logoDisplay.hasClass("hide") === false && this.mainDisplay.hasClass("logo") === true && this.logoDisplay.is(":visible") === true && this.message.isShown() === false && this.application.isShowingLoading() === false) {
+							// Check if logo is showing, create or unlock display is shown, message display isn't shown, application isn't showing loading, application isn't disabled, and messages are allowed
+							if(this.logoDisplay.hasClass("notLoaded") === false && this.logoDisplay.hasClass("hide") === false && this.mainDisplay.hasClass("logo") === true && this.logoDisplay.is(":visible") === true && (this.application.isCreateDisplayShown() === true || this.application.isUnlockDisplayShown() === true) && this.message.isShown() === false && this.application.isShowingLoading() === false && this.application.isDisabled() === false && this.message.getAllowed() === true) {
 							
 								// Show tetris
 								this.tetris.show();

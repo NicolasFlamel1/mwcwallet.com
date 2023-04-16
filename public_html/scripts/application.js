@@ -4332,6 +4332,31 @@ class Application {
 			});
 		}
 		
+		// Is disabled
+		isDisabled() {
+		
+			// Check if create display is shown
+			if(this.isCreateDisplayShown() === true) {
+			
+				// Return if create display is disabled
+				return this.createDisplay.children("div").first().attr("tabindex") === Common.NO_TAB_INDEX;
+			}
+			
+			// Otherwise check if unlock display is shown
+			else if(this.isUnlockDisplayShown() === true) {
+			
+				// Return if unlock display is disabled
+				return this.unlockDisplay.children("div").first().attr("tabindex") === Common.NO_TAB_INDEX;
+			}
+			
+			// Otherwise
+			else {
+			
+				// Return false
+				return false;
+			}
+		}
+		
 		// Show loading delay milliseconds
 		static get SHOW_LOADING_DELAY_MILLISECONDS() {
 		

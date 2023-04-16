@@ -327,10 +327,10 @@
 			"Checksum" => "pIuf2VXyvIUi3QSjOPWSk6OGxx/+KflfBz0vdMw8OjnAVEnW2ZaJ6bsIXiZljkP5D2wMu6F9I9Xv4hPKFLVkzQ=="
 		],
 		"./scripts/application.js" => [
-			"Version" => 46,
+			"Version" => 48,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "FznYnPCNQf052MGr7kMJd6vyTD7yuM2ifhyetanauv/l12jhRZ4wey4M9KjIRQnpEdm7MxWWD4nOUhxikv1/kg=="
+			"Checksum" => "MjqUdFb7b++7iDUsBsV+oZoFLARNbaaHkCpmcbJulC1GuijUrH8be3+mOEmM7M+kMl0J7JE6LgewXhai8Qq2UQ=="
 		],
 		"./scripts/automatic_lock.js" => [
 			"Version" => 5,
@@ -387,10 +387,10 @@
 			"Checksum" => "MkRkaXe8V7U6UZI/wJza3b8syfEflRaPzK6FS025whXZ3xCS+zeE8OuMlzYqCcZI4RURQ9ePc683eJrMAFdpnw=="
 		],
 		"./scripts/logo.js" => [
-			"Version" => 11,
+			"Version" => 13,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "qLg+2Bd4YzdyKcvpmFkDBi3dPS+nnq3+DBF+iG4yeycrqYwBhFmqvIlRMJ4FoSO2UXdABHkyINIP9yMQPYSB6A=="
+			"Checksum" => "Tz4KuEnBSVEjkEcpZUXUd+QDbU3Y0LArmNBpSi1NBPP78MyCoQqi58EtxAm2H0mBzkwt0XBoQU7Eygwhsrognw=="
 		],
 		"./scripts/service_worker_installer.js" => [
 			"Version" => 10,
