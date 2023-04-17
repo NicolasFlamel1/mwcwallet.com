@@ -2028,7 +2028,7 @@ class HardwareWallet {
 												self.releaseExclusiveLock();
 												
 												// Check if response is valid
-												if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === Slatepack.TAG_LENGTH) {
+												if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH >= Slatepack.TAG_LENGTH) {
 												
 													// Get tag from response
 													var tag = response.subarray(0, Slatepack.TAG_LENGTH);
