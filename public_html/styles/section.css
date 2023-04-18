@@ -665,6 +665,7 @@ main > div.unlocked > div > div > div.sections > div > div > div > div > div.val
 	text-align: center;
 	max-height: 100%;
 	display: inline-block;
+	line-height: normal;
 }
 
 main > div.unlocked > div > div > div.sections > div > div > div > div > div.value > span.show.conceal::after {

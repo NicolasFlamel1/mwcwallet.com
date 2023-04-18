@@ -169,6 +169,7 @@ main > div > div > form > div > span.show::after, main > div > div > form > div 
 	text-align: center;
 	max-height: 100%;
 	display: inline-block;
+	line-height: normal;
 }
 
 main > div > div > form > div > span.show.conceal::after {

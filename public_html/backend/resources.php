@@ -453,10 +453,10 @@
 			"Checksum" => "WWrHw7TzCNscPmJbc80xUfy489yUi4N+Q8ZSwlu8ZtokUGL3TUkm+h3QccgB+lhcmGA0uLNGDLmp0/fWyNXfUg=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 45,
+			"Version" => 46,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "FDlzMiqBFIPZG+ClJ0rdtG4Mha5wztrbk/SHnSBuEchb1aciJezCkxAjIAbUFO+xVZLPbEw6qU/oPF83GCI6oA=="
+			"Checksum" => "j5aN86ANND0u7JAyU1GBTLxZhxWZQCDgRxvLKD+wLVNZ85pVZIy6N2igaZbQvvFenraYNqeKs6NXBWkiV87LEw=="
 		],
 		"./scripts/proof_builder.js" => [
 			"Version" => 5,
@@ -1287,7 +1287,7 @@
 			"Checksum" => "XD9ZdiMk+TvjGzPL9bShDP8BHp1n5SyqVAtRs3AreF6Nq+KXPASTM+yEASG0wbibhpJvqb4YEWyQadd4gM7D6Q=="
 		],
 		"./styles/section.css" => [
-			"Version" => 7,
+			"Version" => 8,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -1347,16 +1347,16 @@
 			"Checksum" => "f7VcIaefeaCF9zI+GLjXzzmjfEfAuyjjIxL2xhmyqAM/EKnpTFb4a4r3eZ3KnXGCBICPwcikoFMtTAb7ZwRqzQ=="
 		],
 		"./styles/application.css" => [
-			"Version" => 5,
+			"Version" => 6,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "/o4crAs0KMfybxgKMxmhD/RLocp/MXbx/+rI2e1aRg+ciwlw9rHV3e6RZKkeE3cGz7kUVVVhLzhTfaAjBbJHaw=="
+			"Checksum" => "2PNJwZyZ8BNIJ8nMJdgprVwXlZYIEunOnN19rOaxnVrA8uf/d3i+Cx1bRJQDkyfROKFi8JdVeVzrqbDtMEMajw=="
 		],
 		"./styles/message.css" => [
-			"Version" => 15,
+			"Version" => 16,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "AinbXNJVAI5x2DIXFi7K8sXrhgbsEmJqyP0zz2cAK4PbHv1nBfp5k5rYNABa/cw48UVb1oNr5akNpD4aD4Zc1Q=="
+			"Checksum" => "s0pB79od/qra/7/bp1NwBxPbkkBL9tVQ3ISQfPar034w6rAnQWLeAtceghWpdoYEIlWMdCiLDIedBmb9TkNYgg=="
 		],
 		"./styles/tetris.css" => [
 			"Version" => 3,

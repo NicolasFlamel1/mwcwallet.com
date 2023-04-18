@@ -111,6 +111,7 @@ aside.message > div > div > p > span.text span.input > span.show::after, aside.m
 	text-align: center;
 	max-height: 100%;
 	display: inline-block;
+	line-height: normal;
 }
 
 aside.message > div > div > p > span.text span.input > span.show.conceal::after {
