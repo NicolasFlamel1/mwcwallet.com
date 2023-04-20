@@ -286,7 +286,7 @@ class SlateOutput {
 					this.features = SlateOutput.textToFeatures(serializedSlateOutput["features"]);
 				
 					// Check if serialized slate output's commit isn't supported
-					if("commit" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["commit"]) === false || Common.hexStringLength(serializedSlateOutput["commit"]) !== Crypto.COMMIT_LENGTH) {
+					if("commit" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["commit"]) === false || Common.hexStringLength(serializedSlateOutput["commit"]) !== Crypto.COMMIT_LENGTH || Secp256k1Zkp.isValidCommit(Common.fromHexString(serializedSlateOutput["commit"])) !== true) {
 					
 						// Throw error
 						throw "Unsupported output.";
@@ -319,6 +319,13 @@ class SlateOutput {
 					
 						// Set commit to serialized slate output's commit
 						this.commit = bitReader.getBytes(Crypto.COMMIT_LENGTH);
+						
+						// Check if commit is invalid
+						if(Secp256k1Zkp.isValidCommit(this.commit) !== true) {
+						
+							// Throw error
+							throw "Unsupported output.";
+						}
 						
 						// Get serialized slate output's proof length
 						var proofLength = bitReader.getBits(SlateOutput.COMPACT_PROOF_LENGTH_LENGTH);
@@ -358,7 +365,7 @@ class SlateOutput {
 					this.features = ("f" in serializedSlateOutput === true) ? (new BigNumber(serializedSlateOutput["f"])).toNumber() : SlateOutput.PLAIN_FEATURES;
 				
 					// Check if serialized slate output's commit isn't supported
-					if("c" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["c"]) === false || Common.hexStringLength(serializedSlateOutput["c"]) !== Crypto.COMMIT_LENGTH) {
+					if("c" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["c"]) === false || Common.hexStringLength(serializedSlateOutput["c"]) !== Crypto.COMMIT_LENGTH || Secp256k1Zkp.isValidCommit(Common.fromHexString(serializedSlateOutput["c"])) !== true) {
 					
 						// Throw error
 						throw "Unsupported output.";

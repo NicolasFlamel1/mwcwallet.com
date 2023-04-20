@@ -1101,6 +1101,13 @@ class Language {
 			// Set local storage
 			Language.setLocalStorage();
 			
+			// Check if language is different
+			if(languageIsDifferent === true) {
+			
+				// Log message
+				console.log("%c%s", "color: red; font-size: 30px; text-transform: uppercase;", Language.getTranslation('If someone asked you to copy/paste something here you are being scammed!!!'));
+			}
+			
 			// Go through all translatable elements
 			$(".translatable").each(function() {
 			

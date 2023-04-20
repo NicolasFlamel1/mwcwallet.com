@@ -303,79 +303,90 @@ function getInformation(proof, commit, extendedPrivateKeyOrRootPublicKey, proofB
 	// Return promise
 	return new Promise(function(resolve, reject) {
 	
-		// Return getting rewind nonce from the proof builder
-		return proofBuilder.rewindNonce(commit).then(function(rewindNonce) {
+		// Check if commit is valid
+		if(Secp256k1Zkp.isValidCommit(commit) === true) {
 	
-			// Check if rewinding bulletproof was successful
-			var bulletproof = Secp256k1Zkp.rewindBulletproof(proof, commit, rewindNonce);
-			
-			if(bulletproof !== Secp256k1Zkp.OPERATION_FAILED) {
-			
-				// Securely clear rewind nonce
-				rewindNonce.fill(0);
-			
-				// Get amount from bulletproof
-				var amount = new BigNumber(bulletproof["Value"]);
-			
-				// Get message from bulletproof
-				var message = bulletproof["Message"];
+			// Return getting rewind nonce from the proof builder
+			return proofBuilder.rewindNonce(commit).then(function(rewindNonce) {
+		
+				// Check if rewinding bulletproof was successful
+				var bulletproof = Secp256k1Zkp.rewindBulletproof(proof, commit, rewindNonce);
 				
-				// Return having the proof builder get the output
-				return proofBuilder.getOutput(extendedPrivateKeyOrRootPublicKey, amount, commit, message).then(function(output) {
+				if(bulletproof !== Secp256k1Zkp.OPERATION_FAILED) {
 				
-					// Get identifer from output
-					var identifier = output[ProofBuilder.OUTPUT_IDENTIFIER_INDEX];
+					// Securely clear rewind nonce
+					rewindNonce.fill(0);
+				
+					// Get amount from bulletproof
+					var amount = new BigNumber(bulletproof["Value"]);
+				
+					// Get message from bulletproof
+					var message = bulletproof["Message"];
 					
-					// Get switch type from output
-					var switchType = output[ProofBuilder.OUTPUT_SWITCH_TYPE_INDEX];
+					// Return having the proof builder get the output
+					return proofBuilder.getOutput(extendedPrivateKeyOrRootPublicKey, amount, commit, message).then(function(output) {
 					
-					// Check if output's proof verifies the output's commit
-					if(Secp256k1Zkp.verifyBulletproof(proof, commit, new Uint8Array([])) === true) {
-				
-						// Resolve information
-						resolve([
+						// Get identifer from output
+						var identifier = output[ProofBuilder.OUTPUT_IDENTIFIER_INDEX];
 						
-							// Amount
-							Common.serializeObject(amount),
-							
-							// Identifier
-							Common.serializeObject(identifier),
-							
-							// Switch type
-							switchType
-						]);
-					}
+						// Get switch type from output
+						var switchType = output[ProofBuilder.OUTPUT_SWITCH_TYPE_INDEX];
+						
+						// Check if output's proof verifies the output's commit
+						if(Secp256k1Zkp.verifyBulletproof(proof, commit, new Uint8Array([])) === true) {
 					
-					// Otherwise
-					else {
+							// Resolve information
+							resolve([
+							
+								// Amount
+								Common.serializeObject(amount),
+								
+								// Identifier
+								Common.serializeObject(identifier),
+								
+								// Switch type
+								switchType
+							]);
+						}
+						
+						// Otherwise
+						else {
+						
+							// Resolve no information
+							resolve(Output.NO_INFORMATION);
+						}
+					
+					// Catch errors
+					}).catch(function(error) {
 					
 						// Resolve no information
 						resolve(Output.NO_INFORMATION);
-					}
+					});
+				}
 				
-				// Catch errors
-				}).catch(function(error) {
+				// Otherwise
+				else {
+				
+					// Securely clear rewind nonce
+					rewindNonce.fill(0);
 				
 					// Resolve no information
 					resolve(Output.NO_INFORMATION);
-				});
-			}
+				}
 			
-			// Otherwise
-			else {
-			
-				// Securely clear rewind nonce
-				rewindNonce.fill(0);
+			// Catch errors
+			}).catch(function(error) {
 			
 				// Resolve no information
 				resolve(Output.NO_INFORMATION);
-			}
+			});
+		}
 		
-		// Catch errors
-		}).catch(function(error) {
+		// Otherwise
+		else {
 		
 			// Resolve no information
 			resolve(Output.NO_INFORMATION);
-		});
+		}
 	});
 }

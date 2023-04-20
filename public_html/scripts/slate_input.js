@@ -208,7 +208,7 @@ class SlateInput {
 					this.features = SlateInput.textToFeatures(serializedSlateInput["features"]);
 				
 					// Check if serialized slate input's commit isn't supported
-					if("commit" in serializedSlateInput === false || Common.isHexString(serializedSlateInput["commit"]) === false || Common.hexStringLength(serializedSlateInput["commit"]) !== Crypto.COMMIT_LENGTH) {
+					if("commit" in serializedSlateInput === false || Common.isHexString(serializedSlateInput["commit"]) === false || Common.hexStringLength(serializedSlateInput["commit"]) !== Crypto.COMMIT_LENGTH || Secp256k1Zkp.isValidCommit(Common.fromHexString(serializedSlateInput["commit"])) !== true) {
 					
 						// Throw error
 						throw "Unsupported input.";
@@ -234,7 +234,7 @@ class SlateInput {
 					this.features = ("f" in serializedSlateInput === true) ? (new BigNumber(serializedSlateInput["f"])).toNumber() : SlateInput.PLAIN_FEATURES;
 				
 					// Check if serialized slate input's commit isn't supported
-					if("c" in serializedSlateInput === false || Common.isHexString(serializedSlateInput["c"]) === false || Common.hexStringLength(serializedSlateInput["c"]) !== Crypto.COMMIT_LENGTH) {
+					if("c" in serializedSlateInput === false || Common.isHexString(serializedSlateInput["c"]) === false || Common.hexStringLength(serializedSlateInput["c"]) !== Crypto.COMMIT_LENGTH || Secp256k1Zkp.isValidCommit(Common.fromHexString(serializedSlateInput["c"])) !== true) {
 					
 						// Throw error
 						throw "Unsupported input.";

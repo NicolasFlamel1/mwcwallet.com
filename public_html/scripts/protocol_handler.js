@@ -63,7 +63,7 @@ class ProtocolHandler {
 				// Return protocol
 				return protocol + ":";
 				
-			}).indexOf(parsedUrl["protocol"]) !== Common.INDEX_NOT_FOUND) {
+			}).indexOf(parsedUrl["protocol"]) === 0) {
 			
 				// Return standard URL
 				return url.substring(ProtocolHandler.PROTOCOLS_PREFIX["length"]);

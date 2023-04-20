@@ -928,7 +928,7 @@ class HardwareWallet {
 												self.releaseExclusiveLock();
 											
 												// Check if response is valid
-												if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === Crypto.TAU_X_LENGTH + Crypto.SECP256K1_PUBLIC_KEY_LENGTH + Crypto.SECP256K1_PUBLIC_KEY_LENGTH && Secp256k1Zkp.isValidPublicKey(response.subarray(Crypto.TAU_X_LENGTH, Crypto.TAU_X_LENGTH + Crypto.SECP256K1_PUBLIC_KEY_LENGTH)) === true && Secp256k1Zkp.isValidPublicKey(response.subarray(Crypto.TAU_X_LENGTH + Crypto.SECP256K1_PUBLIC_KEY_LENGTH, Crypto.TAU_X_LENGTH + Crypto.SECP256K1_PUBLIC_KEY_LENGTH + Crypto.SECP256K1_PUBLIC_KEY_LENGTH)) === true) {
+												if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === Crypto.TAU_X_LENGTH + Crypto.SECP256K1_PUBLIC_KEY_LENGTH + Crypto.SECP256K1_PUBLIC_KEY_LENGTH && (Secp256k1Zkp.isValidSecretKey(response.subarray(0, Crypto.TAU_X_LENGTH)) === true || Common.arraysAreEqual(response.subarray(0, Crypto.TAU_X_LENGTH), Crypto.ZERO_SECRET_KEY) === true) && Secp256k1Zkp.isValidPublicKey(response.subarray(Crypto.TAU_X_LENGTH, Crypto.TAU_X_LENGTH + Crypto.SECP256K1_PUBLIC_KEY_LENGTH)) === true && Secp256k1Zkp.isValidPublicKey(response.subarray(Crypto.TAU_X_LENGTH + Crypto.SECP256K1_PUBLIC_KEY_LENGTH, Crypto.TAU_X_LENGTH + Crypto.SECP256K1_PUBLIC_KEY_LENGTH + Crypto.SECP256K1_PUBLIC_KEY_LENGTH)) === true) {
 												
 													// Get tau x from response
 													var tauX = response.subarray(0, Crypto.TAU_X_LENGTH);
@@ -1212,7 +1212,7 @@ class HardwareWallet {
 								if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === 0) {
 								
 									// Resolve
-									resolve(resolve);
+									resolve();
 								}
 								
 								// Otherwise
@@ -1405,7 +1405,7 @@ class HardwareWallet {
 								if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === 0) {
 								
 									// Resolve
-									resolve(resolve);
+									resolve();
 								}
 								
 								// Otherwise
@@ -1598,7 +1598,7 @@ class HardwareWallet {
 								if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === 0) {
 								
 									// Resolve
-									resolve(resolve);
+									resolve();
 								}
 								
 								// Otherwise
@@ -2411,7 +2411,7 @@ class HardwareWallet {
 						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_APPLY_OFFSET_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from(offset), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 						
 							// Check if response is valid
-							if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH <= 1) {
+							if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === 0 || response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === 1) {
 							
 								// Get secret nonce index from response
 								var secretNonceIndex = (response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === 1) ? response[0] : HardwareWallet.NO_SECRET_NONCE_INDEX;
@@ -2591,7 +2591,7 @@ class HardwareWallet {
 						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_GET_MESSAGE_SIGNATURE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from((new TextEncoder()).encode(message)), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 						
 							// Check if response is valid
-							if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === Crypto.SINGLE_SIGNER_SIGNATURE_LENGTH) {
+							if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === Crypto.SINGLE_SIGNER_SIGNATURE_LENGTH && Secp256k1Zkp.isValidSingleSignerSignature(response.subarray(0, Crypto.SINGLE_SIGNER_SIGNATURE_LENGTH)) === true) {
 							
 								// Get signature from response
 								var signature = response.subarray(0, Crypto.SINGLE_SIGNER_SIGNATURE_LENGTH);

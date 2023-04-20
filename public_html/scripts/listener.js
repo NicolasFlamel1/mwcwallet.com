@@ -1208,13 +1208,13 @@ class Listener {
 					$(self).trigger(Listener.RESPONSE_RECEIVE_EVENT, message);
 				
 				// Otherwise check if message is an interaction
-				else if("Interaction" in message === true && "URL" in message === true && "API" in message === true && "Type" in message === true && "Data" in message === true) {
+				else if("Interaction" in message === true && typeof message["Interaction"] === "number" && "URL" in message === true && "API" in message === true && "Type" in message === true && "Data" in message === true) {
 				
 					// Check if not ignoring response
 					if(ignoreResponse === false) {
 				
 						// Check if message's contents are valid
-						if(typeof message["Interaction"] === "number" && typeof message["URL"] === "string" && typeof message["API"] === "string" && typeof message["Type"] === "string" && typeof message["Data"] === "string") {
+						if(typeof message["URL"] === "string" && typeof message["API"] === "string" && typeof message["Type"] === "string" && typeof message["Data"] === "string") {
 						
 							// Try
 							try {

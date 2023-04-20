@@ -3723,6 +3723,13 @@ class Slate {
 							// Check if serialized slate contains a proof signature
 							if(bitReader.getBits(Slate.COMPACT_BOOLEAN_LENGTH) === Slate.COMPACT_BOOLEAN_TRUE) {
 							
+								// Check if doesn't have a payment proof
+								if(this.hasPaymentProof() === false) {
+								
+									// Throw error
+									throw "Unsupported slate.";
+								}
+							
 								// Get serialized slate's receiver signature length
 								var receiverSignatureLength = bitReader.getBits(Slate.COMPACT_PROOF_SIGNATURE_LENGTH_LENGTH) + Crypto.ED25519_SIGNATURE_LENGTH;
 								
