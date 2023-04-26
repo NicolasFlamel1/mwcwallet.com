@@ -1880,6 +1880,16 @@ class Slate {
 					return false;
 			}
 			
+			// Otherwise
+			else {
+			
+				// Check if offsets are equal
+				if(Common.arraysAreEqual(this.getOffset(), slate.getOffset()) === true)
+				
+					// Return false
+					return false;
+			}
+			
 			// Check if block header versions aren't equal
 			if(this.getBlockHeaderVersion().isEqualTo(slate.getBlockHeaderVersion()) === false)
 			

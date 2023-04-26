@@ -93,7 +93,7 @@ class Mqs {
 				else {
 				
 					// Check if shared secret key isn't zero
-					if(Common.arraysAreEqual(sharedSecretKey, (new Uint8Array(sharedSecretKey["length"])).fill(0)) === false) {
+					if(Common.arraysAreEqualTimingSafe(sharedSecretKey, (new Uint8Array(sharedSecretKey["length"])).fill(0)) === false) {
 				
 						// Return creating base key from shared secret key
 						return crypto["subtle"].importKey("raw", sharedSecretKey.subarray(1), {
@@ -304,7 +304,7 @@ class Mqs {
 				else {
 				
 					// Check if shared secret key isn't zero
-					if(Common.arraysAreEqual(sharedSecretKey, (new Uint8Array(sharedSecretKey["length"])).fill(0)) === false) {
+					if(Common.arraysAreEqualTimingSafe(sharedSecretKey, (new Uint8Array(sharedSecretKey["length"])).fill(0)) === false) {
 				
 						// Return creating base key from shared secret key
 						return crypto["subtle"].importKey("raw", sharedSecretKey.subarray(1), {

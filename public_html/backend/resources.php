@@ -435,10 +435,10 @@
 			"Checksum" => "jSzvJoFNyGWGAlNp1a4r556E4qYOKEqZFy153hcWtYOjKYGsBLkY+z5koJK/kiDxemFjQ1v8HtfqeassdIiazg=="
 		],
 		"./scripts/crypto.js" => [
-			"Version" => 9,
+			"Version" => 10,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "HXalEjHaNCXllLsT3dKTTMxKNgnetgHPVymdILPEuLIVorKLEDInK20ck8lq8nFIQPAblK5sf79H3lIg83GqTg=="
+			"Checksum" => "CU/HVGkMUax7mg7poeeifU7kzF+quek1ur6ypAKbXvDunU66QR3Nnbvn/5+UBTxPBxrE/yhw/1JBNlsT+TLFew=="
 		],
 		"./scripts/api.js" => [
 			"Version" => 59,
@@ -531,13 +531,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 57,
+			"Version" => 58,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 125,
+			"Version" => 126,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -549,13 +549,13 @@
 			"Checksum" => "fgXcToDtI6wmtS0RjZW5pbWUYkBBkENvqM+gtInk+grrPOQxx37PqgMCyjDm5JTlC3fMvdWSeNrWv1T1CZ0a3g=="
 		],
 		"./scripts/languages.js" => [
-			"Version" => 1,
+			"Version" => 2,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 52,
+			"Version" => 53,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -621,16 +621,16 @@
 			"Checksum" => "ApDTUYDgpJlRMIxXmUy4QoIquHNYSoSgLboySkdC8k1/cU+C9TP86WQXbjHup1Y9VGJLPy/vPh+F00cLLukt4Q=="
 		],
 		"./scripts/mqs.js" => [
-			"Version" => 7,
+			"Version" => 8,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "XZHsLygtqLRS6unbCZt6rAevILQCm/QLNVm9/V1BChOuSRK0oADvYGjmIpf+uwgheIecWu8TbIVZxkNRfoOc5w=="
+			"Checksum" => "X7hpaoKawlSpa6lEifOoaNBPwHqxJ+BEcUPwGWr8MrKMGznpcn8b67AfKoXSwyC6baz5Bf+az1VTOew93e4a6Q=="
 		],
 		"./scripts/slatepack.js" => [
-			"Version" => 14,
+			"Version" => 15,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "TnEaUlI1kCC6egBs6dvvLMPp5e3LZba4Nc5mliNddBEdvxxULfe9wqIyx+UTPD9kfq47NhzovbY3kXXUp80v6Q=="
+			"Checksum" => "HkTwE761odlGu69siOCd4kYh+cUblrxqxaSvQ29+XODx2M/FApcNF0hvf7AXH1x6zGshcKdmDrLxlmAsshmAOg=="
 		],
 		"./scripts/JSONBigNumber-1.1.1.js" => [
 			"Version" => 5,
@@ -891,10 +891,10 @@
 			"Checksum" => "OA4SbseOEmVcPnIky32I8ZUCfD16z7CnRpym1AVwXWvHwF/EG2E8E4LnsM32YpMCiTM2due3JCbxDtJITdFcwg=="
 		],
 		"./scripts/slate.js" => [
-			"Version" => 87,
+			"Version" => 88,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "OjjPH6ov+FFsCIZ0Qpvok2wn6qxVz8oTZ8X4E2DY+pz4sKlR6s6vc6oJNmrG8xWkJf1MsxbppByHOXh/dt5p3Q=="
+			"Checksum" => "f447B1xmow1o5znRG2CCapg7BZmT87XN9g5VqODRerG2SkAsK4UTCdAopC8V0GszFz1zY3YcXnVn/X93DFBJHQ=="
 		],
 		"./scripts/slate_participant.js" => [
 			"Version" => 7,
@@ -1045,6 +1045,12 @@
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => "9Mlm0FJ9BE+0uNazl1mggjzqHviixc5LO0lKPbwKQcOaY7+tGvL2OCyPPQ6+XSWrrOq4dc8FUPCMF0BoJUikXw=="
+		],
+		"./images/countries/czech_republic.svg" => [
+			"Version" => 1,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "rLBl0FvuqHetz0DTr1ZnACgRfTjyWXFI7SG44HnSTgBi6Xem9P6ys84bf5rfq2xC6R/Fpo/6EzEAAGk6omJ8nQ=="
 		],
 		"./images/app_icons/app_icon-152x152.png" => [
 			"Version" => 4,
