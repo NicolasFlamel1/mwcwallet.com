@@ -5349,8 +5349,8 @@ class Wallets {
 																																// Update transaction's status to unspent since transaction is confirmed on the chain
 																																transaction.setStatus(Transaction.STATUS_UNSPENT);
 																																
-																																// Check if the transaction's new spandable height has past
-																																if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																// Check if the transaction's new spendable height is the next block
+																																if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
 																																
 																																	// Check if the transaction's amount hasn't been released
 																																	if(transaction.getAmountReleased() === false) {
@@ -5409,8 +5409,8 @@ class Wallets {
 																																// Check if transaction's amount hasn't been released
 																																if(transaction.getAmountReleased() === false) {
 																																
-																																	// Check if the transaction's new spendable height has past
-																																	if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																	// Check if the transaction's new spendable height is the next block
+																																	if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
 																																
 																																		// Set transaction amount has been released
 																																		transaction.setAmountReleased(true);
@@ -5442,8 +5442,8 @@ class Wallets {
 																																// Otherwise
 																																else {
 																																
-																																	// Check if the transaction's new spendable height hasn't past
-																																	if(newSpendableHeight.isGreaterThan(tipHeight.getHeight()) === true) {
+																																	// Check if the transaction's new spendable height isn't the next block
+																																	if(newSpendableHeight.isGreaterThan(tipHeight.getHeight().plus(1)) === true) {
 																																	
 																																		// Set transaction amount hasn't been released
 																																		transaction.setAmountReleased(false);
@@ -5573,8 +5573,8 @@ class Wallets {
 																													// Create new transaction
 																													var newTransaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), outputInformation.getOutput().getCommit(), keyPath, true, recordedTimestamp, Transaction.UNKNOWN_CREATED_TIMESTAMP, outputInformation.getOutput().getHeight(), Transaction.UNKNOWN_LOCK_HEIGHT, outputInformation.getOutput().isCoinbase(), Transaction.STATUS_UNSPENT, outputInformation.getAmount(), false, Transaction.UNKNOWN_KERNEL_EXCESS, outputInformation.getIdentifier(), outputInformation.getSwitchType(), true, Transaction.UNKNOWN_KERNEL_OFFSET, Transaction.UNKNOWN_ID, Transaction.UNKNOWN_MESSAGE, Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, timestamp, Transaction.UNKNOWN_FEE, Transaction.UNKNOWN_SENDER_ADDRESS, Transaction.UNKNOWN_RECEIVER_ADDRESS, Transaction.UNKNOWN_RECEIVER_SIGNATURE, Transaction.UNKNOWN_DESTINATION, spendableHeight, self.numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, true, Transaction.UNKNOWN_REBROADCAST_MESSAGE);
 																													
-																													// Check if the new transaction's spendable height has past
-																													if(newTransaction.getSpendableHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																													// Check if the new transaction's spendable height is the next block
+																													if(newTransaction.getSpendableHeight().isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
 																													
 																														// Set new transaction amount has been released
 																														newTransaction.setAmountReleased(true);
@@ -5635,8 +5635,8 @@ class Wallets {
 																							// Return getting wallet's transactions in the height range between the start height and the highest synced height
 																							return self.transactions.getWalletsTransactionsInHeightRange(keyPath, startHeight, highestSyncedHeight).then(function(transactions) {
 																							
-																								// Return getting wallet's unreleased, received transactions that should have been released by the tip height
-																								return self.transactions.getWalletsUnreleasedReceivedTransactionsInSpendableHeightRange(keyPath, Consensus.FIRST_BLOCK_HEIGHT, tipHeight.getHeight()).then(function(unreleasedTransactions) {
+																								// Return getting wallet's unreleased, received transactions that can be included in the next block
+																								return self.transactions.getWalletsUnreleasedReceivedTransactionsInSpendableHeightRange(keyPath, Consensus.FIRST_BLOCK_HEIGHT, tipHeight.getHeight().plus(1)).then(function(unreleasedTransactions) {
 																								
 																									// Return getting wallet's unbroadcast transactions that should have expired by the tip height
 																									return self.transactions.getWalletsUnbroadcastTransactionsInTimeToLiveCutOffHeightRange(keyPath, Consensus.FIRST_BLOCK_HEIGHT, tipHeight.getHeight()).then(function(expiredTransactions) {
@@ -5990,7 +5990,7 @@ class Wallets {
 																																			transactionChanged = true;
 																																		}
 																																		
-																																		// Check if transaction hasn't been broadcast, it isn't expired, and its lock height has past
+																																		// Check if transaction hasn't been broadcast, it isn't expired, and its lock height is the next block
 																																		if(transaction.getBroadcast() === false && transaction.getExpired() === false && transaction.getLockHeight() !== Transaction.UNKNOWN_LOCK_HEIGHT && transaction.getLockHeight() !== Transaction.NO_LOCK_HEIGHT && transaction.getLockHeight().isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
 																																		
 																																			// Return broadcasting transaction to the node
@@ -6175,8 +6175,8 @@ class Wallets {
 																																	// Set updated transaction's status to unspent
 																																	updatedTransaction.setStatus(Transaction.STATUS_UNSPENT);
 																																	
-																																	// Check if the updated transaction's spendable height has past
-																																	if(updatedTransaction.getSpendableHeight() !== Transaction.UNKNOWN_SPENDABLE_HEIGHT && updatedTransaction.getSpendableHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																	// Check if the updated transaction's spendable height is the next block
+																																	if(updatedTransaction.getSpendableHeight() !== Transaction.UNKNOWN_SPENDABLE_HEIGHT && updatedTransaction.getSpendableHeight().isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
 																																
 																																		// Set updated transaction's amount has been released
 																																		updatedTransaction.setAmountReleased(true);
@@ -6456,8 +6456,8 @@ class Wallets {
 																																							// Subtract spent transaction's amount from spent amount change
 																																							spentAmountChange = spentAmountChange.minus(spentTransaction.getAmount());
 																																							
-																																							// Check if the spent transaction's new spendable height has past
-																																							if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																							// Check if the spent transaction's new spendable height is the next block
+																																							if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
 																																							
 																																								// Add spent transaction's amount to unspent amount change
 																																								unspentAmountChange = unspentAmountChange.plus(spentTransaction.getAmount());
@@ -6494,8 +6494,8 @@ class Wallets {
 																																								unconfirmedAmountChange = unconfirmedAmountChange.minus(spentTransaction.getAmount());
 																																							}
 																																							
-																																							// Check if the spent transaction's new spendable height has past
-																																							if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																							// Check if the spent transaction's new spendable height is the next block
+																																							if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
 																																							
 																																								// Add spent transaction's amount to unspent amount change
 																																								unspentAmountChange = unspentAmountChange.plus(spentTransaction.getAmount());
@@ -6514,8 +6514,8 @@ class Wallets {
 																																						// Unspent
 																																						case Transaction.STATUS_UNSPENT:
 																																						
-																																							// Check if the spent transaction's new spendable height has past
-																																							if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																							// Check if the spent transaction's new spendable height is the next block
+																																							if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
 																																							
 																																								// Check if spent transaction's amount hasn't been released
 																																								if(spentTransaction.getAmountReleased() === false) {
@@ -6551,8 +6551,8 @@ class Wallets {
 																																							// Subtract spent transaction's amount from locked amount change
 																																							lockedAmountChange = lockedAmountChange.minus(spentTransaction.getAmount());
 																																							
-																																							// Check if the spent transaction's new spendable height has past
-																																							if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																							// Check if the spent transaction's new spendable height is the next block
+																																							if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
 																																							
 																																								// Add spent transaction's amount to unspent amount change
 																																								unspentAmountChange = unspentAmountChange.plus(spentTransaction.getAmount());
@@ -6569,8 +6569,8 @@ class Wallets {
 																																							break;
 																																					}
 																																					
-																																					// Check if the spent transaction's new spendable height has past
-																																					if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																					// Check if the spent transaction's new spendable height is the next block
+																																					if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
 																																					
 																																						// Check if spent transaction's amount released needs to be updated
 																																						if(spentTransaction.getAmountReleased() === false) {
@@ -7179,8 +7179,8 @@ class Wallets {
 																																									// Update pending transaction's status to unspent since transaction is confirmed on the chain
 																																									pendingTransaction.setStatus(Transaction.STATUS_UNSPENT);
 																																									
-																																									// Check if the pending transaction's new spendable height has past
-																																									if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																									// Check if the pending transaction's new spendable height is the next block
+																																									if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
 																																									
 																																										// Check if the pending transaction's amount hasn't been released
 																																										if(pendingTransaction.getAmountReleased() === false) {
@@ -7226,8 +7226,8 @@ class Wallets {
 																																								// Unspent
 																																								case Transaction.STATUS_UNSPENT:
 																																								
-																																									// Check if pending transaction's amount hasn't been released and the pending transaction's new spendable height has past
-																																									if(pendingTransaction.getAmountReleased() === false && newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																									// Check if pending transaction's amount hasn't been released and the pending transaction's new spendable height is the next block
+																																									if(pendingTransaction.getAmountReleased() === false && newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
 																																									
 																																										// Set pending transaction amount has been released
 																																										pendingTransaction.setAmountReleased(true);
@@ -7242,8 +7242,8 @@ class Wallets {
 																																										transactionChanged = true;
 																																									}
 																																									
-																																									// Otherwise check if pending transaction's amount has been released and the pending transaction's new spendable height hasn't past
-																																									else if(pendingTransaction.getAmountReleased() === true && newSpendableHeight.isGreaterThan(tipHeight.getHeight()) === true) {
+																																									// Otherwise check if pending transaction's amount has been released and the pending transaction's new spendable height isn't the next block
+																																									else if(pendingTransaction.getAmountReleased() === true && newSpendableHeight.isGreaterThan(tipHeight.getHeight().plus(1)) === true) {
 																																									
 																																										// Set pending transaction amount hasn't been released
 																																										pendingTransaction.setAmountReleased(false);

@@ -1990,14 +1990,14 @@ class Api {
 																															if(slate.getLockHeight().isEqualTo(Slate.NO_LOCK_HEIGHT) === false && (slate.getHeight() === Slate.UNKNOWN_HEIGHT || slate.getLockHeight().isGreaterThan(slate.getHeight()) === true)) {
 																															
 																																// Set output height to the current height if it exists and it greater than the slate's lock height or set it to the slate's lock height otherwise
-																																var outputHeight = (currentHeight !== Node.UNKNOWN_HEIGHT && currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false && currentHeight.isGreaterThan(slate.getLockHeight()) === true) ? currentHeight : slate.getLockHeight();
+																																var outputHeight = (currentHeight !== Node.UNKNOWN_HEIGHT && currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false && currentHeight.plus(1).isGreaterThan(slate.getLockHeight()) === true) ? currentHeight.plus(1) : slate.getLockHeight();
 																															}
 																															
 																															// Otherwise
 																															else {
 																															
 																																// Set output height to the current height if it exists or the slate's height otherwise
-																																var outputHeight = (currentHeight !== Node.UNKNOWN_HEIGHT && currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false) ? currentHeight : slate.getHeight();
+																																var outputHeight = (currentHeight !== Node.UNKNOWN_HEIGHT && currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false) ? currentHeight.plus(1) : slate.getHeight();
 																															}
 																														
 																															// Return wallet building output
@@ -8286,14 +8286,14 @@ class Api {
 																if(receiverAddress !== Api.NO_PROOF_ADDRESS) {
 																
 																	// Create slate with payment proof
-																	var slate = new Slate(amount, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, fee, currentHeight, lockHeight, relativeHeight, timeToLiveCutOffHeight, senderAddress, receiverAddress, compatibleSlateVersions);
+																	var slate = new Slate(amount, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, fee, currentHeight.plus(1), lockHeight, relativeHeight, timeToLiveCutOffHeight, senderAddress, receiverAddress, compatibleSlateVersions);
 																}
 																
 																// Otherwise
 																else {
 														
 																	// Create slate without payment proof
-																	var slate = new Slate(amount, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, fee, currentHeight, lockHeight, relativeHeight, timeToLiveCutOffHeight, Slate.NO_SENDER_ADDRESS, Slate.NO_RECEIVER_ADDRESS, compatibleSlateVersions);
+																	var slate = new Slate(amount, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, fee, currentHeight.plus(1), lockHeight, relativeHeight, timeToLiveCutOffHeight, Slate.NO_SENDER_ADDRESS, Slate.NO_RECEIVER_ADDRESS, compatibleSlateVersions);
 																}
 															}
 															
@@ -8469,7 +8469,7 @@ class Api {
 																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																									
 																											// Return wallet building output
-																											return wallet.buildOutput(returnedAmount, (lockHeight.isEqualTo(Slate.NO_LOCK_HEIGHT) === true || lockHeight.isLessThan(currentHeight) === true) ? currentHeight : lockHeight, HardwareWallet.SENDING_TRANSACTION_MESSAGE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function(output) {
+																											return wallet.buildOutput(returnedAmount, (lockHeight.isEqualTo(Slate.NO_LOCK_HEIGHT) === true || lockHeight.isLessThan(currentHeight.plus(1)) === true) ? currentHeight.plus(1) : lockHeight, HardwareWallet.SENDING_TRANSACTION_MESSAGE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function(output) {
 																											
 																												// Check if cancel didn't occur
 																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
