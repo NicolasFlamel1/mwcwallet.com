@@ -3,7 +3,7 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "1.2.0";
+	const VERSION_NUMBER = "2.0.0";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "23 Mar 2023 23:49:00 UTC";
@@ -14,7 +14,7 @@
 		"Fixed error response messages not being displayed if they contained certain characters.",
 		"Fixed detecting when a hardware wallet is locked.",
 		"Added options to open the extension version of this service in a tab or window.",
-		"Changed standalone version of this service to use WASM instead of asm.js.",
+		"Changed the standalone version of this service to use WASM instead of asm.js for some libraries.",
 		"Added Chinese translation by grincalf.",
 		"Added Greek translation by NickTheG.",
 		"Added German translation by High ko XMR.",

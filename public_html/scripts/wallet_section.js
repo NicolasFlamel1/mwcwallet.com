@@ -2523,7 +2523,7 @@ class WalletSection extends Section {
 							try {
 						
 								// Get name
-								var name = self.getMessage().getInputText();
+								var name = self.getMessage().getInputText().trim();
 							}
 							
 							// Catch errors

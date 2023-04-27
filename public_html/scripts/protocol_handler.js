@@ -66,7 +66,7 @@ class ProtocolHandler {
 			}).indexOf(parsedUrl["protocol"]) === 0) {
 			
 				// Return standard URL
-				return url.substring(ProtocolHandler.PROTOCOLS_PREFIX["length"]);
+				return Common.ltrim(url).substring(ProtocolHandler.PROTOCOLS_PREFIX["length"]);
 			}
 			
 			// Otherwise

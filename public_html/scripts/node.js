@@ -530,7 +530,7 @@ class Node {
 			else {
 			
 				// Get custom node address
-				var customNodeAddress = this.customNodeAddress;
+				var customNodeAddress = this.customNodeAddress.trim();
 				
 				// Check if custom node address isn't set
 				if(customNodeAddress["length"] === 0) {

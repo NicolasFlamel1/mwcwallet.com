@@ -286,7 +286,7 @@ class Listener {
 			else {
 			
 				// Get custom listener address
-				var customListenerAddress = this.customListenerAddress;
+				var customListenerAddress = this.customListenerAddress.trim();
 				
 				// Check if custom listener address isn't set
 				if(customListenerAddress["length"] === 0) {
@@ -332,14 +332,14 @@ class Listener {
 							if(parsedUrl["protocol"] === Common.HTTP_PROTOCOL) {
 							
 								// Change custom listener address's protocol to WebSocket
-								customListenerAddress = Common.WEBSOCKET_PROTOCOL + customListenerAddress.substring(Common.HTTP_PROTOCOL["length"]);
+								customListenerAddress = Common.WEBSOCKET_PROTOCOL + Common.ltrim(customListenerAddress).substring(Common.HTTP_PROTOCOL["length"]);
 							}
 							
 							// Otherwise check if URL's protocol is HTTPS
 							else if(parsedUrl["protocol"] === Common.HTTPS_PROTOCOL) {
 							
 								// Change custom listener address's protocol to WebSocket secure
-								customListenerAddress = Common.WEBSOCKET_SECURE_PROTOCOL + customListenerAddress.substring(Common.HTTPS_PROTOCOL["length"]);
+								customListenerAddress = Common.WEBSOCKET_SECURE_PROTOCOL + Common.ltrim(customListenerAddress).substring(Common.HTTPS_PROTOCOL["length"]);
 							}
 						}
 					}

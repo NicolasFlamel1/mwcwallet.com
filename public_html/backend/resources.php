@@ -321,10 +321,10 @@
 			"Checksum" => "AaYCKtIK3CfkZgJL+KjqGHbvK+urVTVK0Wagvfi9MQcrVy95oT6vmwR0lkjIA1gO89vuQ15jrW4vjLyLjUihfA=="
 		],
 		"./scripts/wallets.js" => [
-			"Version" => 45,
+			"Version" => 46,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "pIuf2VXyvIUi3QSjOPWSk6OGxx/+KflfBz0vdMw8OjnAVEnW2ZaJ6bsIXiZljkP5D2wMu6F9I9Xv4hPKFLVkzQ=="
+			"Checksum" => "E48xI22U0d0oiMQXmPjyLQsapYGh7wrvtFI4LVwb9D5QuZ7jBs1pEPjCS8xYHp+ZJWgBbmWylxGXx142SELxQg=="
 		],
 		"./scripts/application.js" => [
 			"Version" => 48,
@@ -351,10 +351,10 @@
 			"Checksum" => "yqvkOl7k3EZh1mspepvBDtl5Ub02kK45/Gx4QS/yQ6OuzfD0bYxG+PnbBdl+j70KM0jbluPmApe/ZIMlMPd99w=="
 		],
 		"./scripts/protocol_handler.js" => [
-			"Version" => 3,
+			"Version" => 4,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "9j1weYv4o9SHedbEXxAMEHyD0JtEf2P4faB45SCZtGIO4S/KACVN9BxE2IZlr/uVXi4JRkr/Afh62aNdSBysZg=="
+			"Checksum" => "L/lzaCVumC3vwo78gHd7la5P607Nrl6umi+FuOiPORp9+pcY/Pzimfz4HAUM6EmGUtd/HhdhrK/1u5KZukl//Q=="
 		],
 		"./scripts/copyright.js" => [
 			"Version" => 5,
@@ -441,10 +441,10 @@
 			"Checksum" => "CU/HVGkMUax7mg7poeeifU7kzF+quek1ur6ypAKbXvDunU66QR3Nnbvn/5+UBTxPBxrE/yhw/1JBNlsT+TLFew=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 59,
+			"Version" => 60,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "pXzvjRQ20YCsjY4FUEKPiiDd+F7H9UJzRqKUu0Wk63F4cmMY7/9cSUQBl2RYjaY9CN1Q57JxlKkJVfrC1XjMKg=="
+			"Checksum" => "iDl2Sf+f/9d5kcDlr8AWtbkpgWpc76CX9N8MNvJ+FfyTSzIHLYEwr+63UpUIQ7s/YtsyCKxtmdmUAJM6+q9azw=="
 		],
 		"./scripts/LedgerJS_Browser-0.0.2.js" => [
 			"Version" => 1,
@@ -549,7 +549,7 @@
 			"Checksum" => "fgXcToDtI6wmtS0RjZW5pbWUYkBBkENvqM+gtInk+grrPOQxx37PqgMCyjDm5JTlC3fMvdWSeNrWv1T1CZ0a3g=="
 		],
 		"./scripts/languages.js" => [
-			"Version" => 2,
+			"Version" => 3,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -567,10 +567,10 @@
 			"Checksum" => "UdiWWkqNvt3q0KH7I+E+eoFOWTt+hULNoXNxnwPaqevGInwqgpnjqJVG1S7lk9jo++XEPiJYK/xSWuwEwpEPRQ=="
 		],
 		"./scripts/listener.js" => [
-			"Version" => 12,
+			"Version" => 13,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "ibDL3lTFkwDcijMXMKHmgmEZCFSP+LIsIuwaSFkRQpNSFYXgf+vDvgdeVVU7PLLdEG/Rj3Ja1+IUUcidh5PD9A=="
+			"Checksum" => "7H1dPigX7g6FcY1WkFtjhIYjjawoL/0pannxyOFfeuRNoYz78V1Kb3Cp5Xx2q+NGzF7rgfPx8Y2TzrL/zozQNA=="
 		],
 		"./scripts/interaction.js" => [
 			"Version" => 4,
@@ -615,10 +615,10 @@
 			"Checksum" => "ewSnCcrrO6n9Z2Md45oCvOYBnbJ6wFgINJFBmTESaOkl2ioj/pkOnJchzGcKg7Bq/1BOoodarA8El0Zrhuv6pw=="
 		],
 		"./scripts/tor.js" => [
-			"Version" => 8,
+			"Version" => 9,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "ApDTUYDgpJlRMIxXmUy4QoIquHNYSoSgLboySkdC8k1/cU+C9TP86WQXbjHup1Y9VGJLPy/vPh+F00cLLukt4Q=="
+			"Checksum" => "iPvX71ZYe0A+FC1gjotWCUKTBDQ8SCdiPYWlQ3RSkV7L3HjBWAnHB1Kd2h3I8OU4ddT3z0+vhtX4s3U8VnXeng=="
 		],
 		"./scripts/mqs.js" => [
 			"Version" => 8,
@@ -681,16 +681,16 @@
 			"Checksum" => "Ba4AMi1Gkx7QB5Xa8OiafsoSjdA5zxaqG3WfyB1I4p9RumPDxl0ZAR21mVN5fPRxsnImSbkIiuU+Lwif40LvqQ=="
 		],
 		"./scripts/tor_proxy.js" => [
-			"Version" => 7,
+			"Version" => 8,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "Jy/3/YmvwzDDzPJXYapunLWmm1E3W3Yjv7FpRRa6lLNJDUe3aK1pTP/IeDCYhPgOyOZ7lSXrxKwQMbRUWIDJbg=="
+			"Checksum" => "DKc9auFvln7lPN+3dXDaSpu/GASjOUb5TsUF/taDYvNDH9yftvtrRwtfISh5F3BOFqa3TIV8RqCljj5aF9ZORQ=="
 		],
 		"./scripts/node.js" => [
-			"Version" => 15,
+			"Version" => 16,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "qBjb4NmgQ4zX2LcSrrv1ZttoRYfe0RUKWvwdv3qJvAHV+tvWoAdeaj2VEYjqJHoOa8MilptjVF+/O3IKyDpNhA=="
+			"Checksum" => "8iUtrx5k612kMmUC2ozd4um+qiSHOw3uCNh2dAqny4/1cIpCFT9DXUrISwoHyvzegn6qFZribp2Je0/YzbsCgg=="
 		],
 		"./scripts/message.js" => [
 			"Version" => 15,
@@ -699,10 +699,10 @@
 			"Checksum" => "37bdgkUcLhp04pc60eGtDy66mfP+o1J5NGgFCu567iSIClJ3VxWmdOvieKd0OTJtiHWmsdVyGhA1cSyZlCEMmg=="
 		],
 		"./scripts/common.js" => [
-			"Version" => 68,
+			"Version" => 69,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "sPuES3RKw3QaB6UdN56/bZ8ngZmA/EM9H7+XS0Mk+tnNmSZQJ3ZBkb38Zw/LR23Tl0ptJoIsC8kZs8ESmgSTcw=="
+			"Checksum" => "vDI6hXt+EMLiX+eF260lGdl8QFvp5PE4sqgmBBnPvjoik6atSAC7pG9I/JkblouH2pATt0muwuG5VyB8CyRb3A=="
 		],
 		"./scripts/bit_reader.js" => [
 			"Version" => 4,
@@ -831,16 +831,16 @@
 			"Checksum" => "S4qtse2vQnhId38WZuCVF1jdkzQJyxGtlXrt/IgH8gdjQrvRaF3gJcMlx1KUFx6ZUwl3mQlsA4xC5J4xIpT+Sg=="
 		],
 		"./scripts/wallet_section.js" => [
-			"Version" => 43,
+			"Version" => 44,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "5C85tMmsRminGQ6TpdT69wksjvdPwrDvu6ITfjveU5zLIJLDCmzVHq/XZ6m4D0E/AOAhIbtWYHkaj4Gqtam5qA=="
+			"Checksum" => "/0bWYKrbdGJfAQfqFBazIuo4y4sBkdCoLoNQr5RF/3i3owdu7Bkh0cn3jnI3FcUgdTm3kF/P+2WC+ylR4TuQpw=="
 		],
 		"./scripts/send_payment_section.js" => [
-			"Version" => 41,
+			"Version" => 42,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "apoCkqa8OIg36ZZ3osnl542O4zHoZXWdT9Lmf9c8Xq4QdKEcUMG6kIMLHavZp+e66gIphdnCuI28QlcHQqI/Gg=="
+			"Checksum" => "0GZe/bAMJ8ZoKdx0B7xbjVlSUpedFcjv8h7/doWfvFtD1+lpZbRoy9JWeH/5G4uHpQIwwonF29yAsf274Om5Dw=="
 		],
 		"./scripts/log_section.js" => [
 			"Version" => 7,
@@ -873,10 +873,10 @@
 			"Checksum" => "tL8JRuLipT2XAjuSFouO83j4CGsTPvdWE8Co6cKcuhskCdPKA3XquDvo3DgpU4cRhbjc4DrDwTZq27YChQ5IIA=="
 		],
 		"./scripts/unlocked.js" => [
-			"Version" => 45,
+			"Version" => 46,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "qdJlQToYvFdImUoFbSGAAI4R/XwbuQVSQckrlvAwhM5vTqWzhCX3AuEgvvL7MeY1Vlxdt4GHzB9Dy/hdtzCYQA=="
+			"Checksum" => "Jjk4laBWn/h/YcXlUiDUAT8FsDTBnE+4XMazjTdOgJRm1OQHSmkpNpn5A3rVYawLqXCrANUql/sXqzaQjexWuA=="
 		],
 		"./scripts/uuid.js" => [
 			"Version" => 5,
@@ -1015,12 +1015,6 @@
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => "6YsD9TAM6RKbXUBtqaqWUX9yme3VmqUpDgyXLX6GHvvOwhHja4CDBUJeTc9WQNYIMoImr5IGl6CajrDg52ylaQ=="
-		],
-		"./images/countries/france.svg" => [
-			"Version" => 2,
-			"Cache" => TRUE,
-			"Minified" => FALSE,
-			"Checksum" => "peZTYH1gGAlaXSWjJPZ/K3dJqlH78TML3/vUhs0g4o7FUNv5cEilAEEdzoxNxTsbNYulbacapCdLb9eIa9MCtA=="
 		],
 		"./images/countries/china.svg" => [
 			"Version" => 2,

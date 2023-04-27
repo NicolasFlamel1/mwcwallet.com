@@ -7349,6 +7349,9 @@ class Api {
 						
 							// Check if cancel didn't occur
 							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+							
+								// Trim url
+								url = url.trim();
 						
 								// Check wallet type
 								switch(Consensus.getWalletType()) {
@@ -7439,7 +7442,7 @@ class Api {
 								try {
 								
 									// Parse receiver URL
-									var parsedUrl = new URL(receiverUrl);
+									new URL(Common.upgradeApplicableInsecureUrl(receiverUrl));
 								}
 								
 								// Catch errors

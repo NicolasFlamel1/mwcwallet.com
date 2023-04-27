@@ -1658,7 +1658,7 @@ class Unlocked {
 							self.automaticLock.prevent();
 							
 							// Split passphrase into mnemonic words
-							var mnemonicWords = Common.splitRemaining(passphrase, Seed.WHITESPACE_PATTERN, Seed.VALID_MNEMONIC_LENGTHS[Seed.VALID_MNEMONIC_LENGTHS["length"] - 1]);
+							var mnemonicWords = Common.splitRemaining(Common.ltrim(passphrase), Seed.WHITESPACE_PATTERN, Seed.VALID_MNEMONIC_LENGTHS[Seed.VALID_MNEMONIC_LENGTHS["length"] - 1]);
 							
 							// TODO Securely clear passphrase
 							

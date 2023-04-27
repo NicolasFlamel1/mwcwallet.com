@@ -148,7 +148,7 @@ class TorProxy {
 			else {
 			
 				// Get custom Tor proxy address
-				var customTorProxyAddress = this.customTorProxyAddress;
+				var customTorProxyAddress = this.customTorProxyAddress.trim();
 				
 				// Check if custom Tor proxy address isn't set
 				if(customTorProxyAddress["length"] === 0) {

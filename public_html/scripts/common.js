@@ -370,7 +370,7 @@ class Common {
 			if(parsedUrl["protocol"] === Common.HTTP_PROTOCOL && parsedHttpsServerUrl["protocol"] === Common.HTTPS_PROTOCOL && parsedUrl["hostname"] === parsedHttpsServerUrl["hostname"]) {
 			
 				// Create an HTTPS URL from the URL
-				var httpsUrl = Common.HTTPS_PROTOCOL + url.substring(Common.HTTP_PROTOCOL["length"]);
+				var httpsUrl = Common.HTTPS_PROTOCOL + Common.ltrim(url).substring(Common.HTTP_PROTOCOL["length"]);
 				
 				// Return HTTPS URL
 				return httpsUrl;
@@ -380,7 +380,7 @@ class Common {
 			else if(parsedUrl["protocol"] === Common.WEBSOCKET_PROTOCOL && parsedHttpsServerUrl["protocol"] === Common.HTTPS_PROTOCOL && parsedUrl["hostname"] === parsedHttpsServerUrl["hostname"]) {
 			
 				// Create an WebSocket secure URL from the URL
-				var wssUrl = Common.WEBSOCKET_SECURE_PROTOCOL + url.substring(Common.WEBSOCKET_PROTOCOL["length"]);
+				var wssUrl = Common.WEBSOCKET_SECURE_PROTOCOL + Common.ltrim(url).substring(Common.WEBSOCKET_PROTOCOL["length"]);
 				
 				// Return WebSocket secure URL
 				return wssUrl;
@@ -390,7 +390,7 @@ class Common {
 			else if(parsedUrl["protocol"] === Common.HTTPS_PROTOCOL && parsedTorServerUrl["protocol"] === Common.HTTP_PROTOCOL && parsedUrl["hostname"] === parsedTorServerUrl["hostname"]) {
 			
 				// Create an HTTP URL from the URL
-				var httpUrl = Common.HTTP_PROTOCOL + url.substring(Common.HTTPS_PROTOCOL["length"]);
+				var httpUrl = Common.HTTP_PROTOCOL + Common.ltrim(url).substring(Common.HTTPS_PROTOCOL["length"]);
 				
 				// Return HTTP URL
 				return httpUrl;
@@ -400,7 +400,7 @@ class Common {
 			else if(parsedUrl["protocol"] === Common.WEBSOCKET_SECURE_PROTOCOL && parsedTorServerUrl["protocol"] === Common.HTTP_PROTOCOL && parsedUrl["hostname"] === parsedTorServerUrl["hostname"]) {
 			
 				// Create an WebSocket URL from the URL
-				var wsUrl = Common.WEBSOCKET_PROTOCOL + url.substring(Common.WEBSOCKET_SECURE_PROTOCOL["length"]);
+				var wsUrl = Common.WEBSOCKET_PROTOCOL + Common.ltrim(url).substring(Common.WEBSOCKET_SECURE_PROTOCOL["length"]);
 				
 				// Return WebSocket URL
 				return wsUrl;
@@ -484,7 +484,7 @@ class Common {
 		static removeTrailingSlashes(text) {
 		
 			// Return text with its trailing slashes removed
-			return text.replace(Common.TRAILING_SLASHES_PATTERN, "");
+			return Common.rtrim(text).replace(Common.TRAILING_SLASHES_PATTERN, "");
 		}
 		
 		// Remove duplicate slashes
@@ -519,16 +519,30 @@ class Common {
 				// Otherwise
 				else {
 				
-					// Append last part to result
-					result.push(text.slice(lastSeparatorEnd));
+					// Get last part
+					var lastPart = text.slice(lastSeparatorEnd);
+				
+					// Check if last part exists and isn't a separator
+					if(lastPart["length"] !== 0 && separator.test(lastPart) === false) {
+				
+						// Append last part to result
+						result.push(lastPart);
+					}
 				
 					// Return result
 					return result;
 				}
 			}
 			
-			// Append last part to result
-			result.push(text.slice(separator["lastIndex"]));
+			// Get last part
+			var lastPart = text.slice(separator["lastIndex"]);
+			
+			// Check if last part exists and isn't a separator
+			if(lastPart["length"] !== 0 && separator.test(lastPart) === false) {
+			
+				// Append last part to result
+				result.push(lastPart);
+			}
 			
 			// Return result
 			return result;
@@ -754,6 +768,20 @@ class Common {
 				// Run callback
 				callback(event);
 			});
+		}
+		
+		// Ltrim
+		static ltrim(text) {
+		
+			// Return text with leading whitespace removed
+			return text.replace(Common.LEADING_WHITESPACE_PATTERN, "");
+		}
+		
+		// Rtrim
+		static rtrim(text) {
+		
+			// Return text with trailing whitespace removed
+			return text.replace(Common.TRAILING_WHITESPACE_PATTERN, "");
 		}
 		
 		// Milliseconds in a second
@@ -1389,7 +1417,7 @@ class Common {
 		static get URL_TOP_LEVEL_DOMAIN_PATTERN() {
 		
 			// Return URL top-level domain pattern
-			return /[^\.]+\.[^\/?:#]+(?:[\/?:#]|$)/u;
+			return /[^\.]+\.[^\/?:#\s]+(?:[\/?:#\s]|$)/u;
 		}
 		
 		// URL domain name pattern
@@ -1460,6 +1488,20 @@ class Common {
 		
 			// Return request animation frame timeout milliseconds
 			return 50;
+		}
+		
+		// Leading whitespace pattern
+		static get LEADING_WHITESPACE_PATTERN() {
+		
+			// Return leading whitespace pattern
+			return /^\s+/u;
+		}
+		
+		// Trailing whitespace pattern
+		static get TRAILING_WHITESPACE_PATTERN() {
+		
+			// Return leading whitespace pattern
+			return /\s+$/u;
 		}
 }
 

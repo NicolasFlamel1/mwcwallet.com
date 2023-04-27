@@ -1108,7 +1108,7 @@ class SendPaymentSection extends Section {
 				button.addClass("loading");
 			
 				// Set recipient address
-				var recipientAddress = self.getDisplay().find("input.recipientAddress").val();
+				var recipientAddress = self.getDisplay().find("input.recipientAddress").val().trim();
 				
 				// Message
 				var message = (self.getDisplay().find("input.message").val()["length"] !== 0) ? self.getDisplay().find("input.message").val() : SlateParticipant.NO_MESSAGE;
