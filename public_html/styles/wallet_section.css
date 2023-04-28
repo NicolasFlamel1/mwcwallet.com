@@ -245,6 +245,7 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.ba
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
+	white-space: pre;
 	width: 100%;
 	text-align: center;
 }
@@ -273,6 +274,7 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.ba
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
+	white-space: pre;
 	width: 100%;
 	text-align: center;
 }
@@ -531,7 +533,7 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.tr
 	pointer-events: none;
 }
 
-main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button> span.name > span > span.type::before {
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.name > span > span.type::before {
 	font-family: "Font Awesome";
 	font-weight: bold;
 	content: "\F51E";

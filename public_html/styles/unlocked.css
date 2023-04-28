@@ -83,6 +83,7 @@ main > div.unlocked > div > div.menu > div > button {
 	display: flex;
 	flex-direction: column;
 	white-space: nowrap;
+	white-space: pre;
 	position: relative;
 	overflow: hidden;
 	font-weight: bold;
@@ -329,6 +330,7 @@ main > div.unlocked > div > div > div.wallets > div > h2 {
 	color: rgb(12, 12, 13);
 	line-height: 2em;
 	white-space: nowrap;
+	white-space: pre;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	padding: 0.1em 1em;
@@ -1038,4 +1040,5 @@ main > div.unlocked > div > div.status > p > span {
 	display: block;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	white-space: pre;
 }

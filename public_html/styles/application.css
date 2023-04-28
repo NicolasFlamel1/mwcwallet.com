@@ -127,6 +127,7 @@ main > div > div.unlock > form > div.status > p > span {
 	display: block;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	white-space: pre;
 }
 
 main > div > div > form > div > span.show, main > div > div > form > div > span.capsLock {

@@ -98,6 +98,7 @@ section.cookieAcceptance > div > button {
 	text-transform: uppercase;
 	line-height: unset;
 	white-space: normal;
+	white-space: break-spaces;
 	font-family: Arial, sans-serif;
 	overflow: hidden;
 	line-height: 1.5em;
@@ -127,5 +128,6 @@ section.cookieAcceptance > div > button:active {
 section.cookieAcceptance > div > button > span {
 	min-height: auto;
 	white-space: normal;
+	white-space: break-spaces;
 	cursor: pointer !important;
 }

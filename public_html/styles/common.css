@@ -76,6 +76,7 @@ button > span {
 	display: block;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	white-space: pre;
 	min-height: 2em;
 	visibility: visible;
 	opacity: 1;

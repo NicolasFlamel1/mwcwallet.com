@@ -88,7 +88,7 @@
 			'Are you sure you want to delete all your wallets?' => 'Είστε βέβαιοι ότι θέλετε να διαγράψετε όλα τα πορτοφόλια σας;',
 			'Are you sure you want to delete Wallet %1$s?' => 'Είστε βέβαιοι ότι θέλετε να διαγράψετε το Πορτοφόλι %1$s;',
 			'Are you sure you want to exit? There\'s a remaining transaction.' => 'Είστε σίγουρος ότι θέλετε να φύγετε; Εκκρεμεί μια συναλλαγή.',
-			'Are you sure you want to exit? There\'s remaining transactions.' => 'Είστε σίγουρος ότι θέλετε να φύγετε;  Εκκρεμούν συναλλαγές.',
+			'Are you sure you want to exit? There\'s remaining transactions.' => 'Είστε σίγουρος ότι θέλετε να φύγετε; Εκκρεμούν συναλλαγές.',
 			'Are you sure you want to reset the settings to their default values?' => 'Είστε βέβαιοι ότι θέλετε να επαναφέρετε τις ρυθμίσεις στις προεπιλεγμένες τιμές;',
 			'Are you sure you want to resync %1$y?' => 'Είστε βέβαιοι ότι θέλετε να επανασυγχρονίσετε το %1$y;',
 			'Are you sure you want to resync Wallet %1$s?' => 'Είστε βέβαιοι ότι θέλετε να επανασυγχρονίσετε το Πορτοφόλι %1$s;',

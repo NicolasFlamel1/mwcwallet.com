@@ -95,6 +95,7 @@ section.installApp > div > button {
 	text-transform: uppercase;
 	line-height: unset;
 	white-space: normal;
+	white-space: break-spaces;
 	font-family: Arial, sans-serif;
 	overflow: hidden;
 	line-height: 1.5em;
@@ -125,6 +126,7 @@ section.installApp > div > button:active {
 section.installApp > div > button > span {
 	min-height: auto;
 	white-space: normal;
+	white-space: break-spaces;
 	cursor: pointer !important;
 	min-width: 2em;
 }

@@ -3721,28 +3721,28 @@ class WalletSection extends Section {
 			var price = this.getPrices().getPrice(currency);
 		
 			// Create button
-			var button = $(`<button class="` + ((transaction.getIsCoinbase() === true) ? "coinbase" : ((transaction.getReceived() === true) ? "received" : "sent")) + `">
-				<span class="name">
-					<span>
-						<span class="index"></span>` +
+			var button = $("<button class=\"" + ((transaction.getIsCoinbase() === true) ? "coinbase" : ((transaction.getReceived() === true) ? "received" : "sent")) + "\">" +
+				"<span class=\"name\">" +
+					"<span>" +
+						"<span class=\"index\"></span>" +
 						Language.createTranslatableContainer("<span>", (transaction.getIsCoinbase() === true) ? Language.getDefaultTranslation('Coinbase') : ((transaction.getReceived() === true) ? Language.getDefaultTranslation('Received') : Language.getDefaultTranslation('Sent')), [], "type", true) +
 						Language.createTranslatableContainer("<span>", (transaction.getIsCoinbase() === true) ? Language.getDefaultTranslation('Coinbase') : ((transaction.getReceived() === true) ? Language.getDefaultTranslation('Received') : Language.getDefaultTranslation('Sent'))) +
-					`</span>` +
+					"</span>" +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('%1$d at %2$t'), [(transaction.getRecordedTimestamp() / Common.MILLISECONDS_IN_A_SECOND).toFixed(), (transaction.getRecordedTimestamp() / Common.MILLISECONDS_IN_A_SECOND).toFixed()]) +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Canceled'), [], "status canceled", true) +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Expired'), [], "status expired", true) +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Unconfirmed'), [], "status unconfirmed", true) +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed'), [], "status confirmed", true) +
-				`</span>
-				<span class="totals">` +
+				"</span>" +
+				"<span class=\"totals\">" +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Amount: %1$c'), [[transaction.getAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(), Consensus.CURRENCY_NAME]], "amount") +
 					((price !== Prices.NO_PRICE_FOUND) ? Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value: %1$c'), [[transaction.getAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).multipliedBy(price).toFixed(), currency]], "value") : "") +
-				`</span>
-				<span class="id">
-					<p>` + ((transaction.getId() !== Transaction.UNKNOWN_ID) ? Common.htmlEncode(transaction.getId().serialize()) : "") + `</p>` +
+				"</span>" +
+				"<span class=\"id\">" +
+					"<p>" + ((transaction.getId() !== Transaction.UNKNOWN_ID) ? Common.htmlEncode(transaction.getId().serialize()) : "") + "</p>" +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) +
-				`</span>
-			</button>`);
+				"</span>" +
+			"</button>");
 			
 			// Check if transaction is canceled
 			if(transaction.getCanceled() === true) {

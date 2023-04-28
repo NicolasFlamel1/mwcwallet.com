@@ -1259,12 +1259,12 @@ class Message {
 		static createInput(text, textArguments = [], isPassword = false, autoComplete = false, autoCapitalize = false, spellcheck = false) {
 		
 			// Create container
-			var container = $(`<span class=\"input\">` +
+			var container = $("<span class=\"input\">" +
 				((isPassword === true) ? Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Show'), [], "show", true) : "") +
 				Language.createTranslatableContainer("<input>", text, textArguments) +
-				`<span></span>
-				<span class="capsLock hide"></span>
-			</span>`);
+				"<span></span>" +
+				"<span class=\"capsLock hide\"></span>" +
+			"</span>");
 			
 			// Get input from container
 			var input = container.find("input");

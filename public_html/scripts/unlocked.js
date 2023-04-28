@@ -3232,26 +3232,26 @@ class Unlocked {
 			var address = wallet.getAddress(this.displayedAddressType);
 		
 			// Create button for wallet
-			var button = $(`<button style="background-color: ` + Common.htmlEncode(wallet.getColor()) + `;">
-				<span class="name">
-					<span>` +
+			var button = $("<button style=\"background-color: " + Common.htmlEncode(wallet.getColor()) + ";\">" +
+				"<span class=\"name\">" +
+					"<span>" +
 						((wallet.getName() !== Wallet.NO_NAME) ? "<span class=\"name\">" + Common.htmlEncode(wallet.getName()) + "</span>" : Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Wallet %1$s'), [wallet.getKeyPath().toFixed()], "name")) +
-						`<span class="status"></span>
-					</span>` +
+						"<span class=\"status\"></span>" +
+					"</span>" +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Selected'), [], "selected", true) +
-				`</span>
-				<span class="totals">` +
+				"</span>" +
+				"<span class=\"totals\">" +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Amount: %1$c'), [[amountToDisplay.toFixed(), Consensus.CURRENCY_NAME]], "amount") +
 					((price !== Prices.NO_PRICE_FOUND) ? Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value: %1$c'), [[amountToDisplay.multipliedBy(price).toFixed(), currency]], "value") : "") +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Syncing'), [], "status syncing", true) +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Synced'), [], "status synced", true) +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Syncing failed'), [], "status error", true) +
-				`</span>
-				<span class="address">
-					<p>` + Common.htmlEncode(address) + `</p>` +
+				"</span>" +
+				"<span class=\"address\">" +
+					"<p>" + Common.htmlEncode(address) + "</p>" +
 					Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) +
-				`</span>
-			</button>`);
+				"</span>" +
+			"</button>");
 			
 			// Check wallet's syncing status
 			switch(wallet.getSyncingStatus()) {

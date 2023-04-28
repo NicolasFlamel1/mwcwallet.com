@@ -6,7 +6,7 @@
 	const VERSION_NUMBER = "2.0.0";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "23 Mar 2023 23:49:00 UTC";
+	const VERSION_RELEASE_DATE = "28 Apr 2023 06:58:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
@@ -24,9 +24,6 @@
 	
 	// Maintenance start time
 	const MAINTENANCE_START_TIME = "01 Jan 1970 00:00:00 UTC";
-
-	// Require access code
-	const REQUIRE_ACCESS_CODE = FALSE;
 
 	// Copyright year
 	const COPYRIGHT_YEAR = 2022;

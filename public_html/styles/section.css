@@ -162,6 +162,7 @@ main > div.unlocked > div > div > div.sections > div > div > div > div.navigatio
 
 main > div.unlocked > div > div > div.sections > div > div > div > div.navigation > h2 {
 	white-space: nowrap;
+	white-space: pre;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	line-height: normal;
@@ -179,6 +180,7 @@ main > div.unlocked.minimal > div > div > div.sections > div > div > div > div.n
 
 main > div.unlocked > div > div > div.sections > div > div > div > h3 {
 	white-space: nowrap;
+	white-space: pre;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	width: 100%;

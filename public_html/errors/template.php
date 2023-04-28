@@ -123,6 +123,8 @@
 		}
 
 		body {
+			white-space: normal;
+			white-space: break-spaces;
 			padding: 0;
 			width: 100%;
 			margin: auto;
@@ -337,6 +339,7 @@
 		div.loading > div.spinner > p {
 			text-overflow: ellipsis;
 			white-space: nowrap;
+			white-space: pre;
 			text-align: center;
 			overflow: hidden;
 			width: 100%;
@@ -429,6 +432,7 @@
 			margin: 0 2em 0.7em 2em;
 			padding-top: 1em;
 			white-space: nowrap;
+			white-space: pre;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			max-width: calc(100% - 4em);
@@ -662,6 +666,7 @@
 			min-width: 7em;
 			line-height: 2.2em;
 			white-space: nowrap;
+			white-space: pre;
 			max-width: calc(100% - 4em);
 			flex-shrink: 0;
 			font-size: 16pt;
@@ -892,15 +897,15 @@
 
 </head>
 
-<body class="loading" spellcheck="false">
-	<div>
-		<div>
-			<main>
-				<div class="language normalTransitionSpeed hide">
-					<div>
-						<select tabindex="-1">
+<body class="loading" spellcheck="false"><!--
+	--><div><!--
+		--><div><!--
+			--><main><!--
+				--><div class="language normalTransitionSpeed hide"><!--
+					--><div><!--
+						--><select tabindex="-1"><!--
 							
-							<?php
+							--><?php
 							
 								// Go through all available languages
 								foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
@@ -908,18 +913,18 @@
 									// Display language currency option
 									echo "<option value=\"" . encodeString($languageIdentifier) . "\"" . (($language === $languageIdentifier) ? " selected=\"selected\" disabled=\"disabled\"" : "") . ">" . encodeString($availableLanguage["Constants"]["Language"]) . "</option>";
 								}
-							?>
+							?><!--
 							
-						</select>
-						<button>
-							<span class="icon"></span>
-							<span>
-								<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Language')); ?>"><?= encodeString(getTranslation('Language')); ?></span>
-							</span>
-						</button>
-						<div class="scrollable hide">
+						--></select><!--
+						--><button><!--
+							--><span class="icon"></span><!--
+							--><span><!--
+								--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Language')); ?>"><?= encodeString(getTranslation('Language')); ?></span><!--
+							--></span><!--
+						--></button><!--
+						--><div class="scrollable hide"><!--
 						
-							<?php
+							--><?php
 							
 								// Go through all available languages
 								foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
@@ -927,62 +932,62 @@
 									// Display available language button
 									echo "<button data-language=\"" . encodeString($languageIdentifier) . "\"" . (($language === $languageIdentifier) ? " disabled=\"disabled\"" : "") . "><img src=\"." . encodeString(getResource($availableLanguage["Constants"]["Image"])) . "\"><span>" . encodeString($availableLanguage["Constants"]["Language"]) . "</span></button>";
 								}
-							?>
-						</div>
-					</div>
-				</div>
-				<div>
-					<div class="loading">
-						<div class="logo"></div>
-						<div class="spinner">
-							<div class="errorHide"></div>
-							<p class="errorHide translatable" data-text="<?= encodeString(getDefaultTranslation('Loading…')); ?>"><?= encodeString(getTranslation('Loading…')); ?></p>
-						</div>
-					</div>
-				</div>
-			</main>
-			<aside class="message noButtons hide errorShow">
-				<div class="message">
-					<div>
-						<h2 class="translatable" data-text="<?= encodeString($error); ?>" data-arguments='<?= escapeData([sprintf("%.0f", $errorArgument)]); ?>'><?= encodeString(getTranslation($error, [getNumberTranslation($errorArgument)])); ?></h2>
-						<span class="upArrow"></span>
-						<p class="scrollable">
-							<span class="text">
-								<span class="translatable" data-text="<?= encodeString($message); ?>"><?= encodeString(getTranslation($message)); ?></span>
-							</span>
-						</p>
-						<span class="downArrow"></span>
-						<div>
-							<button>
-								<span class="translatable"></span>
-								<span class="dots">
-									<span></span>
-									<span></span>
-									<span></span>
-								</span>
-							</button>
-							<button>
-								<span class="translatable"></span>
-								<span class="dots">
-									<span></span>
-									<span></span>
-									<span></span>
-								</span>
-							</button>
-						</div>
-					</div>
-				</div>
-			</aside>
-		</div>
-	</div>
+							?><!--
+						--></div><!--
+					--></div><!--
+				--></div><!--
+				--><div><!--
+					--><div class="loading"><!--
+						--><div class="logo"></div><!--
+						--><div class="spinner"><!--
+							--><div class="errorHide"></div><!--
+							--><p class="errorHide translatable" data-text="<?= encodeString(getDefaultTranslation('Loading…')); ?>"><?= encodeString(getTranslation('Loading…')); ?></p><!--
+						--></div><!--
+					--></div><!--
+				--></div><!--
+			--></main><!--
+			--><aside class="message noButtons hide errorShow"><!--
+				--><div class="message"><!--
+					--><div><!--
+						--><h2 class="translatable" data-text="<?= encodeString($error); ?>" data-arguments='<?= escapeData([sprintf("%.0f", $errorArgument)]); ?>'><?= encodeString(getTranslation($error, [getNumberTranslation($errorArgument)])); ?></h2><!--
+						--><span class="upArrow"></span><!--
+						--><p class="scrollable"><!--
+							--><span class="text"><!--
+								--><span class="translatable" data-text="<?= encodeString($message); ?>"><?= encodeString(getTranslation($message)); ?></span><!--
+							--></span><!--
+						--></p><!--
+						--><span class="downArrow"></span><!--
+						--><div><!--
+							--><button><!--
+								--><span class="translatable"></span><!--
+								--><span class="dots"><!--
+									--><span></span><!--
+									--><span></span><!--
+									--><span></span><!--
+								--></span><!--
+							--></button><!--
+							--><button><!--
+								--><span class="translatable"></span><!--
+								--><span class="dots"><!--
+									--><span></span><!--
+									--><span></span><!--
+									--><span></span><!--
+								--></span><!--
+							--></button><!--
+						--></div><!--
+					--></div><!--
+				--></div><!--
+			--></aside><!--
+		--></div><!--
+	--></div><!--
 	
-	<link rel="prefetch" as="font" href=".<?= encodeString(getResource("./fonts/font_awesome/font_awesome-5.15.4.woff2")); ?>" type="font/woff2" crossorigin="anonymous">
-	<link rel="prefetch" as="font" href=".<?= encodeString(getResource("./fonts/font_awesome/font_awesome_solid-5.15.4.woff2")); ?>" type="font/woff2" crossorigin="anonymous">
+	--><link rel="prefetch" as="font" href=".<?= encodeString(getResource("./fonts/font_awesome/font_awesome-5.15.4.woff2")); ?>" type="font/woff2" crossorigin="anonymous"><!--
+	--><link rel="prefetch" as="font" href=".<?= encodeString(getResource("./fonts/font_awesome/font_awesome_solid-5.15.4.woff2")); ?>" type="font/woff2" crossorigin="anonymous"><!--
 	
-	<link rel="stylesheet" type="text/css" href=".<?= encodeString(getResource("./styles/common.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/common.css")); ?>">
-	<link rel="stylesheet" type="text/css" href=".<?= encodeString(getResource("./styles/language.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/language.css")); ?>">
+	--><link rel="stylesheet" type="text/css" href=".<?= encodeString(getResource("./styles/common.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/common.css")); ?>"><!--
+	--><link rel="stylesheet" type="text/css" href=".<?= encodeString(getResource("./styles/language.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/language.css")); ?>"><!--
 	
-	<script>
+	--><script>
 	
 		// Use strict
 		"use strict";
@@ -1305,25 +1310,25 @@
 			}
 		});
 	
-	</script>
+	</script><!--
 	
-	<script src=".<?= encodeString(getResource("./scripts/jQuery-3.6.4.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/jQuery-3.6.4.js")); ?>" type="application/javascript" charset="UTF-8"></script>
-	<script src=".<?= encodeString(getResource("./scripts/common.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/common.js")); ?>" type="application/javascript" charset="UTF-8"></script>
-	<script src=".<?= encodeString(getResource("./scripts/consensus.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/consensus.js")); ?>" type="application/javascript" charset="UTF-8"></script>
-	<script src=".<?= encodeString(getResource("./scripts/languages.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/languages.js")); ?>" type="application/javascript" charset="UTF-8"></script>
-	<script src=".<?= encodeString(getResource("./scripts/language.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/language.js")); ?>" type="application/javascript" charset="UTF-8"></script>
-	<script src=".<?= encodeString(getResource("./scripts/startup_images_creator.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/startup_images_creator.js")); ?>" type="application/javascript" charset="UTF-8" defer="true"></script>
-	<script src=".<?= encodeString(getResource("./scripts/copyright.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/copyright.js")); ?>" type="application/javascript" charset="UTF-8" defer="true"></script>
-	<script src=".<?= encodeString(getResource("./scripts/log.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/log.js")); ?>" type="application/javascript" charset="UTF-8" defer="true"></script>
+	--><script src=".<?= encodeString(getResource("./scripts/jQuery-3.6.4.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/jQuery-3.6.4.js")); ?>" type="application/javascript" charset="UTF-8"></script><!--
+	--><script src=".<?= encodeString(getResource("./scripts/common.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/common.js")); ?>" type="application/javascript" charset="UTF-8"></script><!--
+	--><script src=".<?= encodeString(getResource("./scripts/consensus.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/consensus.js")); ?>" type="application/javascript" charset="UTF-8"></script><!--
+	--><script src=".<?= encodeString(getResource("./scripts/languages.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/languages.js")); ?>" type="application/javascript" charset="UTF-8"></script><!--
+	--><script src=".<?= encodeString(getResource("./scripts/language.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/language.js")); ?>" type="application/javascript" charset="UTF-8"></script><!--
+	--><script src=".<?= encodeString(getResource("./scripts/startup_images_creator.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/startup_images_creator.js")); ?>" type="application/javascript" charset="UTF-8" defer="true"></script><!--
+	--><script src=".<?= encodeString(getResource("./scripts/copyright.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/copyright.js")); ?>" type="application/javascript" charset="UTF-8" defer="true"></script><!--
+	--><script src=".<?= encodeString(getResource("./scripts/log.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/log.js")); ?>" type="application/javascript" charset="UTF-8" defer="true"></script><!--
 	
-	<?php
+	--><?php
 		
 		// Check if hiding URL
 		if(isset($hideUrl) === TRUE) {
 		
-	?>
+	?><!--
 	
-	<script>
+	--><script>
 	
 		// Use strict
 		"use strict";
@@ -1388,21 +1393,21 @@
 				history.replaceState(NO_STATE, Language.getTranslation('MWC Wallet'), path);
 		}
 		
-	</script>
+	</script><!--
 	
-	<?php
+	--><?php
 					
 		}
-	?>
+	?><!--
 	
-	<?php
+	--><?php
 		
 		// Check if is generic error
 		if(isset($isGenericError) === TRUE) {
 		
-	?>
+	?><!--
 	
-	<script>
+	--><script>
 	
 		// Use strict
 		"use strict";
@@ -1430,21 +1435,21 @@
 		// Replace message text display
 		messageTextDisplay.replaceWith(Language.createTranslatableContainer("<span>", message));
 		
-	</script>
+	</script><!--
 	
-	<?php
+	--><?php
 					
 		}
-	?>
+	?><!--
 	
-	<?php
+	--><?php
 		
 		// Check if is maintenance error
 		if(isset($isMaintenanceError) === TRUE) {
 		
-	?>
+	?><!--
 	
-	<script>
+	--><script>
 	
 		// Use strict
 		"use strict";
@@ -1472,12 +1477,12 @@
 		// Replace message text display
 		messageTextDisplay.replaceWith(Language.createTranslatableContainer("<span>", message));
 		
-	</script>
+	</script><!--
 	
-	<?php
+	--><?php
 					
 		}
-	?>
+	?><!--
 	
-</body>
+--></body>
 </html>

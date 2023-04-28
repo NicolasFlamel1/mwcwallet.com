@@ -12,8 +12,8 @@ class ProtocolHandler {
 		// Register
 		static register() {
 		
-			// Check if not an app
-			if(Common.isApp() === false) {
+			// Check if not an app and not loading from a file
+			if(Common.isApp() === false && location["protocol"] !== Common.FILE_PROTOCOL) {
 		
 				// Check if can register protocol handler
 				if(typeof navigator === "object" && navigator !== null && "registerProtocolHandler" in navigator === true) {

@@ -684,6 +684,8 @@
 		}
 
 		body {
+			white-space: normal;
+			white-space: break-spaces;
 			padding: 0;
 			width: 100%;
 			margin: auto;
@@ -898,6 +900,7 @@
 		div.loading > div.spinner > p {
 			text-overflow: ellipsis;
 			white-space: nowrap;
+			white-space: pre;
 			text-align: center;
 			overflow: hidden;
 			width: 100%;
@@ -990,6 +993,7 @@
 			margin: 0 2em 0.7em 2em;
 			padding-top: 1em;
 			white-space: nowrap;
+			white-space: pre;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			max-width: calc(100% - 4em);
@@ -1223,6 +1227,7 @@
 			min-width: 7em;
 			line-height: 2.2em;
 			white-space: nowrap;
+			white-space: pre;
 			max-width: calc(100% - 4em);
 			flex-shrink: 0;
 			font-size: 16pt;
@@ -1436,23 +1441,23 @@
 
 </head>
 
-<body class="loading" spellcheck="false">
-	<div>
-		<div>
-			<section class="maintenanceNotification hide noFocus">
-				<div class="maintenanceNotification">
-					<span></span>
-					<button>
-						<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('OK')); ?>"><?= encodeString(getTranslation('OK')); ?></span>
-					</button>
-				</div>
-			</section>
-			<main>
-				<div class="language normalTransitionSpeed hide">
-					<div>
-						<select tabindex="-1">
+<body class="loading" spellcheck="false"><!--
+	--><div><!--
+		--><div><!--
+			--><section class="maintenanceNotification hide noFocus"><!--
+				--><div class="maintenanceNotification"><!--
+					--><span></span><!--
+					--><button><!--
+						--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('OK')); ?>"><?= encodeString(getTranslation('OK')); ?></span><!--
+					--></button><!--
+				--></div><!--
+			--></section><!--
+			--><main><!--
+				--><div class="language normalTransitionSpeed hide"><!--
+					--><div><!--
+						--><select tabindex="-1"><!--
 							
-							<?php
+							--><?php
 							
 								// Go through all available languages
 								foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
@@ -1460,18 +1465,18 @@
 									// Display language currency option
 									echo "<option value=\"" . encodeString($languageIdentifier) . "\"" . (($language === $languageIdentifier) ? " selected=\"selected\" disabled=\"disabled\"" : "") . ">" . encodeString($availableLanguage["Constants"]["Language"]) . "</option>";
 								}
-							?>
+							?><!--
 							
-						</select>
-						<button>
-							<span class="icon"></span>
-							<span>
-								<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Language')); ?>"><?= encodeString(getTranslation('Language')); ?></span>
-							</span>
-						</button>
-						<div class="scrollable hide">
+						--></select><!--
+						--><button><!--
+							--><span class="icon"></span><!--
+							--><span><!--
+								--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Language')); ?>"><?= encodeString(getTranslation('Language')); ?></span><!--
+							--></span><!--
+						--></button><!--
+						--><div class="scrollable hide"><!--
 						
-							<?php
+							--><?php
 							
 								// Go through all available languages
 								foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
@@ -1479,475 +1484,475 @@
 									// Display available language button
 									echo "<button data-language=\"" . encodeString($languageIdentifier) . "\"" . (($language === $languageIdentifier) ? " disabled=\"disabled\"" : "") . "><img src=\"" . encodeString(getResource($availableLanguage["Constants"]["Image"])) . "\"><span>" . encodeString($availableLanguage["Constants"]["Language"]) . "</span></button>";
 								}
-							?>
-						</div>
-					</div>
-				</div>
-				<div class="locked">
-					<div class="logo hide notLoaded">
-						<canvas></canvas>
-					</div>
-					<div class="loading">
-						<div class="logo"></div>
-						<div class="spinner">
-							<div class="noScriptHide"></div>
-							<p class="noScriptHide translatable" data-text="<?= encodeString(getDefaultTranslation('Loading…')); ?>"><?= encodeString(getTranslation('Loading…')); ?></p>
-						</div>
-					</div>
-					<div class="create hide">
-						<div class="logo"></div>
-						<form class="hide">
-							<input class="hide translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" type="hidden" name="Username" value="<?= encodeString(getTranslation('MWC Wallet')); ?>" autocomplete="off" autocapitalize="off" spellcheck="false">
-							<div>
-								<span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span>
-								<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('Password')); ?>" type="password" name="Password" placeholder="<?= encodeString(getTranslation('Password')); ?>" autocomplete="new-password" autocapitalize="off" spellcheck="false">
-								<span class="capsLock hide"></span>
-							</div>
-							<div>
-								<span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span>
-								<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirm Password')); ?>" type="password" name="Confirm Password" placeholder="<?= encodeString(getTranslation('Confirm Password')); ?>" autocomplete="new-password" autocapitalize="off" spellcheck="false">
-								<span class="capsLock hide"></span>
-							</div>
-							<button type="submit">
-								<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Create')); ?>"><?= encodeString(getTranslation('Create')); ?></span>
-								<span class="dots">
-									<span></span>
-									<span></span>
-									<span></span>
-								</span>
-							</button>
-						</form>
-					</div>
-					<div class="unlock hide">
-						<div class="logo"></div>
-						<form class="hide">
-							<input class="hide translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" type="hidden" name="Username" value="<?= encodeString(getTranslation('MWC Wallet')); ?>" autocomplete="off" autocapitalize="off" spellcheck="false">
-							<div>
-								<span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span>
-								<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('Password')); ?>" type="password" name="Password" placeholder="<?= encodeString(getTranslation('Password')); ?>" autocomplete="current-password" autocapitalize="off" spellcheck="false">
-								<span class="capsLock hide"></span>
-							</div>
-							<button type="submit">
-								<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Unlock')); ?>"><?= encodeString(getTranslation('Unlock')); ?></span>
-								<span class="dots">
-									<span></span>
-									<span></span>
-									<span></span>
-								</span>
-							</button>
-							<div class="status">
-								<p class="node translatable" data-text="<?= encodeString(getDefaultTranslation('Node disconnected')); ?>" title="<?= encodeString(getTranslation('Node disconnected')); ?>">
-									<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Node')); ?>"><?= encodeString(getTranslation('Node')); ?></span>
-								</p>
-								<p class="listener translatable" data-text="<?= encodeString(getDefaultTranslation('Listener disconnected')); ?>" title="<?= encodeString(getTranslation('Listener disconnected')); ?>">
-									<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Listener')); ?>"><?= encodeString(getTranslation('Listener')); ?></span>
-								</p>
-							</div>
-						</form>
-						<div class="deleteAllWallets hide">
-							<button>
-								<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Delete All Wallets')); ?>"><?= encodeString(getTranslation('Delete All Wallets')); ?></span>
-							</button>
-						</div>
-					</div>
-				</div>
-				<div class="unlocked hide">
-					<div class="hide">
-						<div class="menu">
-							<div>
-								<button class="about translatable" data-text="<?= encodeString(getDefaultTranslation('About')); ?>" title="<?= encodeString(getTranslation('About')); ?>">
-									<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('About')); ?>"><?= encodeString(getTranslation('About')); ?></span>
-								</button>
-								<button class="account translatable" data-text="<?= encodeString(getDefaultTranslation('Account')); ?>" title="<?= encodeString(getTranslation('Account')); ?>">
-									<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Account')); ?>"><?= encodeString(getTranslation('Account')); ?></span>
-								</button>
-								<button class="settings translatable" data-text="<?= encodeString(getDefaultTranslation('Settings')); ?>" title="<?= encodeString(getTranslation('Settings')); ?>">
-									<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Settings')); ?>"><?= encodeString(getTranslation('Settings')); ?></span>
-								</button>
-								<button class="log translatable" data-text="<?= encodeString(getDefaultTranslation('Log')); ?>" title="<?= encodeString(getTranslation('Log')); ?>">
-									<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Log')); ?>"><?= encodeString(getTranslation('Log')); ?></span>
-								</button>
-								<button class="lock translatable" data-text="<?= encodeString(getDefaultTranslation('Lock')); ?>" title="<?= encodeString(getTranslation('Lock')); ?>">
-									<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Lock')); ?>"><?= encodeString(getTranslation('Lock')); ?></span>
-								</button>
-							</div>
-						</div>
-						<div>
-							<div class="wallets">
-								<div class="hide">
-									<h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Wallets')); ?>"><?= encodeString(getTranslation('Wallets')); ?></h2>
-									<div class="new">
-										<button class="create translatable" data-text="<?= encodeString(getDefaultTranslation('Create')); ?>" title="<?= encodeString(getTranslation('Create')); ?>">
-											<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Create')); ?>"><?= encodeString(getTranslation('Create')); ?></span>
-										</button>
-										<button class="recover translatable" data-text="<?= encodeString(getDefaultTranslation('Recover')); ?>" title="<?= encodeString(getTranslation('Recover')); ?>">
-											<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Recover')); ?>"><?= encodeString(getTranslation('Recover')); ?></span>
-										</button>
-										<button class="hardware translatable" data-text="<?= encodeString(getDefaultTranslation('Hardware')); ?>" title="<?= encodeString(getTranslation('Hardware')); ?>">
-											<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Hardware')); ?>"><?= encodeString(getTranslation('Hardware')); ?></span>
-										</button>
-									</div>
-									<div class="list scrollable"></div>
-									<div class="order">
-										<button class="up translatable" data-text="<?= encodeString(getDefaultTranslation('Up')); ?>" title="<?= encodeString(getTranslation('Up')); ?>"></button>
-										<button class="down translatable" data-text="<?= encodeString(getDefaultTranslation('Down')); ?>" title="<?= encodeString(getTranslation('Down')); ?>"></button>
-									</div>
-									<div class="loading hide">
-										<div class="overlay">
-										</div>
-										<div class="spinner">
-										</div>
-									</div>
-								</div>
-								<button class="expand">
-									<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Wallets')); ?>"><?= encodeString(getTranslation('Wallets')); ?></span>
-								</button>
-							</div>
-							<div class="sections">
-								<div>
-									<div class="wallet scrollable hide">
-										<div>
-											<div class="navigation">
-												<button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button>
-												<button class="forward hide translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button>
-											</div>
-											<h3 class="address translatable" data-text="<?= encodeString(getDefaultTranslation('Address')); ?>"><?= encodeString(getTranslation('Address')); ?></h3>
-											<div class="address">
-												<svg viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">
-												</svg>
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Address:')); ?>"><?= encodeString(getTranslation('Address:')); ?></span>
-												</p>
-												<button class="changeAddressSuffix" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Change Address Suffix')); ?>"><?= encodeString(getTranslation('Change Address Suffix')); ?></span>
-												</button>
-												<div class="loading">
-													<div>
-													</div>
-												</div>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Balance')); ?>"><?= encodeString(getTranslation('Balance')); ?></h3>
-											<div class="balance">
-												<button class="sendPayment" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Send Payment')); ?>"><?= encodeString(getTranslation('Send Payment')); ?></span>
-												</button>
-												<div class="syncStatus">
-													<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-														<circle class="background" cx="50" cy="50" r="50" pathLength="100"/>
-														<circle class="foreground" cx="50" cy="50" r="50" pathLength="100"/>
-													</svg>
-													<p class="translatable" data-text="<?= encodeString(getDefaultTranslation('Syncing…')); ?>"><?= encodeString(getTranslation('Syncing…')); ?></p>
-													<p class="translatable syncingFailed" data-text="<?= encodeString(getDefaultTranslation('Syncing failed')); ?>"><?= encodeString(getTranslation('Syncing failed')); ?></p>
-												</div>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Utilities')); ?>"><?= encodeString(getTranslation('Utilities')); ?></h3>
-											<div class="merge">
-												<button class="getPassphrase" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Get Passphrase')); ?>"><?= encodeString(getTranslation('Get Passphrase')); ?></span>
-												</button>
-											</div>
-											<div class="merge">
-												<button class="getPaymentProofAddress" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Get Payment Proof Address')); ?>"><?= encodeString(getTranslation('Get Payment Proof Address')); ?></span>
-													<span class="dots">
-														<span></span>
-														<span></span>
-														<span></span>
-													</span>
-												</button>
-											</div>
-											<div class="merge">
-												<button class="resync" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Resync')); ?>"><?= encodeString(getTranslation('Resync')); ?></span>
-												</button>
-											</div>
-											<div class="merge">
-												<button class="rename" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Rename')); ?>"><?= encodeString(getTranslation('Rename')); ?></span>
-												</button>
-											</div>
-											<div>
-												<button class="delete" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Delete')); ?>"><?= encodeString(getTranslation('Delete')); ?></span>
-												</button>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Transactions')); ?>"><?= encodeString(getTranslation('Transactions')); ?></h3>
-											<div class="transactions empty merge">
-											</div>
-											<div class="merge">
-												<p class="translatable noTransactions" data-text="<?= encodeString(getDefaultTranslation('No transactions exist for this wallet.')); ?>"><?= encodeString(getTranslation('No transactions exist for this wallet.')); ?></p>
-											</div>
-											<div class="transactionsNavigation">
-												<button class="first translatable" data-text="<?= encodeString(getDefaultTranslation('First')); ?>" title="<?= encodeString(getTranslation('First')); ?>" data-private></button>
-												<button class="previous translatable" data-text="<?= encodeString(getDefaultTranslation('Previous')); ?>" title="<?= encodeString(getTranslation('Previous')); ?>" data-private></button>
-												<button class="next translatable" data-text="<?= encodeString(getDefaultTranslation('Next')); ?>" title="<?= encodeString(getTranslation('Next')); ?>" data-private></button>
-												<button class="last translatable" data-text="<?= encodeString(getDefaultTranslation('Last')); ?>" title="<?= encodeString(getTranslation('Last')); ?>" data-private></button>
-											</div>
-										</div>
-									</div>
-									<div class="sendPayment scrollable hide">
-										<div>
-											<div class="navigation">
-												<button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button>
-												<h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Send Payment')); ?>"><?= encodeString(getTranslation('Send Payment')); ?></h2>
-												<button class="forward translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Payment Details')); ?>"><?= encodeString(getTranslation('Payment Details')); ?></h3>
-											<div class="merge">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Recipient address')); ?>"><?= encodeString(getTranslation('Recipient address')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="url">
-													<input class="recipientAddress translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" inputmode="url">
-													<span></span>
-													<span class="capsLock hide"></span>
-												</div>
-											</div>
-											<div>
-												<button class="scan" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Scan QR Code')); ?>"><?= encodeString(getTranslation('Scan QR Code')); ?></span>
-													<span class="dots">
-														<span></span>
-														<span></span>
-														<span></span>
-													</span>
-												</button>
-											</div>
-											<div class="fromWallet merge">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('From wallet')); ?>"><?= encodeString(getTranslation('From wallet')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="select">
-													<select class="fromWallet">
-													</select>
-													<span></span>
-												</div>
-											</div>
-											<div class="merge">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Amount')); ?>"><?= encodeString(getTranslation('Amount')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="number">
-													<input class="amount" type="number" min="0.000000001" step="0.000000001" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal">
-													<span></span>
-												</div>
-											</div>
-											<div class="merge">
-												<button class="all" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('All')); ?>"><?= encodeString(getTranslation('All')); ?></span>
-													<span class="dots">
-														<span></span>
-														<span></span>
-														<span></span>
-													</span>
-												</button>
-											</div>
-											<div>
-												<p>
-													<span></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="number">
-													<input class="value" type="number" min="0" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal">
-													<span></span>
-												</div>
-											</div>
-											<div class="merge">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Base fee')); ?>"><?= encodeString(getTranslation('Base fee')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="number">
-													<input class="baseFee" type="number" min="0.000000001" step="0.000000001" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal">
-													<span></span>
-												</div>
-											</div>
-											<div>
-												<button class="defaultBaseFee" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Default Base Fee')); ?>"><?= encodeString(getTranslation('Default Base Fee')); ?></span>
-													<span class="dots">
-														<span></span>
-														<span></span>
-														<span></span>
-													</span>
-												</button>
-											</div>
-											<div>
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Optional message')); ?>"><?= encodeString(getTranslation('Optional message')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="text">
-													<input class="message" type="text" autocomplete="on" autocapitalize="on" spellcheck="true">
-													<span></span>
-													<span class="capsLock hide"></span>
-												</div>
-											</div>
-											<div class="send">
-												<button class="send" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Send')); ?>"><?= encodeString(getTranslation('Send')); ?></span>
-													<span class="dots">
-														<span></span>
-														<span></span>
-														<span></span>
-													</span>
-												</button>
-											</div>
-											<div class="cancel">
-												<button class="cancel" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Cancel')); ?>"><?= encodeString(getTranslation('Cancel')); ?></span>
-												</button>
-											</div>
-										</div>
-									</div>
-									<div class="account scrollable hide">
-										<div>
-											<div class="navigation">
-												<button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button>
-												<h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Account')); ?>"><?= encodeString(getTranslation('Account')); ?></h2>
-												<button class="forward hide translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Change Password')); ?>"><?= encodeString(getTranslation('Change Password')); ?></h3>
-											<div>
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Current password')); ?>"><?= encodeString(getTranslation('Current password')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="text">
-													<span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span>
-													<input class="currentPassword" type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false" data-private>
-													<span></span>
-													<span class="capsLock hide"></span>
-												</div>
-											</div>
-											<div>
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('New password')); ?>"><?= encodeString(getTranslation('New password')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="text">
-													<span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span>
-													<input class="newPassword" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false" data-private>
-													<span></span>
-													<span class="capsLock hide"></span>
-												</div>
-											</div>
-											<div>
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirm new password')); ?>"><?= encodeString(getTranslation('Confirm new password')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="text">
-													<span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span>
-													<input class="confirmNewPassword" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false" data-private>
-													<span></span>
-													<span class="capsLock hide"></span>
-												</div>
-											</div>
-											<div>
-												<button class="changePassword" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Change Password')); ?>"><?= encodeString(getTranslation('Change Password')); ?></span>
-													<span class="dots">
-														<span></span>
-														<span></span>
-														<span></span>
-													</span>
-												</button>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Delete All Wallets')); ?>"><?= encodeString(getTranslation('Delete All Wallets')); ?></h3>
-											<div>
-												<button class="deleteAllWallets" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Delete All Wallets')); ?>"><?= encodeString(getTranslation('Delete All Wallets')); ?></span>
-												</button>
-											</div>
-										</div>
-									</div>
-									<div class="settings scrollable hide">
-										<div>
-											<div class="navigation">
-												<button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button>
-												<h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Settings')); ?>"><?= encodeString(getTranslation('Settings')); ?></h2>
-												<button class="forward hide translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Interface Settings')); ?>"><?= encodeString(getTranslation('Interface Settings')); ?></h3>
-											<div class="setting translatable" data-setting="<?= encodeString("Enable Node Connection Error Messages"); ?>" data-text="<?= encodeString(getDefaultTranslation('Displays a message when not able to connect to a node, when a connected node is incompatible, or when disconnected from a node')); ?>" title="<?= encodeString(getTranslation('Displays a message when not able to connect to a node, when a connected node is incompatible, or when disconnected from a node')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Show node connection error messages')); ?>"><?= encodeString(getTranslation('Show node connection error messages')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="boolean">
-													<button data-private>
-														<span></span>
-													</button>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Enable Listener Connection Error Messages"); ?>" data-text="<?= encodeString(getDefaultTranslation('Displays a message when not able to connect to a listener or when disconnected from a listener')); ?>" title="<?= encodeString(getTranslation('Displays a message when not able to connect to a listener or when disconnected from a listener')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Show listener connection error messages')); ?>"><?= encodeString(getTranslation('Show listener connection error messages')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="boolean">
-													<button data-private>
-														<span></span>
-													</button>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Enable Automatic Lock"); ?>" data-text="<?= encodeString(getDefaultTranslation('Automatically lock after a set duration of inactivity')); ?>" title="<?= encodeString(getTranslation('Automatically lock after a set duration of inactivity')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Automatically lock after a set duration of inactivity')); ?>"><?= encodeString(getTranslation('Automatically lock after a set duration of inactivity')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="boolean">
-													<button data-private>
-														<span></span>
-													</button>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("No Interaction Lock Timeout Minutes"); ?>" data-dependencies='<?= escapeData([["Enable Automatic Lock", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the duration of inactivity required for the automatic lock to occur')); ?>" title="<?= encodeString(getTranslation('Sets the duration of inactivity required for the automatic lock to occur')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Minutes of inactivity required for automatic lock')); ?>"><?= encodeString(getTranslation('Minutes of inactivity required for automatic lock')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="number">
-													<input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric">
-													<span></span>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Enable Lock On Inactive"); ?>" data-text="<?= encodeString(getDefaultTranslation('Automatically lock when not focused')); ?>" title="<?= encodeString(getTranslation('Automatically lock when not focused')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Lock if not focused')); ?>"><?= encodeString(getTranslation('Lock if not focused')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="boolean">
-													<button data-private>
-														<span></span>
-													</button>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Enable Price"); ?>" data-text="<?= encodeString(getDefaultTranslation('Displays prices for amounts')); ?>" title="<?= encodeString(getTranslation('Displays prices for amounts')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Display prices')); ?>"><?= encodeString(getTranslation('Display prices')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="boolean">
-													<button data-private>
-														<span></span>
-													</button>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Currency Display"); ?>" data-dependencies='<?= escapeData([["Enable Price", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the currency of the displayed prices')); ?>" title="<?= encodeString(getTranslation('Sets the currency of the displayed prices')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Currency of the displayed prices')); ?>"><?= encodeString(getTranslation('Currency of the displayed prices')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="select">
-													<select data-private>
-														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Language\'s currency')); ?>" value="Language's Currency"><?= encodeString(getTranslation('Language\'s currency')); ?></option>
+							?><!--
+						--></div><!--
+					--></div><!--
+				--></div><!--
+				--><div class="locked"><!--
+					--><div class="logo hide notLoaded"><!--
+						--><canvas></canvas><!--
+					--></div><!--
+					--><div class="loading"><!--
+						--><div class="logo"></div><!--
+						--><div class="spinner"><!--
+							--><div class="noScriptHide"></div><!--
+							--><p class="noScriptHide translatable" data-text="<?= encodeString(getDefaultTranslation('Loading…')); ?>"><?= encodeString(getTranslation('Loading…')); ?></p><!--
+						--></div><!--
+					--></div><!--
+					--><div class="create hide"><!--
+						--><div class="logo"></div><!--
+						--><form class="hide"><!--
+							--><input class="hide translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" type="hidden" name="Username" value="<?= encodeString(getTranslation('MWC Wallet')); ?>" autocomplete="off" autocapitalize="off" spellcheck="false"><!--
+							--><div><!--
+								--><span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span><!--
+								--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('Password')); ?>" type="password" name="Password" placeholder="<?= encodeString(getTranslation('Password')); ?>" autocomplete="new-password" autocapitalize="off" spellcheck="false"><!--
+								--><span class="capsLock hide"></span><!--
+							--></div><!--
+							--><div><!--
+								--><span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span><!--
+								--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirm Password')); ?>" type="password" name="Confirm Password" placeholder="<?= encodeString(getTranslation('Confirm Password')); ?>" autocomplete="new-password" autocapitalize="off" spellcheck="false"><!--
+								--><span class="capsLock hide"></span><!--
+							--></div><!--
+							--><button type="submit"><!--
+								--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Create')); ?>"><?= encodeString(getTranslation('Create')); ?></span><!--
+								--><span class="dots"><!--
+									--><span></span><!--
+									--><span></span><!--
+									--><span></span><!--
+								--></span><!--
+							--></button><!--
+						--></form><!--
+					--></div><!--
+					--><div class="unlock hide"><!--
+						--><div class="logo"></div><!--
+						--><form class="hide"><!--
+							--><input class="hide translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" type="hidden" name="Username" value="<?= encodeString(getTranslation('MWC Wallet')); ?>" autocomplete="off" autocapitalize="off" spellcheck="false"><!--
+							--><div><!--
+								--><span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span><!--
+								--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('Password')); ?>" type="password" name="Password" placeholder="<?= encodeString(getTranslation('Password')); ?>" autocomplete="current-password" autocapitalize="off" spellcheck="false"><!--
+								--><span class="capsLock hide"></span><!--
+							--></div><!--
+							--><button type="submit"><!--
+								--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Unlock')); ?>"><?= encodeString(getTranslation('Unlock')); ?></span><!--
+								--><span class="dots"><!--
+									--><span></span><!--
+									--><span></span><!--
+									--><span></span><!--
+								--></span><!--
+							--></button><!--
+							--><div class="status"><!--
+								--><p class="node translatable" data-text="<?= encodeString(getDefaultTranslation('Node disconnected')); ?>" title="<?= encodeString(getTranslation('Node disconnected')); ?>"><!--
+									--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Node')); ?>"><?= encodeString(getTranslation('Node')); ?></span><!--
+								--></p><!--
+								--><p class="listener translatable" data-text="<?= encodeString(getDefaultTranslation('Listener disconnected')); ?>" title="<?= encodeString(getTranslation('Listener disconnected')); ?>"><!--
+									--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Listener')); ?>"><?= encodeString(getTranslation('Listener')); ?></span><!--
+								--></p><!--
+							--></div><!--
+						--></form><!--
+						--><div class="deleteAllWallets hide"><!--
+							--><button><!--
+								--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Delete All Wallets')); ?>"><?= encodeString(getTranslation('Delete All Wallets')); ?></span><!--
+							--></button><!--
+						--></div><!--
+					--></div><!--
+				--></div><!--
+				--><div class="unlocked hide"><!--
+					--><div class="hide"><!--
+						--><div class="menu"><!--
+							--><div><!--
+								--><button class="about translatable" data-text="<?= encodeString(getDefaultTranslation('About')); ?>" title="<?= encodeString(getTranslation('About')); ?>"><!--
+									--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('About')); ?>"><?= encodeString(getTranslation('About')); ?></span><!--
+								--></button><!--
+								--><button class="account translatable" data-text="<?= encodeString(getDefaultTranslation('Account')); ?>" title="<?= encodeString(getTranslation('Account')); ?>"><!--
+									--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Account')); ?>"><?= encodeString(getTranslation('Account')); ?></span><!--
+								--></button><!--
+								--><button class="settings translatable" data-text="<?= encodeString(getDefaultTranslation('Settings')); ?>" title="<?= encodeString(getTranslation('Settings')); ?>"><!--
+									--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Settings')); ?>"><?= encodeString(getTranslation('Settings')); ?></span><!--
+								--></button><!--
+								--><button class="log translatable" data-text="<?= encodeString(getDefaultTranslation('Log')); ?>" title="<?= encodeString(getTranslation('Log')); ?>"><!--
+									--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Log')); ?>"><?= encodeString(getTranslation('Log')); ?></span><!--
+								--></button><!--
+								--><button class="lock translatable" data-text="<?= encodeString(getDefaultTranslation('Lock')); ?>" title="<?= encodeString(getTranslation('Lock')); ?>"><!--
+									--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Lock')); ?>"><?= encodeString(getTranslation('Lock')); ?></span><!--
+								--></button><!--
+							--></div><!--
+						--></div><!--
+						--><div><!--
+							--><div class="wallets"><!--
+								--><div class="hide"><!--
+									--><h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Wallets')); ?>"><?= encodeString(getTranslation('Wallets')); ?></h2><!--
+									--><div class="new"><!--
+										--><button class="create translatable" data-text="<?= encodeString(getDefaultTranslation('Create')); ?>" title="<?= encodeString(getTranslation('Create')); ?>"><!--
+											--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Create')); ?>"><?= encodeString(getTranslation('Create')); ?></span><!--
+										--></button><!--
+										--><button class="recover translatable" data-text="<?= encodeString(getDefaultTranslation('Recover')); ?>" title="<?= encodeString(getTranslation('Recover')); ?>"><!--
+											--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Recover')); ?>"><?= encodeString(getTranslation('Recover')); ?></span><!--
+										--></button><!--
+										--><button class="hardware translatable" data-text="<?= encodeString(getDefaultTranslation('Hardware')); ?>" title="<?= encodeString(getTranslation('Hardware')); ?>"><!--
+											--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Hardware')); ?>"><?= encodeString(getTranslation('Hardware')); ?></span><!--
+										--></button><!--
+									--></div><!--
+									--><div class="list scrollable"></div><!--
+									--><div class="order"><!--
+										--><button class="up translatable" data-text="<?= encodeString(getDefaultTranslation('Up')); ?>" title="<?= encodeString(getTranslation('Up')); ?>"></button><!--
+										--><button class="down translatable" data-text="<?= encodeString(getDefaultTranslation('Down')); ?>" title="<?= encodeString(getTranslation('Down')); ?>"></button><!--
+									--></div><!--
+									--><div class="loading hide"><!--
+										--><div class="overlay"><!--
+										--></div><!--
+										--><div class="spinner"><!--
+										--></div><!--
+									--></div><!--
+								--></div><!--
+								--><button class="expand"><!--
+									--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Wallets')); ?>"><?= encodeString(getTranslation('Wallets')); ?></span><!--
+								--></button><!--
+							--></div><!--
+							--><div class="sections"><!--
+								--><div><!--
+									--><div class="wallet scrollable hide"><!--
+										--><div><!--
+											--><div class="navigation"><!--
+												--><button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button><!--
+												--><button class="forward hide translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button><!--
+											--></div><!--
+											--><h3 class="address translatable" data-text="<?= encodeString(getDefaultTranslation('Address')); ?>"><?= encodeString(getTranslation('Address')); ?></h3><!--
+											--><div class="address"><!--
+												--><svg viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg"><!--
+												--></svg><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Address:')); ?>"><?= encodeString(getTranslation('Address:')); ?></span><!--
+												--></p><!--
+												--><button class="changeAddressSuffix" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Change Address Suffix')); ?>"><?= encodeString(getTranslation('Change Address Suffix')); ?></span><!--
+												--></button><!--
+												--><div class="loading"><!--
+													--><div><!--
+													--></div><!--
+												--></div><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Balance')); ?>"><?= encodeString(getTranslation('Balance')); ?></h3><!--
+											--><div class="balance"><!--
+												--><button class="sendPayment" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Send Payment')); ?>"><?= encodeString(getTranslation('Send Payment')); ?></span><!--
+												--></button><!--
+												--><div class="syncStatus"><!--
+													--><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><!--
+														--><circle class="background" cx="50" cy="50" r="50" pathLength="100"/><!--
+														--><circle class="foreground" cx="50" cy="50" r="50" pathLength="100"/><!--
+													--></svg><!--
+													--><p class="translatable" data-text="<?= encodeString(getDefaultTranslation('Syncing…')); ?>"><?= encodeString(getTranslation('Syncing…')); ?></p><!--
+													--><p class="translatable syncingFailed" data-text="<?= encodeString(getDefaultTranslation('Syncing failed')); ?>"><?= encodeString(getTranslation('Syncing failed')); ?></p><!--
+												--></div><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Utilities')); ?>"><?= encodeString(getTranslation('Utilities')); ?></h3><!--
+											--><div class="merge"><!--
+												--><button class="getPassphrase" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Get Passphrase')); ?>"><?= encodeString(getTranslation('Get Passphrase')); ?></span><!--
+												--></button><!--
+											--></div><!--
+											--><div class="merge"><!--
+												--><button class="getPaymentProofAddress" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Get Payment Proof Address')); ?>"><?= encodeString(getTranslation('Get Payment Proof Address')); ?></span><!--
+													--><span class="dots"><!--
+														--><span></span><!--
+														--><span></span><!--
+														--><span></span><!--
+													--></span><!--
+												--></button><!--
+											--></div><!--
+											--><div class="merge"><!--
+												--><button class="resync" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Resync')); ?>"><?= encodeString(getTranslation('Resync')); ?></span><!--
+												--></button><!--
+											--></div><!--
+											--><div class="merge"><!--
+												--><button class="rename" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Rename')); ?>"><?= encodeString(getTranslation('Rename')); ?></span><!--
+												--></button><!--
+											--></div><!--
+											--><div><!--
+												--><button class="delete" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Delete')); ?>"><?= encodeString(getTranslation('Delete')); ?></span><!--
+												--></button><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Transactions')); ?>"><?= encodeString(getTranslation('Transactions')); ?></h3><!--
+											--><div class="transactions empty merge"><!--
+											--></div><!--
+											--><div class="merge"><!--
+												--><p class="translatable noTransactions" data-text="<?= encodeString(getDefaultTranslation('No transactions exist for this wallet.')); ?>"><?= encodeString(getTranslation('No transactions exist for this wallet.')); ?></p><!--
+											--></div><!--
+											--><div class="transactionsNavigation"><!--
+												--><button class="first translatable" data-text="<?= encodeString(getDefaultTranslation('First')); ?>" title="<?= encodeString(getTranslation('First')); ?>" data-private></button><!--
+												--><button class="previous translatable" data-text="<?= encodeString(getDefaultTranslation('Previous')); ?>" title="<?= encodeString(getTranslation('Previous')); ?>" data-private></button><!--
+												--><button class="next translatable" data-text="<?= encodeString(getDefaultTranslation('Next')); ?>" title="<?= encodeString(getTranslation('Next')); ?>" data-private></button><!--
+												--><button class="last translatable" data-text="<?= encodeString(getDefaultTranslation('Last')); ?>" title="<?= encodeString(getTranslation('Last')); ?>" data-private></button><!--
+											--></div><!--
+										--></div><!--
+									--></div><!--
+									--><div class="sendPayment scrollable hide"><!--
+										--><div><!--
+											--><div class="navigation"><!--
+												--><button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button><!--
+												--><h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Send Payment')); ?>"><?= encodeString(getTranslation('Send Payment')); ?></h2><!--
+												--><button class="forward translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Payment Details')); ?>"><?= encodeString(getTranslation('Payment Details')); ?></h3><!--
+											--><div class="merge"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Recipient address')); ?>"><?= encodeString(getTranslation('Recipient address')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="url"><!--
+													--><input class="recipientAddress translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" inputmode="url"><!--
+													--><span></span><!--
+													--><span class="capsLock hide"></span><!--
+												--></div><!--
+											--></div><!--
+											--><div><!--
+												--><button class="scan" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Scan QR Code')); ?>"><?= encodeString(getTranslation('Scan QR Code')); ?></span><!--
+													--><span class="dots"><!--
+														--><span></span><!--
+														--><span></span><!--
+														--><span></span><!--
+													--></span><!--
+												--></button><!--
+											--></div><!--
+											--><div class="fromWallet merge"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('From wallet')); ?>"><?= encodeString(getTranslation('From wallet')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="select"><!--
+													--><select class="fromWallet"><!--
+													--></select><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="merge"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Amount')); ?>"><?= encodeString(getTranslation('Amount')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="number"><!--
+													--><input class="amount" type="number" min="0.000000001" step="0.000000001" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal"><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="merge"><!--
+												--><button class="all" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('All')); ?>"><?= encodeString(getTranslation('All')); ?></span><!--
+													--><span class="dots"><!--
+														--><span></span><!--
+														--><span></span><!--
+														--><span></span><!--
+													--></span><!--
+												--></button><!--
+											--></div><!--
+											--><div><!--
+												--><p><!--
+													--><span></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="number"><!--
+													--><input class="value" type="number" min="0" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal"><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="merge"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Base fee')); ?>"><?= encodeString(getTranslation('Base fee')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="number"><!--
+													--><input class="baseFee" type="number" min="0.000000001" step="0.000000001" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal"><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><div><!--
+												--><button class="defaultBaseFee" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Default Base Fee')); ?>"><?= encodeString(getTranslation('Default Base Fee')); ?></span><!--
+													--><span class="dots"><!--
+														--><span></span><!--
+														--><span></span><!--
+														--><span></span><!--
+													--></span><!--
+												--></button><!--
+											--></div><!--
+											--><div><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Optional message')); ?>"><?= encodeString(getTranslation('Optional message')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="text"><!--
+													--><input class="message" type="text" autocomplete="on" autocapitalize="on" spellcheck="true"><!--
+													--><span></span><!--
+													--><span class="capsLock hide"></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="send"><!--
+												--><button class="send" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Send')); ?>"><?= encodeString(getTranslation('Send')); ?></span><!--
+													--><span class="dots"><!--
+														--><span></span><!--
+														--><span></span><!--
+														--><span></span><!--
+													--></span><!--
+												--></button><!--
+											--></div><!--
+											--><div class="cancel"><!--
+												--><button class="cancel" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Cancel')); ?>"><?= encodeString(getTranslation('Cancel')); ?></span><!--
+												--></button><!--
+											--></div><!--
+										--></div><!--
+									--></div><!--
+									--><div class="account scrollable hide"><!--
+										--><div><!--
+											--><div class="navigation"><!--
+												--><button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button><!--
+												--><h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Account')); ?>"><?= encodeString(getTranslation('Account')); ?></h2><!--
+												--><button class="forward hide translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Change Password')); ?>"><?= encodeString(getTranslation('Change Password')); ?></h3><!--
+											--><div><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Current password')); ?>"><?= encodeString(getTranslation('Current password')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="text"><!--
+													--><span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span><!--
+													--><input class="currentPassword" type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false" data-private><!--
+													--><span></span><!--
+													--><span class="capsLock hide"></span><!--
+												--></div><!--
+											--></div><!--
+											--><div><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('New password')); ?>"><?= encodeString(getTranslation('New password')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="text"><!--
+													--><span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span><!--
+													--><input class="newPassword" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false" data-private><!--
+													--><span></span><!--
+													--><span class="capsLock hide"></span><!--
+												--></div><!--
+											--></div><!--
+											--><div><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirm new password')); ?>"><?= encodeString(getTranslation('Confirm new password')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="text"><!--
+													--><span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span><!--
+													--><input class="confirmNewPassword" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false" data-private><!--
+													--><span></span><!--
+													--><span class="capsLock hide"></span><!--
+												--></div><!--
+											--></div><!--
+											--><div><!--
+												--><button class="changePassword" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Change Password')); ?>"><?= encodeString(getTranslation('Change Password')); ?></span><!--
+													--><span class="dots"><!--
+														--><span></span><!--
+														--><span></span><!--
+														--><span></span><!--
+													--></span><!--
+												--></button><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Delete All Wallets')); ?>"><?= encodeString(getTranslation('Delete All Wallets')); ?></h3><!--
+											--><div><!--
+												--><button class="deleteAllWallets" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Delete All Wallets')); ?>"><?= encodeString(getTranslation('Delete All Wallets')); ?></span><!--
+												--></button><!--
+											--></div><!--
+										--></div><!--
+									--></div><!--
+									--><div class="settings scrollable hide"><!--
+										--><div><!--
+											--><div class="navigation"><!--
+												--><button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button><!--
+												--><h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Settings')); ?>"><?= encodeString(getTranslation('Settings')); ?></h2><!--
+												--><button class="forward hide translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Interface Settings')); ?>"><?= encodeString(getTranslation('Interface Settings')); ?></h3><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Enable Node Connection Error Messages"); ?>" data-text="<?= encodeString(getDefaultTranslation('Displays a message when not able to connect to a node, when a connected node is incompatible, or when disconnected from a node')); ?>" title="<?= encodeString(getTranslation('Displays a message when not able to connect to a node, when a connected node is incompatible, or when disconnected from a node')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Show node connection error messages')); ?>"><?= encodeString(getTranslation('Show node connection error messages')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Enable Listener Connection Error Messages"); ?>" data-text="<?= encodeString(getDefaultTranslation('Displays a message when not able to connect to a listener or when disconnected from a listener')); ?>" title="<?= encodeString(getTranslation('Displays a message when not able to connect to a listener or when disconnected from a listener')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Show listener connection error messages')); ?>"><?= encodeString(getTranslation('Show listener connection error messages')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Enable Automatic Lock"); ?>" data-text="<?= encodeString(getDefaultTranslation('Automatically lock after a set duration of inactivity')); ?>" title="<?= encodeString(getTranslation('Automatically lock after a set duration of inactivity')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Automatically lock after a set duration of inactivity')); ?>"><?= encodeString(getTranslation('Automatically lock after a set duration of inactivity')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("No Interaction Lock Timeout Minutes"); ?>" data-dependencies='<?= escapeData([["Enable Automatic Lock", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the duration of inactivity required for the automatic lock to occur')); ?>" title="<?= encodeString(getTranslation('Sets the duration of inactivity required for the automatic lock to occur')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Minutes of inactivity required for automatic lock')); ?>"><?= encodeString(getTranslation('Minutes of inactivity required for automatic lock')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="number"><!--
+													--><input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric"><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Enable Lock On Inactive"); ?>" data-text="<?= encodeString(getDefaultTranslation('Automatically lock when not focused')); ?>" title="<?= encodeString(getTranslation('Automatically lock when not focused')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Lock if not focused')); ?>"><?= encodeString(getTranslation('Lock if not focused')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Enable Price"); ?>" data-text="<?= encodeString(getDefaultTranslation('Displays prices for amounts')); ?>" title="<?= encodeString(getTranslation('Displays prices for amounts')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Display prices')); ?>"><?= encodeString(getTranslation('Display prices')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Currency Display"); ?>" data-dependencies='<?= escapeData([["Enable Price", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the currency of the displayed prices')); ?>" title="<?= encodeString(getTranslation('Sets the currency of the displayed prices')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Currency of the displayed prices')); ?>"><?= encodeString(getTranslation('Currency of the displayed prices')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="select"><!--
+													--><select data-private><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Language\'s currency')); ?>" value="Language's Currency"><?= encodeString(getTranslation('Language\'s currency')); ?></option><!--
 														
-														<?php
+														--><?php
 														
 															// Go through all language currencies
 															foreach(getLanguageCurrencies() as $languageCurrency) {
@@ -1955,208 +1960,208 @@
 																// Display language currency option
 																echo "<option value=\"" . encodeString($languageCurrency) . "\">" . encodeString($languageCurrency) . "</option>";
 															}
-														?>
+														?><!--
 														
-													</select>
-													<span></span>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Update Price Interval Minutes"); ?>" data-dependencies='<?= escapeData([["Enable Price", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the duration of time between price updates')); ?>" title="<?= encodeString(getTranslation('Sets the duration of time between price updates')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Minutes between price updates')); ?>"><?= encodeString(getTranslation('Minutes between price updates')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="number">
-													<input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric">
-													<span></span>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Displayed Address Type"); ?>" data-dependencies='<?= escapeData([["Use Custom Listener", FALSE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address type to display for each wallet')); ?>" title="<?= encodeString(getTranslation('Sets the address type to display for each wallet')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Displayed address type')); ?>"><?= encodeString(getTranslation('Displayed address type')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="select">
-													<select data-private>
-														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Match connection')); ?>" value="Match Connection"><?= encodeString(getTranslation('Match connection')); ?></option>
-														<option class="translatable" data-text="<?= encodeString((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? getDefaultTranslation('HTTPS') : getDefaultTranslation('HTTP')); ?>" value="HTTP"><?= encodeString((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? getTranslation('HTTPS') : getTranslation('HTTP')); ?></option>
-														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Onion Service')); ?>" value="Tor"><?= encodeString(getTranslation('Onion Service')); ?></option>
-													</select>
-													<span></span>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Displayed Amount Type"); ?>" data-text="<?= encodeString(getDefaultTranslation('Sets the amount type to display in the wallets list')); ?>" title="<?= encodeString(getTranslation('Sets the amount type to display in the wallets list')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Displayed amount type')); ?>"><?= encodeString(getTranslation('Displayed amount type')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="select">
-													<select data-private>
-														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Spendable')); ?>" value="Spendable"><?= encodeString(getTranslation('Spendable')); ?></option>
-														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirmed')); ?>" value="Confirmed"><?= encodeString(getTranslation('Confirmed')); ?></option>
-														<option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirmed and unconfirmed')); ?>" value="Confirmed And Unconfirmed"><?= encodeString(getTranslation('Confirmed and unconfirmed')); ?></option>
-													</select>
-													<span></span>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Allow Changing Base Fee"); ?>" data-text="<?= encodeString(getDefaultTranslation('Allows changing a transaction\'s base fee when sending a payment')); ?>" title="<?= encodeString(getTranslation('Allows changing a transaction\'s base fee when sending a payment')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Allow changing base fee')); ?>"><?= encodeString(getTranslation('Allow changing base fee')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="boolean">
-													<button data-private>
-														<span></span>
-													</button>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Maximum Number Of Messages"); ?>" data-text="<?= encodeString(getDefaultTranslation('Sets the maximum number of messages that the log can display. Earlier messages will be removed once this limit is reached')); ?>" title="<?= encodeString(getTranslation('Sets the maximum number of messages that the log can display. Earlier messages will be removed once this limit is reached')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Maximum number of messages that the log can display')); ?>"><?= encodeString(getTranslation('Maximum number of messages that the log can display')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="number">
-													<input type="number" min="10" max="1000" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric">
-													<span></span>
-												</div>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Node Settings')); ?>"><?= encodeString(getTranslation('Node Settings')); ?></h3>
-											<div class="setting translatable" data-setting="<?= encodeString("Use Custom Node"); ?>" data-text="<?= encodeString(getDefaultTranslation('Uses a custom node instead of the default nodes')); ?>" title="<?= encodeString(getTranslation('Uses a custom node instead of the default nodes')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Use custom node')); ?>"><?= encodeString(getTranslation('Use custom node')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="boolean">
-													<button data-private>
-														<span></span>
-													</button>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Custom Node Address"); ?>" data-dependencies='<?= escapeData([["Use Custom Node", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address for the custom node')); ?>" title="<?= encodeString(getTranslation('Sets the address for the custom node')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Custom node address')); ?>"><?= encodeString(getTranslation('Custom node address')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="url">
-													<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url">
-													<span></span>
-													<span class="capsLock hide"></span>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Custom Node Secret"); ?>" data-sensitive data-dependencies='<?= escapeData([["Use Custom Node", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the foreign API secret for the custom node. Leave this empty if the custom node doesn\'t require a foreign API secret')); ?>" title="<?= encodeString(getTranslation('Sets the foreign API secret for the custom node. Leave this empty if the custom node doesn\'t require a foreign API secret')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Custom node foreign API secret')); ?>"><?= encodeString(getTranslation('Custom node foreign API secret')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="text">
-													<input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-private>
-													<span></span>
-													<span class="capsLock hide"></span>
-												</div>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Wallet Settings')); ?>"><?= encodeString(getTranslation('Wallet Settings')); ?></h3>
-											<div class="setting translatable" data-setting="<?= encodeString("Number Of Confirmations"); ?>" data-text="<?= encodeString(getDefaultTranslation('Sets the number of confirmations required for a new output to be spendable')); ?>" title="<?= encodeString(getTranslation('Sets the number of confirmations required for a new output to be spendable')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Number of confirmations required to spend an output')); ?>"><?= encodeString(getTranslation('Number of confirmations required to spend an output')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="number">
-													<input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric">
-													<span></span>
-												</div>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('API Settings')); ?>"><?= encodeString(getTranslation('API Settings')); ?></h3>
-											<div class="setting translatable" data-setting="<?= encodeString("Enable Mining API"); ?>" data-text="<?= encodeString(getDefaultTranslation('Allows processing mining related API requests')); ?>" title="<?= encodeString(getTranslation('Allows processing mining related API requests')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Enable mining API')); ?>"><?= encodeString(getTranslation('Enable mining API')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="boolean">
-													<button data-private>
-														<span></span>
-													</button>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Require Payment Proof"); ?>" data-text="<?= encodeString(getDefaultTranslation('Requires all new transactions to have a payment proof')); ?>" title="<?= encodeString(getTranslation('Requires all new transactions to have a payment proof')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Require payment proof')); ?>"><?= encodeString(getTranslation('Require payment proof')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="boolean">
-													<button data-private>
-														<span></span>
-													</button>
-												</div>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Tor Proxy Settings')); ?>"><?= encodeString(getTranslation('Tor Proxy Settings')); ?></h3>
-											<div class="setting translatable" data-setting="<?= encodeString("Use Custom Tor Proxy"); ?>" data-text="<?= encodeString(getDefaultTranslation('Uses a custom Tor proxy instead of the default Tor proxy')); ?>" title="<?= encodeString(getTranslation('Uses a custom Tor proxy instead of the default Tor proxy')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Use custom Tor proxy')); ?>"><?= encodeString(getTranslation('Use custom Tor proxy')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="boolean">
-													<button data-private>
-														<span></span>
-													</button>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Custom Tor Proxy Address"); ?>" data-dependencies='<?= escapeData([["Use Custom Tor Proxy", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address for the custom Tor proxy')); ?>" title="<?= encodeString(getTranslation('Sets the address for the custom Tor proxy')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Custom Tor proxy address')); ?>"><?= encodeString(getTranslation('Custom Tor proxy address')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="url">
-													<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url">
-													<span></span>
-													<span class="capsLock hide"></span>
-												</div>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Listener Settings')); ?>"><?= encodeString(getTranslation('Listener Settings')); ?></h3>
-											<div class="setting translatable" data-setting="<?= encodeString("Use Custom Listener"); ?>" data-text="<?= encodeString(getDefaultTranslation('Uses a custom listener instead of the default listener')); ?>" title="<?= encodeString(getTranslation('Uses a custom listener instead of the default listener')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Use custom listener')); ?>"><?= encodeString(getTranslation('Use custom listener')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="boolean">
-													<button data-private>
-														<span></span>
-													</button>
-												</div>
-											</div>
-											<div class="setting translatable" data-setting="<?= encodeString("Custom Listener Address"); ?>" data-dependencies='<?= escapeData([["Use Custom Listener", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address for the custom listener')); ?>" title="<?= encodeString(getTranslation('Sets the address for the custom listener')); ?>">
-												<p>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Custom listener address')); ?>"><?= encodeString(getTranslation('Custom listener address')); ?></span>
-												</p>
-												<span class="dots"></span>
-												<div class="value" data-type="url">
-													<input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url">
-													<span></span>
-													<span class="capsLock hide"></span>
-												</div>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Reset Settings')); ?>"><?= encodeString(getTranslation('Reset Settings')); ?></h3>
-											<div>
-												<button class="resetSettings" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Reset Settings')); ?>"><?= encodeString(getTranslation('Reset Settings')); ?></span>
-												</button>
-											</div>
-										</div>
-									</div>
-									<div class="about scrollable hide">
-										<div>
-											<div class="navigation">
-												<button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button>
-												<h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('About')); ?>"><?= encodeString(getTranslation('About')); ?></h2>
-												<button class="forward hide translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Version Information')); ?>"><?= encodeString(getTranslation('Version Information')); ?></h3>
-											<div class="versionInformation">
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Version Changes')); ?>"><?= encodeString(getTranslation('Version Changes')); ?></h3>
-											<div>
-												<ul>
+													--></select><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Update Price Interval Minutes"); ?>" data-dependencies='<?= escapeData([["Enable Price", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the duration of time between price updates')); ?>" title="<?= encodeString(getTranslation('Sets the duration of time between price updates')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Minutes between price updates')); ?>"><?= encodeString(getTranslation('Minutes between price updates')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="number"><!--
+													--><input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric"><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Displayed Address Type"); ?>" data-dependencies='<?= escapeData([["Use Custom Listener", FALSE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address type to display for each wallet')); ?>" title="<?= encodeString(getTranslation('Sets the address type to display for each wallet')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Displayed address type')); ?>"><?= encodeString(getTranslation('Displayed address type')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="select"><!--
+													--><select data-private><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Match connection')); ?>" value="Match Connection"><?= encodeString(getTranslation('Match connection')); ?></option><!--
+														--><option class="translatable" data-text="<?= encodeString((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? getDefaultTranslation('HTTPS') : getDefaultTranslation('HTTP')); ?>" value="HTTP"><?= encodeString((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? getTranslation('HTTPS') : getTranslation('HTTP')); ?></option><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Onion Service')); ?>" value="Tor"><?= encodeString(getTranslation('Onion Service')); ?></option><!--
+													--></select><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Displayed Amount Type"); ?>" data-text="<?= encodeString(getDefaultTranslation('Sets the amount type to display in the wallets list')); ?>" title="<?= encodeString(getTranslation('Sets the amount type to display in the wallets list')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Displayed amount type')); ?>"><?= encodeString(getTranslation('Displayed amount type')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="select"><!--
+													--><select data-private><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Spendable')); ?>" value="Spendable"><?= encodeString(getTranslation('Spendable')); ?></option><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirmed')); ?>" value="Confirmed"><?= encodeString(getTranslation('Confirmed')); ?></option><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirmed and unconfirmed')); ?>" value="Confirmed And Unconfirmed"><?= encodeString(getTranslation('Confirmed and unconfirmed')); ?></option><!--
+													--></select><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Allow Changing Base Fee"); ?>" data-text="<?= encodeString(getDefaultTranslation('Allows changing a transaction\'s base fee when sending a payment')); ?>" title="<?= encodeString(getTranslation('Allows changing a transaction\'s base fee when sending a payment')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Allow changing base fee')); ?>"><?= encodeString(getTranslation('Allow changing base fee')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Maximum Number Of Messages"); ?>" data-text="<?= encodeString(getDefaultTranslation('Sets the maximum number of messages that the log can display. Earlier messages will be removed once this limit is reached')); ?>" title="<?= encodeString(getTranslation('Sets the maximum number of messages that the log can display. Earlier messages will be removed once this limit is reached')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Maximum number of messages that the log can display')); ?>"><?= encodeString(getTranslation('Maximum number of messages that the log can display')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="number"><!--
+													--><input type="number" min="10" max="1000" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric"><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Node Settings')); ?>"><?= encodeString(getTranslation('Node Settings')); ?></h3><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Use Custom Node"); ?>" data-text="<?= encodeString(getDefaultTranslation('Uses a custom node instead of the default nodes')); ?>" title="<?= encodeString(getTranslation('Uses a custom node instead of the default nodes')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Use custom node')); ?>"><?= encodeString(getTranslation('Use custom node')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Custom Node Address"); ?>" data-dependencies='<?= escapeData([["Use Custom Node", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address for the custom node')); ?>" title="<?= encodeString(getTranslation('Sets the address for the custom node')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Custom node address')); ?>"><?= encodeString(getTranslation('Custom node address')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="url"><!--
+													--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url"><!--
+													--><span></span><!--
+													--><span class="capsLock hide"></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Custom Node Secret"); ?>" data-sensitive data-dependencies='<?= escapeData([["Use Custom Node", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the foreign API secret for the custom node. Leave this empty if the custom node doesn\'t require a foreign API secret')); ?>" title="<?= encodeString(getTranslation('Sets the foreign API secret for the custom node. Leave this empty if the custom node doesn\'t require a foreign API secret')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Custom node foreign API secret')); ?>"><?= encodeString(getTranslation('Custom node foreign API secret')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="text"><!--
+													--><input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-private><!--
+													--><span></span><!--
+													--><span class="capsLock hide"></span><!--
+												--></div><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Wallet Settings')); ?>"><?= encodeString(getTranslation('Wallet Settings')); ?></h3><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Number Of Confirmations"); ?>" data-text="<?= encodeString(getDefaultTranslation('Sets the number of confirmations required for a new output to be spendable')); ?>" title="<?= encodeString(getTranslation('Sets the number of confirmations required for a new output to be spendable')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Number of confirmations required to spend an output')); ?>"><?= encodeString(getTranslation('Number of confirmations required to spend an output')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="number"><!--
+													--><input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric"><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('API Settings')); ?>"><?= encodeString(getTranslation('API Settings')); ?></h3><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Enable Mining API"); ?>" data-text="<?= encodeString(getDefaultTranslation('Allows processing mining related API requests')); ?>" title="<?= encodeString(getTranslation('Allows processing mining related API requests')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Enable mining API')); ?>"><?= encodeString(getTranslation('Enable mining API')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Require Payment Proof"); ?>" data-text="<?= encodeString(getDefaultTranslation('Requires all new transactions to have a payment proof')); ?>" title="<?= encodeString(getTranslation('Requires all new transactions to have a payment proof')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Require payment proof')); ?>"><?= encodeString(getTranslation('Require payment proof')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Tor Proxy Settings')); ?>"><?= encodeString(getTranslation('Tor Proxy Settings')); ?></h3><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Use Custom Tor Proxy"); ?>" data-text="<?= encodeString(getDefaultTranslation('Uses a custom Tor proxy instead of the default Tor proxy')); ?>" title="<?= encodeString(getTranslation('Uses a custom Tor proxy instead of the default Tor proxy')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Use custom Tor proxy')); ?>"><?= encodeString(getTranslation('Use custom Tor proxy')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Custom Tor Proxy Address"); ?>" data-dependencies='<?= escapeData([["Use Custom Tor Proxy", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address for the custom Tor proxy')); ?>" title="<?= encodeString(getTranslation('Sets the address for the custom Tor proxy')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Custom Tor proxy address')); ?>"><?= encodeString(getTranslation('Custom Tor proxy address')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="url"><!--
+													--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url"><!--
+													--><span></span><!--
+													--><span class="capsLock hide"></span><!--
+												--></div><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Listener Settings')); ?>"><?= encodeString(getTranslation('Listener Settings')); ?></h3><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Use Custom Listener"); ?>" data-text="<?= encodeString(getDefaultTranslation('Uses a custom listener instead of the default listener')); ?>" title="<?= encodeString(getTranslation('Uses a custom listener instead of the default listener')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Use custom listener')); ?>"><?= encodeString(getTranslation('Use custom listener')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Custom Listener Address"); ?>" data-dependencies='<?= escapeData([["Use Custom Listener", TRUE]]); ?>' data-text="<?= encodeString(getDefaultTranslation('Sets the address for the custom listener')); ?>" title="<?= encodeString(getTranslation('Sets the address for the custom listener')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Custom listener address')); ?>"><?= encodeString(getTranslation('Custom listener address')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="url"><!--
+													--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url"><!--
+													--><span></span><!--
+													--><span class="capsLock hide"></span><!--
+												--></div><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Reset Settings')); ?>"><?= encodeString(getTranslation('Reset Settings')); ?></h3><!--
+											--><div><!--
+												--><button class="resetSettings" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Reset Settings')); ?>"><?= encodeString(getTranslation('Reset Settings')); ?></span><!--
+												--></button><!--
+											--></div><!--
+										--></div><!--
+									--></div><!--
+									--><div class="about scrollable hide"><!--
+										--><div><!--
+											--><div class="navigation"><!--
+												--><button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button><!--
+												--><h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('About')); ?>"><?= encodeString(getTranslation('About')); ?></h2><!--
+												--><button class="forward hide translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Version Information')); ?>"><?= encodeString(getTranslation('Version Information')); ?></h3><!--
+											--><div class="versionInformation"><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Version Changes')); ?>"><?= encodeString(getTranslation('Version Changes')); ?></h3><!--
+											--><div><!--
+												--><ul><!--
 												
-													<?php
+													--><?php
 													
 														// Check if there's no version changes
 														if(count(VERSION_CHANGES) === 0) {
@@ -2175,14 +2180,14 @@
 																echo "<li><span class=\"translatable\" data-text=\"" . encodeString(escapeText($versionChange)) . "\">" . encodeString(getTranslation(escapeText($versionChange))) . "</span></li>";
 															}
 														}
-													?>
+													?><!--
 													
-												</ul>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Copyright')); ?>"><?= encodeString(getTranslation('Copyright')); ?></h3>
-											<div>
+												--></ul><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Copyright')); ?>"><?= encodeString(getTranslation('Copyright')); ?></h3><!--
+											--><div><!--
 											
-												<?php
+												--><?php
 												
 													// Check if copyright year is newer than the copyright year
 													if($year > COPYRIGHT_YEAR) {
@@ -2197,17 +2202,17 @@
 														// Display copyright information with the copyright year
 														echo "<p class=\"copyright translatable\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR)]) . "'>" . encodeString(getTranslation('© %1$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR)])) . "</p>";
 													}
-												?>
+												?><!--
 												
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Disclaimer')); ?>"><?= encodeString(getTranslation('Disclaimer')); ?></h3>
-											<div class="disclaimer">
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Translation Contributors')); ?>"><?= encodeString(getTranslation('Translation Contributors')); ?></h3>
-											<div class="translationContributors">
-												<ul>
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Disclaimer')); ?>"><?= encodeString(getTranslation('Disclaimer')); ?></h3><!--
+											--><div class="disclaimer"><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Translation Contributors')); ?>"><?= encodeString(getTranslation('Translation Contributors')); ?></h3><!--
+											--><div class="translationContributors"><!--
+												--><ul><!--
 												
-													<?php
+													--><?php
 													
 														// Check if there's no translation contributors
 														if(count(getTransactionContributors()) === 0) {
@@ -2237,15 +2242,15 @@
 																}
 															}
 														}
-													?>
+													?><!--
 													
-												</ul>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Attributions')); ?>"><?= encodeString(getTranslation('Attributions')); ?></h3>
-											<div class="attributions">
-												<ul>
+												--></ul><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Attributions')); ?>"><?= encodeString(getTranslation('Attributions')); ?></h3><!--
+											--><div class="attributions"><!--
+												--><ul><!--
 												
-													<?php
+													--><?php
 													
 														// Check if there's no attributions
 														if(count(ATTRIBUTIONS) === 0) {
@@ -2253,156 +2258,156 @@
 															// Display no attributions
 															echo "<li><span class=\"translatable\" data-text=\"" . encodeString(getDefaultTranslation('N/A')) . "\">" . encodeString(getTranslation('N/A')) . "</span></li>";
 														}
-													?>
+													?><!--
 													
-												</ul>
-											</div>
-										</div>
-									</div>
-									<div class="log scrollable hide">
-										<div>
-											<div class="navigation">
-												<button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button>
-												<h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Log')); ?>"><?= encodeString(getTranslation('Log')); ?></h2>
-												<button class="forward translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button>
-											</div>
-											<div class="messages">
-											</div>
-										</div>
-									</div>
-									<div class="transaction scrollable hide">
-										<div>
-											<div class="navigation">
-												<button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button>
-												<button class="forward translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Transaction Information')); ?>"><?= encodeString(getTranslation('Transaction Information')); ?></h3>
-											<div class="transactionInformation">
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Payment Proof')); ?>"><?= encodeString(getTranslation('Payment Proof')); ?></h3>
-											<div class="paymentProof">
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Rebroadcast Transaction')); ?>"><?= encodeString(getTranslation('Rebroadcast Transaction')); ?></h3>
-											<div>
-												<button class="rebroadcastTransaction" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Rebroadcast Transaction')); ?>"><?= encodeString(getTranslation('Rebroadcast Transaction')); ?></span>
-													<span class="dots">
-														<span></span>
-														<span></span>
-														<span></span>
-													</span>
-												</button>
-											</div>
-											<h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Cancel Transaction')); ?>"><?= encodeString(getTranslation('Cancel Transaction')); ?></h3>
-											<div>
-												<button class="cancelTransaction" data-private>
-													<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Cancel Transaction')); ?>"><?= encodeString(getTranslation('Cancel Transaction')); ?></span>
-												</button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="status">
-							<p class="node translatable" data-text="<?= encodeString(getDefaultTranslation('Node disconnected')); ?>" title="<?= encodeString(getTranslation('Node disconnected')); ?>">
-								<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Node')); ?>"><?= encodeString(getTranslation('Node')); ?></span>
-							</p>
-							<p class="listener translatable" data-text="<?= encodeString(getDefaultTranslation('Listener disconnected')); ?>" title="<?= encodeString(getTranslation('Listener disconnected')); ?>">
-								<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Listener')); ?>"><?= encodeString(getTranslation('Listener')); ?></span>
-							</p>
-						</div>
-					</div>
-				</div>
-			</main>
-			<aside class="message noButtons hide noScriptShow">
-				<div class="message">
-					<div>
-						<h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('JavaScript Error')); ?>"><?= encodeString(getTranslation('JavaScript Error')); ?></h2>
-						<span class="upArrow"></span>
-						<p class="scrollable">
-							<span class="text">
-								<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Your browser doesn\'t support JavaScript. Update your browser and/or enable JavaScript to continue.')); ?>"><?= encodeString(getTranslation('Your browser doesn\'t support JavaScript. Update your browser and/or enable JavaScript to continue.')); ?></span>
-							</span>
-						</p>
-						<span class="downArrow"></span>
-						<div>
-							<button>
-								<span class="translatable"></span>
-								<span class="dots">
-									<span></span>
-									<span></span>
-									<span></span>
-								</span>
-							</button>
-							<button>
-								<span class="translatable"></span>
-								<span class="dots">
-									<span></span>
-									<span></span>
-									<span></span>
-								</span>
-							</button>
-						</div>
-					</div>
-				</div>
-			</aside>
-			<section class="tetris hide">
-				<canvas>
-				</canvas>
-			</section>
-			<section class="cookieAcceptance hide noFocus">
-				<div class="cookieAcceptance">
-					<span></span>
-					<p class="translatable" data-text="<?= encodeString(getDefaultTranslation('This site uses cookies that are essential to its functionality. By using this site\'s services or clicking OK, you agree to this site\'s use of cookies.')); ?>"><?= encodeString(getTranslation('This site uses cookies that are essential to its functionality. By using this site\'s services or clicking OK, you agree to this site\'s use of cookies.')); ?></p>
-					<button>
-						<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('OK')); ?>"><?= encodeString(getTranslation('OK')); ?></span>
-					</button>
-				</div>
-			</section>
-			<section class="installApp hide noFocus">
-				<div class="installApp">
-					<img src="<?= encodeString(getResource("./images/app_icons/app_icon.svg")); ?>" integrity="<?= encodeString(getChecksum("./images/app_icons/app_icon.svg")); ?>">
-					<p class="translatable" data-text="<?= encodeString(getDefaultTranslation('Install the MWC Wallet app?')); ?>"><?= encodeString(getTranslation('Install the MWC Wallet app?')); ?></p>
-					<button class="installNow">
-						<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Install Now')); ?>"><?= encodeString(getTranslation('Install Now')); ?></span>
-					</button>
-					<button class="remindMeLater translatable" data-text="<?= encodeString(getDefaultTranslation('Remind me later')); ?>" title="<?= encodeString(getTranslation('Remind me later')); ?>">
-						<span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Remind me later')); ?>"><?= encodeString(getTranslation('Remind me later')); ?></span>
-					</button>
-				</div>
-			</section>
-		</div>
-	</div>
+												--></ul><!--
+											--></div><!--
+										--></div><!--
+									--></div><!--
+									--><div class="log scrollable hide"><!--
+										--><div><!--
+											--><div class="navigation"><!--
+												--><button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button><!--
+												--><h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Log')); ?>"><?= encodeString(getTranslation('Log')); ?></h2><!--
+												--><button class="forward translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button><!--
+											--></div><!--
+											--><div class="messages"><!--
+											--></div><!--
+										--></div><!--
+									--></div><!--
+									--><div class="transaction scrollable hide"><!--
+										--><div><!--
+											--><div class="navigation"><!--
+												--><button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button><!--
+												--><button class="forward translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Transaction Information')); ?>"><?= encodeString(getTranslation('Transaction Information')); ?></h3><!--
+											--><div class="transactionInformation"><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Payment Proof')); ?>"><?= encodeString(getTranslation('Payment Proof')); ?></h3><!--
+											--><div class="paymentProof"><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Rebroadcast Transaction')); ?>"><?= encodeString(getTranslation('Rebroadcast Transaction')); ?></h3><!--
+											--><div><!--
+												--><button class="rebroadcastTransaction" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Rebroadcast Transaction')); ?>"><?= encodeString(getTranslation('Rebroadcast Transaction')); ?></span><!--
+													--><span class="dots"><!--
+														--><span></span><!--
+														--><span></span><!--
+														--><span></span><!--
+													--></span><!--
+												--></button><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Cancel Transaction')); ?>"><?= encodeString(getTranslation('Cancel Transaction')); ?></h3><!--
+											--><div><!--
+												--><button class="cancelTransaction" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Cancel Transaction')); ?>"><?= encodeString(getTranslation('Cancel Transaction')); ?></span><!--
+												--></button><!--
+											--></div><!--
+										--></div><!--
+									--></div><!--
+								--></div><!--
+							--></div><!--
+						--></div><!--
+						--><div class="status"><!--
+							--><p class="node translatable" data-text="<?= encodeString(getDefaultTranslation('Node disconnected')); ?>" title="<?= encodeString(getTranslation('Node disconnected')); ?>"><!--
+								--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Node')); ?>"><?= encodeString(getTranslation('Node')); ?></span><!--
+							--></p><!--
+							--><p class="listener translatable" data-text="<?= encodeString(getDefaultTranslation('Listener disconnected')); ?>" title="<?= encodeString(getTranslation('Listener disconnected')); ?>"><!--
+								--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Listener')); ?>"><?= encodeString(getTranslation('Listener')); ?></span><!--
+							--></p><!--
+						--></div><!--
+					--></div><!--
+				--></div><!--
+			--></main><!--
+			--><aside class="message noButtons hide noScriptShow"><!--
+				--><div class="message"><!--
+					--><div><!--
+						--><h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('JavaScript Error')); ?>"><?= encodeString(getTranslation('JavaScript Error')); ?></h2><!--
+						--><span class="upArrow"></span><!--
+						--><p class="scrollable"><!--
+							--><span class="text"><!--
+								--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Your browser doesn\'t support JavaScript. Update your browser and/or enable JavaScript to continue.')); ?>"><?= encodeString(getTranslation('Your browser doesn\'t support JavaScript. Update your browser and/or enable JavaScript to continue.')); ?></span><!--
+							--></span><!--
+						--></p><!--
+						--><span class="downArrow"></span><!--
+						--><div><!--
+							--><button><!--
+								--><span class="translatable"></span><!--
+								--><span class="dots"><!--
+									--><span></span><!--
+									--><span></span><!--
+									--><span></span><!--
+								--></span><!--
+							--></button><!--
+							--><button><!--
+								--><span class="translatable"></span><!--
+								--><span class="dots"><!--
+									--><span></span><!--
+									--><span></span><!--
+									--><span></span><!--
+								--></span><!--
+							--></button><!--
+						--></div><!--
+					--></div><!--
+				--></div><!--
+			--></aside><!--
+			--><section class="tetris hide"><!--
+				--><canvas><!--
+				--></canvas><!--
+			--></section><!--
+			--><section class="cookieAcceptance hide noFocus"><!--
+				--><div class="cookieAcceptance"><!--
+					--><span></span><!--
+					--><p class="translatable" data-text="<?= encodeString(getDefaultTranslation('This site uses cookies that are essential to its functionality. By using this site\'s services or clicking OK, you agree to this site\'s use of cookies.')); ?>"><?= encodeString(getTranslation('This site uses cookies that are essential to its functionality. By using this site\'s services or clicking OK, you agree to this site\'s use of cookies.')); ?></p><!--
+					--><button><!--
+						--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('OK')); ?>"><?= encodeString(getTranslation('OK')); ?></span><!--
+					--></button><!--
+				--></div><!--
+			--></section><!--
+			--><section class="installApp hide noFocus"><!--
+				--><div class="installApp"><!--
+					--><img src="<?= encodeString(getResource("./images/app_icons/app_icon.svg")); ?>" integrity="<?= encodeString(getChecksum("./images/app_icons/app_icon.svg")); ?>"><!--
+					--><p class="translatable" data-text="<?= encodeString(getDefaultTranslation('Install the MWC Wallet app?')); ?>"><?= encodeString(getTranslation('Install the MWC Wallet app?')); ?></p><!--
+					--><button class="installNow"><!--
+						--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Install Now')); ?>"><?= encodeString(getTranslation('Install Now')); ?></span><!--
+					--></button><!--
+					--><button class="remindMeLater translatable" data-text="<?= encodeString(getDefaultTranslation('Remind me later')); ?>" title="<?= encodeString(getTranslation('Remind me later')); ?>"><!--
+						--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Remind me later')); ?>"><?= encodeString(getTranslation('Remind me later')); ?></span><!--
+					--></button><!--
+				--></div><!--
+			--></section><!--
+		--></div><!--
+	--></div><!--
 	
-	<link rel="prefetch" as="font" href="<?= encodeString(getResource("./fonts/font_awesome/font_awesome-5.15.4.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
-	<link rel="prefetch" as="font" href="<?= encodeString(getResource("./fonts/font_awesome/font_awesome_solid-5.15.4.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
+	--><link rel="prefetch" as="font" href="<?= encodeString(getResource("./fonts/font_awesome/font_awesome-5.15.4.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous"><!--
+	--><link rel="prefetch" as="font" href="<?= encodeString(getResource("./fonts/font_awesome/font_awesome_solid-5.15.4.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous"><!--
 	
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/common.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/common.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/mwc/mwc.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/mwc/mwc.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/grin/grin.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/grin/grin.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/btc/btc.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/btc/btc.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/eth/eth.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/eth/eth.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/tetris.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/tetris.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/logo.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/logo.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/application.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/application.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/unlocked.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/unlocked.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/sections.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/sections.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/settings_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/settings_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/about_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/about_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/transaction_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/transaction_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/account_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/account_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/wallet_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/wallet_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/send_payment_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/send_payment_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/log_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/log_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/message.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/message.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/install_app.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/install_app.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/cookie_acceptance.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/cookie_acceptance.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/maintenance_notification.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/maintenance_notification.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
-	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/language.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/language.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/common.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/common.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/mwc/mwc.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/mwc/mwc.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/grin/grin.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/grin/grin.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/btc/btc.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/btc/btc.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/eth/eth.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/eth/eth.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/tetris.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/tetris.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/logo.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/logo.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/application.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/application.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/unlocked.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/unlocked.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/sections.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/sections.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/settings_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/settings_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/about_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/about_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/transaction_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/transaction_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/account_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/account_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/wallet_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/wallet_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/send_payment_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/send_payment_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/log_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/log_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/message.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/message.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/install_app.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/install_app.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/cookie_acceptance.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/cookie_acceptance.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/maintenance_notification.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/maintenance_notification.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/language.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/language.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
 	
-	<script>
+	--><script>
 	
 		// Use strict
 		"use strict";
@@ -2514,103 +2519,103 @@
 			return ((file in FILES === true && FILES[file]["Minified"] === true) ? addMinifiedSuffix(file) : file) + ((file in FILES === true && FILES[file]["Version"] !== 0) ? "?" + FILES[file]["Version"] : "");
 		}
 		
-	</script>
+	</script><!--
 	
-	<script src="<?= encodeString(getResource("./scripts/jQuery-3.6.4.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/jQuery-3.6.4.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
-	<script src="<?= encodeString(getResource("./scripts/bignumber.js-9.1.1.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/bignumber.js-9.1.1.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
-	<script src="<?= encodeString(getResource("./scripts/common.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/common.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
-	<script src="<?= encodeString(getResource("./scripts/consensus.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/consensus.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
-	<script src="<?= encodeString(getResource("./scripts/languages.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/languages.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
-	<script src="<?= encodeString(getResource("./scripts/language.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/language.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
-	<script src="<?= encodeString(getResource("./scripts/extension.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/extension.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script>
-	<script src="<?= encodeString(getResource("./scripts/JSONBigNumber-1.1.1.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/JSONBigNumber-1.1.1.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/glMatrix-3.4.1.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/glMatrix-3.4.1.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/BLAKE2b-0.0.2.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/BLAKE2b-0.0.2.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/Ed25519-0.0.22.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/Ed25519-0.0.22.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/X25519-0.0.23.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/X25519-0.0.23.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/js-sha3-0.8.0.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/js-sha3-0.8.0.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/js-sha256-0.9.0.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/js-sha256-0.9.0.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/ChaCha-2.1.0.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/ChaCha-2.1.0.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/secp256k1-zkp-0.0.29.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/secp256k1-zkp-0.0.29.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/SMAZ-0.0.31.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/SMAZ-0.0.31.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/hi-base32-0.5.1.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/hi-base32-0.5.1.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/bech32-2.0.0.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/bech32-2.0.0.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/base58.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/base58.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/base64.js-3.7.5.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/base64.js-3.7.5.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/crc32-1.2.0.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/crc32-1.2.0.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/bit_reader.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/bit_reader.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/bit_writer.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/bit_writer.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/fatal_error.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/fatal_error.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/startup_images_creator.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/startup_images_creator.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/scroll.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/scroll.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/copyright.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/copyright.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/protocol_handler.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/protocol_handler.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/settings.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/settings.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/crypto.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/crypto.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/json_rpc.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/json_rpc.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/tor.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/tor.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/mqs.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/mqs.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/slatepack.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/slatepack.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/uuid.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/uuid.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/hash.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/hash.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/slate.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/slate.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/slate_participant.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/slate_participant.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/slate_input.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/slate_input.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/slate_output.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/slate_output.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/slate_kernel.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/slate_kernel.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/proof_builder.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/proof_builder.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/legacy_proof_builder.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/legacy_proof_builder.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/new_proof_builder.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/new_proof_builder.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/view_proof_builder.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/view_proof_builder.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/LedgerJS_Browser-0.0.2.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/LedgerJS_Browser-0.0.2.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/hardware_wallet.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/hardware_wallet.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/api.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/api.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/instance.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/instance.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/service_worker_installer.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/service_worker_installer.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/wallet.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/wallet.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/identifier.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/identifier.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/database_transaction.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/database_transaction.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/database.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/database.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/transaction.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/transaction.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/transactions.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/transactions.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/height.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/height.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/initial_heights_obtained.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/initial_heights_obtained.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/recent_heights.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/recent_heights.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/output.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/output.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/output_information.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/output_information.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/tor_proxy.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/tor_proxy.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/node.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/node.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/seed.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/seed.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/wallets.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/wallets.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/listener.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/listener.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/interaction.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/interaction.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/install_app.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/install_app.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/focus.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/focus.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/caps_lock.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/caps_lock.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/message.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/message.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/prices.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/prices.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/log.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/log.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/clipboard.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/clipboard.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/sections.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/sections.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/settings_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/settings_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/about_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/about_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/transaction_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/transaction_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/account_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/account_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/wallet_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/wallet_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/send_payment_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/send_payment_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/log_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/log_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/unlocked.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/unlocked.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/version.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/version.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/cookie_acceptance.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/cookie_acceptance.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/maintenance_notification.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/maintenance_notification.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/tetris.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/tetris.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/logo.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/logo.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/qrcode-generator-1.4.4.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/qrcode-generator-1.4.4.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/automatic_lock.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/automatic_lock.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/wake_lock.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/wake_lock.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/camera.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/camera.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
-	<script src="<?= encodeString(getResource("./scripts/application.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/application.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script>
+	--><script src="<?= encodeString(getResource("./scripts/jQuery-3.6.4.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/jQuery-3.6.4.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/bignumber.js-9.1.1.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/bignumber.js-9.1.1.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/common.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/common.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/consensus.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/consensus.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/languages.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/languages.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/language.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/language.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/extension.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/extension.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/JSONBigNumber-1.1.1.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/JSONBigNumber-1.1.1.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/glMatrix-3.4.1.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/glMatrix-3.4.1.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/BLAKE2b-0.0.2.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/BLAKE2b-0.0.2.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/Ed25519-0.0.22.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/Ed25519-0.0.22.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/X25519-0.0.23.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/X25519-0.0.23.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/js-sha3-0.8.0.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/js-sha3-0.8.0.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/js-sha256-0.9.0.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/js-sha256-0.9.0.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/ChaCha-2.1.0.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/ChaCha-2.1.0.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/secp256k1-zkp-0.0.29.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/secp256k1-zkp-0.0.29.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/SMAZ-0.0.31.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/SMAZ-0.0.31.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/hi-base32-0.5.1.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/hi-base32-0.5.1.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/bech32-2.0.0.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/bech32-2.0.0.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/base58.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/base58.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/base64.js-3.7.5.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/base64.js-3.7.5.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/crc32-1.2.0.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/crc32-1.2.0.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/bit_reader.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/bit_reader.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/bit_writer.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/bit_writer.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/fatal_error.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/fatal_error.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/startup_images_creator.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/startup_images_creator.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/scroll.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/scroll.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/copyright.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/copyright.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/protocol_handler.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/protocol_handler.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/settings.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/settings.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/crypto.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/crypto.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/json_rpc.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/json_rpc.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/tor.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/tor.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/mqs.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/mqs.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/slatepack.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/slatepack.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/uuid.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/uuid.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/hash.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/hash.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/slate.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/slate.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/slate_participant.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/slate_participant.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/slate_input.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/slate_input.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/slate_output.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/slate_output.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/slate_kernel.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/slate_kernel.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/proof_builder.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/proof_builder.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/legacy_proof_builder.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/legacy_proof_builder.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/new_proof_builder.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/new_proof_builder.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/view_proof_builder.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/view_proof_builder.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/LedgerJS_Browser-0.0.2.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/LedgerJS_Browser-0.0.2.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/hardware_wallet.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/hardware_wallet.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/api.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/api.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/instance.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/instance.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/service_worker_installer.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/service_worker_installer.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/wallet.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/wallet.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/identifier.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/identifier.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/database_transaction.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/database_transaction.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/database.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/database.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/transaction.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/transaction.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/transactions.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/transactions.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/height.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/height.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/initial_heights_obtained.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/initial_heights_obtained.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/recent_heights.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/recent_heights.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/output.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/output.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/output_information.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/output_information.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/tor_proxy.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/tor_proxy.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/node.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/node.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/seed.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/seed.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/wallets.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/wallets.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/listener.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/listener.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/interaction.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/interaction.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/install_app.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/install_app.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/focus.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/focus.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/caps_lock.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/caps_lock.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/message.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/message.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/prices.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/prices.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/log.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/log.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/clipboard.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/clipboard.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/sections.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/sections.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/settings_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/settings_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/about_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/about_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/transaction_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/transaction_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/account_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/account_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/wallet_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/wallet_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/send_payment_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/send_payment_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/log_section.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/log_section.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/unlocked.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/unlocked.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/version.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/version.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/cookie_acceptance.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/cookie_acceptance.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/maintenance_notification.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/maintenance_notification.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/tetris.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/tetris.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/logo.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/logo.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/qrcode-generator-1.4.4.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/qrcode-generator-1.4.4.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/automatic_lock.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/automatic_lock.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/wake_lock.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/wake_lock.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/camera.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/camera.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/application.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/application.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
 	
-</body>
+--></body>
 </html>
