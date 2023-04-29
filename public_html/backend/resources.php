@@ -1299,10 +1299,10 @@
 			"Checksum" => "xrlfUeqc9EIcXeWCUYozrJSCCpJbGSO+2XJgzH+RErsFp+7VfJFVPb9FriaQ4F3SXDp/7qkA1oxwgAdUEluVCg=="
 		],
 		"./styles/about_section.css" => [
-			"Version" => 36,
+			"Version" => 38,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "wR2Zua270k4GIV9V1X8zq8/Bx5ZmVfeMGquled3J4/YqqojUuwMF8XRVjQCZomgq/bzJylHSRrjgf4diKZ0b7w=="
+			"Checksum" => "qiXWVTTL+zwSXd/WRN8qMNcDmBFDIRtugPyobx8Q1mDtpGD3Nj7GD70t68xBDK8OiHedD9UfOJSC8BjH0LkaYQ=="
 		],
 		"./styles/transaction_section.css" => [
 			"Version" => 3,

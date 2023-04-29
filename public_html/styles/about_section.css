@@ -56,8 +56,8 @@ main > div.unlocked > div > div > div.sections > div > div.about > div > div.att
 		list-style-type: "•";
 	}
 	
-	main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul > li > span {
-		padding-left: 0.55em;
+	main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul > li > span, main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul > li > a {
+		margin-left: 0.55em;
 	}
 }
 
