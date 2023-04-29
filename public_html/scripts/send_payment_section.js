@@ -2310,6 +2310,9 @@ class SendPaymentSection extends Section {
 			// Set that buttons aren't clicked or loading
 			this.getDisplay().find("button").removeClass("clicked loading");
 			
+			// Allow all button display to merge
+			this.getDisplay().find("button.all").parent().closest("div").addClass("merge");
+			
 			// Empty from wallet selection
 			this.getDisplay().find("select.fromWallet").empty();
 		}
@@ -2560,6 +2563,9 @@ class SendPaymentSection extends Section {
 					// Show value input
 					this.getDisplay().find("input.value").closest("div").parent().closest("div").removeClass("hide");
 					
+					// Allow all button display to merge
+					this.getDisplay().find("button.all").parent().closest("div").addClass("merge");
+					
 					// Trigger resize event
 					$(window).trigger("resize");
 				}
@@ -2570,6 +2576,9 @@ class SendPaymentSection extends Section {
 			
 				// Hide value input
 				this.getDisplay().find("input.value").blur().closest("div").parent().closest("div").addClass("hide");
+				
+				// Prevent all button display from merging
+				this.getDisplay().find("button.all").parent().closest("div").removeClass("merge");
 			}
 		}
 		
