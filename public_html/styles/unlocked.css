@@ -150,6 +150,13 @@ main > div.unlocked > div > div.menu > div > button > span {
 	max-width: 100%;
 }
 
+@media only screen and (min-width: 800px) {
+
+	main > div.unlocked > div > div.menu > div > button {
+		min-width: 7em;
+	}
+}
+
 @media only screen and (max-width: 600px) {
 
 	main > div.unlocked > div > div.menu > div {

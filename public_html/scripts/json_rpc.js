@@ -482,7 +482,7 @@ class JsonRpc {
 								reject(request["status"]);
 							
 							// Otherwise check if response contains an invalid ID
-							else if("id" in response === false || response["id"] instanceof BigNumber === false || response["id"].isEqualTo(id) === false)
+							else if("id" in response === false || response["id"] instanceof BigNumber === false || response["id"].isInteger() === false || response["id"].isPositive() === false)
 							
 								// Reject request's status
 								reject(request["status"]);

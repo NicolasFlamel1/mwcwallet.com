@@ -3,23 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.0.0";
+	const VERSION_NUMBER = "2.1.0";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "29 Apr 2023 09:22:00 UTC";
+	const VERSION_RELEASE_DATE = "08 May 2023 17:20:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed bold fonts being displayed inconsistently across different browsers.",
-		"Fixed error response messages not being displayed if they contained certain characters.",
-		"Fixed detecting when a hardware wallet is locked.",
-		"Added options to open the extension version of this service in a tab or window.",
-		"Changed the standalone version of this service to use WASM instead of asm.js for some libraries.",
-		"Added Chinese translation by grincalf.",
-		"Added Greek translation by NickTheG.",
-		"Added German translation by High ko XMR.",
-		"Added Dutch translation by Ollebollegijs.",
-		"Added Czech translation by blumchen."
+		"Added support for Epic Cash."
 	];
 	
 	// Maintenance start time

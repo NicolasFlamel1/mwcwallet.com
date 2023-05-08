@@ -1538,8 +1538,9 @@ class WalletSection extends Section {
 							// Check wallet's type
 							switch(wallet.getWalletType()) {
 							
-								// MWC wallet
+								// MWC or EPIC wallet
 								case Consensus.MWC_WALLET_TYPE:
+								case Consensus.EPIC_WALLET_TYPE:
 						
 									// Return getting the wallet's Tor proof address
 									return wallet.getTorProofAddress().then(function(proofAddress) {
@@ -1581,8 +1582,9 @@ class WalletSection extends Section {
 								// Check wallet's type
 								switch(wallet.getWalletType()) {
 								
-									// MWC wallet
+									// MWC or EPIC wallet
 									case Consensus.MWC_WALLET_TYPE:
+									case Consensus.EPIC_WALLET_TYPE:
 							
 										// Return getting the wallet's Tor proof address
 										return wallet.getTorProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue getting the payment proof address.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue getting the payment proof address.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true).then(function(proofAddress) {
@@ -1789,8 +1791,9 @@ class WalletSection extends Section {
 								// Check wallet's type
 								switch(wallet.getWalletType()) {
 								
-									// MWC wallet
+									// MWC or EPIC wallet
 									case Consensus.MWC_WALLET_TYPE:
+									case Consensus.EPIC_WALLET_TYPE:
 									
 										// Set text
 										var text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Verify the payment proof address on the hardware wallet for Wallet %1$s to continue getting the payment proof address.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Verify the payment proof address on the hardware wallet for %1$y to continue getting the payment proof address.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the Tor address displayed on the hardware wallet matches the following payment proof address.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(proofAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak();
@@ -1903,8 +1906,9 @@ class WalletSection extends Section {
 														// Check wallet's type
 														switch(wallet.getWalletType()) {
 														
-															// MWC wallet
+															// MWC or EPIC wallet
 															case Consensus.MWC_WALLET_TYPE:
+															case Consensus.EPIC_WALLET_TYPE:
 															
 																// Return verifying the wallet's Tor address with the wallet's hardware wallet
 																return wallet.getHardwareWallet().verifyTorAddress(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue getting the payment proof address.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue getting the payment proof address.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, function() {

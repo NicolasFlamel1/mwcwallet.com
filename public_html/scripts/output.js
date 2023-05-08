@@ -480,29 +480,6 @@ class Output {
 			// Return promise
 			return new Promise(function(resolve, reject) {
 			
-				// Check wallet type
-				switch(Consensus.getWalletType()) {
-				
-					// MWC wallet
-					case Consensus.MWC_WALLET_TYPE:
-					
-						// Check network type
-						switch(Consensus.getNetworkType()) {
-						
-							// Mainnet network type
-							case Consensus.MAINNET_NETWORK_TYPE:
-							
-								// Resolve no information
-								resolve(Output.NO_INFORMATION);
-								
-								// Return
-								return;
-						}
-					
-						// Break
-						break;
-				}
-		
 				// Check if output could be legacy
 				var legacyPreviousWeeksAgo = self.getHeight().minus(Output.LEGACY_PREVIOUS_BLOCKS_CHECK_DURATION);
 				

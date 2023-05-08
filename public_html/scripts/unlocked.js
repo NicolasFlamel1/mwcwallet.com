@@ -330,6 +330,24 @@ class Unlocked {
 				
 				// Restore wallets scroll position
 				self.walletsDisplay.find("div.list").scrollTop(self.walletsScrollPosition);
+				
+				// Update menu display
+				self.updateMenuDisplay();
+				
+				// Unlocked display children transition start event
+				self.unlockedDisplay.children("div").one("transitionstart", function() {
+				
+					// Request animation frame
+					requestAnimationFrame(function() {
+					
+						// Request animation frame
+						requestAnimationFrame(function() {
+				
+							// Update menu display
+							self.updateMenuDisplay();
+						});
+					});
+				});
 			});
 			
 			// Prices change event

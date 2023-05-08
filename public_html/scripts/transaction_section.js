@@ -1359,8 +1359,9 @@ class TransactionSection extends Section {
 			// Check wallet type
 			switch(Consensus.getWalletType()) {
 			
-				// MWC wallet
+				// MWC or EPIC wallet
 				case Consensus.MWC_WALLET_TYPE:
+				case Consensus.EPIC_WALLET_TYPE:
 			
 					// Check if transaction's message is unknown and transaction isn't a coinbase transaction
 					if(this.transaction.getMessage() === Transaction.UNKNOWN_MESSAGE && this.transaction.getIsCoinbase() === false) {

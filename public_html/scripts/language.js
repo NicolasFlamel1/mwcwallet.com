@@ -736,7 +736,16 @@ class Language {
 												
 																// Return currency symbol and encode it if specified
 																return (encodeHtml === false) ? Consensus.CURRENCY_NAME : ("<span class=\"grin\">" + Common.htmlEncode(Consensus.CURRENCY_NAME) + "</span>");
+															
+															// EPIC wallet
+															case Consensus.EPIC_WALLET_TYPE:
+												
+																// Return currency symbol and encode it if specified
+																return (encodeHtml === false) ? Consensus.CURRENCY_NAME : ("<span class=\"epic\">" + Common.htmlEncode(Consensus.CURRENCY_NAME) + "</span>");
 														}
+														
+														// Break
+														break;
 													
 													// Bitcoin currency name
 													case Prices.BITCOIN_CURRENCY_NAME:
@@ -756,6 +765,9 @@ class Language {
 														// Return part's value and encode it if specified
 														return (encodeHtml === false) ? part["value"] : Common.htmlEncode(part["value"]);
 												}
+												
+												// Break
+												break;
 												
 											// Default
 											default:
@@ -1609,11 +1621,18 @@ class Language {
 				"minimumFractionDigits": 0,
 				
 				// Maximum fraction digits
-				"maximumFractionDigits": Consensus.VALUE_NUMBER_BASE.toFixed()["length"] - 1,
+				"maximumFractionDigits": Language.NUMBER_MAX_FRACTIONAL_DIGITS,
 				
 				// Use grouping
 				"useGrouping": false
 			};
+		}
+		
+		// Number max fractional digits
+		static get NUMBER_MAX_FRACTIONAL_DIGITS() {
+		
+			// Return number max fractional digits
+			return 9;
 		}
 		
 		// Time format

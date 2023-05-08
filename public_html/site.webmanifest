@@ -90,6 +90,22 @@
 		{
 			"protocol": "web+grintestnethttps",
 			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("Grin"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Testnet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
+		},
+		{
+			"protocol": "web+epichttp",
+			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("Epic Cash"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Mainnet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
+		},
+		{
+			"protocol": "web+epichttps",
+			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("Epic Cash"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Mainnet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
+		},
+		{
+			"protocol": "web+epicfloonethttp",
+			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("Epic Cash"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Floonet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
+		},
+		{
+			"protocol": "web+epicfloonethttps",
+			"url": "/index.html?<?= urlencode("Override Wallet Type"); ?>=<?= urlencode("Epic Cash"); ?>&<?= urlencode("Override Network Type"); ?>=<?= urlencode("Floonet"); ?>&<?= urlencode("Request"); ?>=<?= urlencode("Start Transaction"); ?>&<?= urlencode("Recipient Address"); ?>=%s"
 		}
 	]
 }

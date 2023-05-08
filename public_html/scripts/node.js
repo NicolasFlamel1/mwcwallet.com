@@ -498,6 +498,9 @@ class Node {
 								"https://mwc7134.floonet.mwc.mw"
 							];
 						}
+						
+						// Break
+						break;
 					
 					// GRIN wallet
 					case Consensus.GRIN_WALLET_TYPE:
@@ -523,6 +526,37 @@ class Node {
 								"http://localhost:13413"
 							];
 						}
+						
+						// Break
+						break;
+					
+					// EPIC wallet
+					case Consensus.EPIC_WALLET_TYPE:
+					
+						// Check if mainnet
+						if(isMainnet === true) {
+				
+							// Return addresses
+							return [
+							
+								// Addresses
+								"https://fastepic.eu:3413"
+							];
+						}
+						
+						// Otherwise
+						else {
+						
+							// Return addresses
+							return [
+							
+								// Addresses
+								"http://localhost:13413"
+							];
+						}
+						
+						// Break
+						break;
 				}
 			}
 			
@@ -1648,6 +1682,12 @@ class Node {
 			
 					// Return minimum compatible node version
 					return "5.0.1";
+				
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
+			
+					// Return minimum compatible node version
+					return "3.3.2";
 			}
 		}
 		
@@ -2706,12 +2746,21 @@ class Node {
 					
 						// Return address
 						return "mwcfloo";
+					
+					// Break
+					break;
 				
 				// GRIN wallet
 				case Consensus.GRIN_WALLET_TYPE:
 			
 					// Return username
 					return "grin";
+				
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
+			
+					// Return username
+					return "epic";
 			}
 		}
 		
@@ -2730,8 +2779,9 @@ class Node {
 						// Return secret
 						return "11ne3EAUtOXVKwhxm84U";
 					
-					// GRIN wallet
+					// GRIN or EPIC wallet
 					case Consensus.GRIN_WALLET_TYPE:
+					case Consensus.EPIC_WALLET_TYPE:
 				
 						// Return secret
 						return Node.NO_SECRET;

@@ -2757,6 +2757,15 @@ class HardwareWallet {
 								
 								// Break
 								break;
+							
+							// EPIC wallet
+							case Consensus.EPIC_WALLET_TYPE:
+							
+								// Set address type
+								var addressType = HardwareWallet.TOR_ADDRESS_TYPE;
+								
+								// Break
+								break;
 						}
 						
 						// Return requesting finishing the transaction on the hardware wallet
@@ -3480,8 +3489,11 @@ class HardwareWallet {
 							// Return application name
 							return "MimbleWimble Coin Floonet";
 					}
+					
+					// Break
+					break;
 				
-				// Grin wallet
+				// GRIN wallet
 				case Consensus.GRIN_WALLET_TYPE:
 				
 					// Check network type
@@ -3499,6 +3511,31 @@ class HardwareWallet {
 							// Return application name
 							return "Grin Testnet";
 					}
+					
+					// Break
+					break;
+				
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
+				
+					// Check network type
+					switch(Consensus.getNetworkType()) {
+					
+						// Mainnet network type
+						case Consensus.MAINNET_NETWORK_TYPE:
+						
+							// Return application name
+							return "Epic Cash";
+						
+						// Testnet network type
+						case Consensus.TESTNET_NETWORK_TYPE:
+						
+							// Return application name
+							return "Epic Cash Floonet";
+					}
+					
+					// Break
+					break;
 			}
 		}
 		
@@ -3684,10 +3721,10 @@ class HardwareWallet {
 			return HardwareWallet.REQUEST_CONTINUE_TRANSACTION_GET_MESSAGE_SIGNATURE_INSTRUCTION + 1;
 		}
 
-		// Request get MQS timestamp signature instruction
-		static get REQUEST_GET_MQS_TIMESTAMP_SIGNATURE_INSTRUCTION() {
+		// Request get MQS challenge signature instruction
+		static get REQUEST_GET_MQS_CHALLENGE_SIGNATURE_INSTRUCTION() {
 
-			// Return request get MQS timestamp signature instruction
+			// Return request get MQS challenge signature instruction
 			return HardwareWallet.REQUEST_FINISH_TRANSACTION_INSTRUCTION + 1;
 		}
 		

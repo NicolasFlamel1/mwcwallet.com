@@ -103,6 +103,9 @@ class ProtocolHandler {
 							// Return protocols prefix
 							return "web+mwcfloonet";
 					}
+					
+					// Break
+					break;
 				
 				// GRIN wallet
 				case Consensus.GRIN_WALLET_TYPE:
@@ -122,6 +125,31 @@ class ProtocolHandler {
 							// Return protocols prefix
 							return "web+grintestnet";
 					}
+					
+					// Break
+					break;
+				
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
+				
+					// Check network type
+					switch(Consensus.getNetworkType()) {
+					
+						// Mainnet network
+						case Consensus.MAINNET_NETWORK_TYPE:
+		
+							// Return protocols prefix
+							return "web+epic";
+						
+						// Testnet network
+						case Consensus.TESTNET_NETWORK_TYPE:
+						
+							// Return protocols prefix
+							return "web+epicfloonet";
+					}
+					
+					// Break
+					break;
 			}
 		}
 		

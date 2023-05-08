@@ -657,6 +657,12 @@ class Prices {
 			
 					// Return API currency ID
 					return "grin";
+				
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
+			
+					// Return API currency ID
+					return "epic-cash";
 			}
 		}
 		

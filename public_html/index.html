@@ -612,6 +612,7 @@
 	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/open_sans/open_sans_semibold-1.10.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
 	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/mwc/mwc.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
 	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/grin/grin.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
+	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/epic/epic.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
 	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/btc/btc.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
 	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/eth/eth.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
 	<link rel="preload" as="image" href="<?= encodeString(getResource("./images/circle.svg")); ?>" onerror="processLoadingError(this, true);" type="image/svg+xml">
@@ -1736,7 +1737,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="number"><!--
-													--><input class="amount" type="number" min="0.000000001" step="0.000000001" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal"><!--
+													--><input class="amount" type="number" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal"><!--
 													--><span></span><!--
 												--></div><!--
 											--></div><!--
@@ -1766,7 +1767,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="number"><!--
-													--><input class="baseFee" type="number" min="0.000000001" step="0.000000001" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal"><!--
+													--><input class="baseFee" type="number" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal"><!--
 													--><span></span><!--
 												--></div><!--
 											--></div><!--
@@ -2386,6 +2387,7 @@
 	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/common.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/common.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
 	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/mwc/mwc.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/mwc/mwc.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
 	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/grin/grin.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/grin/grin.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/epic/epic.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/epic/epic.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
 	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/btc/btc.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/btc/btc.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
 	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/eth/eth.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/eth/eth.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
 	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/tetris.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/tetris.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
@@ -2469,14 +2471,56 @@
 		// Language change event
 		var LANGUAGE_CHANGE_EVENT = "LanguageChangeEvent";
 		
+		// Preserved URL parameters
+		var PRESERVED_URL_PARAMETERS = [
+			"Override Wallet Type",
+			"Override Network Type"
+		];
+		
 		
 		// Main function
 		
 		// Check if history is supported
 		if(typeof history === "object" && history !== null) {
 		
-			// Change displayed URL to remove query string
-			history.replaceState(NO_STATE, document["title"], (location["protocol"] === "file:") ? location["protocol"] + "//" + location["pathname"] : "/");
+			// Initialize new URL parameters
+			var newUrlParameters = [];
+			
+			// Try
+			try {
+			
+				// Get URL parameters
+				var urlParameters = URL_QUERY_STRING.substring("?"["length"]).split("&");
+				
+				// Go through all URL parameters
+				for(var i = 0; i < urlParameters["length"]; ++i) {
+				
+					// Get URL parameter
+					var urlParameter = urlParameters[i].split("=");
+					
+					// Check if URL parameter is valid
+					if(urlParameter["length"] === 2) {
+					
+						// Get URL parameter's key
+						var key = decodeURIComponent(urlParameter[0].replace(/\+/ug, "%20"));
+						
+						// Check if URL parameter should be preserved
+						if(PRESERVED_URL_PARAMETERS.indexOf(key) !== INDEX_NOT_FOUND) {
+						
+							// Add URL parameter to list
+							newUrlParameters.push(urlParameters[i]);
+						}
+					}
+				}
+			}
+			
+			// Catch errors
+			catch(error) {
+			
+			}
+		
+			// Change displayed URL to remove non-preserved URL parameters
+			history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"] + ((newUrlParameters["length"] !== 0) ? "?" : "") + newUrlParameters.join("&"));
 			
 			// Title language change event
 			addEvent(getElement(document, "title", "translatable"), LANGUAGE_CHANGE_EVENT, function() {
@@ -2485,7 +2529,7 @@
 				setTimeout(function() {
 				
 					// Change displayed URL to remove query string
-					history.replaceState(NO_STATE, document["title"], (location["protocol"] === "file:") ? location["protocol"] + "//" + location["pathname"] : "/");
+					history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"] + ((newUrlParameters["length"] !== 0) ? "?" : "") + newUrlParameters.join("&"));
 				}, 0);
 			});
 		}

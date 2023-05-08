@@ -1644,8 +1644,9 @@ class Api {
 																			// Break
 																			break;
 																			
-																		// GRIN wallet
+																		// GRIN or EPIC wallet
 																		case Consensus.GRIN_WALLET_TYPE:
+																		case Consensus.EPIC_WALLET_TYPE:
 																		
 																			// Reject JSON-RPC internal error error response
 																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
@@ -4785,8 +4786,9 @@ class Api {
 																																					// Check wallet type
 																																					switch(Consensus.getWalletType()) {
 																																					
-																																						// MWC wallet
+																																						// MWC or EPIC wallet
 																																						case Consensus.MWC_WALLET_TYPE:
+																																						case Consensus.EPIC_WALLET_TYPE:
 																																				
 																																							// Return getting Tor proof address
 																																							return wallet.getTorProofAddress().then(function(proofAddress) {
@@ -4971,6 +4973,52 @@ class Api {
 																																							
 																																							// Break
 																																							break;
+																																						
+																																						// EPIC wallet
+																																						case Consensus.EPIC_WALLET_TYPE:
+																																		
+																																							// Check receiver address length
+																																							switch(slate.getReceiverAddress()["length"]) {
+																																							
+																																								// Tor address length
+																																								case Tor.ADDRESS_LENGTH:
+																																								
+																																									// Return getting Tor proof address
+																																									return wallet.getTorProofAddress().then(function(proofAddress) {
+																																									
+																																										// Check if cancel didn't occur
+																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																									
+																																											// Resolve proof address
+																																											resolve(proofAddress);
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Reject JSON-RPC internal error error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																										}
+																																									
+																																									// Catch errors
+																																									}).catch(function(error) {
+																																									
+																																										// Reject JSON-RPC internal error error response
+																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																									});
+																																								
+																																								// Default
+																																								default:
+																																								
+																																									// Reject JSON-RPC invalid parameters error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																									
+																																									// Break
+																																									break;
+																																							}
+																																							
+																																							// Break
+																																							break;
 																																					}
 																																				}
 																																			}
@@ -4990,8 +5038,9 @@ class Api {
 																																							// Check wallet type
 																																							switch(Consensus.getWalletType()) {
 																																							
-																																								// MWC wallet
+																																								// MWC or EPIC wallet
 																																								case Consensus.MWC_WALLET_TYPE:
+																																								case Consensus.EPIC_WALLET_TYPE:
 																																						
 																																									// Return getting Tor proof address
 																																									return wallet.getTorProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, false, cancelOccurred).then(function(proofAddress) {
@@ -5681,6 +5730,153 @@ class Api {
 																																								
 																																									// Break
 																																									break;
+																																								
+																																								// EPIC wallet
+																																								case Consensus.EPIC_WALLET_TYPE:
+																																				
+																																									// Check receiver address length
+																																									switch(slate.getReceiverAddress()["length"]) {
+																																									
+																																										// Tor address length
+																																										case Tor.ADDRESS_LENGTH:
+																																										
+																																											// Return getting Tor proof address
+																																											return wallet.getTorProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, false, cancelOccurred).then(function(proofAddress) {
+																																											
+																																												// Check if cancel didn't occur
+																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																											
+																																													// Resolve proof address
+																																													resolve(proofAddress);
+																																												}
+																																												
+																																												// Otherwise
+																																												else {
+																																												
+																																													// Reject JSON-RPC internal error error response
+																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																												}
+																																											
+																																											// Catch errors
+																																											}).catch(function(error) {
+																																											
+																																												// Check if cancel didn't occur
+																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																											
+																																													// Check if hardware wallet was disconnected
+																																													if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																													
+																																														// Check if wallet's hardware wallet is connected
+																																														if(wallet.isHardwareConnected() === true) {
+																																													
+																																															// Wallet's hardware wallet disconnect event
+																																															$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																														
+																																																// Return getting proof address
+																																																return getProofAddress().then(function(proofAddress) {
+																																																
+																																																	// Check if cancel didn't occur
+																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																
+																																																		// Resolve proof address
+																																																		resolve(proofAddress);
+																																																	}
+																																																	
+																																																	// Otherwise
+																																																	else {
+																																																	
+																																																		// Reject JSON-RPC internal error error response
+																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																	}
+																																																
+																																																// Catch errors
+																																																}).catch(function(error) {
+																																																
+																																																	// Check if cancel didn't occur
+																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																
+																																																		// Reject error
+																																																		reject(error);
+																																																	}
+																																																	
+																																																	// Otherwise
+																																																	else {
+																																																	
+																																																		// Reject JSON-RPC internal error error response
+																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																	}
+																																																});
+																																															});
+																																														}
+																																														
+																																														// Otherwise
+																																														else {
+																																														
+																																															// Return getting proof address
+																																															return getProofAddress().then(function(proofAddress) {
+																																															
+																																																// Check if cancel didn't occur
+																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																															
+																																																	// Resolve proof address
+																																																	resolve(proofAddress);
+																																																}
+																																																
+																																																// Otherwise
+																																																else {
+																																																
+																																																	// Reject JSON-RPC internal error error response
+																																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																}
+																																															
+																																															// Catch errors
+																																															}).catch(function(error) {
+																																															
+																																																// Check if cancel didn't occur
+																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																															
+																																																	// Reject error
+																																																	reject(error);
+																																																}
+																																																
+																																																// Otherwise
+																																																else {
+																																																
+																																																	// Reject JSON-RPC internal error error response
+																																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																}
+																																															});
+																																														}
+																																													}
+																																													
+																																													// Otherwise
+																																													else {
+																																												
+																																														// Reject JSON-RPC internal error error response
+																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																													}
+																																												}
+																																												
+																																												// Otherwise
+																																												else {
+																																												
+																																													// Reject JSON-RPC internal error error response
+																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																												}
+																																											});
+																																										
+																																										// Default
+																																										default:
+																																										
+																																											// Reject JSON-RPC invalid parameters error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																											
+																																											// Break
+																																											break;
+																																									}
+																																									
+																																									// Break
+																																									break;
 																																							}
 																																						}
 																																					}
@@ -5867,6 +6063,52 @@ class Api {
 																																											break;
 																																									}
 																																								
+																																									// Break
+																																									break;
+																																								
+																																								// EPIC wallet
+																																								case Consensus.EPIC_WALLET_TYPE:
+																																				
+																																									// Check receiver address length
+																																									switch(slate.getReceiverAddress()["length"]) {
+																																									
+																																										// Tor address length
+																																										case Tor.ADDRESS_LENGTH:
+																																										
+																																											// Return wallet building Tor payment proof
+																																											return wallet.buildTorPaymentProof(slate.getAmount(), excess, slate.getSenderAddress()).then(function(paymentProof) {
+																																											
+																																												// Check if cancel didn't occur
+																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																											
+																																													// Resolve payment proof
+																																													resolve(paymentProof);
+																																												}
+																																												
+																																												// Otherwise
+																																												else {
+																																												
+																																													// Reject JSON-RPC internal error error response
+																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																												}
+																																											
+																																											// Catch errors
+																																											}).catch(function(error) {
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											});
+																																										
+																																										// Default
+																																										default:
+																																										
+																																											// Reject JSON-RPC invalid parameters error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																											
+																																											// Break
+																																											break;
+																																									}
+																																									
 																																									// Break
 																																									break;
 																																							}
@@ -6287,8 +6529,9 @@ class Api {
 																	// Check wallet type
 																	switch(Consensus.getWalletType()) {
 																	
-																		// MWC wallet
+																		// MWC or EPIC wallet
 																		case Consensus.MWC_WALLET_TYPE:
+																		case Consensus.EPIC_WALLET_TYPE:
 																
 																			// Return wallet getting Tor proof address
 																			return wallet.getTorProofAddress().then(function(proofAddress) {
@@ -6355,8 +6598,9 @@ class Api {
 																			// Check wallet type
 																			switch(Consensus.getWalletType()) {
 																			
-																				// MWC wallet
+																				// MWC or EPIC wallet
 																				case Consensus.MWC_WALLET_TYPE:
+																				case Consensus.EPIC_WALLET_TYPE:
 																	
 																					// Return wallet getting Tor proof address
 																					return wallet.getTorProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, false, cancelOccurred).then(function(proofAddress) {
@@ -7356,8 +7600,9 @@ class Api {
 								// Check wallet type
 								switch(Consensus.getWalletType()) {
 								
-									// MWC wallet
+									// MWC or EPIC wallet
 									case Consensus.MWC_WALLET_TYPE:
+									case Consensus.EPIC_WALLET_TYPE:
 							
 										// Initialize error occurred
 										var errorOccurred = false;
@@ -7624,6 +7869,89 @@ class Api {
 															
 															// Break
 															break;
+														
+														// EPIC wallet
+														case Consensus.EPIC_WALLET_TYPE:
+														
+															// Initialize error occurred
+															var errorOccurred = false;
+														
+															// Try
+															try {
+															
+																// Get receiver's public key from URL
+																var receiverPublicKey = Tor.torAddressToPublicKey(url);
+															}
+															
+															// Catch errors
+															catch(error) {
+															
+																// Set error occurred
+																errorOccurred = true;
+															}
+															
+															// Check if an error didn't occur
+															if(errorOccurred === false) {
+														
+																// Resolve the receiver's public key as a Tor address
+																resolve(Tor.publicKeyToTorAddress(receiverPublicKey));
+															}
+															
+															// Otherwise
+															else {
+															
+																// Set use proof address to if version three slates are supported
+																var useProofAddress = compatibleSlateVersions.indexOf("V" + Slate.VERSION_THREE.toFixed()) !== Common.INDEX_NOT_FOUND;
+																
+																// Check if using proof address
+																if(useProofAddress === true) {
+											
+																	// Return getting proof address
+																	return self.getProofAddress(receiverUrl, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, cancelOccurred).then(function(receiverAddress) {
+																	
+																		// Check if cancel didn't occur
+																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																		
+																			// Resolve receiver address
+																			resolve(receiverAddress);
+																		}
+																		
+																		// Otherwise
+																		else {
+																		
+																			// Reject canceled error
+																			reject(Common.CANCELED_ERROR);
+																		}
+																		
+																	// Catch errors
+																	}).catch(function(error) {
+																	
+																		// Check if cancel didn't occur
+																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																		
+																			// Reject error
+																			reject(error);
+																		}
+																		
+																		// Otherwise
+																		else {
+																		
+																			// Reject canceled error
+																			reject(Common.CANCELED_ERROR);
+																		}
+																	});
+																}
+																
+																// Otherwise
+																else {
+																
+																	// Resolve no proof address
+																	resolve(Api.NO_PROOF_ADDRESS);
+																}
+															}
+															
+															// Break
+															break;
 													}
 												}
 												
@@ -7753,12 +8081,53 @@ class Api {
 																						}
 																					});
 																				}
+																				
+																				// Break
+																				break;
 																			
 																			// GRIN wallet
 																			case Consensus.GRIN_WALLET_TYPE:
 																			
 																				// Return wallet getting Slatepack proof address
 																				return wallet.getSlatepackProofAddress().then(function(senderAddress) {
+																				
+																					// Check if cancel didn't occur
+																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																				
+																						// resolve sender address
+																						resolve(senderAddress);
+																					}
+																					
+																					// Otherwise
+																					else {
+																					
+																						// Reject canceled error
+																						reject(Common.CANCELED_ERROR);
+																					}
+																				
+																				// Catch errors
+																				}).catch(function(error) {
+																				
+																					// Check if cancel didn't occur
+																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																					
+																						// Reject error
+																						reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																					}
+																					
+																					// Otherwise
+																					else {
+																					
+																						// Reject canceled error
+																						reject(Common.CANCELED_ERROR);
+																					}
+																				});
+																			
+																			// EPIC wallet
+																			case Consensus.EPIC_WALLET_TYPE:
+																	
+																				// Return wallet getting Tor proof address
+																				return wallet.getTorProofAddress().then(function(senderAddress) {
 																				
 																					// Check if cancel didn't occur
 																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -8080,12 +8449,150 @@ class Api {
 																								}
 																							});
 																						}
+																						
+																						// Break
+																						break;
 																					
 																					// GRIN wallet
 																					case Consensus.GRIN_WALLET_TYPE:
 																					
 																						// Return wallet getting Slatepack proof address
 																						return wallet.getSlatepackProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function(senderAddress) {
+																						
+																							// Check if cancel didn't occur
+																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																						
+																								// resolve sender address
+																								resolve(senderAddress);
+																							}
+																							
+																							// Otherwise
+																							else {
+																							
+																								// Reject canceled error
+																								reject(Common.CANCELED_ERROR);
+																							}
+																						
+																						// Catch errors
+																						}).catch(function(error) {
+																						
+																							// Check if cancel didn't occur
+																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																						
+																								// Check if hardware wallet was disconnected
+																								if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																								
+																									// Check if wallet's hardware wallet is connected
+																									if(wallet.isHardwareConnected() === true) {
+																								
+																										// Wallet's hardware wallet disconnect event
+																										$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																									
+																											// Return getting sender address
+																											return getSenderAddress().then(function(senderAddress) {
+																											
+																												// Check if cancel didn't occur
+																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																											
+																													// Resolve sender address
+																													resolve(senderAddress);
+																												}
+																												
+																												// Otherwise
+																												else {
+																												
+																													// Reject canceled error
+																													reject(Common.CANCELED_ERROR);
+																												}
+																											
+																											// Catch errors
+																											}).catch(function(error) {
+																											
+																												// Check if cancel didn't occur
+																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																											
+																													// Reject error
+																													reject(error);
+																												}
+																												
+																												// Otherwise
+																												else {
+																												
+																													// Reject canceled error
+																													reject(Common.CANCELED_ERROR);
+																												}
+																											});
+																										});
+																									}
+																									
+																									// Otherwise
+																									else {
+																									
+																										// Return getting sender address
+																										return getSenderAddress().then(function(senderAddress) {
+																										
+																											// Check if cancel didn't occur
+																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																										
+																												// Resolve sender address
+																												resolve(senderAddress);
+																											}
+																											
+																											// Otherwise
+																											else {
+																											
+																												// Reject canceled error
+																												reject(Common.CANCELED_ERROR);
+																											}
+																										
+																										// Catch errors
+																										}).catch(function(error) {
+																										
+																											// Check if cancel didn't occur
+																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																										
+																												// Reject error
+																												reject(error);
+																											}
+																											
+																											// Otherwise
+																											else {
+																											
+																												// Reject canceled error
+																												reject(Common.CANCELED_ERROR);
+																											}
+																										});
+																									}
+																								}
+																								
+																								// Otherwise check if canceled
+																								else if(error === Common.CANCELED_ERROR) {
+																								
+																									// Reject error
+																									reject(error);
+																								}
+																								
+																								// Otherwise
+																								else {
+																								
+																									// Reject error
+																									reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																								}
+																							}
+																							
+																							// Otherwise
+																							else {
+																							
+																								// Reject canceled error
+																								reject(Common.CANCELED_ERROR);
+																							}
+																						});
+																					
+																					// EPIC wallet
+																					case Consensus.EPIC_WALLET_TYPE:
+																			
+																						// Return wallet getting Tor proof address
+																						return wallet.getTorProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function(senderAddress) {
 																						
 																							// Check if cancel didn't occur
 																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -12922,6 +13429,12 @@ class Api {
 				
 					// Return default base fee
 					return new BigNumber(Consensus.VALUE_NUMBER_BASE).dividedToIntegerBy(100).dividedToIntegerBy(20);
+				
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
+		
+					// Return default base fee
+					return new BigNumber(Consensus.VALUE_NUMBER_BASE).dividedToIntegerBy(1000);
 			}
 		}
 		
@@ -13277,6 +13790,48 @@ class Api {
 										
 										// Break
 										break;
+									
+									// EPIC wallet
+									case Consensus.EPIC_WALLET_TYPE:
+								
+										// Check proof address's length
+										switch(proofAddress["length"]) {
+										
+											// Tor address length
+											case Tor.ADDRESS_LENGTH:
+											
+												// Try
+												try {
+												
+													// Get public key from proof address
+													Tor.torAddressToPublicKey(proofAddress);
+												}
+												
+												// Catch errors
+												catch(error) {
+												
+													// Reject unsupported response
+													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+													
+													// Return
+													return;
+												}
+											
+												// Break
+												break;
+											
+											// Default
+											default:
+											
+												// Reject unsupported response
+												reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+												
+												// Return
+												return;
+										}
+									
+										// Break
+										break;
 								}
 							
 								// Resolve proof address
@@ -13307,8 +13862,8 @@ class Api {
 							// Check if response status is provided
 							if(typeof responseStatusOrResponse === "number") {
 							
-								// Check if the status is bad request
-								if(responseStatusOrResponse === Common.HTTP_BAD_REQUEST_STATUS) {
+								// Check if the status is ok or bad request
+								if(responseStatusOrResponse === Common.HTTP_OK_STATUS || responseStatusOrResponse === Common.HTTP_BAD_REQUEST_STATUS) {
 								
 									// Resolve no proof address
 									resolve(Api.NO_PROOF_ADDRESS);
@@ -13810,8 +14365,9 @@ class Api {
 															// break
 															break;
 														
-														// GRIN wallet
+														// GRIN or EPIC wallet
 														case Consensus.GRIN_WALLET_TYPE:
+														case Consensus.EPIC_WALLET_TYPE:
 														
 															// Set expecting Slatepack
 															var expectingSlatepack = false;
@@ -14475,6 +15031,9 @@ class Api {
 						// Return error response
 						return Message.createText(Language.getDefaultTranslation('Error response from the recipient.'));
 					}
+					
+					// Break
+					break;
 				
 				// HTTP no response status
 				case Common.HTTP_NO_RESPONSE_STATUS:
@@ -14546,6 +15105,9 @@ class Api {
 						// Return no response
 						return Message.createText(Language.getDefaultTranslation('Connecting to the recipient failed.'));
 					}
+					
+					// Break
+					break;
 				
 				// Default
 				default:
@@ -14593,7 +15155,7 @@ class Api {
 		// Receive transaction slate parameter
 		static get RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX() {
 		
-			// Return receive transaction slate paramater index
+			// Return receive transaction slate parameter index
 			return 0;
 		}
 		

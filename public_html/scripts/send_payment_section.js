@@ -24,6 +24,13 @@ class SendPaymentSection extends Section {
 			// Set allow changing base fee to setting's default value
 			this.allowChangingBaseFee = SendPaymentSection.SETTINGS_ALLOW_CHANGING_BASE_FEE_DEFAULT_VALUE;
 			
+			// Set step
+			var step = Consensus.VALUE_NUMBER_BASE.toFixed()["length"] - 1;
+			
+			// Set amount input's and base fee's step and min to the step
+			this.getDisplay().find("input.amount").attr("step", (new BigNumber(10)).exponentiatedBy(-step).toFixed()).attr("min", (new BigNumber(10)).exponentiatedBy(-step).toFixed());
+			this.getDisplay().find("input.baseFee").attr("step", (new BigNumber(10)).exponentiatedBy(-step).toFixed()).attr("min", (new BigNumber(10)).exponentiatedBy(-step).toFixed());
+			
 			// Set self
 			var self = this;
 			
@@ -1199,8 +1206,9 @@ class SendPaymentSection extends Section {
 					// Check wallet type
 					switch(Consensus.getWalletType()) {
 					
-						// MWC wallet
+						// MWC or EPIC wallet
 						case Consensus.MWC_WALLET_TYPE:
+						case Consensus.EPIC_WALLET_TYPE:
 				
 							// Initialize error occurred
 							var errorOccurred = false;
