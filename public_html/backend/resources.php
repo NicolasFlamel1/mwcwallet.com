@@ -459,10 +459,10 @@
 			"Checksum" => "uf1yQ1igJdTTd3ofOTVelJpqYWF/fuczoZ4/jkp46gyesaEpYag0+eJmgLw5Qe6lu6lM1IpPtTVgMVwA9HkZ0g=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 68,
+			"Version" => 70,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "ReScfJFi9U8vX+jon8FIFUEfc1zBAQIEZO0sv1K9IczUMZILr9MYOBWxI9kOqCa2gRjOwPAsnUwcRkAn7Gtc5g=="
+			"Checksum" => "ohhW07MKxaE1NRSrMsvAjtrDeWTmeXk3022RSLV0R5uBTJdPNLfLWrc2sN7sPs0K/7z5iYsHFDfg/TIwT+jFgg=="
 		],
 		"./scripts/LedgerJS_Browser-0.0.2.js" => [
 			"Version" => 1,

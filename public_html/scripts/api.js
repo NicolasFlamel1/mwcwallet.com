@@ -177,10 +177,10 @@ class Api {
 										case Api.CHECK_VERSION_METHOD:
 										
 											// Check if parameters are provided
-											if(Array.isArray(data["params"]) === true) {
+											if(data["params"] === null || Array.isArray(data["params"]) === true) {
 											
 												// Check if the correct number of parameters are provided
-												if(data["params"]["length"] === Api.CHECK_VERSION_PARAMETERS_LENGTH) {
+												if(data["params"] === null || data["params"]["length"] === Api.CHECK_VERSION_PARAMETERS_LENGTH) {
 										
 													// Resolve
 													resolve([
