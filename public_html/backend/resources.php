@@ -369,10 +369,10 @@
 			"Checksum" => "tAh5Cpvn/PbX46GORiGNt40q0QH5AP6l0sk+XQpuu1oRM3gtdS5nO89ug9+CC882s7Rc93gy0DiHWF7SQGunXQ=="
 		],
 		"./scripts/protocol_handler.js" => [
-			"Version" => 7,
+			"Version" => 8,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "WihNyFlcFbTmqqjdQ/QHElKi+vBti0BFx+7fc70ct9zIVgvNVAkV2hJYjnx0iUs36WYWvvwY+7DCyOZ2SxsKsg=="
+			"Checksum" => "K87ooywiCyohMmt3YZeqByof/3bWyRpbYQJh+3ma78nHgRgGsdiaRI3qgnLS/M72Gq8jQKagdM1h7DrYqYv6sA=="
 		],
 		"./scripts/copyright.js" => [
 			"Version" => 5,

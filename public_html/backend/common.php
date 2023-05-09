@@ -3,14 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.1.0";
+	const VERSION_NUMBER = "2.1.1";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "08 May 2023 17:20:00 UTC";
+	const VERSION_RELEASE_DATE = "09 May 2023 10:13:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Added support for Epic Cash."
+		"Fixed the protocol handler not removing the unused prefix from HTTPS URLs."
 	];
 	
 	// Maintenance start time
