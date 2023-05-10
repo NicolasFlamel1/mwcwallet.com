@@ -1149,7 +1149,7 @@ class SettingsSection extends Section {
 								Extension.preventInterruptOnClose();
 							
 								// Refresh page to have new wallet type
-								location.replace(location.toString() + Common.URL_QUERY_STRING_SEPARATOR + encodeURIComponent(Consensus.OVERRIDE_WALLET_TYPE_URL_PARAMETER_NAME).replace(/%20/ug, "+") + Common.URL_QUERY_STRING_PARAMETER_VALUE_SEPARATOR + encodeURIComponent(Consensus.walletTypeToText(walletType)).replace(/%20/ug, "+"));
+								location.replace(location.toString() + Common.URL_QUERY_STRING_SEPARATOR + encodeURIComponent(Consensus.OVERRIDE_WALLET_TYPE_URL_PARAMETER_NAME).replace(/%20/ug, "+") + Common.URL_QUERY_STRING_PARAMETER_VALUE_SEPARATOR + encodeURIComponent(Consensus.walletTypeToText(walletType)).replace(/%20/ug, "+") + Common.getPreservedUrlParameters());
 							}
 							
 							// Otherwise
@@ -1244,7 +1244,7 @@ class SettingsSection extends Section {
 								Extension.preventInterruptOnClose();
 							
 								// Refresh page to have new network type
-								location.replace(location.toString() + Common.URL_QUERY_STRING_SEPARATOR + encodeURIComponent(Consensus.OVERRIDE_NETWORK_TYPE_URL_PARAMETER_NAME).replace(/%20/ug, "+") + Common.URL_QUERY_STRING_PARAMETER_VALUE_SEPARATOR + encodeURIComponent(Consensus.networkTypeToText(networkType)).replace(/%20/ug, "+"));
+								location.replace(location.toString() + Common.URL_QUERY_STRING_SEPARATOR + encodeURIComponent(Consensus.OVERRIDE_NETWORK_TYPE_URL_PARAMETER_NAME).replace(/%20/ug, "+") + Common.URL_QUERY_STRING_PARAMETER_VALUE_SEPARATOR + encodeURIComponent(Consensus.networkTypeToText(networkType)).replace(/%20/ug, "+") + Common.getPreservedUrlParameters());
 							}
 							
 							// Otherwise

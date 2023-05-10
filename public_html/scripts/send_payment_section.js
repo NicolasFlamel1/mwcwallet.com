@@ -2455,8 +2455,8 @@ class SendPaymentSection extends Section {
 						// GRIN wallet
 						case Consensus.GRIN_WALLET_TYPE:
 						
-							// Hide message input
-							self.getDisplay().find("input.message").closest("div").parent().closest("div").addClass("hide");
+							// Clear and hide message input
+							self.getDisplay().find("input.message").val("").closest("div").parent().closest("div").addClass("hide");
 						
 							// Break
 							break;
