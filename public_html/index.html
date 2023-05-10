@@ -2071,6 +2071,33 @@
 													--><span></span><!--
 												--></div><!--
 											--></div><!--
+											--><div class="translatable" data-text="<?= encodeString(getDefaultTranslation('Sets the wallet type to use')); ?>" title="<?= encodeString(getTranslation('Sets the wallet type to use')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Wallet type')); ?>"><?= encodeString(getTranslation('Wallet type')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="select"><!--
+													--><select data-private class="walletType"><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('MimbleWimble Coin')); ?>" value="0"><?= encodeString(getTranslation('MimbleWimble Coin')); ?></option><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Grin')); ?>" value="1"><?= encodeString(getTranslation('Grin')); ?></option><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Epic Cash')); ?>" value="2"><?= encodeString(getTranslation('Epic Cash')); ?></option><!--
+													--></select><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="translatable" data-text="<?= encodeString(getDefaultTranslation('Sets the network type to use')); ?>" title="<?= encodeString(getTranslation('Sets the network type to use')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Network type')); ?>"><?= encodeString(getTranslation('Network type')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="select"><!--
+													--><select data-private class="networkType"><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Mainnet')); ?>" value="0"><?= encodeString(getTranslation('Mainnet')); ?></option><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Floonet/testnet')); ?>" value="1"><?= encodeString(getTranslation('Floonet/testnet')); ?></option><!--
+													--></select><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
 											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('API Settings')); ?>"><?= encodeString(getTranslation('API Settings')); ?></h3><!--
 											--><div class="setting translatable" data-setting="<?= encodeString("Enable Mining API"); ?>" data-text="<?= encodeString(getDefaultTranslation('Allows processing mining related API requests')); ?>" title="<?= encodeString(getTranslation('Allows processing mining related API requests')); ?>"><!--
 												--><p><!--
@@ -2471,56 +2498,14 @@
 		// Language change event
 		var LANGUAGE_CHANGE_EVENT = "LanguageChangeEvent";
 		
-		// Preserved URL parameters
-		var PRESERVED_URL_PARAMETERS = [
-			"Override Wallet Type",
-			"Override Network Type"
-		];
-		
 		
 		// Main function
 		
 		// Check if history is supported
 		if(typeof history === "object" && history !== null) {
 		
-			// Initialize new URL parameters
-			var newUrlParameters = [];
-			
-			// Try
-			try {
-			
-				// Get URL parameters
-				var urlParameters = URL_QUERY_STRING.substring("?"["length"]).split("&");
-				
-				// Go through all URL parameters
-				for(var i = 0; i < urlParameters["length"]; ++i) {
-				
-					// Get URL parameter
-					var urlParameter = urlParameters[i].split("=");
-					
-					// Check if URL parameter is valid
-					if(urlParameter["length"] === 2) {
-					
-						// Get URL parameter's key
-						var key = decodeURIComponent(urlParameter[0].replace(/\+/ug, "%20"));
-						
-						// Check if URL parameter should be preserved
-						if(PRESERVED_URL_PARAMETERS.indexOf(key) !== INDEX_NOT_FOUND) {
-						
-							// Add URL parameter to list
-							newUrlParameters.push(urlParameters[i]);
-						}
-					}
-				}
-			}
-			
-			// Catch errors
-			catch(error) {
-			
-			}
-		
-			// Change displayed URL to remove non-preserved URL parameters
-			history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"] + ((newUrlParameters["length"] !== 0) ? "?" : "") + newUrlParameters.join("&"));
+			// Change displayed URL to remove query string
+			history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"]);
 			
 			// Title language change event
 			addEvent(getElement(document, "title", "translatable"), LANGUAGE_CHANGE_EVENT, function() {
@@ -2529,7 +2514,7 @@
 				setTimeout(function() {
 				
 					// Change displayed URL to remove query string
-					history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"] + ((newUrlParameters["length"] !== 0) ? "?" : "") + newUrlParameters.join("&"));
+					history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"]);
 				}, 0);
 			});
 		}

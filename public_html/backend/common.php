@@ -3,14 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.1.1";
+	const VERSION_NUMBER = "2.1.2";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "09 May 2023 10:13:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed the protocol handler not removing the unused prefix from HTTPS URLs."
+		"Added settings to change the wallet type and network type."
 	];
 	
 	// Maintenance start time

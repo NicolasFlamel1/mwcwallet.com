@@ -1079,6 +1079,196 @@ class SettingsSection extends Section {
 					}
 				});
 			});
+			
+			// Wallet type select input event
+			this.getDisplay().find("select.walletType").on("input", function() {
+			
+				// Check if automatic lock isn't locking
+				if(self.getAutomaticLock().isLocking() === false) {
+				
+					// Get select
+					var select = $(this);
+					
+					// Set that select is clicked
+					select.addClass("clicked");
+				
+					// Get wallet type
+					var walletType = parseInt(select.children(":selected").val(), Common.DECIMAL_NUMBER_BASE);
+					
+					// Check if is an extension
+					if(Common.isExtension() === true) {
+					
+						// Set message
+						var message = Language.getDefaultTranslation('This extension must reload for the new wallet type to be applied. Would you like to reload now?');
+					}
+					
+					// Otherwise check if is an app
+					else if(Common.isApp() === true) {
+					
+						// Set message
+						var message = Language.getDefaultTranslation('This app must reload for the new wallet type to be applied. Would you like to reload now?');
+					}
+					
+					// Otherwise
+					else {
+					
+						// Set message
+						var message = Language.getDefaultTranslation('This site must reload for the new wallet type to be applied. Would you like to reload now?');
+					}
+					
+					// Show message
+					self.getMessage().show(Language.getDefaultTranslation('Reload Required'), Message.createText(message), false, function() {
+					
+						// Save focus and blur
+						self.getFocus().save(true);
+						
+						// Disable unlocked
+						self.getUnlocked().disable();
+					
+					}, Language.getDefaultTranslation('No'), Language.getDefaultTranslation('Yes'), false, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+					
+						// Check if message was displayed
+						if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
+					
+							// Check if resetting settingss
+							if(messageResult === Message.SECOND_BUTTON_CLICKED_RESULT) {
+							
+								// Prevent showing messages
+								self.getMessage().prevent();
+							
+								// Show loading
+								self.getApplication().showLoading();
+							
+								// Set that message second button is loading
+								self.getMessage().setButtonLoading(Message.SECOND_BUTTON);
+								
+								// Prevent automatic lock
+								self.getAutomaticLock().prevent();
+								
+								// Prevent extension from interrupting on close
+								Extension.preventInterruptOnClose();
+							
+								// Refresh page to have new wallet type
+								location.replace(location.toString() + Common.URL_QUERY_STRING_SEPARATOR + encodeURIComponent(Consensus.OVERRIDE_WALLET_TYPE_URL_PARAMETER_NAME).replace(/%20/ug, "+") + Common.URL_QUERY_STRING_PARAMETER_VALUE_SEPARATOR + encodeURIComponent(Consensus.walletTypeToText(walletType)).replace(/%20/ug, "+"));
+							}
+							
+							// Otherwise
+							else {
+							
+								// Enable unlocked
+								self.getUnlocked().enable();
+								
+								// Set that select isn't clicked
+								select.removeClass("clicked");
+								
+								// Set wallet type select value
+								select.val(Consensus.getWalletType()).children("option").enable().filter(":selected").disable();
+								
+								// Restore focus and don't blur
+								self.getFocus().restore(false);
+								
+								// Hide message
+								self.getMessage().hide();
+							}
+						}
+					});
+				}
+			});
+			
+			// Network type select input event
+			this.getDisplay().find("select.networkType").on("input", function() {
+			
+				// Check if automatic lock isn't locking
+				if(self.getAutomaticLock().isLocking() === false) {
+				
+					// Get select
+					var select = $(this);
+					
+					// Set that select is clicked
+					select.addClass("clicked");
+				
+					// Get network type
+					var networkType = parseInt(select.children(":selected").val(), Common.DECIMAL_NUMBER_BASE);
+					
+					// Check if is an extension
+					if(Common.isExtension() === true) {
+					
+						// Set message
+						var message = Language.getDefaultTranslation('This extension must reload for the new network type to be applied. Would you like to reload now?');
+					}
+					
+					// Otherwise check if is an app
+					else if(Common.isApp() === true) {
+					
+						// Set message
+						var message = Language.getDefaultTranslation('This app must reload for the new network type to be applied. Would you like to reload now?');
+					}
+					
+					// Otherwise
+					else {
+					
+						// Set message
+						var message = Language.getDefaultTranslation('This site must reload for the new network type to be applied. Would you like to reload now?');
+					}
+					
+					// Show message
+					self.getMessage().show(Language.getDefaultTranslation('Reload Required'), Message.createText(message), false, function() {
+					
+						// Save focus and blur
+						self.getFocus().save(true);
+						
+						// Disable unlocked
+						self.getUnlocked().disable();
+					
+					}, Language.getDefaultTranslation('No'), Language.getDefaultTranslation('Yes'), false, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+					
+						// Check if message was displayed
+						if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
+					
+							// Check if resetting settingss
+							if(messageResult === Message.SECOND_BUTTON_CLICKED_RESULT) {
+							
+								// Prevent showing messages
+								self.getMessage().prevent();
+							
+								// Show loading
+								self.getApplication().showLoading();
+							
+								// Set that message second button is loading
+								self.getMessage().setButtonLoading(Message.SECOND_BUTTON);
+								
+								// Prevent automatic lock
+								self.getAutomaticLock().prevent();
+								
+								// Prevent extension from interrupting on close
+								Extension.preventInterruptOnClose();
+							
+								// Refresh page to have new network type
+								location.replace(location.toString() + Common.URL_QUERY_STRING_SEPARATOR + encodeURIComponent(Consensus.OVERRIDE_NETWORK_TYPE_URL_PARAMETER_NAME).replace(/%20/ug, "+") + Common.URL_QUERY_STRING_PARAMETER_VALUE_SEPARATOR + encodeURIComponent(Consensus.networkTypeToText(networkType)).replace(/%20/ug, "+"));
+							}
+							
+							// Otherwise
+							else {
+							
+								// Enable unlocked
+								self.getUnlocked().enable();
+								
+								// Set that select isn't clicked
+								select.removeClass("clicked");
+								
+								// Set network type select value
+								select.val(Consensus.getNetworkType()).children("option").enable().filter(":selected").disable();
+								
+								// Restore focus and don't blur
+								self.getFocus().restore(false);
+								
+								// Hide message
+								self.getMessage().hide();
+							}
+						}
+					});
+				}
+			});
 		}
 		
 		// Get name
@@ -1378,6 +1568,12 @@ class SettingsSection extends Section {
 							
 							// Return waiting until all settings' dependencies are checked
 							return Promise.all(checkingSettingsDependencies).then(function() {
+							
+								// Set wallet type select value
+								self.getDisplay().find("select.walletType").val(Consensus.getWalletType()).children("option").enable().filter(":selected").disable();
+								
+								// Set network type select value
+								self.getDisplay().find("select.networkType").val(Consensus.getNetworkType()).children("option").enable().filter(":selected").disable();
 							
 								// Resolve
 								resolve();

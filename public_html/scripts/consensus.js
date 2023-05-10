@@ -12,6 +12,30 @@ class Consensus {
 		// Get wallet type
 		static getWalletType() {
 		
+			// Get the saved wallet type
+			var walletType = localStorage.getItem(Consensus.WALLET_TYPE_LOCAL_STORAGE_NAME);
+			
+			// Check if wallet type doesn't exist or isn't valid
+			if(walletType === Common.INVALID_LOCAL_STORAGE_ITEM || Number.isNaN(parseInt(walletType, Common.DECIMAL_NUMBER_BASE)) === true) {
+			
+				// Set wallet type to the default wallet type
+				walletType = Consensus.DEFAULT_WALLET_TYPE;
+			}
+			
+			// Otherwise
+			else {
+			
+				// Get wallet type in the correct format
+				walletType = parseInt(walletType, Common.DECIMAL_NUMBER_BASE);
+				
+				// Check if the wallet type doesn't exist
+				if(walletType < Consensus.MWC_WALLET_TYPE || walletType > Consensus.EPIC_WALLET_TYPE) {
+				
+					// Set wallet type to the default wallet type
+					walletType = Consensus.DEFAULT_WALLET_TYPE;
+				}
+			}
+		
 			// Get URL parameters
 			var urlParameters = Common.getUrlParameters();
 		
@@ -24,30 +48,79 @@ class Consensus {
 					// MWC wallet
 					case Consensus.WALLET_MWC_TEXT_VALUE:
 					
-						// Return MWC wallet type
-						return Consensus.MWC_WALLET_TYPE;
+						// Set wallet type to MWC wallet type
+						walletType = Consensus.MWC_WALLET_TYPE;
+						
+						// Break
+						break;
 					
 					// GRIN wallet
 					case Consensus.WALLET_GRIN_TEXT_VALUE:
 					
-						// Return GRIN wallet type
-						return Consensus.GRIN_WALLET_TYPE;
+						// Set wallet type to GRIN wallet type
+						walletType = Consensus.GRIN_WALLET_TYPE;
+						
+						// Break
+						break;
 					
 					// EPIC wallet
 					case Consensus.WALLET_EPIC_TEXT_VALUE:
 					
-						// Return EPIC wallet type
-						return Consensus.EPIC_WALLET_TYPE;
+						// Set wallet type to EPIC wallet type
+						walletType = Consensus.EPIC_WALLET_TYPE;
+						
+						// Break
+						break;
 				}
 			}
 			
-			// Return default wallet type
-			return Consensus.DEFAULT_WALLET_TYPE;
+			// Check if saved wallet type needs to be updated
+			if(walletType.toFixed() !== localStorage.getItem(Consensus.WALLET_TYPE_LOCAL_STORAGE_NAME)) {
+			
+				// Try
+				try {
+			
+					// Save wallet type in local storage
+					localStorage.setItem(Consensus.WALLET_TYPE_LOCAL_STORAGE_NAME, walletType.toFixed());
+				}
+				
+				// Catch errors
+				catch(error) {
+				
+				}
+			}
+			
+			// Return wallet type
+			return walletType;
 		}
 		
 		// Get network type
 		static getNetworkType() {
 		
+			// Get the saved network type
+			var networkType = localStorage.getItem(Consensus.NETWORK_TYPE_LOCAL_STORAGE_NAME);
+			
+			// Check if network type doesn't exist or isn't valid
+			if(networkType === Common.INVALID_LOCAL_STORAGE_ITEM || Number.isNaN(parseInt(networkType, Common.DECIMAL_NUMBER_BASE)) === true) {
+			
+				// Set network type to the default network type
+				networkType = Consensus.DEFAULT_NETWORK_TYPE;
+			}
+			
+			// Otherwise
+			else {
+			
+				// Get network type in the correct format
+				networkType = parseInt(networkType, Common.DECIMAL_NUMBER_BASE);
+				
+				// Check if the network type doesn't exist
+				if(networkType < Consensus.MAINNET_NETWORK_TYPE || networkType > Consensus.TESTNET_NETWORK_TYPE) {
+				
+					// Set network type to the default network type
+					networkType = Consensus.DEFAULT_NETWORK_TYPE;
+				}
+			}
+			
 			// Get URL parameters
 			var urlParameters = Common.getUrlParameters();
 		
@@ -60,8 +133,11 @@ class Consensus {
 					// Mainnet network
 					case Consensus.NETWORK_MAINNET_TEXT_VALUE:
 					
-						// Return mainnet network type
-						return Consensus.MAINNET_NETWORK_TYPE;
+						// Set network type to mainnet network type
+						networkType = Consensus.MAINNET_NETWORK_TYPE;
+						
+						// Break
+						break;
 					
 					// Testnet network
 					case Consensus.NETWORK_TESTNET_TEXT_VALUE:
@@ -72,8 +148,11 @@ class Consensus {
 							// GRIN wallet
 							case Consensus.GRIN_WALLET_TYPE:
 							
-								// Return testnet network type
-								return Consensus.TESTNET_NETWORK_TYPE;
+								// Set network type to testnet network type
+								networkType = Consensus.TESTNET_NETWORK_TYPE;
+								
+								// Break
+								break;
 						}
 						
 						// Break
@@ -89,8 +168,11 @@ class Consensus {
 							case Consensus.MWC_WALLET_TYPE:
 							case Consensus.EPIC_WALLET_TYPE:
 					
-								// Return testnet network type
-								return Consensus.TESTNET_NETWORK_TYPE;
+								// Set network type to testnet network type
+								networkType = Consensus.TESTNET_NETWORK_TYPE;
+								
+								// Break
+								break;
 						}
 						
 						// Break
@@ -98,8 +180,24 @@ class Consensus {
 				}
 			}
 			
-			// Return default network type
-			return Consensus.DEFAULT_NETWORK_TYPE;
+			// Check if saved network type needs to be updated
+			if(networkType.toFixed() !== localStorage.getItem(Consensus.NETWORK_TYPE_LOCAL_STORAGE_NAME)) {
+			
+				// Try
+				try {
+			
+					// Save network type in local storage
+					localStorage.setItem(Consensus.NETWORK_TYPE_LOCAL_STORAGE_NAME, networkType.toFixed());
+				}
+				
+				// Catch errors
+				catch(error) {
+				
+				}
+			}
+			
+			// Return network type
+			return networkType;
 		}
 		
 		// Wallet type to text
@@ -298,7 +396,7 @@ class Consensus {
 			// Check wallet type
 			switch(Consensus.getWalletType()) {
 			
-				// MWC and GRIN wallet
+				// MWC or GRIN wallet
 				case Consensus.MWC_WALLET_TYPE:
 				case Consensus.GRIN_WALLET_TYPE:
 		
@@ -1406,6 +1504,20 @@ class Consensus {
 					// Return sixth and up block era interval
 					return 1460 * Consensus.BLOCK_HEIGHT_DAY;
 			}
+		}
+		
+		// Wallet type local storage name
+		static get WALLET_TYPE_LOCAL_STORAGE_NAME() {
+		
+			// Return wallet type local storage name
+			return "Wallet Type";
+		}
+		
+		// Network type local storage name
+		static get NETWORK_TYPE_LOCAL_STORAGE_NAME() {
+		
+			// Return network type local storage name
+			return "Network Type";
 		}
 }
 
