@@ -3851,8 +3851,22 @@ class Unlocked {
 		// Whale amount threshold
 		static get WHALE_AMOUNT_THRESHOLD() {
 		
-			// Return whale amount threshold
-			return 10000;
+			// Check wallet type
+			switch(Consensus.getWalletType()) {
+			
+				// MWC or EPIC wallet
+				case Consensus.MWC_WALLET_TYPE:
+				case Consensus.EPIC_WALLET_TYPE:
+		
+					// Return whale amount threshold
+					return 10000;
+				
+				// GRIN wallet
+				case Consensus.GRIN_WALLET_TYPE:
+		
+					// Return whale amount threshold
+					return Infinity;
+			}
 		}
 		
 		// Change order before delay milliseconds
