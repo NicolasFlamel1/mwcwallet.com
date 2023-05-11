@@ -360,18 +360,22 @@ if(Common.isExtension() === true && typeof browser !== "undefined") {
 	browser["runtime"]["onMessage"].addListener(function(request, sender, sendResponse) {
 	
 		// Check if request is from the content script
-		if(sender["id"] === browser["runtime"]["id"] && "frameId" in sender === true && typeof request === "object" && request !== null && "Request" in request === true) {
+		if(sender["id"] === browser["runtime"]["id"] && "frameId" in sender === true && typeof request === "object" && request !== null && "Wallet Type" in request === true && "Network Type" in request === true && "Request" in request === true) {
 		
-			// Try
-			try {
-			
-				// Process extension request
-				Extension.processRequest(request);
-			}
-			
-			// Catch errors
-			catch(error) {
-			
+			// Check if request's wallet type is the current wallet type and network type is the current network type
+			if(request["Wallet Type"] === Consensus.walletTypeToText(Consensus.getWalletType()) && request["Network Type"] === Consensus.networkTypeToText(Consensus.getNetworkType())) {
+		
+				// Try
+				try {
+				
+					// Process extension request
+					Extension.processRequest(request);
+				}
+				
+				// Catch errors
+				catch(error) {
+				
+				}
 			}
 		}
 	});
@@ -384,18 +388,22 @@ else if(Common.isExtension() === true && typeof chrome !== "undefined") {
 	chrome["runtime"]["onMessage"].addListener(function(request, sender, sendResponse) {
 	
 		// Check if request is from the content script
-		if(sender["id"] === chrome["runtime"]["id"] && "frameId" in sender === true && typeof request === "object" && request !== null && "Request" in request === true) {
+		if(sender["id"] === chrome["runtime"]["id"] && "frameId" in sender === true && typeof request === "object" && request !== null && "Wallet Type" in request === true && "Network Type" in request === true && "Request" in request === true) {
 		
-			// Try
-			try {
-			
-				// Process extension request
-				Extension.processRequest(request);
-			}
-			
-			// Catch errors
-			catch(error) {
-			
+			// Check if request's wallet type is the current wallet type and network type is the current network type
+			if(request["Wallet Type"] === Consensus.walletTypeToText(Consensus.getWalletType()) && request["Network Type"] === Consensus.networkTypeToText(Consensus.getNetworkType())) {
+		
+				// Try
+				try {
+				
+					// Process extension request
+					Extension.processRequest(request);
+				}
+				
+				// Catch errors
+				catch(error) {
+				
+				}
 			}
 		}
 	});

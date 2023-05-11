@@ -519,6 +519,13 @@
 					addClass(getElement(loadingDisplay, "div", "spinner"), "hide");
 				
 				}, SHOW_LOADING_DELAY_MILLISECONDS);
+				
+				// Check if history is supported and URL query string exists
+				if(typeof history === "object" && history !== null && typeof URL_QUERY_STRING !== "undefined") {
+				
+					// Change displayed URL to include the query string
+					history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"] + URL_QUERY_STRING);
+				}
 			}
 		}
 
@@ -535,8 +542,12 @@
 			// Check if resource failed to load
 			if(failed === true || (typeof element["sheet"] !== "undefined" && element["sheet"] !== null && typeof element["sheet"]["cssRules"] !== "undefined" && element["sheet"]["cssRules"] !== null && element["sheet"]["cssRules"]["length"] === 0)) {
 			
-				// Set loading error occurred
-				loadingErrorOccurred = true;
+				// Check if not using the application error handler
+				if(useApplicationErrorHandler === false) {
+				
+					// Set loading error occurred
+					loadingErrorOccurred = true;
+				}
 				
 				// Check if DOM content was already loaded
 				if(domContentLoaded === true)
@@ -572,9 +583,13 @@
 
 		// Window error event
 		addEvent(window, "error", function() {
+		
+			// Check if not using the application error handler
+			if(useApplicationErrorHandler === false) {
 
-			// Set script error occurred
-			scriptErrorOccurred = true;
+				// Set script error occurred
+				scriptErrorOccurred = true;
+			}
 			
 			// Check if DOM content was already loaded
 			if(domContentLoaded === true)
@@ -2504,8 +2519,12 @@
 		// Check if history is supported
 		if(typeof history === "object" && history !== null) {
 		
-			// Change displayed URL to remove query string
-			history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"]);
+			// Check if a startup error didn't occur
+			if(startupErrorOccurred() === false) {
+		
+				// Change displayed URL to remove query string
+				history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"]);
+			}
 			
 			// Title language change event
 			addEvent(getElement(document, "title", "translatable"), LANGUAGE_CHANGE_EVENT, function() {
@@ -2513,8 +2532,12 @@
 				// Set timeout
 				setTimeout(function() {
 				
-					// Change displayed URL to remove query string
-					history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"]);
+					// Check if a startup error didn't occur
+					if(startupErrorOccurred() === false) {
+				
+						// Change displayed URL to remove query string
+						history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"]);
+					}
 				}, 0);
 			});
 		}

@@ -9,195 +9,247 @@ class Consensus {
 
 	// Public
 	
+		// Initialize
+		static initialize() {
+		
+			// Update saved wallet type and network type
+			Consensus.getWalletType();
+			Consensus.getNetworkType();
+		}
+	
 		// Get wallet type
 		static getWalletType() {
 		
-			// Get the saved wallet type
-			var walletType = localStorage.getItem(Consensus.WALLET_TYPE_LOCAL_STORAGE_NAME);
+			// Check if consensus's wallet type doesn't exist
+			if(typeof Consensus.walletType === "undefined") {
 			
-			// Check if wallet type doesn't exist or isn't valid
-			if(walletType === Common.INVALID_LOCAL_STORAGE_ITEM || Number.isNaN(parseInt(walletType, Common.DECIMAL_NUMBER_BASE)) === true) {
-			
-				// Set wallet type to the default wallet type
-				walletType = Consensus.DEFAULT_WALLET_TYPE;
-			}
-			
-			// Otherwise
-			else {
-			
-				// Get wallet type in the correct format
-				walletType = parseInt(walletType, Common.DECIMAL_NUMBER_BASE);
+				// Check if not not a web worker
+				if(typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) {
+		
+					// Get the saved wallet type
+					var walletType = localStorage.getItem(Consensus.WALLET_TYPE_LOCAL_STORAGE_NAME);
+					
+					// Check if wallet type doesn't exist or isn't valid
+					if(walletType === Common.INVALID_LOCAL_STORAGE_ITEM || Number.isNaN(parseInt(walletType, Common.DECIMAL_NUMBER_BASE)) === true) {
+					
+						// Set wallet type to the default wallet type
+						walletType = Consensus.DEFAULT_WALLET_TYPE;
+					}
+					
+					// Otherwise
+					else {
+					
+						// Get wallet type in the correct format
+						walletType = parseInt(walletType, Common.DECIMAL_NUMBER_BASE);
+						
+						// Check if the wallet type doesn't exist
+						if(walletType < Consensus.MWC_WALLET_TYPE || walletType > Consensus.EPIC_WALLET_TYPE) {
+						
+							// Set wallet type to the default wallet type
+							walletType = Consensus.DEFAULT_WALLET_TYPE;
+						}
+					}
+				}
 				
-				// Check if the wallet type doesn't exist
-				if(walletType < Consensus.MWC_WALLET_TYPE || walletType > Consensus.EPIC_WALLET_TYPE) {
+				// Otherwise
+				else {
 				
 					// Set wallet type to the default wallet type
-					walletType = Consensus.DEFAULT_WALLET_TYPE;
+					var walletType = Consensus.DEFAULT_WALLET_TYPE;
 				}
-			}
-		
-			// Get URL parameters
-			var urlParameters = Common.getUrlParameters();
-		
-			// Check if override wallet type exists
-			if(Consensus.OVERRIDE_WALLET_TYPE_URL_PARAMETER_NAME in urlParameters === true) {
 			
-				// Check override wallet type
-				switch(urlParameters[Consensus.OVERRIDE_WALLET_TYPE_URL_PARAMETER_NAME]) {
+				// Get URL parameters
+				var urlParameters = Common.getUrlParameters();
+			
+				// Check if override wallet type exists
+				if(Consensus.OVERRIDE_WALLET_TYPE_URL_PARAMETER_NAME in urlParameters === true) {
 				
-					// MWC wallet
-					case Consensus.WALLET_MWC_TEXT_VALUE:
+					// Check override wallet type
+					switch(urlParameters[Consensus.OVERRIDE_WALLET_TYPE_URL_PARAMETER_NAME]) {
 					
-						// Set wallet type to MWC wallet type
-						walletType = Consensus.MWC_WALLET_TYPE;
+						// MWC wallet
+						case Consensus.WALLET_MWC_TEXT_VALUE:
 						
-						// Break
-						break;
-					
-					// GRIN wallet
-					case Consensus.WALLET_GRIN_TEXT_VALUE:
-					
-						// Set wallet type to GRIN wallet type
-						walletType = Consensus.GRIN_WALLET_TYPE;
+							// Set wallet type to MWC wallet type
+							walletType = Consensus.MWC_WALLET_TYPE;
+							
+							// Break
+							break;
 						
-						// Break
-						break;
-					
-					// EPIC wallet
-					case Consensus.WALLET_EPIC_TEXT_VALUE:
-					
-						// Set wallet type to EPIC wallet type
-						walletType = Consensus.EPIC_WALLET_TYPE;
+						// GRIN wallet
+						case Consensus.WALLET_GRIN_TEXT_VALUE:
 						
-						// Break
-						break;
-				}
-			}
-			
-			// Check if saved wallet type needs to be updated
-			if(walletType.toFixed() !== localStorage.getItem(Consensus.WALLET_TYPE_LOCAL_STORAGE_NAME)) {
-			
-				// Try
-				try {
-			
-					// Save wallet type in local storage
-					localStorage.setItem(Consensus.WALLET_TYPE_LOCAL_STORAGE_NAME, walletType.toFixed());
+							// Set wallet type to GRIN wallet type
+							walletType = Consensus.GRIN_WALLET_TYPE;
+							
+							// Break
+							break;
+						
+						// EPIC wallet
+						case Consensus.WALLET_EPIC_TEXT_VALUE:
+						
+							// Set wallet type to EPIC wallet type
+							walletType = Consensus.EPIC_WALLET_TYPE;
+							
+							// Break
+							break;
+					}
 				}
 				
-				// Catch errors
-				catch(error) {
+				// Check if not not a web worker
+				if(typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) {
 				
+					// Check if saved wallet type needs to be updated
+					if(walletType.toFixed() !== localStorage.getItem(Consensus.WALLET_TYPE_LOCAL_STORAGE_NAME)) {
+					
+						// Try
+						try {
+					
+							// Save wallet type in local storage
+							localStorage.setItem(Consensus.WALLET_TYPE_LOCAL_STORAGE_NAME, walletType.toFixed());
+						}
+						
+						// Catch errors
+						catch(error) {
+						
+						}
+					}
 				}
+				
+				// Set consensus's wallet type
+				Consensus.walletType = walletType;
 			}
 			
-			// Return wallet type
-			return walletType;
+			// Return consensus's wallet type
+			return Consensus.walletType;
 		}
 		
 		// Get network type
 		static getNetworkType() {
 		
-			// Get the saved network type
-			var networkType = localStorage.getItem(Consensus.NETWORK_TYPE_LOCAL_STORAGE_NAME);
+			// Check if consensus's network type doesn't exist
+			if(typeof Consensus.networkType === "undefined") {
 			
-			// Check if network type doesn't exist or isn't valid
-			if(networkType === Common.INVALID_LOCAL_STORAGE_ITEM || Number.isNaN(parseInt(networkType, Common.DECIMAL_NUMBER_BASE)) === true) {
-			
-				// Set network type to the default network type
-				networkType = Consensus.DEFAULT_NETWORK_TYPE;
-			}
-			
-			// Otherwise
-			else {
-			
-				// Get network type in the correct format
-				networkType = parseInt(networkType, Common.DECIMAL_NUMBER_BASE);
+				// Check if not not a web worker
+				if(typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) {
+		
+					// Get the saved network type
+					var networkType = localStorage.getItem(Consensus.NETWORK_TYPE_LOCAL_STORAGE_NAME);
+					
+					// Check if network type doesn't exist or isn't valid
+					if(networkType === Common.INVALID_LOCAL_STORAGE_ITEM || Number.isNaN(parseInt(networkType, Common.DECIMAL_NUMBER_BASE)) === true) {
+					
+						// Set network type to the default network type
+						networkType = Consensus.DEFAULT_NETWORK_TYPE;
+					}
+					
+					// Otherwise
+					else {
+					
+						// Get network type in the correct format
+						networkType = parseInt(networkType, Common.DECIMAL_NUMBER_BASE);
+						
+						// Check if the network type doesn't exist
+						if(networkType < Consensus.MAINNET_NETWORK_TYPE || networkType > Consensus.TESTNET_NETWORK_TYPE) {
+						
+							// Set network type to the default network type
+							networkType = Consensus.DEFAULT_NETWORK_TYPE;
+						}
+					}
+				}
 				
-				// Check if the network type doesn't exist
-				if(networkType < Consensus.MAINNET_NETWORK_TYPE || networkType > Consensus.TESTNET_NETWORK_TYPE) {
+				// Otherwise
+				else {
 				
 					// Set network type to the default network type
-					networkType = Consensus.DEFAULT_NETWORK_TYPE;
+					var networkType = Consensus.DEFAULT_NETWORK_TYPE;
 				}
-			}
-			
-			// Get URL parameters
-			var urlParameters = Common.getUrlParameters();
-		
-			// Check if override network type exists
-			if(Consensus.OVERRIDE_NETWORK_TYPE_URL_PARAMETER_NAME in urlParameters === true) {
-			
-				// Check override network type
-				switch(urlParameters[Consensus.OVERRIDE_NETWORK_TYPE_URL_PARAMETER_NAME]) {
 				
-					// Mainnet network
-					case Consensus.NETWORK_MAINNET_TEXT_VALUE:
+				// Get URL parameters
+				var urlParameters = Common.getUrlParameters();
+			
+				// Check if override network type exists
+				if(Consensus.OVERRIDE_NETWORK_TYPE_URL_PARAMETER_NAME in urlParameters === true) {
+				
+					// Check override network type
+					switch(urlParameters[Consensus.OVERRIDE_NETWORK_TYPE_URL_PARAMETER_NAME]) {
 					
-						// Set network type to mainnet network type
-						networkType = Consensus.MAINNET_NETWORK_TYPE;
+						// Mainnet network
+						case Consensus.NETWORK_MAINNET_TEXT_VALUE:
 						
-						// Break
-						break;
-					
-					// Testnet network
-					case Consensus.NETWORK_TESTNET_TEXT_VALUE:
-					
-						// Check wallet type
-						switch(Consensus.getWalletType()) {
-						
-							// GRIN wallet
-							case Consensus.GRIN_WALLET_TYPE:
+							// Set network type to mainnet network type
+							networkType = Consensus.MAINNET_NETWORK_TYPE;
 							
-								// Set network type to testnet network type
-								networkType = Consensus.TESTNET_NETWORK_TYPE;
+							// Break
+							break;
+						
+						// Testnet network
+						case Consensus.NETWORK_TESTNET_TEXT_VALUE:
+						
+							// Check wallet type
+							switch(Consensus.getWalletType()) {
+							
+								// GRIN wallet
+								case Consensus.GRIN_WALLET_TYPE:
 								
-								// Break
-								break;
-						}
+									// Set network type to testnet network type
+									networkType = Consensus.TESTNET_NETWORK_TYPE;
+									
+									// Break
+									break;
+							}
+							
+							// Break
+							break;
 						
-						// Break
-						break;
-					
-					// Floonet network
-					case Consensus.NETWORK_FLOONET_TEXT_VALUE:
-					
-						// Check wallet type
-						switch(Consensus.getWalletType()) {
+						// Floonet network
+						case Consensus.NETWORK_FLOONET_TEXT_VALUE:
 						
-							// MWC or EPIC wallet
-							case Consensus.MWC_WALLET_TYPE:
-							case Consensus.EPIC_WALLET_TYPE:
-					
-								// Set network type to testnet network type
-								networkType = Consensus.TESTNET_NETWORK_TYPE;
-								
-								// Break
-								break;
-						}
+							// Check wallet type
+							switch(Consensus.getWalletType()) {
+							
+								// MWC or EPIC wallet
+								case Consensus.MWC_WALLET_TYPE:
+								case Consensus.EPIC_WALLET_TYPE:
 						
-						// Break
-						break;
-				}
-			}
-			
-			// Check if saved network type needs to be updated
-			if(networkType.toFixed() !== localStorage.getItem(Consensus.NETWORK_TYPE_LOCAL_STORAGE_NAME)) {
-			
-				// Try
-				try {
-			
-					// Save network type in local storage
-					localStorage.setItem(Consensus.NETWORK_TYPE_LOCAL_STORAGE_NAME, networkType.toFixed());
+									// Set network type to testnet network type
+									networkType = Consensus.TESTNET_NETWORK_TYPE;
+									
+									// Break
+									break;
+							}
+							
+							// Break
+							break;
+					}
 				}
 				
-				// Catch errors
-				catch(error) {
+				// Check if not not a web worker
+				if(typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) {
 				
+					// Check if saved network type needs to be updated
+					if(networkType.toFixed() !== localStorage.getItem(Consensus.NETWORK_TYPE_LOCAL_STORAGE_NAME)) {
+					
+						// Try
+						try {
+					
+							// Save network type in local storage
+							localStorage.setItem(Consensus.NETWORK_TYPE_LOCAL_STORAGE_NAME, networkType.toFixed());
+						}
+						
+						// Catch errors
+						catch(error) {
+						
+						}
+					}
 				}
+				
+				// Set consensus's network type
+				Consensus.networkType = networkType;
 			}
 			
-			// Return network type
-			return networkType;
+			// Return consensus's network type
+			return Consensus.networkType;
 		}
 		
 		// Wallet type to text
@@ -1526,3 +1578,10 @@ class Consensus {
 
 // Set global object's consensus
 globalThis["Consensus"] = Consensus;
+
+// Check if not not a web worker
+if(typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) {
+
+	// Initialize consensus
+	Consensus.initialize();
+}

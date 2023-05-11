@@ -2479,16 +2479,6 @@ class Application {
 										// Trigger unlocked show event
 										$(self.unlocked).trigger(Unlocked.SHOW_EVENT);
 										
-										// Check if protocol handler wasn't registered
-										if(self.protocolHandlerRegistered === false) {
-										
-											// Set protocol handler registered
-											self.protocolHandlerRegistered = true;
-										
-											// Register protocol handler
-											ProtocolHandler.register();
-										}
-										
 										// Check if message is not shown
 										if(self.message.isShown() === false) {
 										
