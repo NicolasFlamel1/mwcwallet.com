@@ -567,7 +567,7 @@
 			"Checksum" => "2ZFvWf9x++Vv5+5yeq1fWEHazydcrD7rc+OTWhRAr3MlyZXYsKEvBo+/ZMHnBK7e5PPW/E34GSQDrgWXz+P0gA=="
 		],
 		"./scripts/languages.js" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
