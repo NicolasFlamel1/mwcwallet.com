@@ -205,12 +205,15 @@ class TransactionSection extends Section {
 				
 					// Get value
 					var value = copyButton.prev().text();
+					
+					// Get is raw data
+					var isRawData = copyButton.prev().hasClass("rawData") === true;
 				
 					// Copy value to clipboard
 					self.getClipboard().copy(value).then(function() {
 					
 						// Show message and allow showing messages
-						self.getMessage().show(Language.getDefaultTranslation('Value Copied'), Message.createText(Language.getDefaultTranslation('The value was successfully copied to your clipboard.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the pasted value matches the following value when you paste it.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(value) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak(), false, function() {
+						self.getMessage().show(Language.getDefaultTranslation('Value Copied'), Message.createText(Language.getDefaultTranslation('The value was successfully copied to your clipboard.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the pasted value matches the following value when you paste it.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Common.htmlEncode(value) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak(), false, function() {
 						
 							// Hide loading
 							self.getApplication().hideLoading();
@@ -452,8 +455,11 @@ class TransactionSection extends Section {
 								// Check if error contains a message
 								if(Node.isMessageError(error) === true) {
 								
+									// Get is raw data
+									var isRawData = Common.hasWhitespace(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"]) === false;
+								
 									// Show rebroadcast transaction error
-									showRebroadcastTransactionError(Message.createText(Language.getDefaultTranslation('Rebroadcasting the transaction failed for the following reason.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Message.createText(Language.escapeText(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+									showRebroadcastTransactionError(Message.createText(Language.getDefaultTranslation('Rebroadcasting the transaction failed for the following reason.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
 								}
 								
 								// Otherwise check if error is a connection error
@@ -1509,8 +1515,11 @@ class TransactionSection extends Section {
 						// Create message display
 						var messageDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Message:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 						
+						// Get is raw data
+						var isRawData = Common.hasWhitespace(this.transaction.getMessage()) === false;
+						
 						// Append transaction's message to message display
-						messageDisplay.append("<span class=\"contextMenu\">" + Common.htmlEncode(this.transaction.getMessage()) + "</span>");
+						messageDisplay.append("<span class=\"" + ((isRawData === true) ? "rawData " : "") + "contextMenu\">" + Common.htmlEncode(this.transaction.getMessage()) + "</span>");
 						
 						// Append copy to message display
 						messageDisplay.append(Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true));

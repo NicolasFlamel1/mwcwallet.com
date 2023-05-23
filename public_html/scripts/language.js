@@ -902,10 +902,25 @@ class Language {
 									var argumentParts = textArguments[argumentIndex].split(Language.VERSION_NUMBER_PART_SEPARATOR);
 									
 									// Go through all argument parts
-									for(var j = 0; j < argumentParts["length"]; ++j)
+									for(var j = 0; j < argumentParts["length"]; ++j) {
 									
-										// Get argument part formatted as a number
-										argumentParts[j] = numberFormatter.format(argumentParts[j]);
+										// Get argument part as subparts
+										var argumentPartSubparts = argumentParts[j].split(Language.VERSION_NUMBER_PART_SUBPART_SEPARATOR);
+										
+										// Go through all argument part subparts
+										for(var k = 0; k < argumentPartSubparts["length"]; ++k) {
+										
+											// Check if argument part subpart is a numeric string
+											if(Language.NUMERIC_STRING_PATTERN.test(argumentPartSubparts[k]) === true) {
+										
+												// Get argument part subpart formatted as a number
+												argumentPartSubparts[k] = numberFormatter.format(argumentPartSubparts[k]);
+											}
+										}
+										
+										// Combine argument part subparts
+										argumentParts[j] =  argumentPartSubparts.join(Language.VERSION_NUMBER_PART_SUBPART_SEPARATOR);
+									}
 									
 									// Combine argument parts
 									var formattedArgumentNumber = argumentParts.join(Language.VERSION_NUMBER_PART_SEPARATOR);
@@ -1718,6 +1733,13 @@ class Language {
 			return ".";
 		}
 		
+		// Version number part subpart separator
+		static get VERSION_NUMBER_PART_SUBPART_SEPARATOR() {
+		
+			// Return version number part subpart separator
+			return "-";
+		}
+		
 		// No language
 		static get NO_LANGUAGE() {
 		
@@ -1821,6 +1843,13 @@ class Language {
 		
 			// Return date component padding
 			return "0";
+		}
+		
+		// Numeric string pattern
+		static get NUMERIC_STRING_PATTERN() {
+		
+			// Return numeric string pattern
+			return /^\d+$/u;
 		}
 }
 

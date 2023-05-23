@@ -836,6 +836,13 @@ class Common {
 			}, 0);
 		}
 		
+		// Has whitespace
+		static hasWhitespace(text) {
+		
+			// Return if text has whitespace
+			return Common.HAS_WHITESPACE_PATTERN.test(text) === true;
+		}
+		
 		// Milliseconds in a second
 		static get MILLISECONDS_IN_A_SECOND() {
 		
@@ -1554,6 +1561,13 @@ class Common {
 		
 			// Return leading whitespace pattern
 			return /\s+$/u;
+		}
+		
+		// Has whitespace pattern
+		static get HAS_WHITESPACE_PATTERN() {
+		
+			// Return has whitespace pattern
+			return /\s/ug;
 		}
 }
 

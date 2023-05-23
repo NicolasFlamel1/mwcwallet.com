@@ -50,13 +50,10 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.ad
 }
 
 main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address > p > span.copy {
-	padding: 0.4em;
-	margin: -0.4em 0;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
+	padding: 0.25em 0.4em;
+	display: inline;
 	cursor: copy;
-	height: 1em;
+	line-height: 1em;
 }
 
 main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address.loading > p > span.copy {
@@ -148,8 +145,7 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.ba
 
 main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > p span.contextMenu {
 	line-height: 1.4;
-	display: inline-block;
-	height: 1em;
+	display: inline;
 }
 
 main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance > button {

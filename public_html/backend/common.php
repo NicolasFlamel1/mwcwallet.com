@@ -11,7 +11,9 @@
 	// Version changes
 	const VERSION_CHANGES = [
 		"Added support for sending and receiving payments as files.",
-		"Fixed a deadlock that can occur when receiving a payment to a hardware wallet."
+		"Fixed a deadlock that can occur when receiving a payment to a hardware wallet.",
+		"Fixed displaying version numbers that include non-numeric text.",
+		"Prevents word breaks from happening before commas and copy icons."
 	];
 	
 	// Maintenance start time

@@ -1413,7 +1413,7 @@ class SendPaymentSection extends Section {
 										// Currency
 										Consensus.CURRENCY_NAME
 									]
-								]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + Message.createText(Language.getDefaultTranslation('Enter your password to continue sending the payment.')) + Message.createLineBreak() + Message.createLineBreak() + Message.createInput(Language.getDefaultTranslation('Password'), [], true) + Message.createLineBreak(), false, function() {
+								]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + Message.createText(Language.getDefaultTranslation('Enter your password to continue sending the payment.')) + Message.createLineBreak() + Message.createLineBreak() + Message.createInput(Language.getDefaultTranslation('Password'), [], true) + Message.createLineBreak(), false, function() {
 								
 									// Hide loading
 									self.getApplication().hideLoading();
@@ -1492,7 +1492,7 @@ class SendPaymentSection extends Section {
 														// Currency
 														Consensus.CURRENCY_NAME
 													]
-												]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>";
+												]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>";
 												
 												// Show message immediately and allow showing messages
 												self.getMessage().show(Language.getDefaultTranslation('Sending Payment'), Message.createPendingResult() + Message.createLineBreak() + text, true, function() {
@@ -1593,7 +1593,7 @@ class SendPaymentSection extends Section {
 																											// Currency
 																											Consensus.CURRENCY_NAME
 																										]
-																									]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>";
+																									]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>";
 																									
 																									// Set second button
 																									secondButton = Message.NO_BUTTON;
@@ -1705,7 +1705,7 @@ class SendPaymentSection extends Section {
 																													Consensus.CURRENCY_NAME
 																												]
 																												
-																											]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(receiverAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can guarantee that this payment is going to the intended recipient by having the recipient confirm that this payment proof address is their payment proof address.')) + "</b>";
+																											]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(receiverAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can guarantee that this payment is going to the intended recipient by having the recipient confirm that this payment proof address is their payment proof address.')) + "</b>";
 																											
 																											// Set second button
 																											secondButton = Language.getDefaultTranslation('Finalize');
@@ -1738,7 +1738,7 @@ class SendPaymentSection extends Section {
 																												// Kernel features
 																												kernelFeatures
 																												
-																											]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(receiverAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can guarantee that this payment is going to the intended recipient by having the recipient confirm that this payment proof address is their payment proof address.')) + "</b>";
+																											]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(receiverAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can guarantee that this payment is going to the intended recipient by having the recipient confirm that this payment proof address is their payment proof address.')) + "</b>";
 																											
 																											// Set second button
 																											secondButton = Message.NO_BUTTON;
@@ -1774,7 +1774,7 @@ class SendPaymentSection extends Section {
 																											// Currency
 																											Consensus.CURRENCY_NAME
 																										]
-																									]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>";
+																									]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>";
 																									
 																									// Set second button
 																									secondButton = Message.NO_BUTTON;
