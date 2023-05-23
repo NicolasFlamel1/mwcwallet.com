@@ -308,15 +308,22 @@ class JsonRpc {
 		// Is request
 		static isRequest(data) {
 		
-			// Return if request is valid
+			// Return if data is a request
 			return Object.isObject(data) === true && "jsonrpc" in data === true && data["jsonrpc"] === JsonRpc.VERSION && "id" in data === true && data["id"] instanceof BigNumber === true && data["id"].isInteger() === true && data["id"].isPositive() === true && "method" in data === true && "params" in data === true;
 		}
 		
 		// Is notification
 		static isNotification(data) {
 		
-			// Return if notification is valid
+			// Return if data is a notification
 			return Object.isObject(data) === true && "jsonrpc" in data === true && data["jsonrpc"] === JsonRpc.VERSION && "id" in data === false && "method" in data === true && "params" in data === true;
+		}
+		
+		// Is error response
+		static isErrorResponse(response) {
+		
+			// Return if response is an error
+			return Object.isObject(response) === true && "jsonrpc" in response === true && response["jsonrpc"] === JsonRpc.VERSION && "id" in response === true && response["id"] instanceof BigNumber === true && response["id"].isInteger() === true && response["id"].isPositive() === true && "error" in response === true && Object.isObject(response["error"]) === true && "code" in response["error"] === true;
 		}
 		
 		// No response

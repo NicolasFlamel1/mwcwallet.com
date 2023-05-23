@@ -802,6 +802,40 @@ class Common {
 			}
 		}
 		
+		// Save file
+		static saveFile(name, contents) {
+		
+			// Create anchor
+			var anchor = $("<a></a>");
+			
+			// Create URL from contents
+			var url = URL.createObjectURL(new Blob([
+			
+				// Contents
+				contents
+			], {
+			
+				// Type
+				"type": "text/plain"
+			}));
+			
+			// Set anchor's href to URL
+			anchor.attr("href", url);
+			
+			// Set anchor's download to name
+			anchor.attr("download", name);
+			
+			// Click on anchor
+			anchor.get(0).click();
+			
+			// Set timeout
+			setTimeout(function() {
+			
+				// Revoke URL
+				URL.revokeObjectURL(url);
+			}, 0);
+		}
+		
 		// Milliseconds in a second
 		static get MILLISECONDS_IN_A_SECOND() {
 		

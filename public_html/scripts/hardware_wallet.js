@@ -41,6 +41,9 @@ class HardwareWallet {
 			
 			// Set connection type to USB connection type
 			this.connectionType = HardwareWallet.USB_CONNECTION_TYPE;
+			
+			// Set wallet key path
+			this.walletKeyPath = Wallet.NO_KEY_PATH;
 		}
 		
 		// Get root public key
@@ -2918,6 +2921,20 @@ class HardwareWallet {
 			});
 		}
 		
+		// Set wallet key path
+		setWalletKeyPath(walletKeyPath) {
+		
+			// Set wallet key path
+			this.walletKeyPath = walletKeyPath;
+		}
+		
+		// Get wallet key path
+		getWalletKeyPath() {
+		
+			// Return wallet key path
+			return this.walletKeyPath;
+		}
+		
 		// Get available hardware wallet descriptors
 		static getAvailableHardwareWalletDescriptors() {
 		
@@ -3550,7 +3567,7 @@ class HardwareWallet {
 		static get MINIMUM_COMPATIBLE_APPLICATION_VERSION() {
 		
 			// Return minimum compatible application version
-			return "6.0.1";
+			return "7.2.0";
 		}
 		
 		// Built-in request class

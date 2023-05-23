@@ -59,3 +59,7 @@ main > div.unlocked > div > div > div.sections > div > div.transaction > div > d
 	position: relative;
 	top: 1px;
 }
+
+main > div.unlocked > div > div > div.sections > div > div.transaction > div > div.merge + div > button {
+	margin-right: auto;
+}

@@ -1190,7 +1190,7 @@ class WalletSection extends Section {
 											// Hide message
 											self.getMessage().hide();
 											
-											// Prevent showing messages
+											// Allow showing messages
 											self.getMessage().allow();
 										}
 									}, WalletSection.CHANGE_ADDRESS_SUFFIX_AFTER_DELAY_MILLISECONDS);
@@ -2630,6 +2630,530 @@ class WalletSection extends Section {
 				});
 			});
 			
+			// Receive payment as file button click event
+			this.getDisplay().find("button.receivePaymentAsFile").on("click", function() {
+			
+				// Get button
+				var button = $(this);
+
+				// Prevent showing messages
+				self.getMessage().prevent();
+				
+				// Save focus and blur
+				self.getFocus().save(true);
+				
+				// Set that button is clicked
+				button.addClass("clicked");
+				
+				// Disable unlocked
+				self.getUnlocked().disable();
+				
+				// Show loading
+				self.getApplication().showLoading();
+				
+				// Set that button is loading
+				button.addClass("loading");
+				
+				// Show receive payment as file error
+				var showReceivePaymentAsFileError = function(error) {
+				
+					// Show message immediately and allow showing messages
+					self.getMessage().show(Language.getDefaultTranslation('Receive Payment As File Error'), error, true, function() {
+					
+						// Hide loading
+						self.getApplication().hideLoading();
+						
+					}, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+					
+						// Check if message was displayed
+						if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
+					
+							// Set that button isn't loading
+							button.removeClass("loading");
+							
+							// Enable unlocked
+							self.getUnlocked().enable();
+							
+							// Set that button isn't clicked
+							button.removeClass("clicked");
+							
+							// Restore focus and don't blur
+							self.getFocus().restore(false);
+							
+							// Hide message
+							self.getMessage().hide();
+						}
+					});
+				};
+				
+				// Prevent automatic lock
+				self.getAutomaticLock().prevent();
+				
+				// Keep device awake and catch errors
+				self.getWakeLock().preventLock().catch(function(error) {
+				
+				});
+				
+				// Prevent scrolling keys
+				self.getScroll().preventKeys();
+				
+				// Block input
+				$("body").addClass("blockInput");
+				
+				// Create file input
+				var fileInput = $("<input type=\"file\">");
+				
+				// File input change event
+				fileInput.one("change", function(event) {
+				
+					// Turn off window focus wallet section event
+					$(window).off("focus.walletSection");
+					
+					// Allow scrolling keys
+					self.getScroll().allowKeys();
+					
+					// Unblock input
+					$("body").removeClass("blockInput");
+					
+					// Get files
+					var files = event["target"]["files"];
+					
+					// Check if no file was selected
+					if(files["length"] < 0) {
+					
+						// Allow device to sleep and catch errors
+						self.getWakeLock().allowLock().catch(function(error) {
+						
+						// Finally
+						}).finally(function() {
+						
+							// Allow automatic lock
+							self.getAutomaticLock().allow();
+							
+							// Check if automatic lock isn't locking
+							if(self.getAutomaticLock().isLocking() === false) {
+					
+								// Set that button isn't loading
+								button.removeClass("loading");
+								
+								// Hide loading
+								self.getApplication().hideLoading();
+								
+								// Enable unlocked
+								self.getUnlocked().enable();
+								
+								// Set that button isn't clicked
+								button.removeClass("clicked");
+								
+								// Restore focus and don't blur
+								self.getFocus().restore(false);
+								
+								// Allow showing messages
+								self.getMessage().allow();
+							}
+						});
+					}
+					
+					// Otherwise
+					else {
+					
+						// Get file
+						var file = files[0];
+						
+						// Create file reader
+						var fileReader = new FileReader();
+						
+						// File reader load event
+						$(fileReader).one("load", function(event) {
+						
+							// Turn off file reader error event
+							$(fileReader).off("error");
+						
+							// Get file's contents trimmed
+							var filesContents = event["originalEvent"]["target"]["result"].trim();
+							
+							// Try
+							try {
+							
+								// Get slate from file's contents parsed as JSON
+								var slate = JSONBigNumber.parse(filesContents);
+							}
+							
+							// Catch errors
+							catch(error) {
+							
+								// Set slate to file's contents
+								var slate = filesContents;
+							}
+							
+							// Try
+							try {
+							
+								// Get wallet
+								var wallet = self.getWallets().getWallet(self.walletKeyPath);
+							}
+							
+							// Catch errors
+							catch(error) {
+							
+								// Allow device to sleep and catch errors
+								self.getWakeLock().allowLock().catch(function(error) {
+								
+								// Finally
+								}).finally(function() {
+								
+									// Allow automatic lock
+									self.getAutomaticLock().allow();
+									
+									// Check if automatic lock isn't locking
+									if(self.getAutomaticLock().isLocking() === false) {
+							
+										// Show receive payment as file error
+										showReceivePaymentAsFileError(Message.createText(error));
+									}
+								});
+							
+								// Return
+								return;
+							}
+							
+							// Create interaction
+							var interaction = new Interaction(Interaction.NO_INDEX, wallet.getKeyPath(), Api.FOREIGN_API_URL, "application/json", {
+							
+								// Version
+								"jsonrpc": JsonRpc.VERSION,
+								
+								// ID
+								"id": new BigNumber(JsonRpc.DEFAULT_ID),
+								
+								// Method
+								"method": Api.RECEIVE_TRANSACTION_METHOD,
+								
+								// Parameters
+								"params": [
+								
+									// Slate
+									slate,
+									
+									// Destination account name
+									null,
+									
+									// Message
+									null,
+								]
+							});
+							
+							// Set timeout
+							setTimeout(function() {
+							
+								// Create promise
+								(new Promise(function(resolve, reject) {
+							
+									// Trigger listener request receive event for the interaction
+									$(self.getWallets().listener).trigger(Listener.REQUEST_RECEIVE_EVENT, [
+									
+										// Interaction
+										interaction,
+										
+										// Resolve
+										resolve,
+										
+										// Reject
+										reject
+									]);
+								
+								// Interaction on success
+								})).then(function(response) {
+								
+									// Get amount from response
+									var amount = response[Listener.PROMISE_RESOLVE_AMOUNT_INDEX];
+									
+									// Get currency from response
+									var currency = response[Listener.PROMISE_RESOLVE_CURRENCY_INDEX];
+									
+									// Get message from response
+									var message = response[Listener.PROMISE_RESOLVE_MESSAGE_INDEX];
+									
+									// Get file response from response
+									var fileResponse = response[Listener.PROMISE_RESOLVE_FILE_RESPONSE_INDEX];
+									
+									// Get ID from response
+									var id = response[Listener.PROMISE_RESOLVE_ID_INDEX];
+									
+									// Set file name
+									var fileName = id.serialize() + ".response";
+									
+									// Create URL from contents
+									var url = URL.createObjectURL(new Blob([
+									
+										// Contents
+										fileResponse
+									], {
+									
+										// Type
+										"type": "text/plain"
+									}));
+									
+									// Show message and allow showing messages
+									self.getMessage().show(Language.getDefaultTranslation('Payment Received'), Message.createSuccessResult() + Message.createLineBreak() + Message.createText((message === SlateParticipant.NO_MESSAGE) ? ((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('You were sent %1$c to Wallet %2$s.') : Language.getDefaultTranslation('You were sent %1$c to %2$y.')) : ((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('You were sent %1$c to Wallet %2$s with a message.') : Language.getDefaultTranslation('You were sent %1$c to %2$y with a message.')), [
+									
+										[
+										
+											// Number
+											amount.toFixed(),
+											
+											// Currency
+											currency
+										],
+										
+										// Wallet key path or name
+										(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()
+										
+									]) + ((message !== SlateParticipant.NO_MESSAGE) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu\">" + Common.htmlEncode(message) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() : "") + Message.createLineBreak() + Message.createText(Language.getDefaultTranslation('Give the %1$m file to the payment\'s sender for them to finalize the transaction.'), [
+					
+										[
+											// Text
+											fileName,
+											
+											// URL
+											url,
+											
+											// Is external
+											true,
+											
+											// Is blob
+											true
+										]
+									]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You shouldn\'t consider this payment to be legitimate until it\'s been confirmed on the blockchain.')) + "</b>", false, function() {
+									
+										// Hide loading
+										self.getApplication().hideLoading();
+										
+										// Message show wallet section event
+										$(self.getMessage()).one(Message.SHOW_EVENT + ".walletSection", function() {
+										
+											// Save file response
+											Common.saveFile(fileName, fileResponse);
+										});
+									
+									}, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+									
+										// Turn off message show wallet section event
+										$(self.getMessage()).off(Message.SHOW_EVENT + ".walletSection");
+										
+										// Revoke URL
+										URL.revokeObjectURL(url);
+									
+										// Check if message was displayed
+										if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
+										
+											// Allow device to sleep and catch errors
+											self.getWakeLock().allowLock().catch(function(error) {
+											
+											// Finally
+											}).finally(function() {
+										
+												// Allow automatic lock
+												self.getAutomaticLock().allow();
+												
+												// Check if automatic lock isn't locking
+												if(self.getAutomaticLock().isLocking() === false) {
+										
+													// Set that button isn't loading
+													button.removeClass("loading");
+													
+													// Enable unlocked
+													self.getUnlocked().enable();
+													
+													// Set that button isn't clicked
+													button.removeClass("clicked");
+													
+													// Delete focus
+													self.getFocus().delete();
+													
+													// Hide message
+													self.getMessage().hide();
+												}
+											});
+										}
+										
+										// Otherwise
+										else {
+										
+											// Allow device to sleep and catch errors
+											self.getWakeLock().allowLock().catch(function(error) {
+											
+											});
+										}
+									});
+								
+								// Interaction on failure
+								}).catch(function(error) {
+								
+									// Allow device to sleep and catch errors
+									self.getWakeLock().allowLock().catch(function(error) {
+									
+									// Finally
+									}).finally(function() {
+									
+										// Allow automatic lock
+										self.getAutomaticLock().allow();
+										
+										// Check if automatic lock isn't locking
+										if(self.getAutomaticLock().isLocking() === false) {
+										
+											// Check if canceled
+											if(error === Common.CANCELED_ERROR) {
+											
+												// Set that button isn't loading
+												button.removeClass("loading");
+												
+												// Hide loading
+												self.getApplication().hideLoading();
+												
+												// Enable unlocked
+												self.getUnlocked().enable();
+												
+												// Set that button isn't clicked
+												button.removeClass("clicked");
+												
+												// Restore focus and don't blur
+												self.getFocus().restore(false);
+												
+												// Allow showing messages
+												self.getMessage().allow();
+											}
+											
+											// Otherwise
+											else {
+										
+												// Check if error is a JSON-RPC error response
+												if(JsonRpc.isErrorResponse(error) === true) {
+											
+													// Check error code
+													switch(error["error"]["code"]) {
+													
+														// Internal error error
+														case JsonRpc.INTERNAL_ERROR_ERROR:
+														
+															// Set text
+															var text = Language.getDefaultTranslation('An internal error occurred.');
+															
+															// Break
+															break;
+														
+														// Default
+														default:
+														
+															// Set text
+															var text = Language.getDefaultTranslation('That file is invalid, contains unsupported features, or was already used.');
+															
+															// Break
+															break;
+													}
+												}
+												
+												// Otherwise check user rejected on hardware
+												else if(error === HardwareWallet.USER_REJECTED_ERROR) {
+												
+													// Set text
+													var text = Language.getDefaultTranslation('Approving the transaction on the hardware wallet was denied.');
+												}
+												
+												// Otherwise
+												else {
+												
+													// Set text
+													var text = Language.getDefaultTranslation('An internal error occurred.');
+												}
+									
+												// Show receive payment as file error
+												showReceivePaymentAsFileError(Message.createFailureResult() + Message.createLineBreak() + Message.createText(text));
+											}
+										}
+									});
+								});
+							
+							}, WalletSection.RECEIVE_PAYMENT_AS_FILE_DELAY_MILLISECONDS);
+							
+						// File reader error event
+						}).one("error", function() {
+						
+							// Turn off file reader load event
+							$(fileReader).off("load");
+							
+							// Allow device to sleep and catch errors
+							self.getWakeLock().allowLock().catch(function(error) {
+							
+							// Finally
+							}).finally(function() {
+							
+								// Allow automatic lock
+								self.getAutomaticLock().allow();
+								
+								// Check if automatic lock isn't locking
+								if(self.getAutomaticLock().isLocking() === false) {
+								
+									// Show receive payment as file error
+									showReceivePaymentAsFileError(Message.createText(Language.getDefaultTranslation('Reading that file failed.')));
+								}
+							});
+						});
+						
+						// Read file as text with file reader
+						fileReader.readAsText(file);
+					}
+				});
+				
+				// Window focus wallet section event
+				$(window).one("focus.walletSection", function() {
+				
+					// Turn off file input change event
+					fileInput.off("change");
+					
+					// Allow scrolling keys
+					self.getScroll().allowKeys();
+					
+					// Unblock input
+					$("body").removeClass("blockInput");
+					
+					// Allow device to sleep and catch errors
+					self.getWakeLock().allowLock().catch(function(error) {
+					
+					// Finally
+					}).finally(function() {
+					
+						// Allow automatic lock
+						self.getAutomaticLock().allow();
+						
+						// Check if automatic lock isn't locking
+						if(self.getAutomaticLock().isLocking() === false) {
+					
+							// Set that button isn't loading
+							button.removeClass("loading");
+							
+							// Hide loading
+							self.getApplication().hideLoading();
+							
+							// Enable unlocked
+							self.getUnlocked().enable();
+							
+							// Set that button isn't clicked
+							button.removeClass("clicked");
+							
+							// Restore focus and don't blur
+							self.getFocus().restore(false);
+							
+							// Allow showing messages
+							self.getMessage().allow();
+						}
+					});
+				});
+				
+				// Trigger file input selection
+				fileInput.trigger("click");
+			});
+			
 			// Delete button click event
 			this.getDisplay().find("button.delete").on("click", function() {
 			
@@ -3019,7 +3543,7 @@ class WalletSection extends Section {
 											// Delete focus
 											self.getFocus().delete();
 											
-											// Prevent showing messages
+											// Allow showing messages
 											self.getMessage().allow();
 										}
 									});
@@ -3970,6 +4494,13 @@ class WalletSection extends Section {
 		
 			// Return address before show delay milliseconds
 			return 250;
+		}
+		
+		// Receive payment as file delay milliseconds
+		static get RECEIVE_PAYMENT_AS_FILE_DELAY_MILLISECONDS() {
+		
+			// Return receive payment as file delay milliseconds
+			return 300;
 		}
 		
 		// Syncing minimum stroke dash offset

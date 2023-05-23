@@ -219,7 +219,10 @@ class AboutSection extends Section {
 					"mailto:nicolasflamel@mwcwallet.com",
 					
 					// Is external
-					true
+					true,
+							
+					// Is blob
+					false
 				]
 			]));
 		}
@@ -276,7 +279,10 @@ class AboutSection extends Section {
 								ATTRIBUTIONS[name]["URL"],
 								
 								// Is external
-								true
+								true,
+								
+								// Is blob
+								false
 							],
 							
 							[
@@ -287,7 +293,10 @@ class AboutSection extends Section {
 								ATTRIBUTIONS[name]["License Path"],
 								
 								// Is external
-								true
+								true,
+								
+								// Is blob
+								false
 							]
 						]) + "</li>");
 					}
@@ -309,7 +318,10 @@ class AboutSection extends Section {
 								ATTRIBUTIONS[name]["URL"],
 								
 								// Is external
-								true
+								true,
+								
+								// Is blob
+								false
 							]
 						]) + "</li>");
 					}

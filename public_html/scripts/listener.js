@@ -956,6 +956,48 @@ class Listener {
 			// Return settings change event
 			return "ListenerSettingsChangeEvent";
 		}
+		
+		// Promise resolve wallet index
+		static get PROMISE_RESOLVE_WALLET_INDEX() {
+		
+			// Return promise resolve wallet index
+			return 0;
+		}
+		
+		// Promise resolve amount index
+		static get PROMISE_RESOLVE_AMOUNT_INDEX() {
+		
+			// Return promise resolve amount index
+			return Listener.PROMISE_RESOLVE_WALLET_INDEX + 1;
+		}
+		
+		// Promise resolve currency index
+		static get PROMISE_RESOLVE_CURRENCY_INDEX() {
+		
+			// Return promise resolve currency index
+			return Listener.PROMISE_RESOLVE_AMOUNT_INDEX + 1;
+		}
+		
+		// Promise resolve message index
+		static get PROMISE_RESOLVE_MESSAGE_INDEX() {
+		
+			// Return promise resolve message index
+			return Listener.PROMISE_RESOLVE_CURRENCY_INDEX + 1;
+		}
+		
+		// Promise resolve file response index
+		static get PROMISE_RESOLVE_FILE_RESPONSE_INDEX() {
+		
+			// Return promise resolve file response index
+			return Listener.PROMISE_RESOLVE_MESSAGE_INDEX + 1;
+		}
+		
+		// Promise resolve ID index
+		static get PROMISE_RESOLVE_ID_INDEX() {
+		
+			// Return promise resolve ID index
+			return Listener.PROMISE_RESOLVE_FILE_RESPONSE_INDEX + 1;
+		}
 	
 	// Private
 	

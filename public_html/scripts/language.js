@@ -869,9 +869,10 @@ class Language {
 									var translatedTextArgumentText = Language.getTranslation(Language.escapeText(textArguments[argumentIndex][Language.LINK_TEXT_ARGUMENT_INDEX]));
 									var translatedTextArgumentUrl = textArguments[argumentIndex][Language.LINK_URL_ARGUMENT_INDEX];
 									var translatedTextArgumentIsExternal = textArguments[argumentIndex][Language.LINK_IS_EXTERNAL_ARGUMENT_INDEX];
+									var translatedTextArgumentIsBlob = textArguments[argumentIndex][Language.LINK_IS_BLOB_ARGUMENT_INDEX];
 									
 									// Append argument to result and encode it if specified
-									result += (encodeHtml === false) ? translatedTextArgumentText : ("<a href=\"" + Common.htmlEncode(translatedTextArgumentUrl) + "\" referrerpolicy=\"same-origin\" " + ((translatedTextArgumentIsExternal === true) ? "target=\"_blank\" rel=\"nofollow noopener noreferrer\"" : "target=\"_self\" hreflang=\"" + Common.htmlEncode(Language.currentLanguage) + "\"") + ">" + Common.htmlEncode(translatedTextArgumentText) + "</a>");
+									result += (encodeHtml === false) ? translatedTextArgumentText : ("<a href=\"" + Common.htmlEncode(translatedTextArgumentUrl) + "\" referrerpolicy=\"same-origin\" " + ((translatedTextArgumentIsBlob === true) ? "download=\"" + Common.htmlEncode(translatedTextArgumentText) + "\" " : "") + ((translatedTextArgumentIsExternal === true) ? "target=\"_blank\" rel=\"nofollow noopener noreferrer\"" : "target=\"_self\" hreflang=\"" + Common.htmlEncode(Language.currentLanguage) + "\"") + ">" + Common.htmlEncode(translatedTextArgumentText) + "</a>");
 								
 									// Break
 									break;
@@ -883,10 +884,11 @@ class Language {
 									var notTranslatedTextArgumentText = textArguments[argumentIndex][Language.LINK_TEXT_ARGUMENT_INDEX];
 									var notTranslatedTextArgumentUrl = textArguments[argumentIndex][Language.LINK_URL_ARGUMENT_INDEX];
 									var notTranslatedTextArgumentIsExternal = textArguments[argumentIndex][Language.LINK_IS_EXTERNAL_ARGUMENT_INDEX];
+									var notTranslatedTextArgumentIsBlob = textArguments[argumentIndex][Language.LINK_IS_BLOB_ARGUMENT_INDEX];
 									
 									// Append argument to result and encode it if specified
-									result += (encodeHtml === false) ? notTranslatedTextArgumentText : ("<a href=\"" + Common.htmlEncode(notTranslatedTextArgumentUrl) + "\" referrerpolicy=\"same-origin\" " + ((notTranslatedTextArgumentIsExternal === true) ? "target=\"_blank\" rel=\"nofollow noopener noreferrer\"" : "target=\"_self\" hreflang=\"" + Common.htmlEncode(Language.currentLanguage) + "\"") + ">" + Common.htmlEncode(notTranslatedTextArgumentText) + "</a>");
-								
+									result += (encodeHtml === false) ? notTranslatedTextArgumentText : ("<a href=\"" + Common.htmlEncode(notTranslatedTextArgumentUrl) + "\" referrerpolicy=\"same-origin\" " + ((notTranslatedTextArgumentIsBlob === true) ? "download=\"" + Common.htmlEncode(notTranslatedTextArgumentText) + "\" " : "") + ((notTranslatedTextArgumentIsExternal === true) ? "target=\"_blank\" rel=\"nofollow noopener noreferrer\"" : "target=\"_self\" hreflang=\"" + Common.htmlEncode(Language.currentLanguage) + "\"") + ">" + Common.htmlEncode(notTranslatedTextArgumentText) + "</a>");
+									
 									// Break
 									break;
 								
@@ -1749,6 +1751,13 @@ class Language {
 		
 			// Return link is external argument index
 			return Language.LINK_URL_ARGUMENT_INDEX + 1;
+		}
+		
+		// Link is blob argument index
+		static get LINK_IS_BLOB_ARGUMENT_INDEX() {
+		
+			// Return link is blob argument index
+			return Language.LINK_IS_EXTERNAL_ARGUMENT_INDEX + 1;
 		}
 		
 		// Change language delay milliseconds

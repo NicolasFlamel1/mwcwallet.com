@@ -10,13 +10,36 @@ class Interaction {
 	// Public
 		
 		// Constructor
-		constructor(index, url, api, type, data, listener) {
+		constructor(index, urlOrWalletKeyPath, api, type, data, listener = Interaction.NO_LISTENER) {
+		
+			// Check if a URL is provided
+			if(typeof urlOrWalletKeyPath === "string") {
+			
+				// Set URL
+				var url = urlOrWalletKeyPath;
+				
+				// Set wallet key path
+				var walletKeyPath = Interaction.NO_WALLET_KEY_PATH;
+			}
+			
+			// Otherwise
+			else {
+			
+				// Set URL
+				var url = Interaction.NO_URL;
+				
+				// Set wallet key path
+				var walletKeyPath = urlOrWalletKeyPath;
+			}
 		
 			// Set index
 			this.index = index;
 			
 			// Set URL
 			this.url = url;
+			
+			// Set wallet key path
+			this.walletKeyPath = walletKeyPath;
 			
 			// Set API
 			this.api = api;
@@ -39,6 +62,13 @@ class Interaction {
 		
 			// Return URL
 			return this.url;
+		}
+		
+		// Get wallet key path
+		getWalletKeyPath() {
+		
+			// Return wallet key path
+			return this.walletKeyPath;
 		}
 		
 		// Get API
@@ -92,8 +122,8 @@ class Interaction {
 					reject("Interaction canceled.");
 				}
 				
-				// Otherwise
-				else {
+				// Otherwise check if a listener is used
+				else if(self.listener !== Interaction.NO_LISTENER) {
 			
 					// Return responding with data to listener
 					return self.listener.respondWithData(self.index, response).then(function(status) {
@@ -103,10 +133,17 @@ class Interaction {
 						
 					// Catch errors
 					}).catch(function(error) {
-						
+					
 						// Reject error
 						reject(error);
 					});
+				}
+				
+				// Otherwise
+				else {
+				
+					// Resolve
+					resolve();
 				}
 			});
 		}
@@ -127,8 +164,8 @@ class Interaction {
 					reject("Interaction canceled.");
 				}
 				
-				// Otherwise
-				else {
+				// Otherwise check if a listener is used
+				else if(self.listener !== Interaction.NO_LISTENER) {
 			
 					// Return responding with error to listener
 					return self.listener.respondWithError(self.index, response).then(function(status) {
@@ -143,7 +180,42 @@ class Interaction {
 						reject(error);
 					});
 				}
+				
+				// Otherwise
+				else {
+				
+					// Resolve
+					resolve();
+				}
 			});
+		}
+		
+		// No index
+		static get NO_INDEX() {
+		
+			// Return no index
+			return null;
+		}
+		
+		// No listener
+		static get NO_LISTENER() {
+		
+			// Return no listener
+			return null;
+		}
+		
+		// No URL
+		static get NO_URL() {
+		
+			// Return no URL
+			return null;
+		}
+		
+		// No wallet key path
+		static get NO_WALLET_KEY_PATH() {
+		
+			// Return no wallet key path
+			return null;
 		}
 }
 

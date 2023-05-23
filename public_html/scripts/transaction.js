@@ -10,7 +10,7 @@ class Transaction {
 	// Public
 	
 		// Constructor
-		constructor(walletType, networkType, commit, walletKeyPath, received, recordedTimestamp, createdTimestamp, height, lockHeight, isCoinbase, status, amount, amountReleased, kernelExcess, identifier, switchType, display, kernelOffset, id, message, timeToLiveCutOffHeight, expired, confirmedTimestamp, fee, senderAddress, receiverAddress, receiverSignature, destination, spendableHeight, requiredNumberOfConfirmations, spentOutputs, changeOutputs, broadcast, rebroadcastMessage, canceled = false, keyPath = Transaction.NO_KEY_PATH) {
+		constructor(walletType, networkType, commit, walletKeyPath, received, recordedTimestamp, createdTimestamp, height, lockHeight, isCoinbase, status, amount, amountReleased, kernelExcess, identifier, switchType, display, kernelOffset, id, message, timeToLiveCutOffHeight, expired, confirmedTimestamp, fee, senderAddress, receiverAddress, receiverSignature, destination, spendableHeight, requiredNumberOfConfirmations, spentOutputs, changeOutputs, broadcast, rebroadcastMessage, fileResponse, canceled = false, keyPath = Transaction.NO_KEY_PATH) {
 		
 			// Set wallet type
 			this.setWalletType(walletType);
@@ -113,6 +113,9 @@ class Transaction {
 			
 			// Set rebroadcast message
 			this.setRebroadcastMessage(rebroadcastMessage);
+			
+			// Set file response
+			this.setFileResponse(fileResponse);
 			
 			// Set canceled
 			this.setCanceled(canceled);
@@ -597,6 +600,20 @@ class Transaction {
 			this.rebroadcastMessage = rebroadcastMessage;
 		}
 		
+		// Get file response
+		getFileResponse() {
+		
+			// Return file response
+			return this.fileResponse;
+		}
+		
+		// Set file response
+		setFileResponse(fileResponse) {
+		
+			// Set file response
+			this.fileResponse = fileResponse;
+		}
+		
 		// Get canceled
 		getCanceled() {
 		
@@ -875,6 +892,13 @@ class Transaction {
 		
 			// Return unknown rebroadcast message
 			return null;
+		}
+		
+		// Unused file response
+		static get UNUSED_FILE_RESPONSE() {
+		
+			// Return unused file response
+			return undefined;
 		}
 		
 		// No key path

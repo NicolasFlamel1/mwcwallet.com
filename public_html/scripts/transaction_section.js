@@ -316,7 +316,7 @@ class TransactionSection extends Section {
 				var showRebroadcastTransactionError = function(message) {
 				
 					// Show message and allow showing messages
-					self.getMessage().show(Language.getDefaultTranslation('Rebroadcast Transaction Error'), message, false, function() {
+					self.getMessage().show(Language.getDefaultTranslation('Rebroadcast Error'), message, false, function() {
 					
 						// Hide loading
 						self.getApplication().hideLoading();
@@ -475,6 +475,126 @@ class TransactionSection extends Section {
 				}
 			});
 			
+			// Get transaction file response button click event
+			this.getDisplay().find("button.getTransactionFileResponse").on("click", function() {
+				
+				// Get button
+				var button = $(this);
+
+				// Prevent showing messages
+				self.getMessage().prevent();
+				
+				// Save focus and blur
+				self.getFocus().save(true);
+				
+				// Set that button is clicked
+				button.addClass("clicked");
+				
+				// Disable unlocked
+				self.getUnlocked().disable();
+				
+				// Show loading
+				self.getApplication().showLoading();
+				
+				// Set that button is loading
+				button.addClass("loading");
+				
+				// Show get transaction file response error
+				var showGetTransactionFileResponseError = function(message) {
+				
+					// Show message and allow showing messages
+					self.getMessage().show(Language.getDefaultTranslation('Get File Response Error'), Message.createText(message), false, function() {
+					
+						// Hide loading
+						self.getApplication().hideLoading();
+						
+					}, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+					
+						// Check if message was displayed
+						if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
+					
+							// Set that button isn't loading
+							button.removeClass("loading");
+							
+							// Enable unlocked
+							self.getUnlocked().enable();
+							
+							// Set that button isn't clicked
+							button.removeClass("clicked");
+							
+							// Restore focus and don't blur
+							self.getFocus().restore(false);
+							
+							// Hide message
+							self.getMessage().hide();
+						}
+					});
+				};
+				
+				// Check if transaction is coinbase
+				if(self.transaction.getIsCoinbase() === true) {
+				
+					// Show get transaction file response error
+					showGetTransactionFileResponseError(Language.getDefaultTranslation('Coinbase transactions don\'t have a file response.'));
+				}
+				
+				// Otherwise check if transaction was sent
+				else if(self.transaction.getReceived() === false) {
+				
+					// Show get transaction file response error
+					showGetTransactionFileResponseError(Language.getDefaultTranslation('Sent transactions don\'t have a file response.'));
+				}
+				
+				// Otherwise check if transaction's file response doesn't exist
+				else if(self.transaction.getFileResponse() === Transaction.UNUSED_FILE_RESPONSE) {
+				
+					// Show get transaction file response error
+					showGetTransactionFileResponseError(Language.getDefaultTranslation('The transaction doesn\'t have a file response or its file response isn\'t known.'));
+				}
+				
+				// Otherwise
+				else {
+				
+					// Prevent automatic lock
+					self.getAutomaticLock().prevent();
+					
+					// Set timeout
+					setTimeout(function() {
+					
+						// Set file name
+						var fileName = ((self.transaction.getId() !== Transaction.UNKNOWN_ID && self.transaction.getId() !== Transaction.UNUSED_ID) ? self.transaction.getId().serialize() : "transaction") + ".response";
+					
+						// Save transaction's file response
+						Common.saveFile(fileName, self.transaction.getFileResponse());
+					
+						// Allow automatic lock
+						self.getAutomaticLock().allow();
+						
+						// Check if automatic lock isn't locking
+						if(self.getAutomaticLock().isLocking() === false) {
+					
+							// Set that button isn't loading
+							button.removeClass("loading");
+							
+							// Hide loading
+							self.getApplication().hideLoading();
+							
+							// Enable unlocked
+							self.getUnlocked().enable();
+							
+							// Set that button isn't clicked
+							button.removeClass("clicked");
+							
+							// Delete focus
+							self.getFocus().delete();
+							
+							// Allow showing messages
+							self.getMessage().allow();
+						}
+					}, TransactionSection.GET_TRANSACTION_FILE_RESPONSE_DELAY_MILLISECONDS);
+				}
+			});
+			
 			// Cancel transaction button click event
 			this.getDisplay().find("button.cancelTransaction").on("click", function() {
 			
@@ -485,7 +605,7 @@ class TransactionSection extends Section {
 				button.addClass("clicked");
 
 				// Show message
-				self.getMessage().show(Language.getDefaultTranslation('Cancel Transaction'), Message.createText(Language.getDefaultTranslation('Are you sure you want to cancel transaction %1$s?'), [self.transactionIndex.toFixed()]), false, function() {
+				self.getMessage().show(Language.getDefaultTranslation('Cancel'), Message.createText(Language.getDefaultTranslation('Are you sure you want to cancel transaction %1$s?'), [self.transactionIndex.toFixed()]), false, function() {
 				
 					// Save focus and blur
 					self.getFocus().save(true);
@@ -561,7 +681,7 @@ class TransactionSection extends Section {
 									if(self.getAutomaticLock().isLocking() === false) {
 								
 										// Show message immediately and allow showing messages
-										self.getMessage().show(Language.getDefaultTranslation('Cancel Transaction Error'), Message.createText(error), true, function() {
+										self.getMessage().show(Language.getDefaultTranslation('Cancel Error'), Message.createText(error), true, function() {
 										
 											// Hide loading
 											self.getApplication().hideLoading();
@@ -1274,7 +1394,10 @@ class TransactionSection extends Section {
 						Consensus.EXPLORER_KERNEL_EXCESS_URL + encodeURIComponent(Common.toHexString(this.transaction.getKernelExcess())),
 						
 						// Is external
-						true
+						true,
+						
+						// Is blob
+						false
 					]
 				], "kernelExcess rawData contextMenu"));
 				
@@ -1334,7 +1457,10 @@ class TransactionSection extends Section {
 							Consensus.EXPLORER_OUTPUT_COMMITMENT_URL + encodeURIComponent(Common.toHexString(this.transaction.getCommit())),
 							
 							// Is external
-							true
+							true,
+							
+							// Is blob
+							false
 						]
 					], "outputCommit rawData contextMenu"));
 					
@@ -1620,6 +1746,13 @@ class TransactionSection extends Section {
 		
 			// Return copy value to clipboard delay milliseconds
 			return 175;
+		}
+		
+		// Get transaction file response delay milliseconds
+		static get GET_TRANSACTION_FILE_RESPONSE_DELAY_MILLISECONDS() {
+		
+			// Return get transaction file response delay milliseconds
+			return 300;
 		}
 }
 

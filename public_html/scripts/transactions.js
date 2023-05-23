@@ -17,6 +17,9 @@ class Transactions {
 			
 			// Set exclusive wallet transactions lock release event index
 			this.exclusiveWalletTransactionsLockReleaseEventIndex = 0;
+			
+			// Set exclusive wallet transactions locks priority counters
+			this.exclusiveWalletTransactionsLocksPriorityCounters = {};
 		
 			// Create database
 			Database.createDatabase(function(database, currentVersion) {
@@ -250,7 +253,7 @@ class Transactions {
 		}
 		
 		// Obtain wallet's exclusive transactions lock
-		obtainWalletsExclusiveTransactionsLock(walletKeyPath) {
+		obtainWalletsExclusiveTransactionsLock(walletKeyPath, isHighPriority = true) {
 		
 			// Set self
 			var self = this;
@@ -260,6 +263,20 @@ class Transactions {
 			
 				// Check if wallet's exclusive transactions lock is locked
 				if(self.exclusiveWalletTransactionsLocks.has(walletKeyPath) === true) {
+				
+					// Check if if high priority
+					if(isHighPriority === true) {
+				
+						// Check if exclusive wallet transactions locks priority counter doesn't exist for the wallet
+						if(walletKeyPath.toFixed() in self.exclusiveWalletTransactionsLocksPriorityCounters === false) {
+						
+							// Create exclusive wallet transactions locks priority counter for the wallet
+							self.exclusiveWalletTransactionsLocksPriorityCounters[walletKeyPath.toFixed()] = 0;
+						}
+					
+						// Increment exclusive wallet transactions locks priority counter for the wallet
+						++self.exclusiveWalletTransactionsLocksPriorityCounters[walletKeyPath.toFixed()];
+					}
 				
 					// Get current exclusive wallet transactions lock release event index
 					var index = self.exclusiveWalletTransactionsLockReleaseEventIndex++;
@@ -281,6 +298,13 @@ class Transactions {
 						
 							// Lock wallet's exclusive transactions lock
 							self.exclusiveWalletTransactionsLocks.add(walletKeyPath);
+							
+							// Check if if high priority
+							if(isHighPriority === true) {
+							
+								// Decrement exclusive wallet transactions locks priority counter for the wallet
+								--self.exclusiveWalletTransactionsLocksPriorityCounters[walletKeyPath.toFixed()];
+							}
 							
 							// Resolve
 							resolve();
@@ -319,6 +343,13 @@ class Transactions {
 					$(self).trigger(Transactions.EXCLUSIVE_WALLET_TRANSACTIONS_LOCK_RELEASE_EVENT, walletKeyPath);
 				}, 0);
 			}
+		}
+		
+		// Is high priority wallet's exclusive transactions lock waiting
+		isHighPriorityWalletsExclusiveTransactionsLockWaiting(walletKeyPath) {
+		
+			// Return if exclusive wallet transactions locks priority counter exists for the wallet and it's greater than zero
+			return walletKeyPath.toFixed() in this.exclusiveWalletTransactionsLocksPriorityCounters === true && this.exclusiveWalletTransactionsLocksPriorityCounters[walletKeyPath.toFixed()] > 0;
 		}
 		
 		// Get transactions
@@ -1439,6 +1470,9 @@ class Transactions {
 									// Rebroadcast message
 									[Database.toKeyPath(Transactions.DATABASE_REBROADCAST_MESSAGE_NAME)]: currentTransaction.getRebroadcastMessage(),
 									
+									// File response
+									[Database.toKeyPath(Transactions.DATABASE_FILE_RESPONSE_NAME)]: currentTransaction.getFileResponse(),
+									
 									// TODO Store canceled in the database as a boolean
 									
 									// Canceled
@@ -1588,6 +1622,9 @@ class Transactions {
 										
 										// Rebroadcast message
 										[Database.toKeyPath(Transactions.DATABASE_REBROADCAST_MESSAGE_NAME)]: spentTransaction.getRebroadcastMessage(),
+										
+										// File response
+										[Database.toKeyPath(Transactions.DATABASE_FILE_RESPONSE_NAME)]: spentTransaction.getFileResponse(),
 										
 										// TODO Store canceled in the database as a boolean
 									
@@ -1998,6 +2035,9 @@ class Transactions {
 				// Rebroadcast message
 				result[Database.toKeyPath(Transactions.DATABASE_REBROADCAST_MESSAGE_NAME)],
 				
+				// File response
+				result[Database.toKeyPath(Transactions.DATABASE_FILE_RESPONSE_NAME)],
+				
 				// Canceled
 				(result[Database.toKeyPath(Transactions.DATABASE_CANCELED_NAME)] === 1) ? true : false,
 				
@@ -2249,6 +2289,13 @@ class Transactions {
 		
 			// Return database rebroadcast message name
 			return "Rebroadcast Message";
+		}
+		
+		// Database file response name
+		static get DATABASE_FILE_RESPONSE_NAME() {
+		
+			// Return database file response name
+			return "File Response";
 		}
 		
 		// Database canceled name

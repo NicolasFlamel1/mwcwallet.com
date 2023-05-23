@@ -235,6 +235,13 @@ class Wallet {
 			// Set use BIP39
 			this.setUseBip39(useBip39);
 			
+			// Check if hardware wallet exists
+			if(hardwareWallet !== Wallet.NO_HARDWARE_WALLET) {
+			
+				// Set hardware wallet's wallet key path
+				hardwareWallet.setWalletKeyPath(Wallet.NO_KEY_PATH);
+			}
+			
 			// Set self
 			var self = this;
 			
@@ -2868,6 +2875,13 @@ class Wallet {
 		
 			// Set keyPath
 			this.keyPath = keyPath;
+			
+			// Check if hardware wallet exists
+			if(this.getHardwareWallet() !== Wallet.NO_HARDWARE_WALLET) {
+			
+				// Set hardware wallet's wallet key path
+				this.getHardwareWallet().setWalletKeyPath(keyPath);
+			}
 		}
 		
 		// Get starting sync height
@@ -3091,6 +3105,9 @@ class Wallet {
 									
 										// Set hardware wallet to the hardware wallet
 										self.hardwareWallet = hardwareWallet;
+										
+										// Set hardware wallet's wallet key path
+										hardwareWallet.setWalletKeyPath(self.getKeyPath());
 										
 										// Break
 										break;

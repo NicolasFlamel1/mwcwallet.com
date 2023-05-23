@@ -490,13 +490,66 @@ class Wallets {
 			});
 			
 			// Listener request receive event
-			$(this.listener).on(Listener.REQUEST_RECEIVE_EVENT, function(event, interaction) {
+			$(this.listener).on(Listener.REQUEST_RECEIVE_EVENT, function(event, interaction, promiseResolve = undefined, promiseReject = undefined) {
 			
-				// Get wallet from address suffix
-				self.getWalletFromAddressSuffix(interaction.getUrl()).then(function(wallet) {
+				// Get interaction's wallet
+				var getInteractionsWallet = function() {
 				
-					// Obtain wallet's exclusive transactions lock
-					self.transactions.obtainWalletsExclusiveTransactionsLock(wallet.getKeyPath()).then(function() {
+					// Return promise
+					return new Promise(function(resolve, reject) {
+					
+						// Check if interaction uses a URL
+						if(interaction.getUrl() !== Interaction.NO_URL) {
+						
+							// Return getting wallet with interaction's URL
+							return self.getWalletFromAddressSuffix(interaction.getUrl()).then(function(wallet) {
+							
+								// Resolve wallet
+								resolve(wallet);
+								
+							// Catch errors
+							}).catch(function(error) {
+							
+								// Reject error
+								reject(error);
+							});
+						}
+						
+						// Otherwise check if interaction uses a wallet key path
+						else if(interaction.getWalletKeyPath() !== Interaction.NO_WALLET_KEY_PATH) {
+						
+							// Check if wallet with the interaction's wallet key path doesn't exist
+							if(self.walletExists(interaction.getWalletKeyPath()) === false) {
+							
+								// Reject error
+								reject(Language.getDefaultTranslation('The wallet doesn\'t exist.'));
+							}
+							
+							// Otherwise
+							else {
+					
+								// Resolve wallet
+								resolve(self.wallets[interaction.getWalletKeyPath()]);
+							}
+						}
+						
+						// Otherwise
+						else {
+						
+							// Reject error
+							reject(Language.getDefaultTranslation('The wallet doesn\'t exist.'));
+						}
+					});
+				};
+			
+				// Get interaction's wallet
+				getInteractionsWallet().then(function(wallet) {
+				
+					// Get receiving as file
+					var receivingAsFile = typeof promiseResolve !== "undefined";
+				
+					// Obtain wallet's exclusive transactions lock and make it high priority if receiving as file
+					self.transactions.obtainWalletsExclusiveTransactionsLock(wallet.getKeyPath(), receivingAsFile === true).then(function() {
 					
 						// Check if wallet exists
 						if(self.walletExists(wallet.getKeyPath()) === true) {
@@ -511,7 +564,7 @@ class Wallets {
 							var lastIdentifier = wallet.getLastIdentifier();
 							
 							// Get the APIs response to the request
-							self.api.getResponse(interaction.getApi(), wallet, type, data, function() {
+							self.api.getResponse(interaction.getApi(), wallet, type, data, (receivingAsFile === true) ? false : true, (receivingAsFile === true) ? true : false, (receivingAsFile === true) ? Common.NO_CANCEL_OCCURRED : function() {
 							
 								// Return if interaction is canceled
 								return interaction.isCanceled() === true;
@@ -563,11 +616,14 @@ class Wallets {
 												}
 											}
 											
+											// Set file response
+											var fileResponse = (receivingAsFile === true) ? ((typeof response[Api.RESPONSE_RESPONSE_INDEX]["result"]["Ok"] === "string") ? response[Api.RESPONSE_RESPONSE_INDEX]["result"]["Ok"] : JSONBigNumber.stringify(response[Api.RESPONSE_RESPONSE_INDEX]["result"]["Ok"])) : Transaction.UNUSED_FILE_RESPONSE;
+											
 											// Try
 											try {
 											
 												// Create transaction
-												var transaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), commit, wallet.getKeyPath(), true, timestamp, timestamp, (slate.getHeight() === Slate.UNKNOWN_HEIGHT) ? Transaction.UNKNOWN_HEIGHT : slate.getHeight(), (slate.getLockHeight().isEqualTo(Slate.NO_LOCK_HEIGHT) === false) ? slate.getLockHeight() : Transaction.NO_LOCK_HEIGHT, false, Transaction.STATUS_UNCONFIRMED, slate.getAmount(), false, slate.getExcess(), identifier, switchType, true, slate.getOffsetExcess(), slate.getId(), (slate.getParticipant(SlateParticipant.SENDER_ID).getMessage() !== SlateParticipant.NO_MESSAGE) ? slate.getParticipant(SlateParticipant.SENDER_ID).getMessage() : Transaction.NO_MESSAGE, (slate.getTimeToLiveCutOffHeight() !== Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT) ? slate.getTimeToLiveCutOffHeight() : Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, Transaction.NO_CONFIRMED_TIMESTAMP, slate.getFee(), (slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? slate.getSenderAddress() : Transaction.NO_SENDER_ADDRESS, (slate.getReceiverAddress() !== Slate.NO_RECEIVER_ADDRESS) ? slate.getReceiverAddress() : Transaction.NO_RECEIVER_ADDRESS, (slate.getReceiverSignature() !== Slate.NO_RECEIVER_SIGNATURE) ? slate.getReceiverSignature() : Transaction.NO_RECEIVER_SIGNATURE, Transaction.UNKNOWN_DESTINATION, spendableHeight, self.numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, false, Transaction.UNKNOWN_REBROADCAST_MESSAGE);
+												var transaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), commit, wallet.getKeyPath(), true, timestamp, timestamp, (slate.getHeight() === Slate.UNKNOWN_HEIGHT) ? Transaction.UNKNOWN_HEIGHT : slate.getHeight(), (slate.getLockHeight().isEqualTo(Slate.NO_LOCK_HEIGHT) === false) ? slate.getLockHeight() : Transaction.NO_LOCK_HEIGHT, false, Transaction.STATUS_UNCONFIRMED, slate.getAmount(), false, slate.getExcess(), identifier, switchType, true, slate.getOffsetExcess(), slate.getId(), (slate.getParticipant(SlateParticipant.SENDER_ID).getMessage() !== SlateParticipant.NO_MESSAGE) ? slate.getParticipant(SlateParticipant.SENDER_ID).getMessage() : Transaction.NO_MESSAGE, (slate.getTimeToLiveCutOffHeight() !== Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT) ? slate.getTimeToLiveCutOffHeight() : Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, Transaction.NO_CONFIRMED_TIMESTAMP, slate.getFee(), (slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? slate.getSenderAddress() : Transaction.NO_SENDER_ADDRESS, (slate.getReceiverAddress() !== Slate.NO_RECEIVER_ADDRESS) ? slate.getReceiverAddress() : Transaction.NO_RECEIVER_ADDRESS, (slate.getReceiverSignature() !== Slate.NO_RECEIVER_SIGNATURE) ? slate.getReceiverSignature() : Transaction.NO_RECEIVER_SIGNATURE, Transaction.UNKNOWN_DESTINATION, spendableHeight, self.numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, false, Transaction.UNKNOWN_REBROADCAST_MESSAGE, fileResponse);
 											}
 											
 											// Catch errors
@@ -653,22 +709,58 @@ class Wallets {
 																	
 																	// Check if wallet exists
 																	if(self.walletExists(wallet.getKeyPath()) === true) {
+																	
+																		// Check if promise resolve exists
+																		if(typeof promiseResolve !== "undefined") {
+																	
+																			// Resolve promise
+																			promiseResolve([
+																			
+																				// Wallet
+																				wallet,
+																			
+																				// Amount
+																				slate.getAmount().dividedBy(Consensus.VALUE_NUMBER_BASE),
+																				
+																				// Currency
+																				Consensus.CURRENCY_NAME,
+																				
+																				// Message
+																				slate.getParticipant(SlateParticipant.SENDER_ID).getMessage(),
+																				
+																				// File response
+																				fileResponse,
+																				
+																				// ID
+																				slate.getId()
+																			]);
+																		}
+																		
+																		// Otherwise
+																		else {
 															
-																		// Trigger currency receive event
-																		$(self).trigger(Wallets.CURRENCY_RECEIVE_EVENT, [
-																		
-																			// Key path
-																			wallet,
-																		
-																			// Amount
-																			slate.getAmount().dividedBy(Consensus.VALUE_NUMBER_BASE),
+																			// Trigger currency receive event
+																			$(self).trigger(Wallets.CURRENCY_RECEIVE_EVENT, [
 																			
-																			// Currency
-																			Consensus.CURRENCY_NAME,
+																				// Wallet
+																				wallet,
 																			
-																			// Message
-																			slate.getParticipant(SlateParticipant.SENDER_ID).getMessage()
-																		]);
+																				// Amount
+																				slate.getAmount().dividedBy(Consensus.VALUE_NUMBER_BASE),
+																				
+																				// Currency
+																				Consensus.CURRENCY_NAME,
+																				
+																				// Message
+																				slate.getParticipant(SlateParticipant.SENDER_ID).getMessage(),
+																				
+																				// File response
+																				fileResponse,
+																				
+																				// ID
+																				slate.getId()
+																			]);
+																		}
 																		
 																		// Trigger change event
 																		$(document).trigger(Wallets.CHANGE_EVENT, [
@@ -690,6 +782,17 @@ class Wallets {
 																			[transaction]
 																		]);
 																	}
+																	
+																	// Otherwise
+																	else {
+																	
+																		// Check if promise reject exists
+																		if(typeof promiseReject !== "undefined") {
+																	
+																			// Reject promise
+																			promiseReject(Listener.NOT_FOUND_RESPONSE);
+																		}
+																	}
 																
 																// Catch errors
 																}).catch(function(error) {
@@ -702,6 +805,13 @@ class Wallets {
 																	
 																		// Release wallet's exclusive transactions lock
 																		self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+																		
+																		// Check if promise reject exists
+																		if(typeof promiseReject !== "undefined") {
+																	
+																			// Reject promise
+																			promiseReject(error);
+																		}
 																
 																		// Trigger a fatal error
 																		new FatalError(FatalError.DATABASE_ERROR);
@@ -718,11 +828,25 @@ class Wallets {
 																	// Release wallet's exclusive transactions lock
 																	self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
 																	
+																	// Check if promise reject exists
+																	if(typeof promiseReject !== "undefined") {
+																
+																		// Reject promise
+																		promiseReject(Listener.NOT_FOUND_RESPONSE);
+																	}
+																	
 																// Catch errors
-																}).catch(function() {
+																}).catch(function(error) {
 																
 																	// Release wallet's exclusive transactions lock
 																	self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+																	
+																	// Check if promise reject exists
+																	if(typeof promiseReject !== "undefined") {
+																
+																		// Reject promise
+																		promiseReject(Listener.NOT_FOUND_RESPONSE);
+																	}
 																
 																	// Trigger a fatal error
 																	new FatalError(FatalError.DATABASE_ERROR);
@@ -740,6 +864,13 @@ class Wallets {
 															
 																// Release wallet's exclusive transactions lock
 																self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+																
+																// Check if promise reject exists
+																if(typeof promiseReject !== "undefined") {
+															
+																	// Reject promise
+																	promiseReject(error);
+																}
 														
 																// Trigger a fatal error
 																new FatalError(FatalError.DATABASE_ERROR);
@@ -756,11 +887,25 @@ class Wallets {
 															// Release wallet's exclusive transactions lock
 															self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
 															
+															// Check if promise reject exists
+															if(typeof promiseReject !== "undefined") {
+														
+																// Reject promise
+																promiseReject(Listener.NOT_FOUND_RESPONSE);
+															}
+															
 														// Catch errors
-														}).catch(function() {
+														}).catch(function(error) {
 														
 															// Release wallet's exclusive transactions lock
 															self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+															
+															// Check if promise reject exists
+															if(typeof promiseReject !== "undefined") {
+														
+																// Reject promise
+																promiseReject(Listener.NOT_FOUND_RESPONSE);
+															}
 														
 															// Trigger a fatal error
 															new FatalError(FatalError.DATABASE_ERROR);
@@ -780,13 +925,20 @@ class Wallets {
 														if(self.walletExists(wallet.getKeyPath()) === true && wallet.getLastIdentifier() !== Wallet.NO_LAST_IDENTIFIER && (lastIdentifier === Wallet.NO_LAST_IDENTIFIER || wallet.getLastIdentifier().equalsValue(lastIdentifier) === false)) {
 														
 															// Save wallet and catch errors
-															self.saveWallet(wallet).catch(function(error) {
+															self.saveWallet(wallet).catch(function() {
 															
 															// Finally
 															}).finally(function() {
 															
 																// Release wallet's exclusive transactions lock
 																self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+																
+																// Check if promise reject exists
+																if(typeof promiseReject !== "undefined") {
+															
+																	// Reject promise
+																	promiseReject(error);
+																}
 															
 																// Trigger a fatal error
 																new FatalError(FatalError.DATABASE_ERROR);
@@ -798,6 +950,13 @@ class Wallets {
 														
 															// Release wallet's exclusive transactions lock
 															self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+															
+															// Check if promise reject exists
+															if(typeof promiseReject !== "undefined") {
+														
+																// Reject promise
+																promiseReject(error);
+															}
 													
 															// Trigger a fatal error
 															new FatalError(FatalError.DATABASE_ERROR);
@@ -816,12 +975,26 @@ class Wallets {
 													
 														// Release wallet's exclusive transactions lock
 														self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+														
+														// Check if promise reject exists
+														if(typeof promiseReject !== "undefined") {
+													
+															// Reject promise
+															promiseReject(error);
+														}
 													
 													// Catch errors
-													}).catch(function(error) {
+													}).catch(function() {
 													
 														// Release wallet's exclusive transactions lock
 														self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+														
+														// Check if promise reject exists
+														if(typeof promiseReject !== "undefined") {
+													
+															// Reject promise
+															promiseReject(error);
+														}
 													
 														// Trigger a fatal error
 														new FatalError(FatalError.DATABASE_ERROR);
@@ -833,6 +1006,13 @@ class Wallets {
 												
 													// Release wallet's exclusive transactions lock
 													self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+													
+													// Check if promise reject exists
+													if(typeof promiseReject !== "undefined") {
+												
+														// Reject promise
+														promiseReject(error);
+													}
 											
 													// Trigger a fatal error
 													new FatalError(FatalError.DATABASE_ERROR);
@@ -851,12 +1031,26 @@ class Wallets {
 												
 													// Release wallet's exclusive transactions lock
 													self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+													
+													// Check if promise resolve exists
+													if(typeof promiseResolve !== "undefined") {
+												
+														// Resolve promise
+														promiseResolve();
+													}
 												
 												// Catch errors
 												}).catch(function(error) {
 												
 													// Release wallet's exclusive transactions lock
 													self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+													
+													// Check if promise reject exists
+													if(typeof promiseReject !== "undefined") {
+												
+														// Reject promise
+														promiseReject(error);
+													}
 												
 													// Trigger a fatal error
 													new FatalError(FatalError.DATABASE_ERROR);
@@ -868,6 +1062,13 @@ class Wallets {
 											
 												// Release wallet's exclusive transactions lock
 												self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+												
+												// Check if promise resolve exists
+												if(typeof promiseResolve !== "undefined") {
+											
+													// Resolve promise
+													promiseResolve();
+												}
 											}
 										}
 									
@@ -882,12 +1083,26 @@ class Wallets {
 											
 												// Release wallet's exclusive transactions lock
 												self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+												
+												// Check if promise reject exists
+												if(typeof promiseReject !== "undefined") {
+											
+													// Reject promise
+													promiseReject(error);
+												}
 											
 											// Catch errors
-											}).catch(function(error) {
+											}).catch(function() {
 											
 												// Release wallet's exclusive transactions lock
 												self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+												
+												// Check if promise reject exists
+												if(typeof promiseReject !== "undefined") {
+											
+													// Reject promise
+													promiseReject(error);
+												}
 											
 												// Trigger a fatal error
 												new FatalError(FatalError.DATABASE_ERROR);
@@ -899,9 +1114,15 @@ class Wallets {
 										
 											// Release wallet's exclusive transactions lock
 											self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+											
+											// Check if promise reject exists
+											if(typeof promiseReject !== "undefined") {
+										
+												// Reject promise
+												promiseReject(error);
+											}
 										}
 									});
-								
 								}
 							
 								// Otherwise
@@ -909,6 +1130,13 @@ class Wallets {
 								
 									// Release wallet's exclusive transactions lock
 									self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+									
+									// Check if promise reject exists
+									if(typeof promiseReject !== "undefined") {
+								
+										// Reject promise
+										promiseReject(Listener.NOT_FOUND_RESPONSE);
+									}
 								
 									// Cancel interaction with not found response and catch errors
 									interaction.cancel(Listener.NOT_FOUND_RESPONSE).catch(function(error) {
@@ -919,6 +1147,31 @@ class Wallets {
 							// Catch errors
 							}).catch(function(error) {
 							
+								// Check if canceled or user rejected on hardware wallet
+								if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+								
+									// Check if data is a buffer
+									if(data instanceof Uint8Array === true) {
+								
+										// Set listener error to JSON-RPC internal error error response
+										var listenerError = JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, JSONBigNumber.parse((new TextDecoder()).decode(data)));
+									}
+									
+									// Otherwise
+									else {
+									
+										// Set listener error to JSON-RPC internal error error response
+										var listenerError = JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data);
+									}
+								}
+								
+								// Otherwise
+								else {
+								
+									// Set listener error to error
+									var listenerError = error;
+								}
+								
 								// Check if wallet exists and wallet's last identifier changed
 								if(self.walletExists(wallet.getKeyPath()) === true && wallet.getLastIdentifier() !== Wallet.NO_LAST_IDENTIFIER && (lastIdentifier === Wallet.NO_LAST_IDENTIFIER || wallet.getLastIdentifier().equalsValue(lastIdentifier) === false)) {
 								
@@ -927,9 +1180,16 @@ class Wallets {
 									
 										// Release wallet's exclusive transactions lock
 										self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+										
+										// Check if promise reject exists
+										if(typeof promiseReject !== "undefined") {
 									
-										// Cancel interaction with error and catch errors
-										interaction.cancel(error).catch(function(error) {
+											// Reject promise
+											promiseReject(error);
+										}
+									
+										// Cancel interaction with listener error and catch errors
+										interaction.cancel(listenerError).catch(function(error) {
 										
 										});
 									
@@ -938,9 +1198,16 @@ class Wallets {
 									
 										// Release wallet's exclusive transactions lock
 										self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+										
+										// Check if promise reject exists
+										if(typeof promiseReject !== "undefined") {
 									
-										// Cancel interaction with error and catch errors
-										interaction.cancel(error).catch(function(error) {
+											// Reject promise
+											promiseReject(error);
+										}
+									
+										// Cancel interaction with listener error and catch errors
+										interaction.cancel(listenerError).catch(function(error) {
 										
 										// Finally
 										}).finally(function() {
@@ -956,9 +1223,16 @@ class Wallets {
 								
 									// Release wallet's exclusive transactions lock
 									self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+									
+									// Check if promise reject exists
+									if(typeof promiseReject !== "undefined") {
 								
-									// Cancel interaction with error and catch errors
-									interaction.cancel(error).catch(function(error) {
+										// Reject promise
+										promiseReject(error);
+									}
+								
+									// Cancel interaction with listener error and catch errors
+									interaction.cancel(listenerError).catch(function(error) {
 									
 									});
 								}
@@ -970,6 +1244,13 @@ class Wallets {
 						
 							// Release wallet's exclusive transactions lock
 							self.transactions.releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+							
+							// Check if promise reject exists
+							if(typeof promiseReject !== "undefined") {
+						
+								// Reject promise
+								promiseReject(Listener.NOT_FOUND_RESPONSE);
+							}
 						
 							// Cancel interaction with not found response and catch errors
 							interaction.cancel(Listener.NOT_FOUND_RESPONSE).catch(function(error) {
@@ -980,6 +1261,13 @@ class Wallets {
 				
 				// Catch errors
 				}).catch(function(error) {
+				
+					// Check if promise reject exists
+					if(typeof promiseReject !== "undefined") {
+				
+						// Reject promise
+						promiseReject(Listener.NOT_FOUND_RESPONSE);
+					}
 				
 					// Cancel interaction with not found response and catch errors
 					interaction.cancel(Listener.NOT_FOUND_RESPONSE).catch(function(error) {
@@ -3939,7 +4227,7 @@ class Wallets {
 		}
 		
 		// Wait for hardware wallet to approve
-		waitForHardwareWalletToApprove(keyPath, text, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
+		waitForHardwareWalletToApprove(keyPath, text, allowUnlock = false, preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
 		
 			// Set self
 			var self = this;
@@ -3985,7 +4273,7 @@ class Wallets {
 					else {
 					
 						// Return application showing hardware wallet pending message
-						return self.application.showHardwareWalletPendingMessage(wallet.getHardwareWallet(), text, cancelOccurred).then(function(canceled) {
+						return self.application.showHardwareWalletPendingMessage(wallet.getHardwareWallet(), text, allowUnlock, preventMessages, cancelOccurred).then(function(canceled) {
 						
 							// Resolve canceled
 							resolve(canceled);
@@ -4002,7 +4290,7 @@ class Wallets {
 		}
 		
 		// Hardware wallet done approving
-		hardwareWalletDoneApproving() {
+		hardwareWalletDoneApproving(preventMessages = false) {
 		
 			// Set self
 			var self = this;
@@ -4011,7 +4299,7 @@ class Wallets {
 			return new Promise(function(resolve, reject) {
 		
 				// Return setting that application hardware wallet pending message is done
-				return self.application.hardwareWalletPendingMessageDone().then(function() {
+				return self.application.hardwareWalletPendingMessageDone(preventMessages).then(function() {
 				
 					// Resolve
 					resolve();
@@ -4662,7 +4950,7 @@ class Wallets {
 						// Get key path from result
 						var keyPath = results[0][Database.KEY_PATH_NAME];
 						
-						// Otherwise check if wallet doesn't exist
+						// Check if wallet doesn't exist
 						if(self.walletExists(keyPath) === false) {
 						
 							// Reject error
@@ -5110,7 +5398,7 @@ class Wallets {
 																				return Promise.all(checkingOutputs[j]).then(function(outputsInformation) {
 																				
 																					// Return obtaining wallet's exclusive transactions lock
-																					return self.transactions.obtainWalletsExclusiveTransactionsLock(keyPath).then(function() {
+																					return self.transactions.obtainWalletsExclusiveTransactionsLock(keyPath, false).then(function() {
 																					
 																						// Initialize process transactions
 																						var processTransactions = [];
@@ -5571,7 +5859,7 @@ class Wallets {
 																													}
 																												
 																													// Create new transaction
-																													var newTransaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), outputInformation.getOutput().getCommit(), keyPath, true, recordedTimestamp, Transaction.UNKNOWN_CREATED_TIMESTAMP, outputInformation.getOutput().getHeight(), Transaction.UNKNOWN_LOCK_HEIGHT, outputInformation.getOutput().isCoinbase(), Transaction.STATUS_UNSPENT, outputInformation.getAmount(), false, Transaction.UNKNOWN_KERNEL_EXCESS, outputInformation.getIdentifier(), outputInformation.getSwitchType(), true, Transaction.UNKNOWN_KERNEL_OFFSET, Transaction.UNKNOWN_ID, Transaction.UNKNOWN_MESSAGE, Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, timestamp, Transaction.UNKNOWN_FEE, Transaction.UNKNOWN_SENDER_ADDRESS, Transaction.UNKNOWN_RECEIVER_ADDRESS, Transaction.UNKNOWN_RECEIVER_SIGNATURE, Transaction.UNKNOWN_DESTINATION, spendableHeight, self.numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, true, Transaction.UNKNOWN_REBROADCAST_MESSAGE);
+																													var newTransaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), outputInformation.getOutput().getCommit(), keyPath, true, recordedTimestamp, Transaction.UNKNOWN_CREATED_TIMESTAMP, outputInformation.getOutput().getHeight(), Transaction.UNKNOWN_LOCK_HEIGHT, outputInformation.getOutput().isCoinbase(), Transaction.STATUS_UNSPENT, outputInformation.getAmount(), false, Transaction.UNKNOWN_KERNEL_EXCESS, outputInformation.getIdentifier(), outputInformation.getSwitchType(), true, Transaction.UNKNOWN_KERNEL_OFFSET, Transaction.UNKNOWN_ID, Transaction.UNKNOWN_MESSAGE, Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, timestamp, Transaction.UNKNOWN_FEE, Transaction.UNKNOWN_SENDER_ADDRESS, Transaction.UNKNOWN_RECEIVER_ADDRESS, Transaction.UNKNOWN_RECEIVER_SIGNATURE, Transaction.UNKNOWN_DESTINATION, spendableHeight, self.numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, true, Transaction.UNKNOWN_REBROADCAST_MESSAGE, Transaction.UNUSED_FILE_RESPONSE);
 																													
 																													// Check if the new transaction's spendable height is the next block
 																													if(newTransaction.getSpendableHeight().isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {

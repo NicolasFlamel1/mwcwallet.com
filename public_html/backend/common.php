@@ -3,14 +3,15 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.1.2";
+	const VERSION_NUMBER = "2.2.0";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "11 May 2023 14:18:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Added settings to change the wallet type and network type."
+		"Added support for sending and receiving payments as files.",
+		"Fixed a deadlock that can occur when receiving a payment to a hardware wallet."
 	];
 	
 	// Maintenance start time

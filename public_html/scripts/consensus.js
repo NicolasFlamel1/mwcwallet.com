@@ -23,8 +23,8 @@ class Consensus {
 			// Check if consensus's wallet type doesn't exist
 			if(typeof Consensus.walletType === "undefined") {
 			
-				// Check if not not a web worker
-				if(typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) {
+				// Check if not not a web worker and local storage is usable
+				if((typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) && typeof localStorage !== "undefined") {
 		
 					// Get the saved wallet type
 					var walletType = localStorage.getItem(Consensus.WALLET_TYPE_LOCAL_STORAGE_NAME);
@@ -96,8 +96,8 @@ class Consensus {
 					}
 				}
 				
-				// Check if not not a web worker
-				if(typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) {
+				// Check if not not a web worker and local storage is usable
+				if((typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) && typeof localStorage !== "undefined") {
 				
 					// Check if saved wallet type needs to be updated
 					if(walletType.toFixed() !== localStorage.getItem(Consensus.WALLET_TYPE_LOCAL_STORAGE_NAME)) {
@@ -130,8 +130,8 @@ class Consensus {
 			// Check if consensus's network type doesn't exist
 			if(typeof Consensus.networkType === "undefined") {
 			
-				// Check if not not a web worker
-				if(typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) {
+				// Check if not not a web worker and local storage is usable
+				if((typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) && typeof localStorage !== "undefined") {
 		
 					// Get the saved network type
 					var networkType = localStorage.getItem(Consensus.NETWORK_TYPE_LOCAL_STORAGE_NAME);
@@ -224,8 +224,8 @@ class Consensus {
 					}
 				}
 				
-				// Check if not not a web worker
-				if(typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) {
+				// Check if not not a web worker and local storage is usable
+				if((typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) && typeof localStorage !== "undefined") {
 				
 					// Check if saved network type needs to be updated
 					if(networkType.toFixed() !== localStorage.getItem(Consensus.NETWORK_TYPE_LOCAL_STORAGE_NAME)) {
