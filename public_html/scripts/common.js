@@ -816,7 +816,7 @@ class Common {
 			], {
 			
 				// Type
-				"type": "text/plain"
+				"type": "application/octet-stream"
 			}));
 			
 			// Set anchor's href to URL

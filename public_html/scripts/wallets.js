@@ -46,7 +46,7 @@ class Wallets {
 			this.recentHeights = new RecentHeights(this.node);
 			
 			// Set API
-			this.api = new Api(torProxy, this.node, this.transactions, this, this.settings, message);
+			this.api = new Api(torProxy, this.node, this.transactions, this, this.settings, message, application);
 			
 			// Set number of confirmations to setting's default value
 			this.numberOfConfirmations = new BigNumber(Wallets.SETTINGS_NUMBER_OF_CONFIRMATIONS_DEFAULT_VALUE);
@@ -623,7 +623,7 @@ class Wallets {
 											try {
 											
 												// Create transaction
-												var transaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), commit, wallet.getKeyPath(), true, timestamp, timestamp, (slate.getHeight() === Slate.UNKNOWN_HEIGHT) ? Transaction.UNKNOWN_HEIGHT : slate.getHeight(), (slate.getLockHeight().isEqualTo(Slate.NO_LOCK_HEIGHT) === false) ? slate.getLockHeight() : Transaction.NO_LOCK_HEIGHT, false, Transaction.STATUS_UNCONFIRMED, slate.getAmount(), false, slate.getExcess(), identifier, switchType, true, slate.getOffsetExcess(), slate.getId(), (slate.getParticipant(SlateParticipant.SENDER_ID).getMessage() !== SlateParticipant.NO_MESSAGE) ? slate.getParticipant(SlateParticipant.SENDER_ID).getMessage() : Transaction.NO_MESSAGE, (slate.getTimeToLiveCutOffHeight() !== Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT) ? slate.getTimeToLiveCutOffHeight() : Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, Transaction.NO_CONFIRMED_TIMESTAMP, slate.getFee(), (slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? slate.getSenderAddress() : Transaction.NO_SENDER_ADDRESS, (slate.getReceiverAddress() !== Slate.NO_RECEIVER_ADDRESS) ? slate.getReceiverAddress() : Transaction.NO_RECEIVER_ADDRESS, (slate.getReceiverSignature() !== Slate.NO_RECEIVER_SIGNATURE) ? slate.getReceiverSignature() : Transaction.NO_RECEIVER_SIGNATURE, Transaction.UNKNOWN_DESTINATION, spendableHeight, self.numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, false, Transaction.UNKNOWN_REBROADCAST_MESSAGE, fileResponse);
+												var transaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), commit, wallet.getKeyPath(), true, timestamp, timestamp, (slate.getHeight() === Slate.UNKNOWN_HEIGHT) ? Transaction.UNKNOWN_HEIGHT : slate.getHeight(), (slate.getLockHeight().isEqualTo(Slate.NO_LOCK_HEIGHT) === false) ? slate.getLockHeight() : Transaction.NO_LOCK_HEIGHT, false, Transaction.STATUS_UNCONFIRMED, slate.getAmount(), false, slate.getExcess(), identifier, switchType, true, slate.getOffsetExcess(), slate.getId(), (slate.getParticipant(SlateParticipant.SENDER_ID).getMessage() !== SlateParticipant.NO_MESSAGE) ? slate.getParticipant(SlateParticipant.SENDER_ID).getMessage() : Transaction.NO_MESSAGE, (slate.getTimeToLiveCutOffHeight() !== Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT) ? slate.getTimeToLiveCutOffHeight() : Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, Transaction.NO_CONFIRMED_TIMESTAMP, slate.getFee(), (slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? slate.getSenderAddress() : Transaction.NO_SENDER_ADDRESS, (slate.getReceiverAddress() !== Slate.NO_RECEIVER_ADDRESS) ? slate.getReceiverAddress() : Transaction.NO_RECEIVER_ADDRESS, (slate.getReceiverSignature() !== Slate.NO_RECEIVER_SIGNATURE) ? slate.getReceiverSignature() : Transaction.NO_RECEIVER_SIGNATURE, Transaction.UNUSED_DESTINATION, spendableHeight, self.numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, false, Transaction.UNKNOWN_REBROADCAST_MESSAGE, fileResponse);
 											}
 											
 											// Catch errors
@@ -3260,7 +3260,7 @@ class Wallets {
 		}
 		
 		// Send
-		send(keyPath, destination, amount, fee, baseFee = Api.DEFAULT_BASE_FEE, message = SlateParticipant.NO_MESSAGE, cancelOccurred = Common.NO_CANCEL_OCCURRED, walletsExclusiveTransactionsLockObtained = false) {
+		send(keyPath, destination, amount, fee, baseFee = Api.DEFAULT_BASE_FEE, message = SlateParticipant.NO_MESSAGE, sendAsFile = false, cancelOccurred = Common.NO_CANCEL_OCCURRED, walletsExclusiveTransactionsLockObtained = false) {
 		
 			// Set self
 			var self = this;
@@ -3359,7 +3359,7 @@ class Wallets {
 								var lastIdentifier = wallet.getLastIdentifier();
 							
 								// Return sending
-								return self.api.send(wallet, destination, amount, fee, baseFee, self.numberOfConfirmations, message, Slate.NO_LOCK_HEIGHT, Slate.NO_RELATIVE_HEIGHT, Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT, cancelOccurred).then(function(value) {
+								return self.api.send(wallet, destination, amount, fee, baseFee, self.numberOfConfirmations, message, Slate.NO_LOCK_HEIGHT, Slate.NO_RELATIVE_HEIGHT, Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT, sendAsFile, cancelOccurred).then(function(value) {
 								
 									// Return creating a database transaction
 									return Database.createTransaction([
@@ -5859,7 +5859,7 @@ class Wallets {
 																													}
 																												
 																													// Create new transaction
-																													var newTransaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), outputInformation.getOutput().getCommit(), keyPath, true, recordedTimestamp, Transaction.UNKNOWN_CREATED_TIMESTAMP, outputInformation.getOutput().getHeight(), Transaction.UNKNOWN_LOCK_HEIGHT, outputInformation.getOutput().isCoinbase(), Transaction.STATUS_UNSPENT, outputInformation.getAmount(), false, Transaction.UNKNOWN_KERNEL_EXCESS, outputInformation.getIdentifier(), outputInformation.getSwitchType(), true, Transaction.UNKNOWN_KERNEL_OFFSET, Transaction.UNKNOWN_ID, Transaction.UNKNOWN_MESSAGE, Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, timestamp, Transaction.UNKNOWN_FEE, Transaction.UNKNOWN_SENDER_ADDRESS, Transaction.UNKNOWN_RECEIVER_ADDRESS, Transaction.UNKNOWN_RECEIVER_SIGNATURE, Transaction.UNKNOWN_DESTINATION, spendableHeight, self.numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, true, Transaction.UNKNOWN_REBROADCAST_MESSAGE, Transaction.UNUSED_FILE_RESPONSE);
+																													var newTransaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), outputInformation.getOutput().getCommit(), keyPath, true, recordedTimestamp, Transaction.UNKNOWN_CREATED_TIMESTAMP, outputInformation.getOutput().getHeight(), Transaction.UNKNOWN_LOCK_HEIGHT, outputInformation.getOutput().isCoinbase(), Transaction.STATUS_UNSPENT, outputInformation.getAmount(), false, Transaction.UNKNOWN_KERNEL_EXCESS, outputInformation.getIdentifier(), outputInformation.getSwitchType(), true, Transaction.UNKNOWN_KERNEL_OFFSET, Transaction.UNKNOWN_ID, Transaction.UNKNOWN_MESSAGE, Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, timestamp, Transaction.UNKNOWN_FEE, Transaction.UNKNOWN_SENDER_ADDRESS, Transaction.UNKNOWN_RECEIVER_ADDRESS, Transaction.UNKNOWN_RECEIVER_SIGNATURE, Transaction.UNUSED_DESTINATION, spendableHeight, self.numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, true, Transaction.UNKNOWN_REBROADCAST_MESSAGE, Transaction.UNUSED_FILE_RESPONSE);
 																													
 																													// Check if the new transaction's spendable height is the next block
 																													if(newTransaction.getSpendableHeight().isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {

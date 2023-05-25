@@ -343,14 +343,18 @@ class SendPaymentSection extends Section {
 							// URL
 							case "url":
 							
-								// Check if value isn't a valid URL
-								if(Common.isValidUrl(value) === false) {
-								
-									// Set that display shows an error
-									display.addClass("error");
-								
-									// Return
-									return;
+								// Check if recipient address wasn't changed, or value doesn't exist, or not sending as file
+								if(input.hasClass("recipientAddress") === false || value["length"] !== 0 || self.getDisplay().find("button.sendAsFile").hasClass("enabled") === false) {
+							
+									// Check if value isn't a valid URL
+									if(Common.isValidUrl(value) === false) {
+									
+										// Set that display shows an error
+										display.addClass("error");
+									
+										// Return
+										return;
+									}
 								}
 							
 								// Break
@@ -1026,6 +1030,9 @@ class SendPaymentSection extends Section {
 			
 				// Get button
 				var button = $(this);
+				
+				// Prevent showing messages
+				self.getMessage().prevent();
 			
 				// Save focus and blur
 				self.getFocus().save(true);
@@ -1086,6 +1093,69 @@ class SendPaymentSection extends Section {
 				}, SendPaymentSection.DEFAULT_BASE_FEE_DELAY_MILLISECONDS);
 			});
 			
+			// Boolean buttons click event
+			this.getDisplay().find("div[data-type=\"boolean\"]").find("button").on("click", function() {
+			
+				// Get button
+				var button = $(this);
+				
+				// Prevent showing messages
+				self.getMessage().prevent();
+			
+				// Save focus and blur
+				self.getFocus().save(true);
+				
+				// Set that button is clicked
+				button.addClass("clicked");
+				
+				// Disable unlocked
+				self.getUnlocked().disable();
+				
+				// Prevent automatic lock
+				self.getAutomaticLock().prevent();
+				
+				// Check if button is enabled
+				if(button.hasClass("enabled") === true)
+				
+					// Set that button isn't enabled
+					button.removeClass("enabled");
+				
+				// Otherwise
+				else
+				
+					// Set that button is enabled
+					button.addClass("enabled");
+				
+				// Update state and catch errors
+				self.updateState().catch(function(error) {
+				
+				});
+				
+				// Button transition end or timeout event
+				button.transitionEndOrTimeout(function() {
+				
+					// Enable automatic lock
+					self.getAutomaticLock().allow();
+					
+					// Check if automatic lock isn't locking
+					if(self.getAutomaticLock().isLocking() === false) {
+			
+						// Enable unlocked
+						self.getUnlocked().enable();
+						
+						// Set that button isn't clicked
+						button.removeClass("clicked");
+						
+						// Restore focus and don't blur
+						self.getFocus().restore(false);
+						
+						// Allow showing messages
+						self.getMessage().allow();
+					}
+					
+				}, "background");
+			});
+			
 			// Send button click event
 			this.getDisplay().find("button.send").on("click", function() {
 			
@@ -1117,8 +1187,11 @@ class SendPaymentSection extends Section {
 				// Set recipient address
 				var recipientAddress = self.getDisplay().find("input.recipientAddress").val().trim();
 				
-				// Message
+				// Set message
 				var message = (self.getDisplay().find("input.message").val()["length"] !== 0) ? self.getDisplay().find("input.message").val() : SlateParticipant.NO_MESSAGE;
+				
+				// Set send as file
+				var sendAsFile = self.getDisplay().find("button.sendAsFile").hasClass("enabled") === true;
 				
 				// Show send error
 				var showSendError = function(message) {
@@ -1152,8 +1225,8 @@ class SendPaymentSection extends Section {
 					});
 				};
 				
-				// Check if recipient address doesn't exist
-				if(recipientAddress["length"] === 0) {
+				// Check if not sending as file and recipient address doesn't exist
+				if(sendAsFile === false && recipientAddress["length"] === 0) {
 				
 					// Show send error
 					showSendError(Message.createText(Language.getDefaultTranslation('Recipient address is empty.')));
@@ -1202,108 +1275,112 @@ class SendPaymentSection extends Section {
 					
 					// Base fee
 					var baseFee = (self.allowChangingBaseFee === true) ? (new BigNumber(self.getDisplay().find("input.baseFee").val())).multipliedBy(Consensus.VALUE_NUMBER_BASE) : Api.DEFAULT_BASE_FEE;
-			
-					// Check wallet type
-					switch(Consensus.getWalletType()) {
 					
-						// MWC or EPIC wallet
-						case Consensus.MWC_WALLET_TYPE:
-						case Consensus.EPIC_WALLET_TYPE:
+					// Check if not sending as file
+					if(sendAsFile === false) {
+					
+						// Check wallet type
+						switch(Consensus.getWalletType()) {
+						
+							// MWC or EPIC wallet
+							case Consensus.MWC_WALLET_TYPE:
+							case Consensus.EPIC_WALLET_TYPE:
+					
+								// Initialize error occurred
+								var errorOccurred = false;
+							
+								// Try
+								try {
+								
+									// Get receiver's Tor address from recipient address
+									Tor.getTorAddressFromUrl(recipientAddress);
+								}
+								
+								// Catch errors
+								catch(error) {
+								
+									// Set error occurred
+									errorOccurred = true;
+								}
+								
+								// Check if an error didn't occur
+								if(errorOccurred === false) {
+								
+									// Set receiver URL to the recipient address with a Tor protocol and top-level domain added if needed
+									var receiverUrl = ((Common.urlContainsProtocol(recipientAddress) === false) ? Common.HTTP_PROTOCOL + "//" : "") + recipientAddress + ((Common.urlContainsProtocol(recipientAddress) === false && Common.urlContainsTopLevelDomain(recipientAddress) === false) ? Tor.URL_TOP_LEVEL_DOMAIN : "");
+								}
+								
+								// Otherwise
+								else {
+								
+									// Set receiver URL to recipient address
+									var receiverUrl = recipientAddress;
+								}
+								
+								// break
+								break;
+							
+							// GRIN wallet
+							case Consensus.GRIN_WALLET_TYPE:
+							
+								// Initialize error occurred
+								var errorOccurred = false;
+							
+								// Try
+								try {
+								
+									// Parse the recipient address as a Slatepack address
+									var receiverPublicKey = Slatepack.slatepackAddressToPublicKey(recipientAddress);
+								}
+								
+								// Catch errors
+								catch(error) {
+								
+									// Set error occurred
+									errorOccurred = true;
+								}
+								
+								// Check if an error didn't occur
+								if(errorOccurred === false) {
+								
+									// Set receiver URL to the receiver's public key as a Tor address with a Tor protocol and top-level domain added
+									var receiverUrl = Common.HTTP_PROTOCOL + "//" + Tor.publicKeyToTorAddress(receiverPublicKey) + Tor.URL_TOP_LEVEL_DOMAIN;
+								}
+								
+								// Otherwise
+								else {
+								
+									// Set receiver URL to recipient address
+									var receiverUrl = recipientAddress;
+								}
+							
+								// Break
+								break;
+						}
+						
+						// Check if receiver URL doesn't have a protocol
+						if(Common.urlContainsProtocol(receiverUrl) === false) {
+						
+							// Add protocol to receiver URL
+							receiverUrl = Common.HTTP_PROTOCOL + "//" + receiverUrl;
+						}
 				
-							// Initialize error occurred
-							var errorOccurred = false;
+						// Try
+						try {
 						
-							// Try
-							try {
-							
-								// Get receiver's Tor address from recipient address
-								Tor.getTorAddressFromUrl(recipientAddress);
-							}
-							
-							// Catch errors
-							catch(error) {
-							
-								// Set error occurred
-								errorOccurred = true;
-							}
-							
-							// Check if an error didn't occur
-							if(errorOccurred === false) {
-							
-								// Set receiver URL to the recipient address with a Tor protocol and top-level domain added if needed
-								var receiverUrl = ((Common.urlContainsProtocol(recipientAddress) === false) ? Common.HTTP_PROTOCOL + "//" : "") + recipientAddress + ((Common.urlContainsProtocol(recipientAddress) === false && Common.urlContainsTopLevelDomain(recipientAddress) === false) ? Tor.URL_TOP_LEVEL_DOMAIN : "");
-							}
-							
-							// Otherwise
-							else {
-							
-								// Set receiver URL to recipient address
-								var receiverUrl = recipientAddress;
-							}
-							
-							// break
-							break;
+							// Parse receiver URL
+							var parsedUrl = new URL(Common.upgradeApplicableInsecureUrl(receiverUrl));
+						}
 						
-						// GRIN wallet
-						case Consensus.GRIN_WALLET_TYPE:
+						// Catch errors
+						catch(error) {
 						
-							// Initialize error occurred
-							var errorOccurred = false;
-						
-							// Try
-							try {
+							// Show send error
+							showSendError(Message.createText(Language.getDefaultTranslation('Recipient address isn\'t supported.')));
 							
-								// Parse the recipient address as a Slatepack address
-								var receiverPublicKey = Slatepack.slatepackAddressToPublicKey(recipientAddress);
-							}
-							
-							// Catch errors
-							catch(error) {
-							
-								// Set error occurred
-								errorOccurred = true;
-							}
-							
-							// Check if an error didn't occur
-							if(errorOccurred === false) {
-							
-								// Set receiver URL to the receiver's public key as a Tor address with a Tor protocol and top-level domain added
-								var receiverUrl = Common.HTTP_PROTOCOL + "//" + Tor.publicKeyToTorAddress(receiverPublicKey) + Tor.URL_TOP_LEVEL_DOMAIN;
-							}
-							
-							// Otherwise
-							else {
-							
-								// Set receiver URL to recipient address
-								var receiverUrl = recipientAddress;
-							}
-						
-							// Break
-							break;
-					}
-					
-					// Check if receiver URL doesn't have a protocol
-					if(Common.urlContainsProtocol(receiverUrl) === false) {
-					
-						// Add protocol to receiver URL
-						receiverUrl = Common.HTTP_PROTOCOL + "//" + receiverUrl;
-					}
-			
-					// Try
-					try {
-					
-						// Parse receiver URL
-						var parsedUrl = new URL(Common.upgradeApplicableInsecureUrl(receiverUrl));
-					}
-					
-					// Catch errors
-					catch(error) {
-					
-						// Show send error
-						showSendError(Message.createText(Language.getDefaultTranslation('Recipient address isn\'t supported.')));
-						
-						// Return
-						return;
+							// Return
+							return;
+						}
 					}
 					
 					// Try
@@ -1323,37 +1400,41 @@ class SendPaymentSection extends Section {
 						return;
 					}
 					
-					// Check if wallet has an address suffix
-					if(wallet.getAddressSuffix() !== Wallet.NO_ADDRESS_SUFFIX) {
+					// Check if not sending as file
+					if(sendAsFile === false) {
 					
-						// Try
-						try {
+						// Check if wallet has an address suffix
+						if(wallet.getAddressSuffix() !== Wallet.NO_ADDRESS_SUFFIX) {
 						
-							// Parse wallet's address suffix as a URL
-							var walletUrl = new URL(wallet.getAddressSuffix());
+							// Try
+							try {
 							
-							// Check if sending to self
-							if(parsedUrl["origin"] === walletUrl["origin"] && Common.removeTrailingSlashes(Common.removeDuplicateSlashes(parsedUrl["pathname"])) === walletUrl["pathname"]) {
-							
-								// Show send error
-								showSendError(Message.createText(Language.getDefaultTranslation('A wallet can\'t send payments to itself.')));
+								// Parse wallet's address suffix as a URL
+								var walletUrl = new URL(wallet.getAddressSuffix());
 								
-								// Return
-								return;
+								// Check if sending to self
+								if(parsedUrl["origin"] === walletUrl["origin"] && Common.removeTrailingSlashes(Common.removeDuplicateSlashes(parsedUrl["pathname"])) === walletUrl["pathname"]) {
+								
+									// Show send error
+									showSendError(Message.createText(Language.getDefaultTranslation('A wallet can\'t send payments to itself.')));
+									
+									// Return
+									return;
+								}
 							}
-						}
-						
-						// Catch errors
-						catch(error) {
-						
-							// Check if sending to self
-							if((parsedUrl["origin"] === HTTPS_SERVER_ADDRESS || parsedUrl["origin"] === TOR_SERVER_ADDRESS) && Common.removeTrailingSlashes(Common.removeDuplicateSlashes(parsedUrl["pathname"])) === "/wallet/" + wallet.getAddressSuffix()) {
 							
-								// Show send error
-								showSendError(Message.createText(Language.getDefaultTranslation('A wallet can\'t send payments to itself.')));
+							// Catch errors
+							catch(error) {
+							
+								// Check if sending to self
+								if((parsedUrl["origin"] === HTTPS_SERVER_ADDRESS || parsedUrl["origin"] === TOR_SERVER_ADDRESS) && Common.removeTrailingSlashes(Common.removeDuplicateSlashes(parsedUrl["pathname"])) === "/wallet/" + wallet.getAddressSuffix()) {
 								
-								// Return
-								return;
+									// Show send error
+									showSendError(Message.createText(Language.getDefaultTranslation('A wallet can\'t send payments to itself.')));
+									
+									// Return
+									return;
+								}
 							}
 						}
 					}
@@ -1391,7 +1472,7 @@ class SendPaymentSection extends Section {
 								fee = fee[Api.FEE_FEE_INDEX];
 							
 								// Show message and allow showing messages
-								self.getMessage().show(Language.getDefaultTranslation('Confirm Payment Details'), Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('You\'ll be sending %1$c from Wallet %2$s to the following address for a fee of %3$c.') : Language.getDefaultTranslation('You\'ll be sending %1$c from %2$y to the following address for a fee of %3$c.'), [
+								self.getMessage().show(Language.getDefaultTranslation('Confirm Payment Details'), Message.createText((wallet.getName() === Wallet.NO_NAME) ? ((recipientAddress["length"] !== 0) ? Language.getDefaultTranslation('You\'ll be sending %1$c from Wallet %2$s to the following address for a fee of %3$c.') : Language.getDefaultTranslation('You\'ll be sending %1$c from Wallet %2$s for a fee of %3$c.')) : ((recipientAddress["length"] !== 0) ? Language.getDefaultTranslation('You\'ll be sending %1$c from %2$y to the following address for a fee of %3$c.') : Language.getDefaultTranslation('You\'ll be sending %1$c from %2$y for a fee of %3$c.')), [
 												
 									[
 									
@@ -1413,7 +1494,7 @@ class SendPaymentSection extends Section {
 										// Currency
 										Consensus.CURRENCY_NAME
 									]
-								]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + Message.createText(Language.getDefaultTranslation('Enter your password to continue sending the payment.')) + Message.createLineBreak() + Message.createLineBreak() + Message.createInput(Language.getDefaultTranslation('Password'), [], true) + Message.createLineBreak(), false, function() {
+								]) + ((recipientAddress["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('(?<=.) '))) + Message.createText(Language.getDefaultTranslation('Enter your password to continue sending the payment.')) + Message.createLineBreak() + Message.createLineBreak() + Message.createInput(Language.getDefaultTranslation('Password'), [], true) + Message.createLineBreak(), false, function() {
 								
 									// Hide loading
 									self.getApplication().hideLoading();
@@ -1470,7 +1551,7 @@ class SendPaymentSection extends Section {
 												var canceled = false;
 												
 												// Set text
-												var text = Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Sending %1$c from Wallet %2$s to the following address for a fee of %3$c.') : Language.getDefaultTranslation('Sending %1$c from %2$y to the following address for a fee of %3$c.'), [
+												var text = Message.createText((wallet.getName() === Wallet.NO_NAME) ? ((recipientAddress["length"] !== 0) ? Language.getDefaultTranslation('Sending %1$c from Wallet %2$s to the following address for a fee of %3$c.') : Language.getDefaultTranslation('Sending %1$c from Wallet %2$s for a fee of %3$c.')) : ((recipientAddress["length"] !== 0) ? Language.getDefaultTranslation('Sending %1$c from %2$y to the following address for a fee of %3$c.') : Language.getDefaultTranslation('Sending %1$c from %2$y for a fee of %3$c.')), [
 												
 													[
 													
@@ -1492,7 +1573,7 @@ class SendPaymentSection extends Section {
 														// Currency
 														Consensus.CURRENCY_NAME
 													]
-												]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>";
+												]) + ((recipientAddress["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() : "") + ((sendAsFile === false) ? Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>" : "");
 												
 												// Show message immediately and allow showing messages
 												self.getMessage().show(Language.getDefaultTranslation('Sending Payment'), Message.createPendingResult() + Message.createLineBreak() + text, true, function() {
@@ -1546,6 +1627,9 @@ class SendPaymentSection extends Section {
 																				// Initialize second button
 																				var secondButton = Message.NO_BUTTON;
 																				
+																				// Initialize URL
+																				var url = SendPaymentSection.NO_URL;
+																				
 																				// Message replace send section event
 																				$(self.getMessage()).on(Message.REPLACE_EVENT + ".sendPaymentSection", function(event, messageType, messageData) {
 																				
@@ -1571,7 +1655,7 @@ class SendPaymentSection extends Section {
 																								case Application.HARDWARE_WALLET_DISCONNECT_MESSAGE:
 																								
 																									// Set text
-																									text = Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Sending %1$c from Wallet %2$s to the following address for a fee of %3$c.') : Language.getDefaultTranslation('Sending %1$c from %2$y to the following address for a fee of %3$c.'), [
+																									text = Message.createText((wallet.getName() === Wallet.NO_NAME) ? ((recipientAddress["length"] !== 0) ? Language.getDefaultTranslation('Sending %1$c from Wallet %2$s to the following address for a fee of %3$c.') : Language.getDefaultTranslation('Sending %1$c from Wallet %2$s for a fee of %3$c.')) : ((recipientAddress["length"] !== 0) ? Language.getDefaultTranslation('Sending %1$c from %2$y to the following address for a fee of %3$c.') : Language.getDefaultTranslation('Sending %1$c from %2$y for a fee of %3$c.')), [
 																									
 																										[
 																										
@@ -1593,7 +1677,7 @@ class SendPaymentSection extends Section {
 																											// Currency
 																											Consensus.CURRENCY_NAME
 																										]
-																									]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>";
+																									]) + ((recipientAddress["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() : "") + ((sendAsFile === false) ? Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>" : "");
 																									
 																									// Set second button
 																									secondButton = Message.NO_BUTTON;
@@ -1748,11 +1832,60 @@ class SendPaymentSection extends Section {
 																									// Break
 																									break;
 																								
+																								// API get transaction response message
+																								case Api.GET_TRANSACTION_RESPONSE_MESSAGE:
+																								
+																									// Get file contents and name from the message data
+																									var fileContents = messageData[Api.GET_TRANSACTION_RESPONSE_MESSAGE_FILE_CONTENTS_INDEX];
+																									var fileName = messageData[Api.GET_TRANSACTION_RESPONSE_MESSAGE_FILE_NAME_INDEX];
+																									
+																									// Check if URL exists
+																									if(url !== SendPaymentSection.NO_URL) {
+																									
+																										// Revoke URL
+																										URL.revokeObjectURL(url);
+																									}
+																									
+																									// Create URL from file contents
+																									url = URL.createObjectURL(new Blob([
+																									
+																										// Contents
+																										fileContents 
+																									], {
+																									
+																										// Type
+																										"type": "application/octet-stream"
+																									}));
+																									
+																									// Set text
+																									text = Message.createText(Language.getDefaultTranslation('Give the %1$m file to the payment\'s recipient and open their response file to continue sending the payment.'), [
+																					
+																										[
+																											// Text
+																											fileName,
+																											
+																											// URL
+																											url,
+																											
+																											// Is external
+																											true,
+																											
+																											// Is blob
+																											true
+																										]
+																									]);
+																									
+																									// Set second button
+																									secondButton = Language.getDefaultTranslation('Open Response File');
+																									
+																									// Break
+																									break;
+																								
 																								// Default
 																								default:
 																								
 																									// Set text
-																									text = Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Sending %1$c from Wallet %2$s to the following address for a fee of %3$c.') : Language.getDefaultTranslation('Sending %1$c from %2$y to the following address for a fee of %3$c.'), [
+																									text = Message.createText((wallet.getName() === Wallet.NO_NAME) ? ((recipientAddress["length"] !== 0) ? Language.getDefaultTranslation('Sending %1$c from Wallet %2$s to the following address for a fee of %3$c.') : Language.getDefaultTranslation('Sending %1$c from Wallet %2$s for a fee of %3$c.')) : ((recipientAddress["length"] !== 0) ? Language.getDefaultTranslation('Sending %1$c from %2$y to the following address for a fee of %3$c.') : Language.getDefaultTranslation('Sending %1$c from %2$y for a fee of %3$c.')), [
 																									
 																										[
 																										
@@ -1774,7 +1907,7 @@ class SendPaymentSection extends Section {
 																											// Currency
 																											Consensus.CURRENCY_NAME
 																										]
-																									]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>";
+																									]) + ((recipientAddress["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() : "") + ((sendAsFile === false) ? Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>" : "");
 																									
 																									// Set second button
 																									secondButton = Message.NO_BUTTON;
@@ -1869,7 +2002,7 @@ class SendPaymentSection extends Section {
 																				});
 																			
 																				// Return sending
-																				return self.getWallets().send(wallet.getKeyPath(), recipientAddress, currentFee[Api.FEE_AMOUNT_INDEX], currentFee[Api.FEE_FEE_INDEX], currentFee[Api.FEE_BASE_FEE_INDEX], message, function() {
+																				return self.getWallets().send(wallet.getKeyPath(), recipientAddress, currentFee[Api.FEE_AMOUNT_INDEX], currentFee[Api.FEE_FEE_INDEX], currentFee[Api.FEE_BASE_FEE_INDEX], message, sendAsFile, function() {
 																			
 																					// Return if canceled
 																					return canceled === true;
@@ -1881,6 +2014,13 @@ class SendPaymentSection extends Section {
 																					
 																					// Release wallet's exclusive transactions lock
 																					self.getTransactions().releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+																					
+																					// Check if URL exists
+																					if(url !== SendPaymentSection.NO_URL) {
+																					
+																						// Revoke URL
+																						URL.revokeObjectURL(url);
+																					}
 																				
 																					// Resolve
 																					resolve();
@@ -1893,6 +2033,13 @@ class SendPaymentSection extends Section {
 																					
 																					// Release wallet's exclusive transactions lock
 																					self.getTransactions().releaseWalletsExclusiveTransactionsLock(wallet.getKeyPath());
+																					
+																					// Check if URL exists
+																					if(url !== SendPaymentSection.NO_URL) {
+																					
+																						// Revoke URL
+																						URL.revokeObjectURL(url);
+																					}
 																				
 																					// Reject error
 																					reject(error);
@@ -2315,8 +2462,8 @@ class SendPaymentSection extends Section {
 			// Set that inputs aren't showing an error or hidden and clear their values
 			this.getDisplay().find("div").removeClass("error hide").find("input").val("");
 			
-			// Set that buttons aren't clicked or loading
-			this.getDisplay().find("button").removeClass("clicked loading");
+			// Set that buttons aren't clicked, loading, enabled, or transition instantly
+			this.getDisplay().find("button").removeClass("clicked loading enabled noTransition");
 			
 			// Allow all button display to merge
 			this.getDisplay().find("button.all").parent().closest("div").addClass("merge");
@@ -2462,6 +2609,9 @@ class SendPaymentSection extends Section {
 							break;
 					}
 					
+					// Make boolean buttons transition instantly
+					self.getDisplay().find("div[data-type=\"boolean\"]").find("button").addClass("noTransition");
+					
 					// Section shown send payment section event
 					$(self).one(Section.SHOWN_EVENT + ".sendPaymentSection", function() {
 					
@@ -2487,6 +2637,9 @@ class SendPaymentSection extends Section {
 							// Refresh prices
 							self.getPrices().refresh();
 						}
+						
+						// Allow boolean buttons to transition
+						self.getDisplay().find("div[data-type=\"boolean\"]").find("button").removeClass("noTransition");
 					});
 				
 					// Resolve
@@ -2736,6 +2889,13 @@ class SendPaymentSection extends Section {
 		
 			// Return settings allow changing base fee default value
 			return false;
+		}
+		
+		// No URL
+		static get NO_URL() {
+		
+			// Return no URL
+			return null;
 		}
 }
 

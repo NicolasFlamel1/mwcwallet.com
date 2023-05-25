@@ -5242,7 +5242,7 @@ class Application {
 				if((thirdPartyCookiesMessageShown === Common.INVALID_LOCAL_STORAGE_ITEM || thirdPartyCookiesMessageShown !== Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_TRUE_VALUE) && (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL)) {
 				
 					// Check if browser is Safari
-					if(typeof navigator === "object" && navigator !== null && navigator["userAgent"].toLowerCase().indexOf("safari") !== Common.INDEX_NOT_FOUND && navigator["userAgent"].toLowerCase().indexOf("chrome") === Common.INDEX_NOT_FOUND) {
+					if(typeof navigator === "object" && navigator !== null && "userAgent" in navigator === true && navigator["userAgent"].toLowerCase().indexOf("safari") !== Common.INDEX_NOT_FOUND && navigator["userAgent"].toLowerCase().indexOf("chrome") === Common.INDEX_NOT_FOUND) {
 					
 						// Initialize message button clicked
 						var messageButtonClicked = false;

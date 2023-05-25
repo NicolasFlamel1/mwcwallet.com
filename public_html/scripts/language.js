@@ -919,7 +919,7 @@ class Language {
 										}
 										
 										// Combine argument part subparts
-										argumentParts[j] =  argumentPartSubparts.join(Language.VERSION_NUMBER_PART_SUBPART_SEPARATOR);
+										argumentParts[j] = argumentPartSubparts.join(Language.VERSION_NUMBER_PART_SUBPART_SEPARATOR);
 									}
 									
 									// Combine argument parts

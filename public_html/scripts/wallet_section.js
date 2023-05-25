@@ -2719,7 +2719,7 @@ class WalletSection extends Section {
 					var files = event["target"]["files"];
 					
 					// Check if no file was selected
-					if(files["length"] < 0) {
+					if(files["length"] <= 0) {
 					
 						// Allow device to sleep and catch errors
 						self.getWakeLock().allowLock().catch(function(error) {
@@ -2891,7 +2891,7 @@ class WalletSection extends Section {
 									], {
 									
 										// Type
-										"type": "text/plain"
+										"type": "application/octet-stream"
 									}));
 									
 									// Get is raw data
@@ -3098,7 +3098,7 @@ class WalletSection extends Section {
 								if(self.getAutomaticLock().isLocking() === false) {
 								
 									// Show receive payment as file error
-									showReceivePaymentAsFileError(Message.createText(Language.getDefaultTranslation('Reading that file failed.')));
+									showReceivePaymentAsFileError(Message.createText(Language.getDefaultTranslation('Opening that file failed.')));
 								}
 							});
 						});

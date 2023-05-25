@@ -1324,8 +1324,8 @@ class TransactionSection extends Section {
 				transactionInformationDisplay.append(idDisplay);
 			}
 			
-			// Check if transaction was received or transaction is a coinbase transaction
-			if(this.transaction.getReceived() === true || this.transaction.getIsCoinbase() === true) {
+			// Check if transaction was received, transaction is a coinbase transaction, or transaction's destination isn't used
+			if(this.transaction.getReceived() === true || this.transaction.getIsCoinbase() === true || this.transaction.getDestination() === Transaction.UNUSED_DESTINATION) {
 			
 				// Add destination to transaction information display
 				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Destination:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");

@@ -859,6 +859,13 @@ class Transaction {
 			return null;
 		}
 		
+		// Unused destination
+		static get UNUSED_DESTINATION() {
+		
+			// Return unused destination
+			return undefined;
+		}
+		
 		// Unknown spendable height
 		static get UNKNOWN_SPENDABLE_HEIGHT() {
 		

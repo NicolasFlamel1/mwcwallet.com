@@ -10,7 +10,7 @@ class Api {
 	// Public
 	
 		// Constructor
-		constructor(torProxy, node, transactions, wallets, settings, message) {
+		constructor(torProxy, node, transactions, wallets, settings, message, application) {
 		
 			// Set Tor proxy
 			this.torProxy = torProxy;
@@ -29,6 +29,9 @@ class Api {
 			
 			// Set message
 			this.message = message;
+			
+			// Set application
+			this.application = application;
 			
 			// Set enable mining API to setting's default value
 			this.enableMiningApi = Api.SETTINGS_ENABLE_MINING_API_DEFAULT_VALUE;
@@ -8131,7 +8134,7 @@ class Api {
 		}
 		
 		// Send
-		send(wallet, url, amount, fee, baseFee = Api.DEFAULT_BASE_FEE, numberOfConfirmations = Api.DEFAULT_NUMBER_OF_CONFIRMATIONS, message = SlateParticipant.NO_MESSAGE, lockHeight = Slate.NO_LOCK_HEIGHT, relativeHeight = Slate.NO_RELATIVE_HEIGHT, timeToLiveCutOffHeight = Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
+		send(wallet, url, amount, fee, baseFee = Api.DEFAULT_BASE_FEE, numberOfConfirmations = Api.DEFAULT_NUMBER_OF_CONFIRMATIONS, message = SlateParticipant.NO_MESSAGE, lockHeight = Slate.NO_LOCK_HEIGHT, relativeHeight = Slate.NO_RELATIVE_HEIGHT, timeToLiveCutOffHeight = Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT, sendAsFile = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
 		
 			// Set self
 			var self = this;
@@ -8391,112 +8394,123 @@ class Api {
 							
 								// Trim url
 								url = url.trim();
-						
-								// Check wallet type
-								switch(Consensus.getWalletType()) {
 								
-									// MWC or EPIC wallet
-									case Consensus.MWC_WALLET_TYPE:
-									case Consensus.EPIC_WALLET_TYPE:
+								// Check if not sending as file
+								if(sendAsFile === false) {
+						
+									// Check wallet type
+									switch(Consensus.getWalletType()) {
+									
+										// MWC or EPIC wallet
+										case Consensus.MWC_WALLET_TYPE:
+										case Consensus.EPIC_WALLET_TYPE:
+								
+											// Initialize error occurred
+											var errorOccurred = false;
+										
+											// Try
+											try {
+											
+												// Get receiver's Tor address from URL
+												Tor.getTorAddressFromUrl(url);
+											}
+											
+											// Catch errors
+											catch(error) {
+											
+												// Set error occurred
+												errorOccurred = true;
+											}
+											
+											// Check if an error didn't occur
+											if(errorOccurred === false) {
+											
+												// Set receiver URL to the URL with a Tor protocol and top-level domain added if needed
+												var receiverUrl = ((Common.urlContainsProtocol(url) === false) ? Common.HTTP_PROTOCOL + "//" : "") + url + ((Common.urlContainsProtocol(url) === false && Common.urlContainsTopLevelDomain(url) === false) ? Tor.URL_TOP_LEVEL_DOMAIN : "");
+											}
+											
+											// Otherwise
+											else {
+											
+												// Set receiver URL to url
+												var receiverUrl = url;
+											}
+											
+											// break
+											break;
+										
+										// GRIN wallet
+										case Consensus.GRIN_WALLET_TYPE:
+										
+											// Initialize error occurred
+											var errorOccurred = false;
+										
+											// Try
+											try {
+											
+												// Parse the URL as a Slatepack address
+												var receiverPublicKey = Slatepack.slatepackAddressToPublicKey(url);
+											}
+											
+											// Catch errors
+											catch(error) {
+											
+												// Set error occurred
+												errorOccurred = true;
+											}
+											
+											// Check if an error didn't occur
+											if(errorOccurred === false) {
+											
+												// Set receiver URL to the receiver's public key as a Tor address with a Tor protocol and top-level domain added
+												var receiverUrl = Common.HTTP_PROTOCOL + "//" + Tor.publicKeyToTorAddress(receiverPublicKey) + Tor.URL_TOP_LEVEL_DOMAIN;
+											}
+											
+											// Otherwise
+											else {
+											
+												// Set receiver URL to url
+												var receiverUrl = url;
+											}
+										
+											// Break
+											break;
+									}
+									
+									// Check if receiver URL doesn't have a protocol
+									if(Common.urlContainsProtocol(receiverUrl) === false) {
+									
+										// Add protocol to receiver URL
+										receiverUrl = Common.HTTP_PROTOCOL + "//" + receiverUrl;
+									}
 							
-										// Initialize error occurred
-										var errorOccurred = false;
+									// Try
+									try {
 									
-										// Try
-										try {
-										
-											// Get receiver's Tor address from URL
-											Tor.getTorAddressFromUrl(url);
-										}
-										
-										// Catch errors
-										catch(error) {
-										
-											// Set error occurred
-											errorOccurred = true;
-										}
-										
-										// Check if an error didn't occur
-										if(errorOccurred === false) {
-										
-											// Set receiver URL to the URL with a Tor protocol and top-level domain added if needed
-											var receiverUrl = ((Common.urlContainsProtocol(url) === false) ? Common.HTTP_PROTOCOL + "//" : "") + url + ((Common.urlContainsProtocol(url) === false && Common.urlContainsTopLevelDomain(url) === false) ? Tor.URL_TOP_LEVEL_DOMAIN : "");
-										}
-										
-										// Otherwise
-										else {
-										
-											// Set receiver URL to url
-											var receiverUrl = url;
-										}
-										
-										// break
-										break;
+										// Parse receiver URL
+										new URL(Common.upgradeApplicableInsecureUrl(receiverUrl));
+									}
 									
-									// GRIN wallet
-									case Consensus.GRIN_WALLET_TYPE:
+									// Catch errors
+									catch(error) {
 									
-										// Initialize error occurred
-										var errorOccurred = false;
-									
-										// Try
-										try {
+										// Reject error
+										reject(Message.createText(Language.getDefaultTranslation('Recipient address isn\'t supported.')));
 										
-											// Parse the URL as a Slatepack address
-											var receiverPublicKey = Slatepack.slatepackAddressToPublicKey(url);
-										}
-										
-										// Catch errors
-										catch(error) {
-										
-											// Set error occurred
-											errorOccurred = true;
-										}
-										
-										// Check if an error didn't occur
-										if(errorOccurred === false) {
-										
-											// Set receiver URL to the receiver's public key as a Tor address with a Tor protocol and top-level domain added
-											var receiverUrl = Common.HTTP_PROTOCOL + "//" + Tor.publicKeyToTorAddress(receiverPublicKey) + Tor.URL_TOP_LEVEL_DOMAIN;
-										}
-										
-										// Otherwise
-										else {
-										
-											// Set receiver URL to url
-											var receiverUrl = url;
-										}
-									
-										// Break
-										break;
+										// Return
+										return;
+									}
 								}
 								
-								// Check if receiver URL doesn't have a protocol
-								if(Common.urlContainsProtocol(receiverUrl) === false) {
+								// Otherwise
+								else {
 								
-									// Add protocol to receiver URL
-									receiverUrl = Common.HTTP_PROTOCOL + "//" + receiverUrl;
-								}
-						
-								// Try
-								try {
-								
-									// Parse receiver URL
-									new URL(Common.upgradeApplicableInsecureUrl(receiverUrl));
+									// Set receiver URL to url
+									var receiverUrl = url;
 								}
 								
-								// Catch errors
-								catch(error) {
-								
-									// Reject error
-									reject(Message.createText(Language.getDefaultTranslation('Recipient address isn\'t supported.')));
-									
-									// Return
-									return;
-								}
-								
-								// Return checking if device is compatible
-								return self.isCompatible(receiverUrl, cancelOccurred).then(function(compatibleSlateVersions) {
+								// Return checking if receiver is compatible
+								return self.isCompatible(receiverUrl, sendAsFile, cancelOccurred).then(function(compatibleSlateVersions) {
 								
 									// Check if cancel didn't occur
 									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -8550,7 +8564,7 @@ class Api {
 																if(useProofAddress === true) {
 											
 																	// Return getting proof address
-																	return self.getProofAddress(receiverUrl, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, cancelOccurred).then(function(receiverAddress) {
+																	return self.getProofAddress(receiverUrl, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, sendAsFile, cancelOccurred).then(function(receiverAddress) {
 																	
 																		// Check if cancel didn't occur
 																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -8627,7 +8641,7 @@ class Api {
 															else {
 															
 																// Return getting proof address
-																return self.getProofAddress(receiverUrl, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, cancelOccurred).then(function(receiverAddress) {
+																return self.getProofAddress(receiverUrl, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, sendAsFile, cancelOccurred).then(function(receiverAddress) {
 																
 																	// Check if cancel didn't occur
 																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -8702,7 +8716,7 @@ class Api {
 																if(useProofAddress === true) {
 											
 																	// Return getting proof address
-																	return self.getProofAddress(receiverUrl, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, cancelOccurred).then(function(receiverAddress) {
+																	return self.getProofAddress(receiverUrl, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, sendAsFile, cancelOccurred).then(function(receiverAddress) {
 																	
 																		// Check if cancel didn't occur
 																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -9609,8 +9623,8 @@ class Api {
 																return;
 															}
 															
-															// Check if slate isn't supported
-															if(compatibleSlateVersions.indexOf((slate.getVersion() instanceof BigNumber === true) ? "V" + slate.getVersion().toFixed() : slate.getVersion()) === Common.INDEX_NOT_FOUND) {
+															// Check if not sending as file slate's version isn't supported
+															if(sendAsFile === false && compatibleSlateVersions.indexOf((slate.getVersion() instanceof BigNumber === true) ? "V" + slate.getVersion().toFixed() : slate.getVersion()) === Common.INDEX_NOT_FOUND) {
 															
 																// Reject unsupported response
 																reject(Message.createText(Language.getDefaultTranslation('Recipient doesn\'t support any available slate versions.')));
@@ -11825,7 +11839,7 @@ class Api {
 																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																											
 																												// Return getting slate response
-																												return self.getSlateResponse(receiverUrl, wallet, slate, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, cancelOccurred).then(function(slateResponse) {
+																												return self.getSlateResponse(receiverUrl, wallet, slate, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, sendAsFile, cancelOccurred).then(function(slateResponse) {
 																												
 																													// Get timestamp
 																													var timestamp = Date.now();
@@ -11880,7 +11894,7 @@ class Api {
 																																							// Check if cancel didn't occur
 																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																							
-																																								// Check if a replacement message wasn't not displayed
+																																								// Check if a replacement message was displayed
 																																								if(replaceResult !== Message.REPLACE_NOT_DISPLAYED_RESULT) {
 																																						
 																																									// Resolve
@@ -12330,7 +12344,7 @@ class Api {
 																																																	// Check if cancel didn't occur
 																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																																	
-																																																		// Check if a replacement message wasn't not displayed
+																																																		// Check if a replacement message was displayed
 																																																		if(replaceResult !== Message.REPLACE_NOT_DISPLAYED_RESULT) {
 																																																
 																																																			// Resolve
@@ -13592,7 +13606,7 @@ class Api {
 																																	try {
 																																	
 																																		// Create returned transaction
-																																		var returnedTransaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), output[Wallet.OUTPUT_COMMIT_INDEX], wallet.getKeyPath(), true, timestamp, timestamp, (slateResponse.getHeight() === Slate.UNKNOWN_HEIGHT) ? Transaction.UNKNOWN_HEIGHT : slateResponse.getHeight(), (slateResponse.getLockHeight().isEqualTo(Slate.NO_LOCK_HEIGHT) === false) ? slateResponse.getLockHeight() : Transaction.NO_LOCK_HEIGHT, false, Transaction.STATUS_UNCONFIRMED, returnedAmount, false, slateResponse.getExcess(), output[Wallet.OUTPUT_IDENTIFIER_INDEX], output[Wallet.OUTPUT_SWITCH_TYPE_INDEX], false, slate.getOffsetExcess(), Transaction.UNUSED_ID, Transaction.NO_MESSAGE, (slateResponse.getTimeToLiveCutOffHeight() !== Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT) ? slateResponse.getTimeToLiveCutOffHeight() : Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, Transaction.NO_CONFIRMED_TIMESTAMP, Transaction.NO_FEE, Transaction.NO_SENDER_ADDRESS, Transaction.NO_RECEIVER_ADDRESS, Transaction.NO_RECEIVER_SIGNATURE, Transaction.UNKNOWN_DESTINATION, spendableHeight, numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, willBroadcast, Transaction.UNKNOWN_REBROADCAST_MESSAGE, Transaction.UNUSED_FILE_RESPONSE);
+																																		var returnedTransaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), output[Wallet.OUTPUT_COMMIT_INDEX], wallet.getKeyPath(), true, timestamp, timestamp, (slateResponse.getHeight() === Slate.UNKNOWN_HEIGHT) ? Transaction.UNKNOWN_HEIGHT : slateResponse.getHeight(), (slateResponse.getLockHeight().isEqualTo(Slate.NO_LOCK_HEIGHT) === false) ? slateResponse.getLockHeight() : Transaction.NO_LOCK_HEIGHT, false, Transaction.STATUS_UNCONFIRMED, returnedAmount, false, slateResponse.getExcess(), output[Wallet.OUTPUT_IDENTIFIER_INDEX], output[Wallet.OUTPUT_SWITCH_TYPE_INDEX], false, slate.getOffsetExcess(), Transaction.UNUSED_ID, Transaction.NO_MESSAGE, (slateResponse.getTimeToLiveCutOffHeight() !== Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT) ? slateResponse.getTimeToLiveCutOffHeight() : Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, Transaction.NO_CONFIRMED_TIMESTAMP, Transaction.NO_FEE, Transaction.NO_SENDER_ADDRESS, Transaction.NO_RECEIVER_ADDRESS, Transaction.NO_RECEIVER_SIGNATURE, Transaction.UNUSED_DESTINATION, spendableHeight, numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, willBroadcast, Transaction.UNKNOWN_REBROADCAST_MESSAGE, Transaction.UNUSED_FILE_RESPONSE);
 																																	}
 																																	
 																																	// Catch errors
@@ -13616,7 +13630,7 @@ class Api {
 																																try {
 																																
 																																	// Create sent transaction
-																																	var sentTransaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), Transaction.UNUSED_COMMIT, wallet.getKeyPath(), false, timestamp, timestamp, (slateResponse.getHeight() === Slate.UNKNOWN_HEIGHT) ? Transaction.UNKNOWN_HEIGHT : slateResponse.getHeight(), (slateResponse.getLockHeight().isEqualTo(Slate.NO_LOCK_HEIGHT) === false) ? slateResponse.getLockHeight() : Transaction.NO_LOCK_HEIGHT, false, Transaction.UNKNOWN_STATUS, amount, false, slateResponse.getExcess(), Transaction.UNKNOWN_IDENTIFIER, Transaction.UNKNOWN_SWITCH_TYPE, true, Transaction.UNUSED_KERNEL_OFFSET, slateResponse.getId(), (slateResponse.getParticipant(SlateParticipant.SENDER_ID).getMessage() !== SlateParticipant.NO_MESSAGE) ? slateResponse.getParticipant(SlateParticipant.SENDER_ID).getMessage() : Transaction.NO_MESSAGE, (slateResponse.getTimeToLiveCutOffHeight() !== Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT) ? slateResponse.getTimeToLiveCutOffHeight() : Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, Transaction.NO_CONFIRMED_TIMESTAMP, slateResponse.getFee(), (slateResponse.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? slateResponse.getSenderAddress() : Transaction.NO_SENDER_ADDRESS, (slateResponse.getReceiverAddress() !== Slate.NO_RECEIVER_ADDRESS) ? slateResponse.getReceiverAddress() : Transaction.NO_RECEIVER_ADDRESS, (slateResponse.getReceiverSignature() !== Slate.NO_RECEIVER_SIGNATURE) ? slateResponse.getReceiverSignature() : Transaction.NO_RECEIVER_SIGNATURE, url, Transaction.UNKNOWN_SPENDABLE_HEIGHT, Transaction.UNKNOWN_REQUIRED_NUMBER_OF_CONFIRMATIONS, inputs.map(function(input) {
+																																	var sentTransaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), Transaction.UNUSED_COMMIT, wallet.getKeyPath(), false, timestamp, timestamp, (slateResponse.getHeight() === Slate.UNKNOWN_HEIGHT) ? Transaction.UNKNOWN_HEIGHT : slateResponse.getHeight(), (slateResponse.getLockHeight().isEqualTo(Slate.NO_LOCK_HEIGHT) === false) ? slateResponse.getLockHeight() : Transaction.NO_LOCK_HEIGHT, false, Transaction.UNKNOWN_STATUS, amount, false, slateResponse.getExcess(), Transaction.UNKNOWN_IDENTIFIER, Transaction.UNKNOWN_SWITCH_TYPE, true, Transaction.UNUSED_KERNEL_OFFSET, slateResponse.getId(), (slateResponse.getParticipant(SlateParticipant.SENDER_ID).getMessage() !== SlateParticipant.NO_MESSAGE) ? slateResponse.getParticipant(SlateParticipant.SENDER_ID).getMessage() : Transaction.NO_MESSAGE, (slateResponse.getTimeToLiveCutOffHeight() !== Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT) ? slateResponse.getTimeToLiveCutOffHeight() : Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, Transaction.NO_CONFIRMED_TIMESTAMP, slateResponse.getFee(), (slateResponse.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? slateResponse.getSenderAddress() : Transaction.NO_SENDER_ADDRESS, (slateResponse.getReceiverAddress() !== Slate.NO_RECEIVER_ADDRESS) ? slateResponse.getReceiverAddress() : Transaction.NO_RECEIVER_ADDRESS, (slateResponse.getReceiverSignature() !== Slate.NO_RECEIVER_SIGNATURE) ? slateResponse.getReceiverSignature() : Transaction.NO_RECEIVER_SIGNATURE, (url["length"] !== 0) ? url : Transaction.UNUSED_DESTINATION, Transaction.UNKNOWN_SPENDABLE_HEIGHT, Transaction.UNKNOWN_REQUIRED_NUMBER_OF_CONFIRMATIONS, inputs.map(function(input) {
 																																	
 																																		// Return input's key path
 																																		return input[Wallet.INPUT_KEY_PATH_INDEX];
@@ -14270,11 +14284,32 @@ class Api {
 			// Return finalize transaction message kernel features index
 			return Api.FINALIZE_TRANSACTION_MESSAGE_RECEIVER_ADDRESS_INDEX + 1;
 		}
+		
+		// Get transaction response message
+		static get GET_TRANSACTION_RESPONSE_MESSAGE() {
+		
+			// Return get transaction response message
+			return "ApiGetTransactionResponseMessage";
+		}
+		
+		// Get transaction response message file contents index
+		static get GET_TRANSACTION_RESPONSE_MESSAGE_FILE_CONTENTS_INDEX() {
+		
+			// Return get transaction response message file contents index
+			return 0;
+		}
+		
+		// Get transaction response message file name index
+		static get GET_TRANSACTION_RESPONSE_MESSAGE_FILE_NAME_INDEX() {
+		
+			// Return get transaction response message file name index
+			return Api.GET_TRANSACTION_RESPONSE_MESSAGE_FILE_CONTENTS_INDEX + 1;
+		}
 	
 	// Private
 		
 		// Is compatible
-		isCompatible(url, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
+		isCompatible(url, sendAsFile = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
 		
 			// Set self
 			var self = this;
@@ -14284,150 +14319,161 @@ class Api {
 			
 				// Check if cancel didn't occur
 				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+				
+					// Check if not sending as file
+					if(sendAsFile === false) {
 			
-					// Get proxy request
-					var proxyRequest = Tor.isTorUrl(url) === true && Tor.isSupported() === false;
-					
-					// Upgrade URL if applicable
-					url = Common.upgradeApplicableInsecureUrl(url);
-			
-					// Return sending JSON-RPC request to check version
-					return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.CHECK_VERSION_METHOD, [], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
-					
-						// Check if cancel didn't occur
-						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-					
-							// Check if response contains a result
-							if(Object.isObject(response) === true && "Ok" in response === true) {
-							
-								// Set response to its value
-								response = response["Ok"];
+						// Get proxy request
+						var proxyRequest = Tor.isTorUrl(url) === true && Tor.isSupported() === false;
+						
+						// Upgrade URL if applicable
+						url = Common.upgradeApplicableInsecureUrl(url);
+				
+						// Return sending JSON-RPC request to check version
+						return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.CHECK_VERSION_METHOD, [], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
+						
+							// Check if cancel didn't occur
+							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+						
+								// Check if response contains a result
+								if(Object.isObject(response) === true && "Ok" in response === true) {
 								
-								// Check if response's foreign API version isn't supported
-								if(Object.isObject(response) === false || "foreign_api_version" in response === false || (Common.isNumberString(response["foreign_api_version"]) === false && response["foreign_api_version"] instanceof BigNumber === false) || (new BigNumber(response["foreign_api_version"])).isInteger() === false || (new BigNumber(response["foreign_api_version"])).isLessThan(Api.FOREIGN_API_VERSION_ONE) === true) {
-								
-									// Reject unsupported response
-									reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+									// Set response to its value
+									response = response["Ok"];
 									
-									// Return
-									return;
-								}
-								
-								// Get foreign API version
-								var foreignApiVersion = new BigNumber(response["foreign_api_version"]);
-								
-								// Check if foreign API version isn't supported
-								if(foreignApiVersion.isEqualTo(Api.CURRENT_FOREIGN_API_VERSION) === false) {
-								
-									// Reject unsupported foreign API version
-									reject(Message.createText(Language.getDefaultTranslation('Recipient\'s foreign API version isn\'t supported.')));
+									// Check if response's foreign API version isn't supported
+									if(Object.isObject(response) === false || "foreign_api_version" in response === false || (Common.isNumberString(response["foreign_api_version"]) === false && response["foreign_api_version"] instanceof BigNumber === false) || (new BigNumber(response["foreign_api_version"])).isInteger() === false || (new BigNumber(response["foreign_api_version"])).isLessThan(Api.FOREIGN_API_VERSION_ONE) === true) {
 									
-									// Return
-									return;
-								}
-								
-								// Check if response's supported slate versions isn't supported
-								if(Object.isObject(response) === false || "supported_slate_versions" in response === false || Array.isArray(response["supported_slate_versions"]) === false || response["supported_slate_versions"].every(function(supportedSlateVersion) {
-								
-									// Return if supported slate version is a string
-									return typeof supportedSlateVersion === "string";
-									
-								}) === false) {
-								
-									// Reject unsupported response
-									reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-									
-									// Return
-									return;
-								}
-								
-								// Get supported slate versions
-								var supportedSlateVersions = response["supported_slate_versions"];
-								
-								// Initialize compatible slate versions
-								var compatibleSlateVersions = [];
-								
-								// Go through all supported slate versions
-								for(var i = 0; i < supportedSlateVersions["length"]; ++i) {
-								
-									// Get supported slate version
-									var supportedSlateVersion = supportedSlateVersions[i];
-									
-									// Check if supported slate version is compatible
-									if(Slate.SUPPORTED_VERSIONS.indexOf(supportedSlateVersion) !== Common.INDEX_NOT_FOUND) {
-									
-										// Append supported slate version to list of compatible slate versions
-										compatibleSlateVersions.push(supportedSlateVersion);
+										// Reject unsupported response
+										reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+										
+										// Return
+										return;
 									}
-								}
-								
-								// Check if there no supported slate versions are compatible
-								if(compatibleSlateVersions["length"] === 0) {
-								
-									// Reject unsupported slate versions
-									reject(Message.createText(Language.getDefaultTranslation('Recipient\'s slate versions aren\'t supported.')));
 									
-									// Return
-									return;
+									// Get foreign API version
+									var foreignApiVersion = new BigNumber(response["foreign_api_version"]);
+									
+									// Check if foreign API version isn't supported
+									if(foreignApiVersion.isEqualTo(Api.CURRENT_FOREIGN_API_VERSION) === false) {
+									
+										// Reject unsupported foreign API version
+										reject(Message.createText(Language.getDefaultTranslation('Recipient\'s foreign API version isn\'t supported.')));
+										
+										// Return
+										return;
+									}
+									
+									// Check if response's supported slate versions isn't supported
+									if(Object.isObject(response) === false || "supported_slate_versions" in response === false || Array.isArray(response["supported_slate_versions"]) === false || response["supported_slate_versions"].every(function(supportedSlateVersion) {
+									
+										// Return if supported slate version is a string
+										return typeof supportedSlateVersion === "string";
+										
+									}) === false) {
+									
+										// Reject unsupported response
+										reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+										
+										// Return
+										return;
+									}
+									
+									// Get supported slate versions
+									var supportedSlateVersions = response["supported_slate_versions"];
+									
+									// Initialize compatible slate versions
+									var compatibleSlateVersions = [];
+									
+									// Go through all supported slate versions
+									for(var i = 0; i < supportedSlateVersions["length"]; ++i) {
+									
+										// Get supported slate version
+										var supportedSlateVersion = supportedSlateVersions[i];
+										
+										// Check if supported slate version is compatible
+										if(Slate.SUPPORTED_VERSIONS.indexOf(supportedSlateVersion) !== Common.INDEX_NOT_FOUND) {
+										
+											// Append supported slate version to list of compatible slate versions
+											compatibleSlateVersions.push(supportedSlateVersion);
+										}
+									}
+									
+									// Check if there no supported slate versions are compatible
+									if(compatibleSlateVersions["length"] === 0) {
+									
+										// Reject unsupported slate versions
+										reject(Message.createText(Language.getDefaultTranslation('Recipient\'s slate versions aren\'t supported.')));
+										
+										// Return
+										return;
+									}
+								
+									// Resolve compatible slate versions
+									resolve(compatibleSlateVersions);
 								}
 							
-								// Resolve compatible slate versions
-								resolve(compatibleSlateVersions);
+								// Otherwise
+								else {
+								
+									// Reject invalid response
+									reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+								}
 							}
-						
+					
 							// Otherwise
 							else {
 							
-								// Reject invalid response
-								reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+								// Reject canceled error
+								reject(Common.CANCELED_ERROR);
 							}
-						}
-				
-						// Otherwise
-						else {
 						
-							// Reject canceled error
-							reject(Common.CANCELED_ERROR);
-						}
-					
-					// Catch errors
-					}).catch(function(responseStatusOrResponse) {
-					
-						// Check if cancel didn't occur
-						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-					
-							// Check if response status is provided
-							if(typeof responseStatusOrResponse === "number") {
-							
-								// Reject status as text
-								reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
+						// Catch errors
+						}).catch(function(responseStatusOrResponse) {
+						
+							// Check if cancel didn't occur
+							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+						
+								// Check if response status is provided
+								if(typeof responseStatusOrResponse === "number") {
+								
+									// Reject status as text
+									reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
+								}
+								
+								// Otherwise check if response contains an error message
+								else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
+								
+									// Get is raw data
+									var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
+								
+									// Reject the response's error message
+									reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+								}
+								
+								// Otherwise
+								else {
+								
+									// Reject invalid response
+									reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+								}
 							}
-							
-							// Otherwise check if response contains an error message
-							else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
-							
-								// Get is raw data
-								var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
-							
-								// Reject the response's error message
-								reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
-							}
-							
+					
 							// Otherwise
 							else {
 							
-								// Reject invalid response
-								reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+								// Reject canceled error
+								reject(Common.CANCELED_ERROR);
 							}
-						}
-				
-						// Otherwise
-						else {
-						
-							// Reject canceled error
-							reject(Common.CANCELED_ERROR);
-						}
-					});
+						});
+					}
+					
+					// Otherwise
+					else {
+					
+						// Resolve compatible slate versions
+						resolve([]);
+					}
 				}
 				
 				// Otherwise
@@ -14440,7 +14486,7 @@ class Api {
 		}
 		
 		// Get proof address
-		getProofAddress(url, isMainnet, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
+		getProofAddress(url, isMainnet, sendAsFile = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
 		
 			// Set self
 			var self = this;
@@ -14450,266 +14496,277 @@ class Api {
 			
 				// Check if cancel didn't occur
 				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-			
-					// Get proxy request
-					var proxyRequest = Tor.isTorUrl(url) === true && Tor.isSupported() === false;
-					
-					// Upgrade URL if applicable
-					url = Common.upgradeApplicableInsecureUrl(url);
 				
-					// Return sending JSON-RPC request to get proof address
-					return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.GET_PROOF_ADDRESS_METHOD, [], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
+					// Check if not sending as file
+					if(sendAsFile === false) {
+			
+						// Get proxy request
+						var proxyRequest = Tor.isTorUrl(url) === true && Tor.isSupported() === false;
+						
+						// Upgrade URL if applicable
+						url = Common.upgradeApplicableInsecureUrl(url);
 					
-						// Check if cancel didn't occur
-						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-					
-							// Check if response contains a result
-							if(Object.isObject(response) === true && "Ok" in response === true) {
-							
-								// Set response to its value
-								response = response["Ok"];
+						// Return sending JSON-RPC request to get proof address
+						return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.GET_PROOF_ADDRESS_METHOD, [], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
+						
+							// Check if cancel didn't occur
+							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+						
+								// Check if response contains a result
+								if(Object.isObject(response) === true && "Ok" in response === true) {
 								
-								// Check if response isn't supported
-								if(typeof response !== "string") {
-								
-									// Reject unsupported response
-									reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+									// Set response to its value
+									response = response["Ok"];
 									
-									// Return
-									return;
+									// Check if response isn't supported
+									if(typeof response !== "string") {
+									
+										// Reject unsupported response
+										reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+										
+										// Return
+										return;
+									}
+									
+									// Get proof address
+									var proofAddress = response.replace(Common.DOUBLE_QUOTE_PATTERN, "");
+									
+									// Check wallet type
+									switch(Consensus.getWalletType()) {
+									
+										// MWC wallet
+										case Consensus.MWC_WALLET_TYPE:
+									
+											// Check proof address's length
+											switch(proofAddress["length"]) {
+											
+												// Tor address length
+												case Tor.ADDRESS_LENGTH:
+												
+													// Try
+													try {
+													
+														// Get public key from proof address
+														Tor.torAddressToPublicKey(proofAddress);
+													}
+													
+													// Catch errors
+													catch(error) {
+													
+														// Reject unsupported response
+														reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+														
+														// Return
+														return;
+													}
+												
+													// Break
+													break;
+												
+												// MQS address length
+												case Mqs.ADDRESS_LENGTH:
+												
+													// Try
+													try {
+													
+														// Get public key from proof address
+														Mqs.mqsAddressToPublicKey(proofAddress, isMainnet);
+													}
+													
+													// Catch errors
+													catch(error) {
+													
+														// Reject unsupported response
+														reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+														
+														// Return
+														return;
+													}
+												
+													// Break
+													break;
+												
+												// Default
+												default:
+												
+													// Reject unsupported response
+													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+													
+													// Return
+													return;
+											}
+										
+											// Break
+											break;
+										
+										// GRIN wallet
+										case Consensus.GRIN_WALLET_TYPE:
+										
+											// Check proof address's length
+											switch(proofAddress["length"]) {
+											
+												// Slatepack address length
+												case Slatepack.ADDRESS_LENGTH:
+												
+													// Try
+													try {
+													
+														// Get public key from proof address
+														Slatepack.slatepackAddressToPublicKey(proofAddress);
+													}
+													
+													// Catch errors
+													catch(error) {
+													
+														// Reject unsupported response
+														reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+														
+														// Return
+														return;
+													}
+												
+													// Break
+													break;
+												
+												// Default
+												default:
+												
+													// Reject unsupported response
+													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+													
+													// Return
+													return;
+											}
+											
+											// Break
+											break;
+										
+										// EPIC wallet
+										case Consensus.EPIC_WALLET_TYPE:
+									
+											// Check proof address's length
+											switch(proofAddress["length"]) {
+											
+												// Tor address length
+												case Tor.ADDRESS_LENGTH:
+												
+													// Try
+													try {
+													
+														// Get public key from proof address
+														Tor.torAddressToPublicKey(proofAddress);
+													}
+													
+													// Catch errors
+													catch(error) {
+													
+														// Reject unsupported response
+														reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+														
+														// Return
+														return;
+													}
+												
+													// Break
+													break;
+												
+												// Default
+												default:
+												
+													// Reject unsupported response
+													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+													
+													// Return
+													return;
+											}
+										
+											// Break
+											break;
+									}
+								
+									// Resolve proof address
+									resolve(proofAddress);
 								}
 								
-								// Get proof address
-								var proofAddress = response.replace(Common.DOUBLE_QUOTE_PATTERN, "");
+								// Otherwise
+								else {
 								
-								// Check wallet type
-								switch(Consensus.getWalletType()) {
-								
-									// MWC wallet
-									case Consensus.MWC_WALLET_TYPE:
-								
-										// Check proof address's length
-										switch(proofAddress["length"]) {
-										
-											// Tor address length
-											case Tor.ADDRESS_LENGTH:
-											
-												// Try
-												try {
-												
-													// Get public key from proof address
-													Tor.torAddressToPublicKey(proofAddress);
-												}
-												
-												// Catch errors
-												catch(error) {
-												
-													// Reject unsupported response
-													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-													
-													// Return
-													return;
-												}
-											
-												// Break
-												break;
-											
-											// MQS address length
-											case Mqs.ADDRESS_LENGTH:
-											
-												// Try
-												try {
-												
-													// Get public key from proof address
-													Mqs.mqsAddressToPublicKey(proofAddress, isMainnet);
-												}
-												
-												// Catch errors
-												catch(error) {
-												
-													// Reject unsupported response
-													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-													
-													// Return
-													return;
-												}
-											
-												// Break
-												break;
-											
-											// Default
-											default:
-											
-												// Reject unsupported response
-												reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-												
-												// Return
-												return;
-										}
-									
-										// Break
-										break;
-									
-									// GRIN wallet
-									case Consensus.GRIN_WALLET_TYPE:
-									
-										// Check proof address's length
-										switch(proofAddress["length"]) {
-										
-											// Slatepack address length
-											case Slatepack.ADDRESS_LENGTH:
-											
-												// Try
-												try {
-												
-													// Get public key from proof address
-													Slatepack.slatepackAddressToPublicKey(proofAddress);
-												}
-												
-												// Catch errors
-												catch(error) {
-												
-													// Reject unsupported response
-													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-													
-													// Return
-													return;
-												}
-											
-												// Break
-												break;
-											
-											// Default
-											default:
-											
-												// Reject unsupported response
-												reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-												
-												// Return
-												return;
-										}
-										
-										// Break
-										break;
-									
-									// EPIC wallet
-									case Consensus.EPIC_WALLET_TYPE:
-								
-										// Check proof address's length
-										switch(proofAddress["length"]) {
-										
-											// Tor address length
-											case Tor.ADDRESS_LENGTH:
-											
-												// Try
-												try {
-												
-													// Get public key from proof address
-													Tor.torAddressToPublicKey(proofAddress);
-												}
-												
-												// Catch errors
-												catch(error) {
-												
-													// Reject unsupported response
-													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-													
-													// Return
-													return;
-												}
-											
-												// Break
-												break;
-											
-											// Default
-											default:
-											
-												// Reject unsupported response
-												reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-												
-												// Return
-												return;
-										}
-									
-										// Break
-										break;
+									// Reject invalid response
+									reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
 								}
-							
-								// Resolve proof address
-								resolve(proofAddress);
 							}
 							
 							// Otherwise
 							else {
 							
-								// Reject invalid response
-								reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+								// Reject canceled error
+								reject(Common.CANCELED_ERROR);
 							}
-						}
 						
-						// Otherwise
-						else {
+						// Catch errors
+						}).catch(function(responseStatusOrResponse) {
 						
-							// Reject canceled error
-							reject(Common.CANCELED_ERROR);
-						}
-					
-					// Catch errors
-					}).catch(function(responseStatusOrResponse) {
-					
-						// Check if cancel didn't occur
-						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-					
-							// Check if response status is provided
-							if(typeof responseStatusOrResponse === "number") {
-							
-								// Check if the status is ok or bad request
-								if(responseStatusOrResponse === Common.HTTP_OK_STATUS || responseStatusOrResponse === Common.HTTP_BAD_REQUEST_STATUS) {
+							// Check if cancel didn't occur
+							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+						
+								// Check if response status is provided
+								if(typeof responseStatusOrResponse === "number") {
+								
+									// Check if the status is ok or bad request
+									if(responseStatusOrResponse === Common.HTTP_OK_STATUS || responseStatusOrResponse === Common.HTTP_BAD_REQUEST_STATUS) {
+									
+										// Resolve no proof address
+										resolve(Api.NO_PROOF_ADDRESS);
+									}
+									
+									// Otherwise
+									else {
+								
+										// Reject status as text
+										reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
+									}
+								}
+								
+								// Otherwise check if response is a method not found error
+								else if(Object.isObject(responseStatusOrResponse) === true && "code" in responseStatusOrResponse && responseStatusOrResponse["code"] instanceof BigNumber === true && responseStatusOrResponse["code"].isEqualTo(JsonRpc.METHOD_NOT_FOUND_ERROR) === true) {
 								
 									// Resolve no proof address
 									resolve(Api.NO_PROOF_ADDRESS);
 								}
 								
+								// Otherwise check if response contains an error message
+								else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
+								
+									// Get is raw data
+									var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
+									
+									// Reject the response's error message
+									reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+								}
+								
 								// Otherwise
 								else {
-							
-									// Reject status as text
-									reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
-								}
-							}
-							
-							// Otherwise check if response is a method not found error
-							else if(Object.isObject(responseStatusOrResponse) === true && "code" in responseStatusOrResponse && responseStatusOrResponse["code"] instanceof BigNumber === true && responseStatusOrResponse["code"].isEqualTo(JsonRpc.METHOD_NOT_FOUND_ERROR) === true) {
-							
-								// Resolve no proof address
-								resolve(Api.NO_PROOF_ADDRESS);
-							}
-							
-							// Otherwise check if response contains an error message
-							else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
-							
-								// Get is raw data
-								var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
 								
-								// Reject the response's error message
-								reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+									// Reject invalid response
+									reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+								}
 							}
 							
 							// Otherwise
 							else {
 							
-								// Reject invalid response
-								reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+								// Reject canceled error
+								reject(Common.CANCELED_ERROR);
 							}
-						}
-						
-						// Otherwise
-						else {
-						
-							// Reject canceled error
-							reject(Common.CANCELED_ERROR);
-						}
-					});
+						});
+					}
+					
+					// Otherwise
+					else {
+					
+						// Resolve no proof address
+						resolve(Api.NO_PROOF_ADDRESS);
+					}
 				}
 				
 				// Otherwise
@@ -14722,7 +14779,7 @@ class Api {
 		}
 		
 		// Get slate response
-		getSlateResponse(url, wallet, slate, isMainnet, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
+		getSlateResponse(url, wallet, slate, isMainnet, sendAsFile = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
 		
 			// Set self
 			var self = this;
@@ -15113,138 +15170,572 @@ class Api {
 						// Check if cancel didn't occur
 						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 						
-							// Get proxy request
-							var proxyRequest = Tor.isTorUrl(url) === true && Tor.isSupported() === false;
+							// Send slate
+							var sendSlate = function() {
 							
-							// Upgrade URL if applicable
-							url = Common.upgradeApplicableInsecureUrl(url);
-							
-							// Set current slate send ID to the slate's ID
-							self.currentSlateSendId = slate.getId();
-							
-							// Return sending JSON-RPC request to get slate response
-							return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.RECEIVE_TRANSACTION_METHOD, [
-							
-								// Slate
-								encodedSlate,
+								// Return promise
+								return new Promise(function(resolve, reject) {
 								
-								// Destination account name
-								null,
-								
-								// Message
-								null,
+									// Check if cancel didn't occur
+									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 							
-							], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
-							
-								// Set current slate send ID to no current slate send ID
-								self.currentSlateSendId = Api.NO_CURRENT_SLATE_SEND_ID;
-							
-								// Check if cancel didn't occur
-								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-							
-									// Check if response contains a result
-									if(Object.isObject(response) === true && "Ok" in response === true) {
+										// Check if not sending as file
+										if(sendAsFile === false) {
 									
-										// Set response to its value
-										response = response["Ok"];
-										
-										// Decode slate
-										var decodeSlate = function(serializedSlateOrSlatepack) {
-										
-											// Return promise
-											return new Promise(function(resolve, reject) {
+											// Get proxy request
+											var proxyRequest = Tor.isTorUrl(url) === true && Tor.isSupported() === false;
+											
+											// Upgrade URL if applicable
+											url = Common.upgradeApplicableInsecureUrl(url);
+											
+											// Set current slate send ID to the slate's ID
+											self.currentSlateSendId = slate.getId();
+											
+											// Return sending JSON-RPC request to get slate response
+											return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.RECEIVE_TRANSACTION_METHOD, [
+											
+												// Slate
+												encodedSlate,
+												
+												// Destination account name
+												null,
+												
+												// Message
+												null,
+											
+											], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
+											
+												// Set current slate send ID to no current slate send ID
+												self.currentSlateSendId = Api.NO_CURRENT_SLATE_SEND_ID;
 											
 												// Check if cancel didn't occur
 												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 												
-													// Check wallet type
-													switch(Consensus.getWalletType()) {
+													// Check if response contains a result
+													if(Object.isObject(response) === true && "Ok" in response === true) {
 													
-														// MWC wallet
-														case Consensus.MWC_WALLET_TYPE:
-												
-															// Set expecting Slatepack
-															var expectingSlatepack = slate.isCompact() === true;
-															
-															// break
-															break;
-														
-														// GRIN or EPIC wallet
-														case Consensus.GRIN_WALLET_TYPE:
-														case Consensus.EPIC_WALLET_TYPE:
-														
-															// Set expecting Slatepack
-															var expectingSlatepack = false;
-															
-															// Break
-															break;
+														// Resolve response's result
+														resolve(response["Ok"]);
 													}
 												
-													// Check if a Slatepack is received and it should have been
-													if(typeof serializedSlateOrSlatepack === "string" && expectingSlatepack === true) {
+													// Otherwise
+													else {
 													
-														// Get Slatepack
-														var slatepack = serializedSlateOrSlatepack;
-														
-														// Check if Slatepack should be encrypted, it is encrypted, and it's sender public key matches the slate's receiver address
-														if(slate.getReceiverAddress() !== Slate.NO_RECEIVER_ADDRESS && slate.getReceiverAddress()["length"] === Tor.ADDRESS_LENGTH && Slatepack.isEncryptedSlatepack(slatepack) === true && Slatepack.getSlatepackSenderPublicKey(slatepack) !== Slatepack.NO_PUBLIC_KEY && Tor.publicKeyToTorAddress(Slatepack.getSlatepackSenderPublicKey(slatepack)) === slate.getReceiverAddress()) {
+														// Reject invalid response
+														reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+													}
+												}
+											
+												// Otherwise
+												else {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+												}
+											
+											// Catch errors
+											}).catch(function(responseStatusOrResponse) {
+											
+												// Set current slate send ID to no current slate send ID
+												self.currentSlateSendId = Api.NO_CURRENT_SLATE_SEND_ID;
+											
+												// Check if cancel didn't occur
+												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+											
+													// Check if response status is provided
+													if(typeof responseStatusOrResponse === "number") {
 													
-															// Check if wallet isn't a hardware wallet
-															if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
+														// Reject status as text
+														reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
+													}
+													
+													// Otherwise check if response contains an error message
+													else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
+													
+														// Get is raw data
+														var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
 														
-																// Return getting wallet's Tor secret key
-																return wallet.getAddressKey(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX).then(function(secretKey) {
+														// Reject the response's error message
+														reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+													}
+													
+													// Otherwise
+													else {
+													
+														// Reject invalid response
+														reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+													}
+												}
+												
+												// Otherwise
+												else {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+												}
+											});
+										}
+										
+										// Otherwise
+										else {
+										
+											// Initialize response
+											var response = Api.NO_RESPONSE;
+											
+											// Initialize response error
+											var responseError = Api.NO_RESPONSE_ERROR;
+											
+											// Update message
+											var updateMessage = function() {
+											
+												// Return promise
+												return new Promise(function(resolve, reject) {
+												
+													// Check if cancel didn't occur
+													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+													
+														// Disable message
+														self.message.disable();
+														
+														// Set file contents
+														var fileContents = (typeof encodedSlate === "string") ? encodedSlate : JSONBigNumber.stringify(encodedSlate);
+														
+														// Set file name
+														var fileName = slate.getId().serialize();
+														
+														// Message before show not cancelable event API event
+														$(self.message).one(Message.BEFORE_SHOW_NOT_CANCELABLE_EVENT + ".api", function() {
+														
+															// Check if cancel didn't occur
+															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+														
+																// Message message display second button click API event
+																self.message.messageDisplay.find("button").eq(1).on("click.api", function(event) {
 																
 																	// Check if cancel didn't occur
 																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																	
-																		// Return decoding the Slatepack
-																		return Slatepack.decodeSlatepack(slatepack, secretKey).then(function(decodedSlate) {
+																		// Check if response and response error don't exist
+																		if(response === Api.NO_RESPONSE && responseError === Api.NO_RESPONSE_ERROR) {
+																	
+																			// Stop immediate propagation
+																			event.stopImmediatePropagation();
+																			
+																			// Get button
+																			var button = $(this);
+																			
+																			// Check if button has focus
+																			if(button.is(":focus") === true) {
+																			
+																				// Add focus apperance to button
+																				button.addClass("focus");
+																			}
+																			
+																			// Blue focused element
+																			$(":focus").blur();
+																			
+																			// Remove selection
+																			Focus.removeSelection();
+																			
+																			// Show loading
+																			self.application.showLoading();
 																		
-																			// Securely clear secret key
-																			secretKey.fill(0);
+																			// Set that message second button is loading
+																			self.message.setButtonLoading(Message.SECOND_BUTTON);
 																			
-																			// Check if cancel didn't occur
-																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																			// Disable message
+																			self.message.disable();
 																			
-																				// Resolve the decoded slate
-																				resolve(decodedSlate);
-																			}
+																			// Prevent scrolling keys
+																			self.application.scroll.preventKeys();
 																			
-																			// Otherwise
-																			else {
+																			// Block input
+																			$("body").addClass("blockInput");
 																			
-																				// Reject canceled error
-																				reject(Common.CANCELED_ERROR);
-																			}
-																		
-																		// Catch errors
-																		}).catch(function(error) {
-																		
-																			// Securely clear secret key
-																			secretKey.fill(0);
+																			// Create file input
+																			var fileInput = $("<input type=\"file\">");
 																			
-																			// Check if cancel didn't occur
-																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																			// File input change event
+																			fileInput.one("change", function(event) {
 																			
-																				// Reject error
-																				reject(error);
-																			}
+																				// Turn off window focus API event
+																				$(window).off("focus.api");
+																				
+																				// Allow scrolling keys
+																				self.application.scroll.allowKeys();
+																				
+																				// Unblock input
+																				$("body").removeClass("blockInput");
+																				
+																				// Check if cancel didn't occur
+																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																				
+																					// Get files
+																					var files = event["target"]["files"];
+																					
+																					// Check if no file was selected
+																					if(files["length"] <= 0) {
+																					
+																						// Hide loading
+																						self.application.hideLoading();
+																					
+																						// Enable message
+																						self.message.enable();
+																						
+																						// Check if button had focus
+																						if(button.hasClass("focus") === true) {
+																						
+																							// Focus on button
+																							button.focus().removeClass("focus");
+																						}
+																					}
+																					
+																					// Otherwise
+																					else {
+																					
+																						// Get file
+																						var file = files[0];
+																						
+																						// Create file reader
+																						var fileReader = new FileReader();
+																						
+																						// File reader load event
+																						$(fileReader).one("load", function(event) {
+																						
+																							// Turn off file reader error event
+																							$(fileReader).off("error");
+																							
+																							// Check if cancel didn't occur
+																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																						
+																								// Get file's contents trimmed
+																								var filesContents = event["originalEvent"]["target"]["result"].trim();
+																								
+																								// Try
+																								try {
+																								
+																									// Get response from file's contents parsed as JSON
+																									response = JSONBigNumber.parse(filesContents);
+																								}
+																								
+																								// Catch errors
+																								catch(error) {
+																								
+																									// Set response to file's contents
+																									response = filesContents;
+																								}
+																								
+																								// Trigger click on button
+																								button.trigger("click");
+																							}
+																							
+																						// File reader error event
+																						}).one("error", function() {
+																						
+																							// Turn off file reader load event
+																							$(fileReader).off("load");
+																							
+																							// Check if cancel didn't occur
+																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																							
+																								// Set response error to error
+																								responseError = Message.createText(Language.getDefaultTranslation('Opening that file failed.'));
+																								
+																								// Trigger click on button
+																								button.trigger("click");
+																							}
+																						});
+																						
+																						// Read file as text with file reader
+																						fileReader.readAsText(file);
+																					}
+																				}
+																				
+																				// Otherwise
+																				else {
+																				
+																					// Hide loading
+																					self.application.hideLoading();
+																				}
+																			});
 																			
-																			// Otherwise
-																			else {
+																			// TODO Find better method for detecting when a file dialog is canceled
+								
+																			// Window focus API event
+																			$(window).one("focus.api", function() {
 																			
-																				// Reject canceled error
-																				reject(Common.CANCELED_ERROR);
-																			}
-																		});
+																				// Turn off file input change event
+																				fileInput.off("change");
+																				
+																				// Allow scrolling keys
+																				self.application.scroll.allowKeys();
+																				
+																				// Unblock input
+																				$("body").removeClass("blockInput");
+																				
+																				// Hide loading
+																				self.application.hideLoading();
+																				
+																				// Check if cancel didn't occur
+																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																				
+																					// Enable message
+																					self.message.enable();
+																					
+																					// Check if button had focus
+																					if(button.hasClass("focus") === true) {
+																					
+																						// Focus on button and remove its focus apperance
+																						button.focus().removeClass("focus");
+																					}
+																				}
+																			});
+																			
+																			// Trigger file input selection
+																			fileInput.trigger("click");
+																		}
+																	}
+																});
+															}
+														});
+													
+														// Return replace message
+														return self.message.replace(Api.GET_TRANSACTION_RESPONSE_MESSAGE, [fileContents, fileName]).then(function(replaceResult) {
+														
+															// Check if cancel didn't occur
+															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+															
+																// Check if a replacement message was displayed
+																if(replaceResult !== Message.REPLACE_NOT_DISPLAYED_RESULT) {
+																
+																	// Save file contents
+																	Common.saveFile(fileName, fileContents);
+																	
+																	// Resolve
+																	resolve();
+																}
+																
+																// Otherwise
+																else {
+																
+																	// Turn off message before show not cancelable event API event
+																	$(self.message).off(Message.BEFORE_SHOW_NOT_CANCELABLE_EVENT + ".api");
+																
+																	// Reject canceled error
+																	reject(Common.CANCELED_ERROR);
+																}
+															}
+											
+															// Otherwise
+															else {
+															
+																// Turn off message before show not cancelable event API event
+																$(self.message).off(Message.BEFORE_SHOW_NOT_CANCELABLE_EVENT + ".api");
+															
+																// Reject canceled error
+																reject(Common.CANCELED_ERROR);
+															}
+														});
+													}
+													
+													// Otherwise
+													else {
+													
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
+													}
+												});
+											};
+											
+											// Return updating message
+											return updateMessage().then(function() {
+											
+												// Check if cancel didn't occur
+												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+												
+													// Message first button click API event
+													$(self.message).one(Message.FIRST_BUTTON_CLICK_EVENT + ".api", function() {
+													
+														// Turn off message before show not cancelable event API event
+														$(self.message).off(Message.BEFORE_SHOW_NOT_CANCELABLE_EVENT + ".api");
+														
+														// Turn off message second button click API event
+														$(self.message).off(Message.SECOND_BUTTON_CLICK_EVENT + ".api");
+														
+														// Turn off message hide API event
+														$(self.message).off(Message.HIDE_EVENT + ".api");
+														
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
+													
+													// Message second button click API event
+													}).one(Message.SECOND_BUTTON_CLICK_EVENT + ".api", function() {
+													
+														// Turn off message before show not cancelable event API event
+														$(self.message).off(Message.BEFORE_SHOW_NOT_CANCELABLE_EVENT + ".api");
+														
+														// Turn off message first button click API event
+														$(self.message).off(Message.FIRST_BUTTON_CLICK_EVENT + ".api");
+														
+														// Turn off message hide API event
+														$(self.message).off(Message.HIDE_EVENT + ".api");
+														
+														// Check if cancel didn't occur
+														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+														
+															// Check if response exists
+															if(response !== Api.NO_RESPONSE) {
+															
+																// Resolve response
+																resolve(response);
+															}
+															
+															// Otherwise check if response error exists
+															else if(responseError !== Api.NO_RESPONSE_ERROR) {
+															
+																// Reject response error
+																reject(responseError);
+															}
+															
+															// Otherwise
+															else {
+															
+																// Reject canceled error
+																reject(Common.CANCELED_ERROR);
+															}
+														}
+														
+														// Otherwise
+														else {
+														
+															// Reject canceled error
+															reject(Common.CANCELED_ERROR);
+														}
+													
+													// Message hide API event
+													}).one(Message.HIDE_EVENT + ".api", function() {
+													
+														// Turn off message before show not cancelable event API event
+														$(self.message).off(Message.BEFORE_SHOW_NOT_CANCELABLE_EVENT + ".api");
+														
+														// Turn off message first button click API event
+														$(self.message).off(Message.FIRST_BUTTON_CLICK_EVENT + ".api");
+														
+														// Turn off message second button click API event
+														$(self.message).off(Message.SECOND_BUTTON_CLICK_EVENT + ".api");
+														
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
+													});
+												}
+												
+												// Otherwise
+												else {
+												
+													// Turn off message before show not cancelable event API event
+													$(self.message).off(Message.BEFORE_SHOW_NOT_CANCELABLE_EVENT + ".api");
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+												}
+											
+											// Catch errors
+											}).catch(function(error) {
+											
+												// Check if cancel didn't occur
+												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+											
+													// Reject error
+													reject(error);
+												}
+													
+												// Otherwise
+												else {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+												}
+											});
+										}
+									}
+									
+									// Otherwise
+									else {
+									
+										// Reject canceled error
+										reject(Common.CANCELED_ERROR);
+									}
+								});
+							};
+							
+							// Return sending slate
+							return sendSlate().then(function(response) {
+						
+								// Decode slate
+								var decodeSlate = function(serializedSlateOrSlatepack) {
+								
+									// Return promise
+									return new Promise(function(resolve, reject) {
+									
+										// Check if cancel didn't occur
+										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+										
+											// Check wallet type
+											switch(Consensus.getWalletType()) {
+											
+												// MWC wallet
+												case Consensus.MWC_WALLET_TYPE:
+										
+													// Set expecting Slatepack
+													var expectingSlatepack = slate.isCompact() === true;
+													
+													// break
+													break;
+												
+												// GRIN or EPIC wallet
+												case Consensus.GRIN_WALLET_TYPE:
+												case Consensus.EPIC_WALLET_TYPE:
+												
+													// Set expecting Slatepack
+													var expectingSlatepack = false;
+													
+													// Break
+													break;
+											}
+										
+											// Check if a Slatepack is received and it should have been
+											if(typeof serializedSlateOrSlatepack === "string" && expectingSlatepack === true) {
+											
+												// Get Slatepack
+												var slatepack = serializedSlateOrSlatepack;
+												
+												// Check if Slatepack should be encrypted, it is encrypted, and it's sender public key matches the slate's receiver address
+												if(slate.getReceiverAddress() !== Slate.NO_RECEIVER_ADDRESS && slate.getReceiverAddress()["length"] === Tor.ADDRESS_LENGTH && Slatepack.isEncryptedSlatepack(slatepack) === true && Slatepack.getSlatepackSenderPublicKey(slatepack) !== Slatepack.NO_PUBLIC_KEY && Tor.publicKeyToTorAddress(Slatepack.getSlatepackSenderPublicKey(slatepack)) === slate.getReceiverAddress()) {
+											
+													// Check if wallet isn't a hardware wallet
+													if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
+												
+														// Return getting wallet's Tor secret key
+														return wallet.getAddressKey(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX).then(function(secretKey) {
+														
+															// Check if cancel didn't occur
+															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+															
+																// Return decoding the Slatepack
+																return Slatepack.decodeSlatepack(slatepack, secretKey).then(function(decodedSlate) {
+																
+																	// Securely clear secret key
+																	secretKey.fill(0);
+																	
+																	// Check if cancel didn't occur
+																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																	
+																		// Resolve the decoded slate
+																		resolve(decodedSlate);
 																	}
 																	
 																	// Otherwise
 																	else {
-																	
-																		// Securely clear secret key
-																		secretKey.fill(0);
 																	
 																		// Reject canceled error
 																		reject(Common.CANCELED_ERROR);
@@ -15253,6 +15744,9 @@ class Api {
 																// Catch errors
 																}).catch(function(error) {
 																
+																	// Securely clear secret key
+																	secretKey.fill(0);
+																	
 																	// Check if cancel didn't occur
 																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																	
@@ -15272,368 +15766,342 @@ class Api {
 															// Otherwise
 															else {
 															
-																// Return waiting for wallet's hardware wallet to connect
-																return self.wallets.waitForHardwareWalletToConnect(wallet.getKeyPath(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Connect the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Connect the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function() {
-																
-																	// Check if cancel didn't occur
-																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																// Securely clear secret key
+																secretKey.fill(0);
 															
-																		// Check if hardware wallet is connected
-																		if(wallet.isHardwareConnected() === true) {
-																		
-																			// Return decoding the Slatepack
-																			return Slatepack.decodeSlatepack(slatepack, wallet.getHardwareWallet(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function(decodedSlate) {
-																			
-																				// Check if cancel didn't occur
-																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																			
-																					// Resolve the decoded slate
-																					resolve(decodedSlate);
-																				}
-																				
-																				// Otherwise
-																				else {
-																				
-																					// Reject canceled error
-																					reject(Common.CANCELED_ERROR);
-																				}
-																				
-																			// Catch errors
-																			}).catch(function(error) {
-																			
-																				// Check if cancel didn't occur
-																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																			
-																					// Check if hardware wallet was disconnected
-																					if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																					
-																						// Check if wallet's hardware wallet is connected
-																						if(wallet.isHardwareConnected() === true) {
-																					
-																							// Wallet's hardware wallet disconnect event
-																							$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																						
-																								// Return decoding the Slatepack
-																								return decodeSlate(slatepack).then(function(decodedSlate) {
-																								
-																									// Check if cancel didn't occur
-																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																								
-																										// Resolve the decoded slate
-																										resolve(decodedSlate);
-																									}
-																									
-																									// Otherwise
-																									else {
-																									
-																										// Reject canceled error
-																										reject(Common.CANCELED_ERROR);
-																									}
-																								
-																								// Catch errors
-																								}).catch(function(error) {
-																								
-																									// Check if cancel didn't occur
-																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																								
-																										// Reject error
-																										reject(error);
-																									}
-																									
-																									// Otherwise
-																									else {
-																									
-																										// Reject canceled error
-																										reject(Common.CANCELED_ERROR);
-																									}
-																								});
-																							});
-																						}
-																						
-																						// Otherwise
-																						else {
-																						
-																							// Return decoding the Slatepack
-																							return decodeSlate(slatepack).then(function(decodedSlate) {
-																							
-																								// Check if cancel didn't occur
-																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																							
-																									// Resolve the decoded slate
-																									resolve(decodedSlate);
-																								}
-																								
-																								// Otherwise
-																								else {
-																								
-																									// Reject canceled error
-																									reject(Common.CANCELED_ERROR);
-																								}
-																							
-																							// Catch errors
-																							}).catch(function(error) {
-																							
-																								// Check if cancel didn't occur
-																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																							
-																									// Reject error
-																									reject(error);
-																								}
-																								
-																								// Otherwise
-																								else {
-																								
-																									// Reject canceled error
-																									reject(Common.CANCELED_ERROR);
-																								}
-																							});
-																						}
-																					}
-																					
-																					// Otherwise
-																					else {
-																				
-																						// Reject error
-																						reject(error);
-																					}
-																				}
-																				
-																				// Otherwise
-																				else {
-																				
-																					// Reject canceled error
-																					reject(Common.CANCELED_ERROR);
-																				}
-																			});
+																// Reject canceled error
+																reject(Common.CANCELED_ERROR);
+															}
+														
+														// Catch errors
+														}).catch(function(error) {
+														
+															// Check if cancel didn't occur
+															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+															
+																// Reject error
+																reject(error);
+															}
+															
+															// Otherwise
+															else {
+															
+																// Reject canceled error
+																reject(Common.CANCELED_ERROR);
+															}
+														});
+													}
+													
+													// Otherwise
+													else {
+													
+														// Return waiting for wallet's hardware wallet to connect
+														return self.wallets.waitForHardwareWalletToConnect(wallet.getKeyPath(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Connect the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Connect the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function() {
+														
+															// Check if cancel didn't occur
+															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+													
+																// Check if hardware wallet is connected
+																if(wallet.isHardwareConnected() === true) {
+																
+																	// Return decoding the Slatepack
+																	return Slatepack.decodeSlatepack(slatepack, wallet.getHardwareWallet(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue sending the payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue sending the payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], false, true, cancelOccurred).then(function(decodedSlate) {
+																	
+																		// Check if cancel didn't occur
+																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																	
+																			// Resolve the decoded slate
+																			resolve(decodedSlate);
 																		}
 																		
 																		// Otherwise
 																		else {
 																		
-																			// Return decoding the Slatepack
-																			return decodeSlate(slatepack).then(function(decodedSlate) {
-																			
-																				// Check if cancel didn't occur
-																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																			
-																					// Resolve the decoded slate
-																					resolve(decodedSlate);
-																				}
-																				
-																				// Otherwise
-																				else {
-																				
-																					// Reject canceled error
-																					reject(Common.CANCELED_ERROR);
-																				}
-																			
-																			// Catch errors
-																			}).catch(function(error) {
-																			
-																				// Check if cancel didn't occur
-																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																			
-																					// Reject error
-																					reject(error);
-																				}
-																				
-																				// Otherwise
-																				else {
-																				
-																					// Reject canceled error
-																					reject(Common.CANCELED_ERROR);
-																				}
-																			});
+																			// Reject canceled error
+																			reject(Common.CANCELED_ERROR);
 																		}
-																	}
-																								
-																	// Otherwise
-																	else {
+																		
+																	// Catch errors
+																	}).catch(function(error) {
 																	
-																		// Reject canceled error
-																		reject(Common.CANCELED_ERROR);
-																	}
+																		// Check if cancel didn't occur
+																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																	
-																// Catch errors
-																}).catch(function(error) {
+																			// Check if hardware wallet was disconnected
+																			if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																			
+																				// Check if wallet's hardware wallet is connected
+																				if(wallet.isHardwareConnected() === true) {
+																			
+																					// Wallet's hardware wallet disconnect event
+																					$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																				
+																						// Return decoding the Slatepack
+																						return decodeSlate(slatepack).then(function(decodedSlate) {
+																						
+																							// Check if cancel didn't occur
+																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																						
+																								// Resolve the decoded slate
+																								resolve(decodedSlate);
+																							}
+																							
+																							// Otherwise
+																							else {
+																							
+																								// Reject canceled error
+																								reject(Common.CANCELED_ERROR);
+																							}
+																						
+																						// Catch errors
+																						}).catch(function(error) {
+																						
+																							// Check if cancel didn't occur
+																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																						
+																								// Reject error
+																								reject(error);
+																							}
+																							
+																							// Otherwise
+																							else {
+																							
+																								// Reject canceled error
+																								reject(Common.CANCELED_ERROR);
+																							}
+																						});
+																					});
+																				}
+																				
+																				// Otherwise
+																				else {
+																				
+																					// Return decoding the Slatepack
+																					return decodeSlate(slatepack).then(function(decodedSlate) {
+																					
+																						// Check if cancel didn't occur
+																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																					
+																							// Resolve the decoded slate
+																							resolve(decodedSlate);
+																						}
+																						
+																						// Otherwise
+																						else {
+																						
+																							// Reject canceled error
+																							reject(Common.CANCELED_ERROR);
+																						}
+																					
+																					// Catch errors
+																					}).catch(function(error) {
+																					
+																						// Check if cancel didn't occur
+																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																					
+																							// Reject error
+																							reject(error);
+																						}
+																						
+																						// Otherwise
+																						else {
+																						
+																							// Reject canceled error
+																							reject(Common.CANCELED_ERROR);
+																						}
+																					});
+																				}
+																			}
+																			
+																			// Otherwise
+																			else {
+																		
+																				// Reject error
+																				reject(error);
+																			}
+																		}
+																		
+																		// Otherwise
+																		else {
+																		
+																			// Reject canceled error
+																			reject(Common.CANCELED_ERROR);
+																		}
+																	});
+																}
 																
-																	// Check if cancel didn't occur
-																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																// Otherwise
+																else {
+																
+																	// Return decoding the Slatepack
+																	return decodeSlate(slatepack).then(function(decodedSlate) {
 																	
-																		// Reject error
-																		reject(error);
-																	}
+																		// Check if cancel didn't occur
+																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																	
-																	// Otherwise
-																	else {
+																			// Resolve the decoded slate
+																			resolve(decodedSlate);
+																		}
+																		
+																		// Otherwise
+																		else {
+																		
+																			// Reject canceled error
+																			reject(Common.CANCELED_ERROR);
+																		}
 																	
-																		// Reject canceled error
-																		reject(Common.CANCELED_ERROR);
-																	}
-																});
+																	// Catch errors
+																	}).catch(function(error) {
+																	
+																		// Check if cancel didn't occur
+																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																	
+																			// Reject error
+																			reject(error);
+																		}
+																		
+																		// Otherwise
+																		else {
+																		
+																			// Reject canceled error
+																			reject(Common.CANCELED_ERROR);
+																		}
+																	});
+																}
 															}
-														}
-														
-														// Otherwise check if response should have been encrypted but it wasn't encrypted or has the wrong sender public key
-														else if(slate.getReceiverAddress() !== Slate.NO_RECEIVER_ADDRESS && slate.getReceiverAddress()["length"] === Tor.ADDRESS_LENGTH) {
-														
-															// Reject
-															reject();
-														}
-														
-														// Otherwise check if response was encrypted when it shouldn't have been
-														else if(Slatepack.isEncryptedSlatepack(slatepack) === true) {
-														
-															// Reject
-															reject();
-														}
-														
-														// Otherwise
-														else {
-														
-															// Return decoding the Slatepack
-															return Slatepack.decodeSlatepack(slatepack).then(function(decodedSlate) {
+																						
+															// Otherwise
+															else {
 															
-																// Check if cancel didn't occur
-																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																
-																	// Resolve the decoded slate
-																	resolve(decodedSlate);
-																}
-																
-																// Otherwise
-																else {
-																
-																	// Reject canceled error
-																	reject(Common.CANCELED_ERROR);
-																}
+																// Reject canceled error
+																reject(Common.CANCELED_ERROR);
+															}
 															
-															// Catch errors
-															}).catch(function(error) {
+														// Catch errors
+														}).catch(function(error) {
+														
+															// Check if cancel didn't occur
+															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 															
-																// Check if cancel didn't occur
-																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																
-																	// Reject error
-																	reject(error);
-																}
-																
-																// Otherwise
-																else {
-																
-																	// Reject canceled error
-																	reject(Common.CANCELED_ERROR);
-																}
-															});
-														}
+																// Reject error
+																reject(error);
+															}
+															
+															// Otherwise
+															else {
+															
+																// Reject canceled error
+																reject(Common.CANCELED_ERROR);
+															}
+														});
 													}
-													
-													// Otherwise check if a Slatepack should have been received but it wasn't
-													else if(expectingSlatepack === true) {
-													
-														// Reject
-														reject();
-													}
-													
-													// Otherwise check if a serialized slate was received
-													else if(Object.isObject(serializedSlateOrSlatepack) === true) {
-													
-														// Get decoded slate
-														var decodedSlate = serializedSlateOrSlatepack;
-													
-														// Resolve the decoded slate
-														resolve(decodedSlate);
-													}
-													
-													// Otherwise
-													else {
-													
-														// Reject
-														reject();
-													}
+												}
+												
+												// Otherwise check if response should have been encrypted but it wasn't encrypted or has the wrong sender public key
+												else if(slate.getReceiverAddress() !== Slate.NO_RECEIVER_ADDRESS && slate.getReceiverAddress()["length"] === Tor.ADDRESS_LENGTH) {
+												
+													// Reject
+													reject();
+												}
+												
+												// Otherwise check if response was encrypted when it shouldn't have been
+												else if(Slatepack.isEncryptedSlatepack(slatepack) === true) {
+												
+													// Reject
+													reject();
 												}
 												
 												// Otherwise
 												else {
 												
-													// Reject canceled error
-													reject(Common.CANCELED_ERROR);
-												}
-											});
-										};
-										
-										// Return decoding response
-										return decodeSlate(response).then(function(decodedSlate) {
-										
-											// Check if cancel didn't occur
-											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-											
-												// Return parsing slate
-												return Slate.parseSlateAsynchronous(decodedSlate, isMainnet, Slate.COMPACT_SLATE_PURPOSE_SEND_RESPONSE, slate).then(function(slateResponse) {
-												
-													// Check if cancel didn't occur
-													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-												
-														// Check if slate response hasn't changed too much from the sent slate
-														if(slate.isEqualTo(slateResponse) === true) {
+													// Return decoding the Slatepack
+													return Slatepack.decodeSlatepack(slatepack).then(function(decodedSlate) {
+													
+														// Check if cancel didn't occur
+														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 														
-															// Resolve slate response
-															resolve(slateResponse);
+															// Resolve the decoded slate
+															resolve(decodedSlate);
 														}
 														
 														// Otherwise
 														else {
 														
-															// Reject unsupported response
-															reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+															// Reject canceled error
+															reject(Common.CANCELED_ERROR);
 														}
 													
-													}
+													// Catch errors
+													}).catch(function(error) {
+													
+														// Check if cancel didn't occur
+														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+														
+															// Reject error
+															reject(error);
+														}
+														
+														// Otherwise
+														else {
+														
+															// Reject canceled error
+															reject(Common.CANCELED_ERROR);
+														}
+													});
+												}
+											}
 											
-													// Otherwise
-													else {
-													
-														// Reject canceled error
-														reject(Common.CANCELED_ERROR);
-													}
-													
-												// Catch errors
-												}).catch(function(error) {
-												
-													// Check if cancel didn't occur
-													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-												
-														// Reject unsupported response
-														reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-													}
+											// Otherwise check if a Slatepack should have been received but it wasn't
+											else if(expectingSlatepack === true) {
 											
-													// Otherwise
-													else {
-													
-														// Reject canceled error
-														reject(Common.CANCELED_ERROR);
-													}
-												});
+												// Reject
+												reject();
+											}
+											
+											// Otherwise check if a serialized slate was received
+											else if(Object.isObject(serializedSlateOrSlatepack) === true) {
+											
+												// Get decoded slate
+												var decodedSlate = serializedSlateOrSlatepack;
+											
+												// Resolve the decoded slate
+												resolve(decodedSlate);
 											}
 											
 											// Otherwise
 											else {
 											
-												// Reject canceled error
-												reject(Common.CANCELED_ERROR);
+												// Reject
+												reject();
 											}
+										}
 										
-										// Catch errors
-										}).catch(function(error) {
+										// Otherwise
+										else {
+										
+											// Reject canceled error
+											reject(Common.CANCELED_ERROR);
+										}
+									});
+								};
+								
+								// Return decoding response
+								return decodeSlate(response).then(function(decodedSlate) {
+								
+									// Check if cancel didn't occur
+									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+									
+										// Return parsing slate
+										return Slate.parseSlateAsynchronous(decodedSlate, isMainnet, Slate.COMPACT_SLATE_PURPOSE_SEND_RESPONSE, slate).then(function(slateResponse) {
 										
 											// Check if cancel didn't occur
 											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-											
-												// Check if canceled
-												if(error === Common.CANCELED_ERROR) {
+										
+												// Check if slate response hasn't changed too much from the sent slate
+												if(slate.isEqualTo(slateResponse) === true) {
 												
-													// Reject error
-													reject(error);
+													// Resolve slate response
+													resolve(slateResponse);
 												}
 												
 												// Otherwise
@@ -15642,8 +16110,26 @@ class Api {
 													// Reject unsupported response
 													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
 												}
+											
+											}
+									
+											// Otherwise
+											else {
+											
+												// Reject canceled error
+												reject(Common.CANCELED_ERROR);
 											}
 											
+										// Catch errors
+										}).catch(function(error) {
+										
+											// Check if cancel didn't occur
+											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+										
+												// Reject unsupported response
+												reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+											}
+									
 											// Otherwise
 											else {
 											
@@ -15656,50 +16142,47 @@ class Api {
 									// Otherwise
 									else {
 									
-										// Reject invalid response
-										reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+										// Reject canceled error
+										reject(Common.CANCELED_ERROR);
 									}
-								}
 								
-								// Otherwise
-								else {
+								// Catch errors
+								}).catch(function(error) {
 								
-									// Reject canceled error
-									reject(Common.CANCELED_ERROR);
-								}
-							
-							// Catch errors
-							}).catch(function(responseStatusOrResponse) {
-							
-								// Set current slate send ID to no current slate send ID
-								self.currentSlateSendId = Api.NO_CURRENT_SLATE_SEND_ID;
-							
-								// Check if cancel didn't occur
-								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-							
-									// Check if response status is provided
-									if(typeof responseStatusOrResponse === "number") {
+									// Check if cancel didn't occur
+									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 									
-										// Reject status as text
-										reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
-									}
-									
-									// Otherwise check if response contains an error message
-									else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
-									
-										// Get is raw data
-										var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
+										// Check if canceled
+										if(error === Common.CANCELED_ERROR) {
 										
-										// Reject the response's error message
-										reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+											// Reject error
+											reject(error);
+										}
+										
+										// Otherwise
+										else {
+										
+											// Reject unsupported response
+											reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+										}
 									}
 									
 									// Otherwise
 									else {
 									
-										// Reject invalid response
-										reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+										// Reject canceled error
+										reject(Common.CANCELED_ERROR);
 									}
+								});
+							
+							// Catch errors
+							}).catch(function(error) {
+							
+								// Check if cancel didn't occur
+								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+								
+									// Reject error
+									reject(error);
 								}
 								
 								// Otherwise
@@ -16040,6 +16523,20 @@ class Api {
 		static get NO_CURRENT_SLATE_SEND_ID() {
 		
 			// Return current slate send ID
+			return null;
+		}
+		
+		// No response
+		static get NO_RESPONSE() {
+		
+			// Return no response
+			return null;
+		}
+		
+		// No response error
+		static get NO_RESPONSE_ERROR() {
+		
+			// Return no response error
 			return null;
 		}
 }

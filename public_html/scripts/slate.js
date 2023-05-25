@@ -4487,7 +4487,7 @@ class Slate {
 					else {
 					
 						// Check if version two isn't preferred
-						if(preferredVersions.indexOf("V" + Slate.VERSION_TWO.toFixed()) === Common.INDEX_NOT_FOUND) {
+						if(preferredVersions["length"] !== 0 && preferredVersions.indexOf("V" + Slate.VERSION_TWO.toFixed()) === Common.INDEX_NOT_FOUND) {
 						
 							// Return version three
 							return Slate.VERSION_THREE;
@@ -4524,7 +4524,7 @@ class Slate {
 					else {
 					
 						// Check if version two isn't preferred
-						if(preferredVersions.indexOf("V" + Slate.VERSION_TWO.toFixed()) === Common.INDEX_NOT_FOUND) {
+						if(preferredVersions["length"] !== 0 && preferredVersions.indexOf("V" + Slate.VERSION_TWO.toFixed()) === Common.INDEX_NOT_FOUND) {
 						
 							// Return version three
 							return Slate.VERSION_THREE;

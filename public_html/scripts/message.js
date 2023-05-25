@@ -648,7 +648,7 @@ class Message {
 											resolve(Message.SECOND_BUTTON_CLICKED_RESULT);
 										});
 										
-										// Enable tabbing to everything in message display and disable everything in message display
+										// Enable tabbing to everything in message display and enable everything in message display
 										self.messageDisplay.find("*").enableTab().enable();
 										
 										// Check if focusing on message
@@ -683,7 +683,7 @@ class Message {
 									// Otherwise
 									else {
 									
-										// Enable tabbing to everything in message display and disable everything in message display
+										// Enable tabbing to everything in message display and enable everything in message display
 										self.messageDisplay.find("*").enableTab().enable();
 										
 										// Trigger message show event
@@ -1193,6 +1193,19 @@ class Message {
 			
 			// Enable message display text's copy buttons
 			this.messageDisplay.find("p").children("span.text").find("span.copy").enable();
+			
+			// Enable tabbing to message display links and enable them
+			this.messageDisplay.find("a").enableTab().enable();
+		}
+		
+		// Enable
+		enable() {
+		
+			// Enable tabbing to everything in message display and enable everything in message display
+			this.messageDisplay.find("*").enableTab().enable();
+			
+			// Set that message display buttons aren't loading
+			this.messageDisplay.find("button").removeClass("loading");
 		}
 		
 		// Get input text

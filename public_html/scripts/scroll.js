@@ -43,7 +43,7 @@ class Scroll {
 			});
 			
 			// Check if browser isn't Firefox
-			if(typeof navigator !== "object" || navigator === null || navigator["userAgent"].toLowerCase().indexOf("firefox") === Common.INDEX_NOT_FOUND) {
+			if(typeof navigator !== "object" || navigator === null || "userAgent" in navigator === false || navigator["userAgent"].toLowerCase().indexOf("firefox") === Common.INDEX_NOT_FOUND) {
 			
 				// Scroll event
 				document.addEventListener("scroll", function(event) {
