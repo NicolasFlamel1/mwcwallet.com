@@ -4938,6 +4938,12 @@ class Application {
 					
 						// Throw error
 						throw "File reader isn't supported.";
+					
+					// Otherwise check if Blobs aren't supported
+					else if(typeof Blob !== "function")
+					
+						// Throw error
+						throw "Blobs aren't supported.";
 						
 					// Otherwise
 					else

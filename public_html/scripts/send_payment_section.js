@@ -1636,6 +1636,9 @@ class SendPaymentSection extends Section {
 																					// Check if not canceled
 																					if(canceled === false) {
 																					
+																						// Initialize message is loading
+																						var messageIsLoading = false;
+																						
 																						// Check if message type changed
 																						if(lastMessageType !== messageType) {
 																							
@@ -1647,6 +1650,13 @@ class SendPaymentSection extends Section {
 																							
 																								// Application hardware wallet unlock message
 																								case Application.HARDWARE_WALLET_UNLOCK_MESSAGE:
+																								
+																									// Check if second button isn't no button
+																									if(secondButton !== Message.NO_BUTTON) {
+																									
+																										// Set message is loading
+																										messageIsLoading = true;
+																									}
 																								
 																									// Break
 																									break;
@@ -1732,8 +1742,11 @@ class SendPaymentSection extends Section {
 																										else {
 																								
 																											// Set text
-																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for %1$y to continue sending the payment.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and that there\'s no recipient payment proof address displayed.'), [
+																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for %1$y to continue sending the payment.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the account index displayed on the hardware wallet is %1$s, the amount displayed is %2$c, the fee displayed is %3$c, the kernel features displayed is %4$x, and that there\'s no recipient payment proof address displayed.'), [
 																											
+																												// Account index
+																												HardwareWallet.ACCOUNT.toFixed(),
+																												
 																												[
 																
 																													// Number
@@ -1799,8 +1812,11 @@ class SendPaymentSection extends Section {
 																										else {
 																									
 																											// Set text
-																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for %1$y to continue sending the payment.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and the recipient payment proof address displayed matches the following payment proof address.'), [
+																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Approve sending the transaction on the hardware wallet for %1$y to continue sending the payment.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the account index displayed on the hardware wallet is %1$s, the amount displayed is %2$c, the fee displayed is %3$c, the kernel features displayed is %4$x, and the recipient payment proof address displayed matches the following payment proof address.'), [
 																											
+																												// Account index
+																												HardwareWallet.ACCOUNT.toFixed(),
+																												
 																												[
 																
 																													// Number
@@ -1844,6 +1860,9 @@ class SendPaymentSection extends Section {
 																									
 																										// Revoke URL
 																										URL.revokeObjectURL(url);
+																										
+																										// Set URL to no URL
+																										url = SendPaymentSection.NO_URL;
 																									}
 																									
 																									// Create URL from file contents
@@ -1920,6 +1939,13 @@ class SendPaymentSection extends Section {
 																							lastMessageType = messageType;
 																						}
 																						
+																						// Otherwise check if second button isn't no button
+																						else if(secondButton !== Message.NO_BUTTON) {
+																						
+																							// Set message is loading
+																							messageIsLoading = true;
+																						}
+																						
 																						// Check if message isn't already shown
 																						if(messageShown === false) {
 																					
@@ -1939,12 +1965,51 @@ class SendPaymentSection extends Section {
 																									// Set message shown
 																									messageShown = true;
 																									
-																									// Hide loading
-																									self.getApplication().hideLoading();
+																									// Check if message isn't loading
+																									if(messageIsLoading === false) {
+																									
+																										// Hide loading
+																										self.getApplication().hideLoading();
+																									}
+																									
+																									// Otherwise
+																									else {
+																									
+																										// Clear message is loading
+																										messageIsLoading = false;
+																										
+																										// Show loading
+																										self.getApplication().showLoading();
+																								
+																										// Message before show not cancelable send payment section message replace event
+																										$(self.getMessage()).one(Message.BEFORE_SHOW_NOT_CANCELABLE_EVENT + ".sendPaymentSectionMessageReplace", function() {
+																										
+																											// Add focus apperance to message second button
+																											self.getMessage().messageDisplay.find("button").removeClass("focus").eq(1).addClass("focus");
+																											
+																											// Set that message second button is loading
+																											self.getMessage().setButtonLoading(Message.SECOND_BUTTON);
+																										
+																										// Message show send payment section message replace event
+																										}).one(Message.SHOW_EVENT + ".sendPaymentSectionMessageReplace", function() {
+																										
+																											// Blur message buttons
+																											self.getMessage().messageDisplay.find("button").blur();
+																											
+																											// Disable message
+																											self.getMessage().disable();
+																										});
+																									}
 																								}
 																								
 																							}, Language.getDefaultTranslation('Cancel'), secondButton, true, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
 																							
+																								// Turn off message before show not cancelable send payment section message replace event
+																								$(self.getMessage()).off(Message.BEFORE_SHOW_NOT_CANCELABLE_EVENT + ".sendPaymentSectionMessageReplace");
+																								
+																								// Turn off message show send payment section message replace event
+																								$(self.getMessage()).off(Message.SHOW_EVENT + ".sendPaymentSectionMessageReplace");
+																								
 																								// Clear message shown
 																								messageShown = false;
 												
@@ -2020,6 +2085,9 @@ class SendPaymentSection extends Section {
 																					
 																						// Revoke URL
 																						URL.revokeObjectURL(url);
+																						
+																						// Set URL to no URL
+																						url = SendPaymentSection.NO_URL;
 																					}
 																				
 																					// Resolve
@@ -2039,6 +2107,9 @@ class SendPaymentSection extends Section {
 																					
 																						// Revoke URL
 																						URL.revokeObjectURL(url);
+																						
+																						// Set URL to no URL
+																						url = SendPaymentSection.NO_URL;
 																					}
 																				
 																					// Reject error

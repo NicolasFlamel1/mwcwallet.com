@@ -2912,7 +2912,7 @@ class WalletSection extends Section {
 										// Wallet key path or name
 										(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()
 										
-									]) + ((message !== SlateParticipant.NO_MESSAGE) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Common.htmlEncode(message) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() : "") + Message.createLineBreak() + Message.createText(Language.getDefaultTranslation('Give the %1$m file to the payment\'s sender for them to finalize the transaction.'), [
+									]) + ((message !== SlateParticipant.NO_MESSAGE) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Common.htmlEncode(message) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak() + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('(?<=.) '))) + Message.createText(Language.getDefaultTranslation('Give the %1$m file to the payment\'s sender for them to finalize the transaction.'), [
 					
 										[
 											// Text

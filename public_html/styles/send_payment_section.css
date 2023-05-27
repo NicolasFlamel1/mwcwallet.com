@@ -24,3 +24,7 @@ main > div.unlocked > div > div > div.sections > div > div.sendPayment > div > d
 main > div.unlocked.minimal > div > div > div.sections > div > div.sendPayment > div > div.fromWallet, main > div.unlocked.minimal > div > div > div.sections > div > div.sendPayment > div > div.cancel {
 	display: flex;
 }
+
+main > div.unlocked.minimal > div > div > div.sections > div > div.sendPayment > div > div.sendAsFile {
+	display: none;
+}

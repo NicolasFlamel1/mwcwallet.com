@@ -432,8 +432,11 @@ class Api {
 																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																				
 																							// Return waiting for wallet's hardware wallet to approve
-																							return self.wallets.waitForHardwareWalletToApprove(wallet.getKeyPath(), Message.createPendingResult() + Message.createLineBreak() + Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for Wallet %1$s to continue mining.') : Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for %1$y to continue mining.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and that there\'s no sender payment proof address displayed.'), [
-																														
+																							return self.wallets.waitForHardwareWalletToApprove(wallet.getKeyPath(), Message.createPendingResult() + Message.createLineBreak() + Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for Wallet %1$s to continue mining.') : Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for %1$y to continue mining.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the account index displayed on the hardware wallet is %1$s, the amount displayed is %2$c, the fee displayed is %3$c, the kernel features displayed is %4$x, and that there\'s no sender payment proof address displayed.'), [
+																							
+																								// Account index				
+																								HardwareWallet.ACCOUNT.toFixed(),
+																								
 																								[
 												
 																									// Number
@@ -3280,8 +3283,11 @@ class Api {
 																																											else {
 																																										
 																																												// Return waiting for wallet's hardware wallet to approve
-																																												return self.wallets.waitForHardwareWalletToApprove(wallet.getKeyPath(), Message.createPendingResult() + Message.createLineBreak() + Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText((slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and the sender payment proof address displayed matches the following payment proof address.') : Language.getDefaultTranslation('Verify that the amount displayed on the hardware wallet is %1$c, the fee displayed is %2$c, the kernel features displayed is %3$x, and that there\'s no sender payment proof address displayed.'), [
+																																												return self.wallets.waitForHardwareWalletToApprove(wallet.getKeyPath(), Message.createPendingResult() + Message.createLineBreak() + Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText((slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? Language.getDefaultTranslation('Verify that the account index displayed on the hardware wallet is %1$s, the amount displayed is %2$c, the fee displayed is %3$c, the kernel features displayed is %4$x, and the sender payment proof address displayed matches the following payment proof address.') : Language.getDefaultTranslation('Verify that the account index displayed on the hardware wallet is %1$s, the amount displayed is %2$c, the fee displayed is %3$c, the kernel features displayed is %4$x, and that there\'s no sender payment proof address displayed.'), [
 																																																			
+																																													// Account index
+																																													HardwareWallet.ACCOUNT.toFixed(),
+																																													
 																																													[
 																																	
 																																														// Number
@@ -8557,53 +8563,81 @@ class Api {
 															// Otherwise
 															else {
 															
-																// Set use proof address to if version three, three B, and Slatepack slates are supported
-																var useProofAddress = compatibleSlateVersions.indexOf("V" + Slate.VERSION_THREE.toFixed()) !== Common.INDEX_NOT_FOUND || compatibleSlateVersions.indexOf("V" + Slate.VERSION_THREE.toFixed() + "B") !== Common.INDEX_NOT_FOUND || compatibleSlateVersions.indexOf(Slate.VERSION_SLATEPACK) !== Common.INDEX_NOT_FOUND;
+																// Clear error occurred
+																errorOccurred = false;
+															
+																// Try
+																try {
 																
-																// Check if using proof address
-																if(useProofAddress === true) {
-											
-																	// Return getting proof address
-																	return self.getProofAddress(receiverUrl, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, sendAsFile, cancelOccurred).then(function(receiverAddress) {
-																	
-																		// Check if cancel didn't occur
-																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																		
-																			// Resolve receiver address
-																			resolve(receiverAddress);
-																		}
-																		
-																		// Otherwise
-																		else {
-																		
-																			// Reject canceled error
-																			reject(Common.CANCELED_ERROR);
-																		}
-																		
-																	// Catch errors
-																	}).catch(function(error) {
-																	
-																		// Check if cancel didn't occur
-																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																		
-																			// Reject error
-																			reject(error);
-																		}
-																		
-																		// Otherwise
-																		else {
-																		
-																			// Reject canceled error
-																			reject(Common.CANCELED_ERROR);
-																		}
-																	});
+																	// Get receiver's public key from URL
+																	receiverPublicKey = Mqs.mqsAddressToPublicKey(url, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE);
+																}
+																
+																// Catch errors
+																catch(error) {
+																
+																	// Set error occurred
+																	errorOccurred = true;
+																}
+																
+																// Check if an error didn't occur
+																if(errorOccurred === false) {
+															
+																	// Resolve the receiver's public key as an MQS address
+																	resolve(Mqs.publicKeyToMqsAddress(receiverPublicKey, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE));
 																}
 																
 																// Otherwise
 																else {
-																
-																	// Resolve no proof address
-																	resolve(Api.NO_PROOF_ADDRESS);
+															
+																	// Set use proof address to if version three, three B, and Slatepack slates are supported
+																	var useProofAddress = compatibleSlateVersions.indexOf("V" + Slate.VERSION_THREE.toFixed()) !== Common.INDEX_NOT_FOUND || compatibleSlateVersions.indexOf("V" + Slate.VERSION_THREE.toFixed() + "B") !== Common.INDEX_NOT_FOUND || compatibleSlateVersions.indexOf(Slate.VERSION_SLATEPACK) !== Common.INDEX_NOT_FOUND;
+																	
+																	// Check if using proof address
+																	if(useProofAddress === true) {
+												
+																		// Return getting proof address
+																		return self.getProofAddress(receiverUrl, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, sendAsFile, cancelOccurred).then(function(receiverAddress) {
+																		
+																			// Check if cancel didn't occur
+																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																			
+																				// Resolve receiver address
+																				resolve(receiverAddress);
+																			}
+																			
+																			// Otherwise
+																			else {
+																			
+																				// Reject canceled error
+																				reject(Common.CANCELED_ERROR);
+																			}
+																			
+																		// Catch errors
+																		}).catch(function(error) {
+																		
+																			// Check if cancel didn't occur
+																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																			
+																				// Reject error
+																				reject(error);
+																			}
+																			
+																			// Otherwise
+																			else {
+																			
+																				// Reject canceled error
+																				reject(Common.CANCELED_ERROR);
+																			}
+																		});
+																	}
+																	
+																	// Otherwise
+																	else {
+																	
+																		// Resolve no proof address
+																		resolve(Api.NO_PROOF_ADDRESS);
+																	}
 																}
 															}
 															
@@ -15303,7 +15337,7 @@ class Api {
 														// Set file name
 														var fileName = slate.getId().serialize();
 														
-														// Message before show not cancelable event API event
+														// Message before show not cancelable API event
 														$(self.message).one(Message.BEFORE_SHOW_NOT_CANCELABLE_EVENT + ".api", function() {
 														
 															// Check if cancel didn't occur
@@ -16097,8 +16131,8 @@ class Api {
 											// Check if cancel didn't occur
 											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 										
-												// Check if slate response hasn't changed too much from the sent slate
-												if(slate.isEqualTo(slateResponse) === true) {
+												// Check if slate response hasn't changed too much from the sent slate and at least one output was added
+												if(slate.isEqualTo(slateResponse) === true && slateResponse.getOutputs()["length"] > slate.getOutputs()["length"]) {
 												
 													// Resolve slate response
 													resolve(slateResponse);
