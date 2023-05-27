@@ -4777,18 +4777,6 @@ class Application {
 						// Throw error
 						throw "Web Workers aren't supported.";
 					
-					// Otherwise check if binary to ASCII isn't supported
-					else if(typeof btoa !== "function")
-					
-						// Throw error
-						throw "Binary to ASCII isn't supported.";
-					
-					// Otherwise check if ASCII to binary isn't supported
-					else if(typeof atob !== "function")
-					
-						// Throw error
-						throw "ASCII to binary isn't supported.";
-					
 					// Otherwise check if RegExp isn't supported
 					else if(typeof RegExp !== "function")
 					

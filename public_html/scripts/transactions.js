@@ -248,6 +248,20 @@ class Transactions {
 						// Unique
 						"unique": false
 					});
+					
+					// Create index to search transactions object store by wallet key path and checked
+					transactionsObjectStore.createIndex(Transactions.DATABASE_WALLET_KEY_PATH_AND_CHECKED_NAME, [
+					
+						// Wallet key path
+						Database.toKeyPath(Transactions.DATABASE_WALLET_KEY_PATH_NAME),
+						
+						// Checked
+						Database.toKeyPath(Transactions.DATABASE_CHECKED_NAME)
+					], {
+					
+						// Unique
+						"unique": false
+					});
 				}
 			});
 		}
@@ -1182,6 +1196,51 @@ class Transactions {
 			});
 		}
 		
+		// Get wallet's unchecked transactions
+		getWalletsUncheckedTransactions(walletKeyPath) {
+		
+			// Set self
+			var self = this;
+			
+			// Return promise
+			return new Promise(function(resolve, reject) {
+			
+				// Return getting all of the wallet's unchecked transactions in the database
+				return Database.getResults(Transactions.OBJECT_STORE_NAME, Database.GET_ALL_RESULTS, Database.GET_ALL_RESULTS, Transactions.DATABASE_WALLET_KEY_PATH_AND_CHECKED_NAME, IDBKeyRange.only([
+				
+					// Wallet key path
+					walletKeyPath,
+					
+					// Checked
+					0
+					
+				])).then(function(results) {
+				
+					// Initialize transactions
+					var transactions = [];
+					
+					// Go through all results
+					for(var i = 0; i < results["length"]; ++i) {
+					
+						// Get transaction from result
+						var transaction = Transactions.getTransactionFromResult(results[i]);
+					
+						// Append transaction to list of transactions
+						transactions.push(transaction);
+					}
+					
+					// Resolve transactions
+					resolve(transactions);
+				
+				// Catch errors
+				}).catch(function(error) {
+				
+					// Reject error
+					reject(Language.getDefaultTranslation('The database failed.'));
+				});
+			});
+		}
+		
 		// Get wallet's transaction with ID
 		getWalletsTransactionWithId(walletKeyPath, id) {
 		
@@ -1473,6 +1532,11 @@ class Transactions {
 									// File response
 									[Database.toKeyPath(Transactions.DATABASE_FILE_RESPONSE_NAME)]: currentTransaction.getFileResponse(),
 									
+									// TODO Store checked in the database as a boolean
+									
+									// Checked
+									[Database.toKeyPath(Transactions.DATABASE_CHECKED_NAME)]: (currentTransaction.getChecked() === true) ? 1 : 0,
+									
 									// TODO Store canceled in the database as a boolean
 									
 									// Canceled
@@ -1625,6 +1689,11 @@ class Transactions {
 										
 										// File response
 										[Database.toKeyPath(Transactions.DATABASE_FILE_RESPONSE_NAME)]: spentTransaction.getFileResponse(),
+										
+										// TODO Store checked in the database as a boolean
+									
+										// Checked
+										[Database.toKeyPath(Transactions.DATABASE_CHECKED_NAME)]: (spentTransaction.getChecked() === true) ? 1 : 0,
 										
 										// TODO Store canceled in the database as a boolean
 									
@@ -2038,6 +2107,9 @@ class Transactions {
 				// File response
 				result[Database.toKeyPath(Transactions.DATABASE_FILE_RESPONSE_NAME)],
 				
+				// Checked
+				(Database.toKeyPath(Transactions.DATABASE_CHECKED_NAME) in result === false || result[Database.toKeyPath(Transactions.DATABASE_CHECKED_NAME)] === 1) ? true : false,
+				
 				// Canceled
 				(result[Database.toKeyPath(Transactions.DATABASE_CANCELED_NAME)] === 1) ? true : false,
 				
@@ -2298,6 +2370,13 @@ class Transactions {
 			return "File Response";
 		}
 		
+		// Database checked name
+		static get DATABASE_CHECKED_NAME() {
+		
+			// Return database checked name
+			return "Checked";
+		}
+		
 		// Database canceled name
 		static get DATABASE_CANCELED_NAME() {
 		
@@ -2380,6 +2459,13 @@ class Transactions {
 		
 			// Return database wallet type and network type name
 			return "Wallet Type And Network Type";
+		}
+		
+		// Database wallet key path and checked name
+		static get DATABASE_WALLET_KEY_PATH_AND_CHECKED_NAME() {
+		
+			// Return database wallet key path and checked name
+			return "Wallet Key Path And Checked";
 		}
 		
 		// Exclusive wallet transactions lock release event

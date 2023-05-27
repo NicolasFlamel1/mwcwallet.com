@@ -393,7 +393,7 @@ class Wallets {
 													return {
 													
 														// New synced height value
-														[Wallets.NEW_SYNCED_HEIGHT_VALUE]: height
+														[Wallets.NEW_SYNCED_HEIGHT_VALUE]: height.minus(1)
 													};
 												}
 												
@@ -404,10 +404,14 @@ class Wallets {
 													return {};
 												}
 												
-											}, databaseTransaction).then(function() {
+											}, databaseTransaction).then(function(newValues) {
 											
-												// Append changed wallet to list
-												changedWallets.push(wallet);
+												// Check if wallet's new synced height was saved
+												if(Wallets.NEW_SYNCED_HEIGHT_VALUE in newValues === true) {
+											
+													// Append changed wallet to list
+													changedWallets.push(wallet);
+												}
 											
 												// Resolve
 												resolve();
@@ -451,7 +455,7 @@ class Wallets {
 									var wallet = changedWallets[i];
 									
 									// Set wallet's synced height to the node's current height
-									wallet.setSyncedHeight(height);
+									wallet.setSyncedHeight(height.minus(1));
 									
 									// Update wallet's starting sync height
 									wallet.setStartingSyncHeight(wallet.getSyncedHeight());
@@ -5830,6 +5834,16 @@ class Wallets {
 																															transactionChanged = true;
 																														}
 																														
+																														// Check if transaction's checked needs to be updated
+																														if(transaction.getChecked() === false) {
+																														
+																															// Set transaction's checked
+																															transaction.setChecked(true);
+																															
+																															// Set transaction changed
+																															transactionChanged = true;
+																														}
+																														
 																														// Check if transaction changed
 																														if(transactionChanged === true) {
 																														
@@ -5859,7 +5873,7 @@ class Wallets {
 																													}
 																												
 																													// Create new transaction
-																													var newTransaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), outputInformation.getOutput().getCommit(), keyPath, true, recordedTimestamp, Transaction.UNKNOWN_CREATED_TIMESTAMP, outputInformation.getOutput().getHeight(), Transaction.UNKNOWN_LOCK_HEIGHT, outputInformation.getOutput().isCoinbase(), Transaction.STATUS_UNSPENT, outputInformation.getAmount(), false, Transaction.UNKNOWN_KERNEL_EXCESS, outputInformation.getIdentifier(), outputInformation.getSwitchType(), true, Transaction.UNKNOWN_KERNEL_OFFSET, Transaction.UNKNOWN_ID, Transaction.UNKNOWN_MESSAGE, Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, timestamp, Transaction.UNKNOWN_FEE, Transaction.UNKNOWN_SENDER_ADDRESS, Transaction.UNKNOWN_RECEIVER_ADDRESS, Transaction.UNKNOWN_RECEIVER_SIGNATURE, Transaction.UNUSED_DESTINATION, spendableHeight, self.numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, true, Transaction.UNKNOWN_REBROADCAST_MESSAGE, Transaction.UNUSED_FILE_RESPONSE);
+																													var newTransaction = new Transaction(wallet.getWalletType(), wallet.getNetworkType(), outputInformation.getOutput().getCommit(), keyPath, true, recordedTimestamp, Transaction.UNKNOWN_CREATED_TIMESTAMP, outputInformation.getOutput().getHeight(), Transaction.UNKNOWN_LOCK_HEIGHT, outputInformation.getOutput().isCoinbase(), Transaction.STATUS_UNSPENT, outputInformation.getAmount(), false, Transaction.UNKNOWN_KERNEL_EXCESS, outputInformation.getIdentifier(), outputInformation.getSwitchType(), true, Transaction.UNKNOWN_KERNEL_OFFSET, Transaction.UNKNOWN_ID, Transaction.UNKNOWN_MESSAGE, Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT, false, timestamp, Transaction.UNKNOWN_FEE, Transaction.UNKNOWN_SENDER_ADDRESS, Transaction.UNKNOWN_RECEIVER_ADDRESS, Transaction.UNKNOWN_RECEIVER_SIGNATURE, Transaction.UNUSED_DESTINATION, spendableHeight, self.numberOfConfirmations, Transaction.UNUSED_SPENT_OUTPUTS, Transaction.UNUSED_CHANGE_OUTPUTS, true, Transaction.UNKNOWN_REBROADCAST_MESSAGE, Transaction.UNUSED_FILE_RESPONSE, true);
 																													
 																													// Check if the new transaction's spendable height is the next block
 																													if(newTransaction.getSpendableHeight().isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
@@ -5934,136 +5948,273 @@ class Wallets {
 																										
 																											// Return getting wallet's unexpired, sent, unbroadcast transactions that can be included in the next block
 																											return self.transactions.getWalletsUnexpiredSentUnbroadcastTransactionsInLockHeightRange(keyPath, Consensus.FIRST_BLOCK_HEIGHT, tipHeight.getHeight().plus(1)).then(function(sentUnbroadcastTransactions) {
+																											
+																												// Return getting the wallet's unchecked transactions
+																												return self.transactions.getWalletsUncheckedTransactions(keyPath).then(function(uncheckedTransactions) {
 																										
-																												// Initialize processed sent transactions
-																												var processedSentTransactions = [];
-																												
-																												// Initialize verifying send transactions
-																												var verifyingSentTransactions = [];
-																									
-																												// Initialize pending transactions
-																												var pendingTransactions = [];
-																												
-																												// Initialize spent outputs
-																												var spentOutputs = [
-																												
-																													// Change to spent
-																													[],
+																													// Initialize processed sent transactions
+																													var processedSentTransactions = [];
 																													
-																													// Change to unspent
-																													[],
+																													// Initialize verifying send transactions
+																													var verifyingSentTransactions = [];
+																										
+																													// Initialize pending transactions
+																													var pendingTransactions = [];
 																													
-																													// Change to locked
-																													[]
-																												];
-																												
-																												// Initialize spent outputs to change
-																												var spentOutputsToChange = [];
-																												
-																												// Initialize change outputs to change
-																												var changeOutputsToChange = [];
-																												
-																												// Go through all of the wallet's transactions in the height range, the wallet's unreleased transactions that should have been released by the tip height, the wallet's unexpired transactions that should have expired by the tip height, the wallet's unreleased sent transactions that have been broadcast, and the wallet's unexpired sent unbroadcast transactions that can be included in the next block
-																												for(var k = 0; k < transactions["length"] + unreleasedTransactions["length"] + expiredTransactions["length"] + sentUnreleasedTransactions["length"] + sentUnbroadcastTransactions["length"]; ++k) {
-																												
-																													// Initialize transaction
-																													let transaction;
+																													// Initialize spent outputs
+																													var spentOutputs = [
 																													
-																													// Check if transaction is in the height range
-																													if(k < transactions["length"]) {
-																													
-																														// Set transaction
-																														transaction = transactions[k];
-																													}
-																													
-																													// Otherwise check if transaction is an unreleased transactions that should have been released by the tip height
-																													else if(k - transactions["length"] < unreleasedTransactions["length"]) {
-																													
-																														// Set transaction
-																														transaction = unreleasedTransactions[k - transactions["length"]];
-																													}
-																													
-																													// Otherwise check if transaction is an unreleased transactions that should have expired by the tip height
-																													else if(k - transactions["length"] - unreleasedTransactions["length"] < expiredTransactions["length"]) {
-																													
-																														// Set transaction
-																														transaction = expiredTransactions[k - transactions["length"] - unreleasedTransactions["length"]];
-																													}
-																													
-																													// Otherwise check if transaction is a sent unreleased transaction
-																													else if(k - transactions["length"] - unreleasedTransactions["length"] - expiredTransactions["length"] < sentUnreleasedTransactions["length"]) {
-																													
-																														// Set transaction
-																														transaction = sentUnreleasedTransactions[k - transactions["length"] - unreleasedTransactions["length"] - expiredTransactions["length"]];
-																													}
-																													
-																													// Otherwise check if transaction is a sent unbroadcast transaction
-																													else if(k - transactions["length"] - unreleasedTransactions["length"] - expiredTransactions["length"] - sentUnreleasedTransactions["length"] < sentUnbroadcastTransactions["length"]) {
-																													
-																														// Set transaction
-																														transaction = sentUnbroadcastTransactions[k - transactions["length"] - unreleasedTransactions["length"] - expiredTransactions["length"] - sentUnreleasedTransactions["length"]];
-																													}
-																													
-																													// Check if transaction was received
-																													if(transaction.getReceived() === true) {
+																														// Change to spent
+																														[],
 																														
-																														// Check if transactions wasn't already verified
-																														if(transactionsVerified.indexOf(Common.toHexString(transaction.getCommit())) === Common.INDEX_NOT_FOUND) {
+																														// Change to unspent
+																														[],
 																														
-																															// Append transaction to list of transactions verified
-																															transactionsVerified.push(Common.toHexString(transaction.getCommit()));
-																															
-																															// Append transaction to list of pending transactions
-																															pendingTransactions.push(transaction);
+																														// Change to locked
+																														[]
+																													];
+																													
+																													// Initialize spent outputs to change
+																													var spentOutputsToChange = [];
+																													
+																													// Initialize change outputs to change
+																													var changeOutputsToChange = [];
+																													
+																													// Go through all of the wallet's transactions in the height range, the wallet's unreleased transactions that should have been released by the tip height, the wallet's unexpired transactions that should have expired by the tip height, the wallet's unreleased sent transactions that have been broadcast, the wallet's unexpired sent unbroadcast transactions that can be included in the next block, and the wallet's unchecked transactions
+																													for(var k = 0; k < transactions["length"] + unreleasedTransactions["length"] + expiredTransactions["length"] + sentUnreleasedTransactions["length"] + sentUnbroadcastTransactions["length"] + uncheckedTransactions["length"]; ++k) {
+																													
+																														// Initialize transaction
+																														let transaction;
+																														
+																														// Check if transaction is in the height range
+																														if(k < transactions["length"]) {
+																														
+																															// Set transaction
+																															transaction = transactions[k];
 																														}
-																													}
-																													
-																													// Otherwise
-																													else {
-																													
-																														// Check if transaction wasn't already processed
-																														if(processedSentTransactions.indexOf(transaction.getKeyPath()) === Common.INDEX_NOT_FOUND) {
 																														
-																															// Append transaction to list of sent transactions that have been processed
-																															processedSentTransactions.push(transaction.getKeyPath());
-																													
-																															// Append verifying sent transaction to list
-																															verifyingSentTransactions.push(new Promise(function(resolve, reject) {
+																														// Otherwise check if transaction is an unreleased transactions that should have been released by the tip height
+																														else if(k - transactions["length"] < unreleasedTransactions["length"]) {
+																														
+																															// Set transaction
+																															transaction = unreleasedTransactions[k - transactions["length"]];
+																														}
+																														
+																														// Otherwise check if transaction is an unreleased transactions that should have expired by the tip height
+																														else if(k - transactions["length"] - unreleasedTransactions["length"] < expiredTransactions["length"]) {
+																														
+																															// Set transaction
+																															transaction = expiredTransactions[k - transactions["length"] - unreleasedTransactions["length"]];
+																														}
+																														
+																														// Otherwise check if transaction is a sent unreleased transaction
+																														else if(k - transactions["length"] - unreleasedTransactions["length"] - expiredTransactions["length"] < sentUnreleasedTransactions["length"]) {
+																														
+																															// Set transaction
+																															transaction = sentUnreleasedTransactions[k - transactions["length"] - unreleasedTransactions["length"] - expiredTransactions["length"]];
+																														}
+																														
+																														// Otherwise check if transaction is a sent unbroadcast transaction
+																														else if(k - transactions["length"] - unreleasedTransactions["length"] - expiredTransactions["length"] - sentUnreleasedTransactions["length"] < sentUnbroadcastTransactions["length"]) {
+																														
+																															// Set transaction
+																															transaction = sentUnbroadcastTransactions[k - transactions["length"] - unreleasedTransactions["length"] - expiredTransactions["length"] - sentUnreleasedTransactions["length"]];
+																														}
+																														
+																														// Otherwise check if transaction is an unchecked transactions
+																														else if(k - transactions["length"] - unreleasedTransactions["length"] - expiredTransactions["length"] - sentUnreleasedTransactions["length"] - sentUnbroadcastTransactions["length"] < uncheckedTransactions["length"]) {
+																														
+																															// Set transaction
+																															transaction = uncheckedTransactions[k - transactions["length"] - unreleasedTransactions["length"] - expiredTransactions["length"] - sentUnreleasedTransactions["length"] - sentUnbroadcastTransactions["length"]];
+																														}
+																														
+																														// Check if transaction was received
+																														if(transaction.getReceived() === true) {
 																															
-																																// Set get transaction's kernel
-																																var getTransactionsKernel = function() {
+																															// Check if transactions wasn't already verified
+																															if(transactionsVerified.indexOf(Common.toHexString(transaction.getCommit())) === Common.INDEX_NOT_FOUND) {
+																															
+																																// Append transaction to list of transactions verified
+																																transactionsVerified.push(Common.toHexString(transaction.getCommit()));
 																																
-																																	// Return promise
-																																	return new Promise(function(resolve, reject) {
+																																// Append transaction to list of pending transactions
+																																pendingTransactions.push(transaction);
+																															}
+																														}
+																														
+																														// Otherwise
+																														else {
+																														
+																															// Check if transaction wasn't already processed
+																															if(processedSentTransactions.indexOf(transaction.getKeyPath()) === Common.INDEX_NOT_FOUND) {
+																															
+																																// Append transaction to list of sent transactions that have been processed
+																																processedSentTransactions.push(transaction.getKeyPath());
+																														
+																																// Append verifying sent transaction to list
+																																verifyingSentTransactions.push(new Promise(function(resolve, reject) {
+																																
+																																	// Set get transaction's kernel
+																																	var getTransactionsKernel = function() {
 																																	
-																																		// Check if transaction has been broadcast
-																																		if(transaction.getBroadcast() === true) {
+																																		// Return promise
+																																		return new Promise(function(resolve, reject) {
 																																		
-																																			// Set kernel minimum height
-																																			var kernelMinimumHeight = transaction.getHeight().minus(Wallets.VARIATION_FROM_PREVIOUS_BLOCK_HEIGHT);
-																																		
-																																			// Set kernel maximum height
-																																			var kernelMaximumHeight = transaction.getHeight().plus(Wallets.VARIATION_TO_NEXT_BLOCK_HEIGHT);
+																																			// Check if transaction has been broadcast
+																																			if(transaction.getBroadcast() === true) {
 																																			
-																																			// Check if kernel minimum height is less than the first block height
-																																			if(kernelMinimumHeight.isLessThan(Consensus.FIRST_BLOCK_HEIGHT) === true) {
+																																				// Set kernel minimum height
+																																				var kernelMinimumHeight = transaction.getHeight().minus(Wallets.VARIATION_FROM_PREVIOUS_BLOCK_HEIGHT);
 																																			
-																																				// Set kernel minimum height to the first block height
-																																				kernelMinimumHeight = new BigNumber(Consensus.FIRST_BLOCK_HEIGHT);
+																																				// Set kernel maximum height
+																																				var kernelMaximumHeight = transaction.getHeight().plus(Wallets.VARIATION_TO_NEXT_BLOCK_HEIGHT);
+																																				
+																																				// Check if kernel minimum height is less than the first block height
+																																				if(kernelMinimumHeight.isLessThan(Consensus.FIRST_BLOCK_HEIGHT) === true) {
+																																				
+																																					// Set kernel minimum height to the first block height
+																																					kernelMinimumHeight = new BigNumber(Consensus.FIRST_BLOCK_HEIGHT);
+																																				}
+																																				
+																																				// Check if kernel maximum height exceeds the tip height
+																																				if(kernelMaximumHeight.isGreaterThan(tipHeight.getHeight()) === true) {
+																																				
+																																					// Set kernel maximum height to the tip height
+																																					kernelMaximumHeight = tipHeight.getHeight();
+																																				}
+																																			
+																																				// Return getting transaction's kernel in the range around its height
+																																				return self.node.getKernel(transaction.getKernelExcess(), kernelMinimumHeight, kernelMaximumHeight).then(function(kernel) {
+																																				
+																																					// Resolve kernel
+																																					resolve(kernel);
+																																					
+																																				// Catch errors
+																																				}).catch(function(error) {
+																																				
+																																					// Reject error
+																																					reject(error);
+																																				});
 																																			}
 																																			
-																																			// Check if kernel maximum height exceeds the tip height
-																																			if(kernelMaximumHeight.isGreaterThan(tipHeight.getHeight()) === true) {
+																																			// Otherwise
+																																			else {
 																																			
-																																				// Set kernel maximum height to the tip height
-																																				kernelMaximumHeight = tipHeight.getHeight();
+																																				// Resolve no kernel found
+																																				resolve(Node.NO_KERNEL_FOUND);
+																																			}
+																																		});
+																																	};
+																																
+																																	// Return getting transaction's kernel
+																																	return getTransactionsKernel().then(function(kernel) {
+																																	
+																																		// Set transaction changed
+																																		var transactionChanged = false;
+																																	
+																																		// Check if kernel exists
+																																		if(kernel !== Node.NO_KERNEL_FOUND) {
+																																		
+																																			// Go through all the transaction's spent outputs
+																																			for(var l = 0; l < transaction.getSpentOutputs()["length"]; ++l) {
+																																			
+																																				// Get spent output
+																																				var spentOutput = transaction.getSpentOutputs()[l];
+																																				
+																																				// Check if spent output isn't in the change to spent list
+																																				if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_SPENT_INDEX].indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
+																																				
+																																					// Add spent output to change to spent list
+																																					spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_SPENT_INDEX].push(spentOutput);
+																																				}
+																																				
+																																				// Check if spent output exists in change to unspent list
+																																				if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(spentOutput) !== Common.INDEX_NOT_FOUND) {
+																																				
+																																					// Remove spent output from change to unspent list
+																																					spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].splice(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(spentOutput), 1);
+																																				}
+																																				
+																																				// Check if spent output exists in change to locked list
+																																				if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].indexOf(spentOutput) !== Common.INDEX_NOT_FOUND) {
+																																				
+																																					// Remove spent output from change to locked list
+																																					spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].splice(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].indexOf(spentOutput), 1);
+																																				}
+																																				
+																																				// Check if spent output doesn't exists in the list of outputs to change
+																																				if(spentOutputsToChange.indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
+																																				
+																																					// Append spent output to list of spent outputs to change
+																																					spentOutputsToChange.push(spentOutput);
+																																				}
 																																			}
 																																		
-																																			// Return getting transaction's kernel in the range around its height
-																																			return self.node.getKernel(transaction.getKernelExcess(), kernelMinimumHeight, kernelMaximumHeight).then(function(kernel) {
+																																			// Check if transaction's amount wasn't released
+																																			if(transaction.getAmountReleased() === false) {
 																																			
-																																				// Resolve kernel
-																																				resolve(kernel);
+																																				// Set transaction amount has been released
+																																				transaction.setAmountReleased(true);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if transaction's amount was expired
+																																			if(transaction.getExpired() === true) {
+																																			
+																																				// Set transaction isn't expired
+																																				transaction.setExpired(false);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if transaction's height needs to be updated
+																																			if(transaction.getHeight().isEqualTo(kernel["height"]) === false) {
+																																			
+																																				// Update transaction's height to the kernel's height
+																																				transaction.setHeight(kernel["height"]);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if transaction's checked needs to be updated
+																																			if(transaction.getChecked() === false) {
+																																			
+																																				// Set transaction's checked
+																																				transaction.setChecked(true);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Return getting header at kernel's height
+																																			return self.node.getHeader(kernel["height"]).then(function(header) {
+																																			
+																																				// Get timestamp
+																																				var timestamp = header["timestamp"];
+																																				
+																																				// Check if transaction's confirmed timestamp needs to be updated
+																																				if(transaction.getConfirmedTimestamp() !== timestamp) {
+																																				
+																																					// Set transaction's confirmed timestamp
+																																					transaction.setConfirmedTimestamp(timestamp);
+																																					
+																																					// Set transaction changed
+																																					transactionChanged = true;
+																																				}
+																																				
+																																				// Check if transaction changed
+																																				if(transactionChanged === true) {
+																																				
+																																					// Append transaction to list of updated transactions
+																																					updatedTransactions.push(transaction);
+																																				}
+																																				
+																																				// Resolve
+																																				resolve();
 																																				
 																																			// Catch errors
 																																			}).catch(function(error) {
@@ -6076,97 +6227,460 @@ class Wallets {
 																																		// Otherwise
 																																		else {
 																																		
-																																			// Resolve no kernel found
-																																			resolve(Node.NO_KERNEL_FOUND);
+																																			// Check if transaction hasn't been broadcast and it's expired
+																																			if(transaction.getBroadcast() === false && transaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && transaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && transaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																			
+																																				// Go through all the transaction's spent outputs
+																																				for(var l = 0; l < transaction.getSpentOutputs()["length"]; ++l) {
+																																				
+																																					// Get spent output
+																																					var spentOutput = transaction.getSpentOutputs()[l];
+																																					
+																																					// Check if spent output doesn't exists in change to spent list or change to locked list
+																																					if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_SPENT_INDEX].indexOf(spentOutput) === Common.INDEX_NOT_FOUND && spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
+																																					
+																																						// Check if spent output isn't in the change to unspent list
+																																						if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
+																																					
+																																							// Add spent output to change to unspent list
+																																							spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].push(spentOutput);
+																																						}
+																																					}
+																																					
+																																					// Check if spent output doesn't exists in the list of outputs to change
+																																					if(spentOutputsToChange.indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
+																																					
+																																						// Append spent output to list of spent outputs to change
+																																						spentOutputsToChange.push(spentOutput);
+																																					}
+																																				}
+																																			}
+																																			
+																																			// Otherwise
+																																			else {
+																																		
+																																				// Go through all the transaction's spent outputs
+																																				for(var l = 0; l < transaction.getSpentOutputs()["length"]; ++l) {
+																																				
+																																					// Get spent output
+																																					var spentOutput = transaction.getSpentOutputs()[l];
+																																					
+																																					// Check if spent output doesn't exists in change to spent list
+																																					if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_SPENT_INDEX].indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
+																																					
+																																						// Check if spent output isn't in the change to locked list
+																																						if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
+																																					
+																																							// Add spent output to change to locked list
+																																							spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].push(spentOutput);
+																																						}
+																																						
+																																						// Check if spent output exists in change to unspent list
+																																						if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(spentOutput) !== Common.INDEX_NOT_FOUND) {
+																																						
+																																							// Remove spent output from change to unspent list
+																																							spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].splice(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(spentOutput), 1);
+																																						}
+																																					}
+																																					
+																																					// Check if spent output doesn't exists in the list of outputs to change
+																																					if(spentOutputsToChange.indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
+																																					
+																																						// Append spent output to list of spent outputs to change
+																																						spentOutputsToChange.push(spentOutput);
+																																					}
+																																				}
+																																			}
+																																		
+																																			// Check if transaction's amount was released
+																																			if(transaction.getAmountReleased() === true) {
+																																		
+																																				// Set transaction amount hasn't been released
+																																				transaction.setAmountReleased(false);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																		
+																																			// Check if transaction hasn't been broadcast, it isn't expired, and its time to live cut off height has past
+																																			if(transaction.getBroadcast() === false && transaction.getExpired() === false && transaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && transaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && transaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																			
+																																				// Set that transaction is expired
+																																				transaction.setExpired(true);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if transaction's checked needs to be updated
+																																			if(transaction.getChecked() === false) {
+																																			
+																																				// Set transaction's checked
+																																				transaction.setChecked(true);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if transaction hasn't been broadcast, it isn't expired, and its lock height is the next block
+																																			if(transaction.getBroadcast() === false && transaction.getExpired() === false && transaction.getLockHeight() !== Transaction.UNKNOWN_LOCK_HEIGHT && transaction.getLockHeight() !== Transaction.NO_LOCK_HEIGHT && transaction.getLockHeight().isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
+																																			
+																																				// Return broadcasting transaction to the node
+																																				return self.node.broadcastTransaction(JSONBigNumber.parse(transaction.getRebroadcastMessage())).then(function() {
+																																				
+																																					// Set transaction has been broadcast
+																																					transaction.setBroadcast(true);
+																																					
+																																					// Go through all of the transaction's change outputs
+																																					for(var l = 0; l < transaction.getChangeOutputs()["length"]; ++l) {
+																																					
+																																						// Get change output
+																																						var changeOutput = transaction.getChangeOutputs()[l];
+																																					
+																																						// Append change output to list of outputs to change
+																																						changeOutputsToChange.push(changeOutput);
+																																					}
+																																					
+																																					// Append transaction to list of updated transactions
+																																					updatedTransactions.push(transaction);
+																																					
+																																					// Resolve
+																																					resolve();
+																																					
+																																				// Catch errors
+																																				}).catch(function(error) {
+																																				
+																																					// Check if transaction changed
+																																					if(transactionChanged === true) {
+																																					
+																																						// Append transaction to list of updated transactions
+																																						updatedTransactions.push(transaction);
+																																					}
+																																				
+																																					// Resolve
+																																					resolve();
+																																				});
+																																			}
+																																			
+																																			// Otherwise
+																																			else {
+																																			
+																																				// Check if transaction changed
+																																				if(transactionChanged === true) {
+																																				
+																																					// Append transaction to list of updated transactions
+																																					updatedTransactions.push(transaction);
+																																				}
+																																				
+																																				// Resolve
+																																				resolve();
+																																			}
 																																		}
+																																	
+																																	// Catch errors
+																																	}).catch(function(error) {
+																																	
+																																		// Reject error
+																																		reject(error);
 																																	});
-																																};
+																																}));
+																															}
+																														}
+																													}
+																													
+																													// Return verifying sent transactions
+																													return Promise.all(verifyingSentTransactions).then(function() {
+																													
+																														// Go through all pending transactions
+																														for(var k = 0; k < pendingTransactions["length"]; ++k) {
+																														
+																															// Get pending transaction
+																															var pendingTransaction = pendingTransactions[k];
 																															
-																																// Return getting transaction's kernel
-																																return getTransactionsKernel().then(function(kernel) {
+																															// Check if pending transaction is a change output that's changing
+																															if(changeOutputsToChange.indexOf(pendingTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
+																															
+																																// Remove pending transaction from list
+																																pendingTransactions.splice(k--, 1);
+																															}
+																															
+																															// Otherwise check if pending transaction is a spent output that's changing
+																															else if(spentOutputsToChange.indexOf(pendingTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
+																															
+																																// Remove pending transaction from list
+																																pendingTransactions.splice(k--, 1);
+																															}
+																														}
+																													
+																														// Return getting change transactions
+																														return self.transactions.getTransactions(changeOutputsToChange).then(function(changeTransactions) {
+																															
+																															// Go through all change transactions
+																															for(var k = 0; k < changeTransactions["length"]; ++k) {
+																															
+																																// Get change transaction
+																																var changeTransaction = changeTransactions[k];
 																																
-																																	// Set transaction changed
-																																	var transactionChanged = false;
+																																// Set change transaction has been broadcast
+																																changeTransaction.setBroadcast(true);
 																																
-																																	// Check if kernel exists
-																																	if(kernel !== Node.NO_KERNEL_FOUND) {
+																																// Set changed transaction has been checked
+																																changeTransaction.setChecked(true);
+																																
+																																// Append change transaction to list of updated transactions
+																																updatedTransactions.push(changeTransaction);
+																															}
+																													
+																															// Go through all updated transactions
+																															for(var k = 0; k < updatedTransactions["length"]; ++k) {
+																															
+																																// Get updated transaction
+																																var updatedTransaction = updatedTransactions[k];
+																																
+																																// Check if updated transaction is a spent output that's changing
+																																if(updatedTransaction.getKeyPath() !== Transaction.NO_KEY_PATH && spentOutputsToChange.indexOf(updatedTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
+																																
+																																	// Check updated transaction's status
+																																	switch(updatedTransaction.getStatus()) {
 																																	
-																																		// Go through all the transaction's spent outputs
-																																		for(var l = 0; l < transaction.getSpentOutputs()["length"]; ++l) {
+																																		// Spent
+																																		case Transaction.STATUS_SPENT:
 																																		
-																																			// Get spent output
-																																			var spentOutput = transaction.getSpentOutputs()[l];
-																																			
-																																			// Check if spent output isn't in the change to spent list
-																																			if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_SPENT_INDEX].indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
-																																			
-																																				// Add spent output to change to spent list
-																																				spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_SPENT_INDEX].push(spentOutput);
+																																			// Subtract updated transaction's amount from spent amount change
+																																			spentAmountChange = spentAmountChange.minus(updatedTransaction.getAmount());
+																																		
+																																			// Break
+																																			break;
+																																		
+																																		// Unconfirmed
+																																		case Transaction.STATUS_UNCONFIRMED:
+																																		
+																																			// Subtract updated transaction's amount from unconfirmed amount change
+																																			unconfirmedAmountChange = unconfirmedAmountChange.minus(updatedTransaction.getAmount());
+																																		
+																																			// Break
+																																			break;
+																																		
+																																		// Unspent
+																																		case Transaction.STATUS_UNSPENT:
+																																		
+																																			// Check if updated transaction's amount has been released
+																																			if(updatedTransaction.getAmountReleased() === true) {
+																																		
+																																				// Subtract updated transaction's amount from unspent amount change
+																																				unspentAmountChange = unspentAmountChange.minus(updatedTransaction.getAmount());
 																																			}
 																																			
-																																			// Check if spent output exists in change to unspent list
-																																			if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(spentOutput) !== Common.INDEX_NOT_FOUND) {
-																																			
-																																				// Remove spent output from change to unspent list
-																																				spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].splice(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(spentOutput), 1);
+																																			// Otherwis
+																																			else {
+																																		
+																																				// Subtract updated transaction's amount from pending amount change
+																																				pendingAmountChange = pendingAmountChange.minus(updatedTransaction.getAmount());
 																																			}
-																																			
-																																			// Check if spent output exists in change to locked list
-																																			if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].indexOf(spentOutput) !== Common.INDEX_NOT_FOUND) {
-																																			
-																																				// Remove spent output from change to locked list
-																																				spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].splice(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].indexOf(spentOutput), 1);
-																																			}
-																																			
-																																			// Check if spent output doesn't exists in the list of outputs to change
-																																			if(spentOutputsToChange.indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
-																																			
-																																				// Append spent output to list of spent outputs to change
-																																				spentOutputsToChange.push(spentOutput);
-																																			}
-																																		}
+																																		
+																																			// Break
+																																			break;
+																																		
+																																		// Locked
+																																		case Transaction.STATUS_LOCKED:
+																																		
+																																			// Subtract updated transaction's amount from locked amount change
+																																			lockedAmountChange = lockedAmountChange.minus(updatedTransaction.getAmount());
+																																		
+																																			// Break
+																																			break;
+																																	}
+																																
+																																	// Check if updated transaction is being changed to spent
+																																	if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_SPENT_INDEX].indexOf(updatedTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
 																																	
-																																		// Check if transaction's amount wasn't released
-																																		if(transaction.getAmountReleased() === false) {
+																																		// Set updated transaction's status to spent
+																																		updatedTransaction.setStatus(Transaction.STATUS_SPENT);
 																																		
-																																			// Set transaction amount has been released
-																																			transaction.setAmountReleased(true);
+																																		// Set updated transaction's amount has been released
+																																		updatedTransaction.setAmountReleased(true);
+																																		
+																																		// Add updated transaction's amount to spent amount change
+																																		spentAmountChange = spentAmountChange.plus(updatedTransaction.getAmount());
+																																	}
+																																	
+																																	// Otherwise check if updated transaction is being changed to unspent
+																																	else if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(updatedTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
+																																	
+																																		// Set updated transaction's status to unspent
+																																		updatedTransaction.setStatus(Transaction.STATUS_UNSPENT);
+																																		
+																																		// Check if the updated transaction's spendable height is the next block
+																																		if(updatedTransaction.getSpendableHeight() !== Transaction.UNKNOWN_SPENDABLE_HEIGHT && updatedTransaction.getSpendableHeight().isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
+																																	
+																																			// Set updated transaction's amount has been released
+																																			updatedTransaction.setAmountReleased(true);
 																																			
-																																			// Set transaction changed
-																																			transactionChanged = true;
+																																			// Add updated transaction's amount to unspent amount change
+																																			unspentAmountChange = unspentAmountChange.plus(updatedTransaction.getAmount());
 																																		}
 																																		
-																																		// Check if transaction's amount was expired
-																																		if(transaction.getExpired() === true) {
-																																		
-																																			// Set transaction isn't expired
-																																			transaction.setExpired(false);
+																																		// Otherwise
+																																		else {
+																																	
+																																			// Set updated transaction's amount hasn't been released
+																																			updatedTransaction.setAmountReleased(false);
 																																			
-																																			// Set transaction changed
-																																			transactionChanged = true;
+																																			// Add updated transaction's amount to pending amount change
+																																			pendingAmountChange = pendingAmountChange.plus(updatedTransaction.getAmount());
 																																		}
+																																	}
+																																	
+																																	// Otherwise check if updated transaction is being changed to locked
+																																	else if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].indexOf(updatedTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
+																																	
+																																		// Set updated transaction's status to locked
+																																		updatedTransaction.setStatus(Transaction.STATUS_LOCKED);
 																																		
-																																		// Check if transaction's height needs to be updated
-																																		if(transaction.getHeight().isEqualTo(kernel["height"]) === false) {
+																																		// Set updated transaction's amount has been released
+																																		updatedTransaction.setAmountReleased(true);
 																																		
-																																			// Update transaction's height to the kernel's height
-																																			transaction.setHeight(kernel["height"]);
+																																		// Add updated transaction's amount to locked amount change
+																																		lockedAmountChange = lockedAmountChange.plus(updatedTransaction.getAmount());
+																																	}
+																																
+																																	// Remove spent output to change from list
+																																	spentOutputsToChange.splice(spentOutputsToChange.indexOf(updatedTransaction.getKeyPath()), 1);
+																																}
+																															}
+																														
+																															// Return getting spent transactions
+																															return self.transactions.getTransactions(spentOutputsToChange).then(function(spentTransactions) {
+																															
+																																// Initializing verifying spent transactions
+																																var verifyingSpentTransactions = [];
+																															
+																																// Go through all spent transactions
+																																for(let k = 0; k < spentTransactions["length"]; ++k) {
+																																
+																																	// Append verifying spent transaction to list
+																																	verifyingSpentTransactions.push(new Promise(function(resolve, reject) {
+																																
+																																		// Get spent transaction
+																																		var spentTransaction = spentTransactions[k];
+																																		
+																																		// Set transaction changed
+																																		var transactionChanged = false;
+																																		
+																																		// Check if spent transaction is being changed to spent
+																																		if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_SPENT_INDEX].indexOf(spentTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
+																																		
+																																			// Check spent transaction's status
+																																			switch(spentTransaction.getStatus()) {
+																																		
+																																				// Unconfirmed
+																																				case Transaction.STATUS_UNCONFIRMED:
+																																				
+																																					// Check if spent transaction is expired
+																																					if(spentTransaction.getExpired() === true) {
+																																					
+																																						// Check if spent transaction isn't change output
+																																						if(spentTransaction.getDisplay() === true) {
+																																					
+																																							// Subtract spent transaction's amount from expired amount change
+																																							expiredAmountChange = expiredAmountChange.minus(spentTransaction.getAmount());
+																																						}
+																																					}
+																																					
+																																					// Otherwise
+																																					else {
+																																				
+																																						// Subtract spent transaction's amount from unconfirmed amount change
+																																						unconfirmedAmountChange = unconfirmedAmountChange.minus(spentTransaction.getAmount());
+																																					}
+																																					
+																																					// Add spent transaction's amount to spent amount change
+																																					spentAmountChange = spentAmountChange.plus(spentTransaction.getAmount());
+																																					
+																																					// Break
+																																					break;
+																																				
+																																				// Unspent
+																																				case Transaction.STATUS_UNSPENT:
+																																				
+																																					// Check if spent transaction's amount has been released
+																																					if(spentTransaction.getAmountReleased() === true) {
+																																				
+																																						// Subtract spent transaction's amount from unspent amount change
+																																						unspentAmountChange = unspentAmountChange.minus(spentTransaction.getAmount());
+																																					}
+																																					
+																																					// Otherwis
+																																					else {
+																																				
+																																						// Subtract spent transaction's amount from pending amount change
+																																						pendingAmountChange = pendingAmountChange.minus(spentTransaction.getAmount());
+																																					}
+																																					
+																																					// Add spent transaction's amount to spent amount change
+																																					spentAmountChange = spentAmountChange.plus(spentTransaction.getAmount());
+																																					
+																																					// Break
+																																					break;
+																																				
+																																				// Locked
+																																				case Transaction.STATUS_LOCKED:
+																																				
+																																					// Subtract spent transaction's amount from locked amount change
+																																					lockedAmountChange = lockedAmountChange.minus(spentTransaction.getAmount());
+																																					
+																																					// Add spent transaction's amount to spent amount change
+																																					spentAmountChange = spentAmountChange.plus(spentTransaction.getAmount());
+																																					
+																																					// Break
+																																					break;
+																																			}
 																																			
-																																			// Set transaction changed
-																																			transactionChanged = true;
-																																		}
-																																		
-																																		// Return getting header at kernel's height
-																																		return self.node.getHeader(kernel["height"]).then(function(header) {
-																																		
-																																			// Get timestamp
-																																			var timestamp = header["timestamp"];
+																																			// Check if spent transaction's amount released needs to be updated
+																																			if(spentTransaction.getAmountReleased() === false) {
 																																			
-																																			// Check if transaction's confirmed timestamp needs to be updated
-																																			if(transaction.getConfirmedTimestamp() !== timestamp) {
+																																				// Set spent transaction's amount has been released
+																																				spentTransaction.setAmountReleased(true);
 																																			
-																																				// Set transaction's confirmed timestamp
-																																				transaction.setConfirmedTimestamp(timestamp);
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if spent transaction's expired needs to be updated
+																																			if(spentTransaction.getExpired() === true) {
+																																			
+																																				// Set spent transaction's expired
+																																				spentTransaction.setExpired(false);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if spent transaction's broadcast needs to be updated
+																																			if(spentTransaction.getBroadcast() === false) {
+																																			
+																																				// Set spent transaction's broadcast
+																																				spentTransaction.setBroadcast(true);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if spent transaction's status needs to be updated
+																																			if(spentTransaction.getStatus() !== Transaction.STATUS_SPENT) {
+																																			
+																																				// Set spent transaction's status to spent
+																																				spentTransaction.setStatus(Transaction.STATUS_SPENT);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if spent transaction's checked needs to be updated
+																																			if(spentTransaction.getChecked() === false) {
+																																			
+																																				// Set spent transaction's checked
+																																				spentTransaction.setChecked(true);
 																																				
 																																				// Set transaction changed
 																																				transactionChanged = true;
@@ -6175,506 +6689,335 @@ class Wallets {
 																																			// Check if transaction changed
 																																			if(transactionChanged === true) {
 																																			
-																																				// Append transaction to list of updated transactions
-																																				updatedTransactions.push(transaction);
-																																			}
-																																			
-																																			// Resolve
-																																			resolve();
-																																			
-																																		// Catch errors
-																																		}).catch(function(error) {
-																																		
-																																			// Reject error
-																																			reject(error);
-																																		});
-																																	}
-																																	
-																																	// Otherwise
-																																	else {
-																																	
-																																		// Check if transaction hasn't been broadcast and it's expired
-																																		if(transaction.getBroadcast() === false && transaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && transaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && transaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
-																																		
-																																			// Go through all the transaction's spent outputs
-																																			for(var l = 0; l < transaction.getSpentOutputs()["length"]; ++l) {
-																																			
-																																				// Get spent output
-																																				var spentOutput = transaction.getSpentOutputs()[l];
-																																				
-																																				// Check if spent output doesn't exists in change to spent list or change to locked list
-																																				if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_SPENT_INDEX].indexOf(spentOutput) === Common.INDEX_NOT_FOUND && spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
-																																				
-																																					// Check if spent output isn't in the change to unspent list
-																																					if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
-																																				
-																																						// Add spent output to change to unspent list
-																																						spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].push(spentOutput);
-																																					}
-																																				}
-																																				
-																																				// Check if spent output doesn't exists in the list of outputs to change
-																																				if(spentOutputsToChange.indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
-																																				
-																																					// Append spent output to list of spent outputs to change
-																																					spentOutputsToChange.push(spentOutput);
-																																				}
-																																			}
-																																		}
-																																		
-																																		// Otherwise
-																																		else {
-																																	
-																																			// Go through all the transaction's spent outputs
-																																			for(var l = 0; l < transaction.getSpentOutputs()["length"]; ++l) {
-																																			
-																																				// Get spent output
-																																				var spentOutput = transaction.getSpentOutputs()[l];
-																																				
-																																				// Check if spent output doesn't exists in change to spent list
-																																				if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_SPENT_INDEX].indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
-																																				
-																																					// Check if spent output isn't in the change to locked list
-																																					if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
-																																				
-																																						// Add spent output to change to locked list
-																																						spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].push(spentOutput);
-																																					}
-																																					
-																																					// Check if spent output exists in change to unspent list
-																																					if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(spentOutput) !== Common.INDEX_NOT_FOUND) {
-																																					
-																																						// Remove spent output from change to unspent list
-																																						spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].splice(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(spentOutput), 1);
-																																					}
-																																				}
-																																				
-																																				// Check if spent output doesn't exists in the list of outputs to change
-																																				if(spentOutputsToChange.indexOf(spentOutput) === Common.INDEX_NOT_FOUND) {
-																																				
-																																					// Append spent output to list of spent outputs to change
-																																					spentOutputsToChange.push(spentOutput);
-																																				}
-																																			}
-																																		}
-																																	
-																																		// Check if transaction's amount was released
-																																		if(transaction.getAmountReleased() === true) {
-																																	
-																																			// Set transaction amount hasn't been released
-																																			transaction.setAmountReleased(false);
-																																			
-																																			// Set transaction changed
-																																			transactionChanged = true;
-																																		}
-																																	
-																																		// Check if transaction hasn't been broadcast, it isn't expired, and its time to live cut off height has past
-																																		if(transaction.getBroadcast() === false && transaction.getExpired() === false && transaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && transaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && transaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
-																																		
-																																			// Set that transaction is expired
-																																			transaction.setExpired(true);
-																																			
-																																			// Set transaction changed
-																																			transactionChanged = true;
-																																		}
-																																		
-																																		// Check if transaction hasn't been broadcast, it isn't expired, and its lock height is the next block
-																																		if(transaction.getBroadcast() === false && transaction.getExpired() === false && transaction.getLockHeight() !== Transaction.UNKNOWN_LOCK_HEIGHT && transaction.getLockHeight() !== Transaction.NO_LOCK_HEIGHT && transaction.getLockHeight().isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
-																																		
-																																			// Return broadcasting transaction to the node
-																																			return self.node.broadcastTransaction(JSONBigNumber.parse(transaction.getRebroadcastMessage())).then(function() {
-																																			
-																																				// Set transaction has been broadcast
-																																				transaction.setBroadcast(true);
-																																				
-																																				// Go through all of the transaction's change outputs
-																																				for(var l = 0; l < transaction.getChangeOutputs()["length"]; ++l) {
-																																				
-																																					// Get change output
-																																					var changeOutput = transaction.getChangeOutputs()[l];
-																																				
-																																					// Append change output to list of outputs to change
-																																					changeOutputsToChange.push(changeOutput);
-																																				}
-																																				
-																																				// Append transaction to list of updated transactions
-																																				updatedTransactions.push(transaction);
-																																				
-																																				// Resolve
-																																				resolve();
-																																				
-																																			// Catch errors
-																																			}).catch(function(error) {
-																																			
-																																				// Check if transaction changed
-																																				if(transactionChanged === true) {
-																																				
-																																					// Append transaction to list of updated transactions
-																																					updatedTransactions.push(transaction);
-																																				}
-																																			
-																																				// Resolve
-																																				resolve();
-																																			});
-																																		}
-																																		
-																																		// Otherwise
-																																		else {
-																																		
-																																			// Check if transaction changed
-																																			if(transactionChanged === true) {
-																																			
-																																				// Append transaction to list of updated transactions
-																																				updatedTransactions.push(transaction);
+																																				// Append spent transaction to list of updated transactions
+																																				updatedTransactions.push(spentTransaction);
 																																			}
 																																			
 																																			// Resolve
 																																			resolve();
 																																		}
-																																	}
-																																
-																																// Catch errors
-																																}).catch(function(error) {
-																																
-																																	// Reject error
-																																	reject(error);
-																																});
-																															}));
-																														}
-																													}
-																												}
-																												
-																												// Return verifying sent transactions
-																												return Promise.all(verifyingSentTransactions).then(function() {
-																												
-																													// Go through all pending transactions
-																													for(var k = 0; k < pendingTransactions["length"]; ++k) {
-																													
-																														// Get pending transaction
-																														var pendingTransaction = pendingTransactions[k];
-																														
-																														// Check if pending transaction is a change output that's changing
-																														if(changeOutputsToChange.indexOf(pendingTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
-																														
-																															// Remove pending transaction from list
-																															pendingTransactions.splice(k--, 1);
-																														}
-																														
-																														// Otherwise check if pending transaction is a spent output that's changing
-																														else if(spentOutputsToChange.indexOf(pendingTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
-																														
-																															// Remove pending transaction from list
-																															pendingTransactions.splice(k--, 1);
-																														}
-																													}
-																												
-																													// Return getting change transactions
-																													return self.transactions.getTransactions(changeOutputsToChange).then(function(changeTransactions) {
-																														
-																														// Go through all change transactions
-																														for(var k = 0; k < changeTransactions["length"]; ++k) {
-																														
-																															// Get change transaction
-																															var changeTransaction = changeTransactions[k];
-																															
-																															// Set change transaction has been broadcast
-																															changeTransaction.setBroadcast(true);
-																															
-																															// Append change transaction to list of updated transactions
-																															updatedTransactions.push(changeTransaction);
-																														}
-																												
-																														// Go through all updated transactions
-																														for(var k = 0; k < updatedTransactions["length"]; ++k) {
-																														
-																															// Get updated transaction
-																															var updatedTransaction = updatedTransactions[k];
-																															
-																															// Check if updated transaction is a spent output that's changing
-																															if(updatedTransaction.getKeyPath() !== Transaction.NO_KEY_PATH && spentOutputsToChange.indexOf(updatedTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
-																															
-																																// Check updated transaction's status
-																																switch(updatedTransaction.getStatus()) {
-																																
-																																	// Spent
-																																	case Transaction.STATUS_SPENT:
-																																	
-																																		// Subtract updated transaction's amount from spent amount change
-																																		spentAmountChange = spentAmountChange.minus(updatedTransaction.getAmount());
-																																	
-																																		// Break
-																																		break;
-																																	
-																																	// Unconfirmed
-																																	case Transaction.STATUS_UNCONFIRMED:
-																																	
-																																		// Subtract updated transaction's amount from unconfirmed amount change
-																																		unconfirmedAmountChange = unconfirmedAmountChange.minus(updatedTransaction.getAmount());
-																																	
-																																		// Break
-																																		break;
-																																	
-																																	// Unspent
-																																	case Transaction.STATUS_UNSPENT:
-																																	
-																																		// Check if updated transaction's amount has been released
-																																		if(updatedTransaction.getAmountReleased() === true) {
-																																	
-																																			// Subtract updated transaction's amount from unspent amount change
-																																			unspentAmountChange = unspentAmountChange.minus(updatedTransaction.getAmount());
-																																		}
 																																		
-																																		// Otherwis
-																																		else {
-																																	
-																																			// Subtract updated transaction's amount from pending amount change
-																																			pendingAmountChange = pendingAmountChange.minus(updatedTransaction.getAmount());
-																																		}
-																																	
-																																		// Break
-																																		break;
-																																	
-																																	// Locked
-																																	case Transaction.STATUS_LOCKED:
-																																	
-																																		// Subtract updated transaction's amount from locked amount change
-																																		lockedAmountChange = lockedAmountChange.minus(updatedTransaction.getAmount());
-																																	
-																																		// Break
-																																		break;
-																																}
-																															
-																																// Check if updated transaction is being changed to spent
-																																if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_SPENT_INDEX].indexOf(updatedTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
-																																
-																																	// Set updated transaction's status to spent
-																																	updatedTransaction.setStatus(Transaction.STATUS_SPENT);
-																																	
-																																	// Set updated transaction's amount has been released
-																																	updatedTransaction.setAmountReleased(true);
-																																	
-																																	// Add updated transaction's amount to spent amount change
-																																	spentAmountChange = spentAmountChange.plus(updatedTransaction.getAmount());
-																																}
-																																
-																																// Otherwise check if updated transaction is being changed to unspent
-																																else if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(updatedTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
-																																
-																																	// Set updated transaction's status to unspent
-																																	updatedTransaction.setStatus(Transaction.STATUS_UNSPENT);
-																																	
-																																	// Check if the updated transaction's spendable height is the next block
-																																	if(updatedTransaction.getSpendableHeight() !== Transaction.UNKNOWN_SPENDABLE_HEIGHT && updatedTransaction.getSpendableHeight().isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
-																																
-																																		// Set updated transaction's amount has been released
-																																		updatedTransaction.setAmountReleased(true);
+																																		// Otherwise check if spent transaction is being changed to unspent
+																																		else if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(spentTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
 																																		
-																																		// Add updated transaction's amount to unspent amount change
-																																		unspentAmountChange = unspentAmountChange.plus(updatedTransaction.getAmount());
-																																	}
-																																	
-																																	// Otherwise
-																																	else {
-																																
-																																		// Set updated transaction's amount hasn't been released
-																																		updatedTransaction.setAmountReleased(false);
-																																		
-																																		// Add updated transaction's amount to pending amount change
-																																		pendingAmountChange = pendingAmountChange.plus(updatedTransaction.getAmount());
-																																	}
-																																}
-																																
-																																// Otherwise check if updated transaction is being changed to locked
-																																else if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].indexOf(updatedTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
-																																
-																																	// Set updated transaction's status to locked
-																																	updatedTransaction.setStatus(Transaction.STATUS_LOCKED);
-																																	
-																																	// Set updated transaction's amount has been released
-																																	updatedTransaction.setAmountReleased(true);
-																																	
-																																	// Add updated transaction's amount to locked amount change
-																																	lockedAmountChange = lockedAmountChange.plus(updatedTransaction.getAmount());
-																																}
-																															
-																																// Remove spent output to change from list
-																																spentOutputsToChange.splice(spentOutputsToChange.indexOf(updatedTransaction.getKeyPath()), 1);
-																															}
-																														}
-																													
-																														// Return getting spent transactions
-																														return self.transactions.getTransactions(spentOutputsToChange).then(function(spentTransactions) {
-																														
-																															// Initializing verifying spent transactions
-																															var verifyingSpentTransactions = [];
-																														
-																															// Go through all spent transactions
-																															for(let k = 0; k < spentTransactions["length"]; ++k) {
-																															
-																																// Append verifying spent transaction to list
-																																verifyingSpentTransactions.push(new Promise(function(resolve, reject) {
-																															
-																																	// Get spent transaction
-																																	var spentTransaction = spentTransactions[k];
-																																	
-																																	// Set transaction changed
-																																	var transactionChanged = false;
-																																	
-																																	// Check if spent transaction is being changed to spent
-																																	if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_SPENT_INDEX].indexOf(spentTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
-																																	
-																																		// Check spent transaction's status
-																																		switch(spentTransaction.getStatus()) {
-																																	
-																																			// Unconfirmed
-																																			case Transaction.STATUS_UNCONFIRMED:
+																																			// Return getting node's output for the spent transaction
+																																			return self.node.getOutputs([spentTransaction.getCommit()]).then(function(outputs) {
 																																			
-																																				// Check if spent transaction is expired
-																																				if(spentTransaction.getExpired() === true) {
+																																				// Get output
+																																				var output = outputs[0];
 																																				
-																																					// Check if spent transaction isn't change output
-																																					if(spentTransaction.getDisplay() === true) {
+																																				// Get wallet owns output
+																																				var getWalletOwnsOutput = function() {
 																																				
-																																						// Subtract spent transaction's amount from expired amount change
-																																						expiredAmountChange = expiredAmountChange.minus(spentTransaction.getAmount());
-																																					}
-																																				}
-																																				
-																																				// Otherwise
-																																				else {
-																																			
-																																					// Subtract spent transaction's amount from unconfirmed amount change
-																																					unconfirmedAmountChange = unconfirmedAmountChange.minus(spentTransaction.getAmount());
-																																				}
-																																				
-																																				// Add spent transaction's amount to spent amount change
-																																				spentAmountChange = spentAmountChange.plus(spentTransaction.getAmount());
-																																				
-																																				// Break
-																																				break;
-																																			
-																																			// Unspent
-																																			case Transaction.STATUS_UNSPENT:
-																																			
-																																				// Check if spent transaction's amount has been released
-																																				if(spentTransaction.getAmountReleased() === true) {
-																																			
-																																					// Subtract spent transaction's amount from unspent amount change
-																																					unspentAmountChange = unspentAmountChange.minus(spentTransaction.getAmount());
-																																				}
-																																				
-																																				// Otherwis
-																																				else {
-																																			
-																																					// Subtract spent transaction's amount from pending amount change
-																																					pendingAmountChange = pendingAmountChange.minus(spentTransaction.getAmount());
-																																				}
-																																				
-																																				// Add spent transaction's amount to spent amount change
-																																				spentAmountChange = spentAmountChange.plus(spentTransaction.getAmount());
-																																				
-																																				// Break
-																																				break;
-																																			
-																																			// Locked
-																																			case Transaction.STATUS_LOCKED:
-																																			
-																																				// Subtract spent transaction's amount from locked amount change
-																																				lockedAmountChange = lockedAmountChange.minus(spentTransaction.getAmount());
-																																				
-																																				// Add spent transaction's amount to spent amount change
-																																				spentAmountChange = spentAmountChange.plus(spentTransaction.getAmount());
-																																				
-																																				// Break
-																																				break;
-																																		}
-																																		
-																																		// Check if spent transaction's amount released needs to be updated
-																																		if(spentTransaction.getAmountReleased() === false) {
-																																		
-																																			// Set spent transaction's amount has been released
-																																			spentTransaction.setAmountReleased(true);
-																																		
-																																			// Set transaction changed
-																																			transactionChanged = true;
-																																		}
-																																		
-																																		// Check if spent transaction's expired needs to be updated
-																																		if(spentTransaction.getExpired() === true) {
-																																		
-																																			// Set spent transaction's expired
-																																			spentTransaction.setExpired(false);
-																																			
-																																			// Set transaction changed
-																																			transactionChanged = true;
-																																		}
-																																		
-																																		// Check if spent transaction's broadcast needs to be updated
-																																		if(spentTransaction.getBroadcast() === false) {
-																																		
-																																			// Set spent transaction's broadcast
-																																			spentTransaction.setBroadcast(true);
-																																			
-																																			// Set transaction changed
-																																			transactionChanged = true;
-																																		}
-																																		
-																																		// Check if spent transaction's status needs to be updated
-																																		if(spentTransaction.getStatus() !== Transaction.STATUS_SPENT) {
-																																		
-																																			// Set spent transaction's status to spent
-																																			spentTransaction.setStatus(Transaction.STATUS_SPENT);
-																																			
-																																			// Set transaction changed
-																																			transactionChanged = true;
-																																		}
-																																		
-																																		// Check if transaction changed
-																																		if(transactionChanged === true) {
-																																		
-																																			// Append spent transaction to list of updated transactions
-																																			updatedTransactions.push(spentTransaction);
-																																		}
-																																		
-																																		// Resolve
-																																		resolve();
-																																	}
-																																	
-																																	// Otherwise check if spent transaction is being changed to unspent
-																																	else if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_UNSPENT_INDEX].indexOf(spentTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
-																																	
-																																		// Return getting node's output for the spent transaction
-																																		return self.node.getOutputs([spentTransaction.getCommit()]).then(function(outputs) {
-																																		
-																																			// Get output
-																																			var output = outputs[0];
-																																			
-																																			// Get wallet owns output
-																																			var getWalletOwnsOutput = function() {
-																																			
-																																				// Return promise
-																																				return new Promise(function(resolve, reject) {
-																																				
-																																					// Check if output was found
-																																					if(output !== Node.NO_OUTPUT_FOUND) {
+																																					// Return promise
+																																					return new Promise(function(resolve, reject) {
 																																					
-																																						// Return getting if wallet owns output
-																																						return wallet.ownsOutput(new Output(output["commit"], output["proof"], output["output_type"], output["block_height"])).then(function(outputInformation) {
+																																						// Check if output was found
+																																						if(output !== Node.NO_OUTPUT_FOUND) {
 																																						
-																																							// Check if output information exists
-																																							if(outputInformation !== Output.NO_INFORMATION) {
+																																							// Return getting if wallet owns output
+																																							return wallet.ownsOutput(new Output(output["commit"], output["proof"], output["output_type"], output["block_height"])).then(function(outputInformation) {
 																																							
-																																								// Resolve true
-																																								resolve(true);
+																																								// Check if output information exists
+																																								if(outputInformation !== Output.NO_INFORMATION) {
+																																								
+																																									// Resolve true
+																																									resolve(true);
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Resolve false
+																																									resolve(false);
+																																								}
+																																							
+																																							// Catch errors
+																																							}).catch(function(error) {
+																																							
+																																								// Reject error
+																																								reject(error);
+																																							});
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Resolve false
+																																							resolve(false);
+																																						}
+																																					});
+																																				};
+																																				
+																																				// Return getting if the wallet owns the output
+																																				return getWalletOwnsOutput().then(function(walletOwnsOutput) {
+																																				
+																																					// Check if wallet owns output
+																																					if(walletOwnsOutput === true) {
+																																					
+																																						// Check if spent transaction's is coinbase needs to be updated
+																																						if(spentTransaction.getIsCoinbase() !== (output["output_type"] === Output.COINBASE_TYPE)) {
+																																						
+																																							// Set sent transaction's is coinbase
+																																							spentTransaction.setIsCoinbase(output["output_type"] === Output.COINBASE_TYPE);
+																																							
+																																							// Set transaction changed
+																																							transactionChanged = true;
+																																						}
+																																						
+																																						// Check if spent transaction's height needs to be updated
+																																						if(spentTransaction.getHeight() === Transaction.UNKNOWN_HEIGHT || spentTransaction.getHeight().isEqualTo(output["block_height"]) === false) {
+																																						
+																																							// Set spent transaction's height
+																																							spentTransaction.setHeight(output["block_height"]);
+																																							
+																																							// Set transaction changed
+																																							transactionChanged = true;
+																																						}
+																																						
+																																						// Get new spendable height as the output height added to the spent transaction's number of confirmations
+																																						var newSpendableHeight = output["block_height"].plus(spentTransaction.getRequiredNumberOfConfirmations().minus(1));
+																																						
+																																						// Check if maturity height is greater than the new spendable height
+																																						if(output["block_height"].plus((spentTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0).isGreaterThan(newSpendableHeight) === true) {
+																																						
+																																							// Set the new spendable height to the maturity height
+																																							newSpendableHeight = output["block_height"].plus((spentTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0);
+																																						}
+																																						
+																																						// Check if spent transaction's lock height exists and if it added to the number of confirmation is greater than the new spendable height
+																																						if(spentTransaction.getLockHeight() !== Transaction.UNKNOWN_LOCK_HEIGHT && spentTransaction.getLockHeight() !== Transaction.NO_LOCK_HEIGHT && spentTransaction.getLockHeight().plus(spentTransaction.getRequiredNumberOfConfirmations().minus(1)).isGreaterThan(newSpendableHeight) === true) {
+																																						
+																																							// Set the new spendable height to the spent transaction's lock height added to the number of confirmation
+																																							newSpendableHeight = spentTransaction.getLockHeight().plus(spentTransaction.getRequiredNumberOfConfirmations().minus(1));
+																																						}
+																																						
+																																						// Check spent transaction's status
+																																						switch(spentTransaction.getStatus()) {
+																																					
+																																							// Spent
+																																							case Transaction.STATUS_SPENT:
+																																							
+																																								// Subtract spent transaction's amount from spent amount change
+																																								spentAmountChange = spentAmountChange.minus(spentTransaction.getAmount());
+																																								
+																																								// Check if the spent transaction's new spendable height is the next block
+																																								if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
+																																								
+																																									// Add spent transaction's amount to unspent amount change
+																																									unspentAmountChange = unspentAmountChange.plus(spentTransaction.getAmount());
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Add spent transaction's amount to pending amount change
+																																									pendingAmountChange = pendingAmountChange.plus(spentTransaction.getAmount());
+																																								}
+																																								
+																																								// Break
+																																								break;
+																																							
+																																							// Unconfirmed
+																																							case Transaction.STATUS_UNCONFIRMED:
+																																							
+																																								// Check if spent transaction is expired
+																																								if(spentTransaction.getExpired() === true) {
+																																								
+																																									// Check if spent transaction isn't change output
+																																									if(spentTransaction.getDisplay() === true) {
+																																								
+																																										// Subtract spent transaction's amount from expired amount change
+																																										expiredAmountChange = expiredAmountChange.minus(spentTransaction.getAmount());
+																																									}
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																							
+																																									// Subtract spent transaction's amount from unconfirmed amount change
+																																									unconfirmedAmountChange = unconfirmedAmountChange.minus(spentTransaction.getAmount());
+																																								}
+																																								
+																																								// Check if the spent transaction's new spendable height is the next block
+																																								if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
+																																								
+																																									// Add spent transaction's amount to unspent amount change
+																																									unspentAmountChange = unspentAmountChange.plus(spentTransaction.getAmount());
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Add spent transaction's amount to pending amount change
+																																									pendingAmountChange = pendingAmountChange.plus(spentTransaction.getAmount());
+																																								}
+																																								
+																																								// Break
+																																								break;
+																																							
+																																							// Unspent
+																																							case Transaction.STATUS_UNSPENT:
+																																							
+																																								// Check if the spent transaction's new spendable height is the next block
+																																								if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
+																																								
+																																									// Check if spent transaction's amount hasn't been released
+																																									if(spentTransaction.getAmountReleased() === false) {
+																																									
+																																										// Subtract spent transaction's amount from pending amount change
+																																										pendingAmountChange = pendingAmountChange.minus(spentTransaction.getAmount());
+																																										
+																																										// Add spent transaction's amount to unspent amount change
+																																										unspentAmountChange = unspentAmountChange.plus(spentTransaction.getAmount());
+																																									}
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Check if spent transaction's amount has been released
+																																									if(spentTransaction.getAmountReleased() === true) {
+																																									
+																																										// Subtract spent transaction's amount from unspent amount change
+																																										unspentAmountChange = unspentAmountChange.minus(spentTransaction.getAmount());
+																																										
+																																										// Add spent transaction's amount to pending amount change
+																																										pendingAmountChange = pendingAmountChange.plus(spentTransaction.getAmount());
+																																									}
+																																								}
+																																							
+																																								// Break
+																																								break;
+																																							
+																																							// Locked
+																																							case Transaction.STATUS_LOCKED:
+																																							
+																																								// Subtract spent transaction's amount from locked amount change
+																																								lockedAmountChange = lockedAmountChange.minus(spentTransaction.getAmount());
+																																								
+																																								// Check if the spent transaction's new spendable height is the next block
+																																								if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
+																																								
+																																									// Add spent transaction's amount to unspent amount change
+																																									unspentAmountChange = unspentAmountChange.plus(spentTransaction.getAmount());
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Add spent transaction's amount to pending amount change
+																																									pendingAmountChange = pendingAmountChange.plus(spentTransaction.getAmount());
+																																								}
+																																								
+																																								// Break
+																																								break;
+																																						}
+																																						
+																																						// Check if the spent transaction's new spendable height is the next block
+																																						if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
+																																						
+																																							// Check if spent transaction's amount released needs to be updated
+																																							if(spentTransaction.getAmountReleased() === false) {
+																																							
+																																								// Set spent transaction's amount has been released
+																																								spentTransaction.setAmountReleased(true);
+																																							
+																																								// Set transaction changed
+																																								transactionChanged = true;
+																																							}
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Check if spent transaction's amount released needs to be updated
+																																							if(spentTransaction.getAmountReleased() === true) {
+																																							
+																																								// Set spent transaction's amount hasn't been released
+																																								spentTransaction.setAmountReleased(false);
+																																							
+																																								// Set transaction changed
+																																								transactionChanged = true;
+																																							}
+																																						}
+																																						
+																																						// Check if spent transaction's expired needs to be updated
+																																						if(spentTransaction.getExpired() === true) {
+																																						
+																																							// Set spent transaction's expired
+																																							spentTransaction.setExpired(false);
+																																							
+																																							// Set transaction changed
+																																							transactionChanged = true;
+																																						}
+																																						
+																																						// Check if spent transaction's broadcast needs to be updated
+																																						if(spentTransaction.getBroadcast() === false) {
+																																						
+																																							// Set spent transaction's broadcast
+																																							spentTransaction.setBroadcast(true);
+																																							
+																																							// Set transaction changed
+																																							transactionChanged = true;
+																																						}
+																																						
+																																						// Check if spent transaction's status needs to be updated
+																																						if(spentTransaction.getStatus() !== Transaction.STATUS_UNSPENT) {
+																																						
+																																							// Set spent transaction's status to unspent
+																																							spentTransaction.setStatus(Transaction.STATUS_UNSPENT);
+																																							
+																																							// Set transaction changed
+																																							transactionChanged = true;
+																																						}
+																																						
+																																						// Check if spent transaction's spendable height needs to be updated
+																																						if(spentTransaction.getSpendableHeight() === Transaction.UNKNOWN_SPENDABLE_HEIGHT || spentTransaction.getSpendableHeight().isEqualTo(newSpendableHeight) === false) {
+																																						
+																																							// Set spent transaction's spendable height
+																																							spentTransaction.setSpendableHeight(newSpendableHeight);
+																																							
+																																							// Set transaction changed
+																																							transactionChanged = true;
+																																						}
+																																						
+																																						// Check if spent transaction's checked needs to be updated
+																																						if(spentTransaction.getChecked() === false) {
+																																						
+																																							// Set spent transaction's checked
+																																							spentTransaction.setChecked(true);
+																																							
+																																							// Set transaction changed
+																																							transactionChanged = true;
+																																						}
+																																						
+																																						// Return getting header at output's height
+																																						return self.node.getHeader(output["block_height"]).then(function(header) {
+																																						
+																																							// Get timestamp
+																																							var timestamp = header["timestamp"];
+																																							
+																																							// Check if spent transaction's confirmed timestamp needs to be updated
+																																							if(spentTransaction.getConfirmedTimestamp() !== timestamp) {
+																																							
+																																								// Set spent transaction's confirmed timestamp
+																																								spentTransaction.setConfirmedTimestamp(timestamp);
+																																								
+																																								// Set transaction changed
+																																								transactionChanged = true;
+																																							}
+																																					
+																																							// Check if transaction changed
+																																							if(transactionChanged === true) {
+																																							
+																																								// Append spent transaction to list of updated transactions
+																																								updatedTransactions.push(spentTransaction);
 																																							}
 																																							
-																																							// Otherwise
-																																							else {
+																																							// Resolve
+																																							resolve();
 																																							
-																																								// Resolve false
-																																								resolve(false);
-																																							}
-																																						
 																																						// Catch errors
 																																						}).catch(function(error) {
 																																						
@@ -6686,256 +7029,207 @@ class Wallets {
 																																					// Otherwise
 																																					else {
 																																					
-																																						// Resolve false
-																																						resolve(false);
-																																					}
-																																				});
-																																			};
-																																			
-																																			// Return getting if the wallet owns the output
-																																			return getWalletOwnsOutput().then(function(walletOwnsOutput) {
-																																			
-																																				// Check if wallet owns output
-																																				if(walletOwnsOutput === true) {
-																																				
-																																					// Check if spent transaction's is coinbase needs to be updated
-																																					if(spentTransaction.getIsCoinbase() !== (output["output_type"] === Output.COINBASE_TYPE)) {
+																																						// Check spent transaction's status
+																																						switch(spentTransaction.getStatus()) {
 																																					
-																																						// Set sent transaction's is coinbase
-																																						spentTransaction.setIsCoinbase(output["output_type"] === Output.COINBASE_TYPE);
-																																						
-																																						// Set transaction changed
-																																						transactionChanged = true;
-																																					}
-																																					
-																																					// Check if spent transaction's height needs to be updated
-																																					if(spentTransaction.getHeight() === Transaction.UNKNOWN_HEIGHT || spentTransaction.getHeight().isEqualTo(output["block_height"]) === false) {
-																																					
-																																						// Set spent transaction's height
-																																						spentTransaction.setHeight(output["block_height"]);
-																																						
-																																						// Set transaction changed
-																																						transactionChanged = true;
-																																					}
-																																					
-																																					// Get new spendable height as the output height added to the spent transaction's number of confirmations
-																																					var newSpendableHeight = output["block_height"].plus(spentTransaction.getRequiredNumberOfConfirmations().minus(1));
-																																					
-																																					// Check if maturity height is greater than the new spendable height
-																																					if(output["block_height"].plus((spentTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0).isGreaterThan(newSpendableHeight) === true) {
-																																					
-																																						// Set the new spendable height to the maturity height
-																																						newSpendableHeight = output["block_height"].plus((spentTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0);
-																																					}
-																																					
-																																					// Check if spent transaction's lock height exists and if it added to the number of confirmation is greater than the new spendable height
-																																					if(spentTransaction.getLockHeight() !== Transaction.UNKNOWN_LOCK_HEIGHT && spentTransaction.getLockHeight() !== Transaction.NO_LOCK_HEIGHT && spentTransaction.getLockHeight().plus(spentTransaction.getRequiredNumberOfConfirmations().minus(1)).isGreaterThan(newSpendableHeight) === true) {
-																																					
-																																						// Set the new spendable height to the spent transaction's lock height added to the number of confirmation
-																																						newSpendableHeight = spentTransaction.getLockHeight().plus(spentTransaction.getRequiredNumberOfConfirmations().minus(1));
-																																					}
-																																					
-																																					// Check spent transaction's status
-																																					switch(spentTransaction.getStatus()) {
-																																				
-																																						// Spent
-																																						case Transaction.STATUS_SPENT:
-																																						
-																																							// Subtract spent transaction's amount from spent amount change
-																																							spentAmountChange = spentAmountChange.minus(spentTransaction.getAmount());
+																																							// Spent
+																																							case Transaction.STATUS_SPENT:
 																																							
-																																							// Check if the spent transaction's new spendable height is the next block
-																																							if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
-																																							
-																																								// Add spent transaction's amount to unspent amount change
-																																								unspentAmountChange = unspentAmountChange.plus(spentTransaction.getAmount());
-																																							}
-																																							
-																																							// Otherwise
-																																							else {
-																																							
-																																								// Add spent transaction's amount to pending amount change
-																																								pendingAmountChange = pendingAmountChange.plus(spentTransaction.getAmount());
-																																							}
-																																							
-																																							// Break
-																																							break;
-																																						
-																																						// Unconfirmed
-																																						case Transaction.STATUS_UNCONFIRMED:
-																																						
-																																							// Check if spent transaction is expired
-																																							if(spentTransaction.getExpired() === true) {
-																																							
-																																								// Check if spent transaction isn't change output
-																																								if(spentTransaction.getDisplay() === true) {
-																																							
-																																									// Subtract spent transaction's amount from expired amount change
-																																									expiredAmountChange = expiredAmountChange.minus(spentTransaction.getAmount());
-																																								}
-																																							}
-																																							
-																																							// Otherwise
-																																							else {
-																																						
-																																								// Subtract spent transaction's amount from unconfirmed amount change
-																																								unconfirmedAmountChange = unconfirmedAmountChange.minus(spentTransaction.getAmount());
-																																							}
-																																							
-																																							// Check if the spent transaction's new spendable height is the next block
-																																							if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
-																																							
-																																								// Add spent transaction's amount to unspent amount change
-																																								unspentAmountChange = unspentAmountChange.plus(spentTransaction.getAmount());
-																																							}
-																																							
-																																							// Otherwise
-																																							else {
-																																							
-																																								// Add spent transaction's amount to pending amount change
-																																								pendingAmountChange = pendingAmountChange.plus(spentTransaction.getAmount());
-																																							}
-																																							
-																																							// Break
-																																							break;
-																																						
-																																						// Unspent
-																																						case Transaction.STATUS_UNSPENT:
-																																						
-																																							// Check if the spent transaction's new spendable height is the next block
-																																							if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
-																																							
-																																								// Check if spent transaction's amount hasn't been released
-																																								if(spentTransaction.getAmountReleased() === false) {
+																																								// Subtract spent transaction's amount from spent amount change
+																																								spentAmountChange = spentAmountChange.minus(spentTransaction.getAmount());
 																																								
-																																									// Subtract spent transaction's amount from pending amount change
-																																									pendingAmountChange = pendingAmountChange.minus(spentTransaction.getAmount());
-																																									
-																																									// Add spent transaction's amount to unspent amount change
-																																									unspentAmountChange = unspentAmountChange.plus(spentTransaction.getAmount());
+																																								// Check if the spent transaction's is expired
+																																								if(spentTransaction.getBroadcast() === false && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																								
+																																									// Check if spent transaction isn't change output
+																																									if(spentTransaction.getDisplay() === true) {
+																																								
+																																										// Add spent transaction's amount to expired amount change
+																																										expiredAmountChange = expiredAmountChange.plus(spentTransaction.getAmount());
+																																									}
 																																								}
-																																							}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Add spent transaction's amount to unconfirmed amount change
+																																									unconfirmedAmountChange = unconfirmedAmountChange.plus(spentTransaction.getAmount());
+																																								}
+																																								
+																																								// Break
+																																								break;
 																																							
-																																							// Otherwise
-																																							else {
+																																							// Unconfirmed
+																																							case Transaction.STATUS_UNCONFIRMED:
+																																							
+																																								// Check if the spent transaction's is expired
+																																								if(spentTransaction.getBroadcast() === false && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																								
+																																									// Check if spent transaction isn't expired
+																																									if(spentTransaction.getExpired() === false) {
+																																									
+																																										// Subtract spent transaction's amount from unconfirmed amount change
+																																										unconfirmedAmountChange = unconfirmedAmountChange.minus(spentTransaction.getAmount());
+																																										
+																																										// Check if spent transaction isn't change output
+																																										if(spentTransaction.getDisplay() === true) {
+																																									
+																																											// Add spent transaction's amount to expired amount change
+																																											expiredAmountChange = expiredAmountChange.plus(spentTransaction.getAmount());
+																																										}
+																																									}
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Check if spent transaction is expired
+																																									if(spentTransaction.getExpired() === true) {
+																																									
+																																										// Check if spent transaction isn't change output
+																																										if(spentTransaction.getDisplay() === true) {
+																																									
+																																											// Subtract spent transaction's amount from expired amount change
+																																											expiredAmountChange = expiredAmountChange.minus(spentTransaction.getAmount());
+																																										}
+																																										
+																																										// Add spent transaction's amount to unconfirmed amount change
+																																										unconfirmedAmountChange = unconfirmedAmountChange.plus(spentTransaction.getAmount());
+																																									}
+																																								}
+																																							
+																																								// Break
+																																								break;
+																																							
+																																							// Unspent
+																																							case Transaction.STATUS_UNSPENT:
 																																							
 																																								// Check if spent transaction's amount has been released
 																																								if(spentTransaction.getAmountReleased() === true) {
-																																								
+																																							
 																																									// Subtract spent transaction's amount from unspent amount change
 																																									unspentAmountChange = unspentAmountChange.minus(spentTransaction.getAmount());
-																																									
-																																									// Add spent transaction's amount to pending amount change
-																																									pendingAmountChange = pendingAmountChange.plus(spentTransaction.getAmount());
 																																								}
-																																							}
-																																						
-																																							// Break
-																																							break;
-																																						
-																																						// Locked
-																																						case Transaction.STATUS_LOCKED:
-																																						
-																																							// Subtract spent transaction's amount from locked amount change
-																																							lockedAmountChange = lockedAmountChange.minus(spentTransaction.getAmount());
+																																								
+																																								// Otherwis
+																																								else {
 																																							
-																																							// Check if the spent transaction's new spendable height is the next block
-																																							if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
+																																									// Subtract spent transaction's amount from pending amount change
+																																									pendingAmountChange = pendingAmountChange.minus(spentTransaction.getAmount());
+																																								}
+																																								
+																																								// Check if the spent transaction's is expired
+																																								if(spentTransaction.getBroadcast() === false && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																								
+																																									// Check if spent transaction isn't change output
+																																									if(spentTransaction.getDisplay() === true) {
+																																								
+																																										// Add spent transaction's amount to expired amount change
+																																										expiredAmountChange = expiredAmountChange.plus(spentTransaction.getAmount());
+																																									}
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Add spent transaction's amount to unconfirmed amount change
+																																									unconfirmedAmountChange = unconfirmedAmountChange.plus(spentTransaction.getAmount());
+																																								}
+																																								
+																																								// Break
+																																								break;
 																																							
-																																								// Add spent transaction's amount to unspent amount change
-																																								unspentAmountChange = unspentAmountChange.plus(spentTransaction.getAmount());
-																																							}
+																																							// Locked
+																																							case Transaction.STATUS_LOCKED:
 																																							
-																																							// Otherwise
-																																							else {
-																																							
-																																								// Add spent transaction's amount to pending amount change
-																																								pendingAmountChange = pendingAmountChange.plus(spentTransaction.getAmount());
-																																							}
-																																							
-																																							// Break
-																																							break;
-																																					}
-																																					
-																																					// Check if the spent transaction's new spendable height is the next block
-																																					if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
-																																					
-																																						// Check if spent transaction's amount released needs to be updated
-																																						if(spentTransaction.getAmountReleased() === false) {
-																																						
-																																							// Set spent transaction's amount has been released
-																																							spentTransaction.setAmountReleased(true);
-																																						
-																																							// Set transaction changed
-																																							transactionChanged = true;
+																																								// Subtract spent transaction's amount from locked amount change
+																																								lockedAmountChange = lockedAmountChange.minus(spentTransaction.getAmount());
+																																								
+																																								// Check if the spent transaction's is expired
+																																								if(spentTransaction.getBroadcast() === false && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																								
+																																									// Check if spent transaction isn't change output
+																																									if(spentTransaction.getDisplay() === true) {
+																																								
+																																										// Add spent transaction's amount to expired amount change
+																																										expiredAmountChange = expiredAmountChange.plus(spentTransaction.getAmount());
+																																									}
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Add spent transaction's amount to unconfirmed amount change
+																																									unconfirmedAmountChange = unconfirmedAmountChange.plus(spentTransaction.getAmount());
+																																								}
+																																								
+																																								// Break
+																																								break;
 																																						}
-																																					}
-																																					
-																																					// Otherwise
-																																					else {
-																																					
+																																						
 																																						// Check if spent transaction's amount released needs to be updated
 																																						if(spentTransaction.getAmountReleased() === true) {
 																																						
-																																							// Set spent transaction's amount hasn't been released
+																																							// Set spent transaction's amount released
 																																							spentTransaction.setAmountReleased(false);
-																																						
+																																							
 																																							// Set transaction changed
 																																							transactionChanged = true;
 																																						}
-																																					}
-																																					
-																																					// Check if spent transaction's expired needs to be updated
-																																					if(spentTransaction.getExpired() === true) {
-																																					
-																																						// Set spent transaction's expired
-																																						spentTransaction.setExpired(false);
 																																						
-																																						// Set transaction changed
-																																						transactionChanged = true;
-																																					}
-																																					
-																																					// Check if spent transaction's broadcast needs to be updated
-																																					if(spentTransaction.getBroadcast() === false) {
-																																					
-																																						// Set spent transaction's broadcast
-																																						spentTransaction.setBroadcast(true);
+																																						// Check if the spent transaction's is expired
+																																						if(spentTransaction.getBroadcast() === false && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
 																																						
-																																						// Set transaction changed
-																																						transactionChanged = true;
-																																					}
-																																					
-																																					// Check if spent transaction's status needs to be updated
-																																					if(spentTransaction.getStatus() !== Transaction.STATUS_UNSPENT) {
-																																					
-																																						// Set spent transaction's status to unspent
-																																						spentTransaction.setStatus(Transaction.STATUS_UNSPENT);
+																																							// Check if spent transaction's expired needs to be updated
+																																							if(spentTransaction.getExpired() === false) {
+																																							
+																																								// Set that spent transaction's is expired
+																																								spentTransaction.setExpired(true);
+																																							
+																																								// Set transaction changed
+																																								transactionChanged = true;
+																																							}
+																																						}
 																																						
-																																						// Set transaction changed
-																																						transactionChanged = true;
-																																					}
-																																					
-																																					// Check if spent transaction's spendable height needs to be updated
-																																					if(spentTransaction.getSpendableHeight() === Transaction.UNKNOWN_SPENDABLE_HEIGHT || spentTransaction.getSpendableHeight().isEqualTo(newSpendableHeight) === false) {
-																																					
-																																						// Set spent transaction's spendable height
-																																						spentTransaction.setSpendableHeight(newSpendableHeight);
+																																						// Otherwise
+																																						else {
 																																						
-																																						// Set transaction changed
-																																						transactionChanged = true;
-																																					}
-																																					
-																																					// Return getting header at output's height
-																																					return self.node.getHeader(output["block_height"]).then(function(header) {
-																																					
-																																						// Get timestamp
-																																						var timestamp = header["timestamp"];
+																																							// Check if spent transaction's expired needs to be updated
+																																							if(spentTransaction.getExpired() === true) {
+																																							
+																																								// Set that spent transaction's isn't expired
+																																								spentTransaction.setExpired(false);
+																																							
+																																								// Set transaction changed
+																																								transactionChanged = true;
+																																							}
+																																						}
+																																						
+																																						// Check if spent transaction's status needs to be updated
+																																						if(spentTransaction.getStatus() !== Transaction.STATUS_UNCONFIRMED) {
+																																						
+																																							// Set spent transaction's status to unconfirmed
+																																							spentTransaction.setStatus(Transaction.STATUS_UNCONFIRMED);
+																																							
+																																							// Set transaction changed
+																																							transactionChanged = true;
+																																						}
 																																						
 																																						// Check if spent transaction's confirmed timestamp needs to be updated
-																																						if(spentTransaction.getConfirmedTimestamp() !== timestamp) {
+																																						if(spentTransaction.getConfirmedTimestamp() !== Transaction.NO_CONFIRMED_TIMESTAMP) {
 																																						
 																																							// Set spent transaction's confirmed timestamp
-																																							spentTransaction.setConfirmedTimestamp(timestamp);
+																																							spentTransaction.setConfirmedTimestamp(Transaction.NO_CONFIRMED_TIMESTAMP);
+																																							
+																																							// Set transaction changed
+																																							transactionChanged = true;
+																																						}
+																																						
+																																						// Check if spent transaction's checked needs to be updated
+																																						if(spentTransaction.getChecked() === false) {
+																																						
+																																							// Set spent transaction's checked
+																																							spentTransaction.setChecked(true);
 																																							
 																																							// Set transaction changed
 																																							transactionChanged = true;
@@ -6950,224 +7244,14 @@ class Wallets {
 																																						
 																																						// Resolve
 																																						resolve();
-																																						
-																																					// Catch errors
-																																					}).catch(function(error) {
-																																					
-																																						// Reject error
-																																						reject(error);
-																																					});
-																																				}
+																																					}
 																																				
-																																				// Otherwise
-																																				else {
+																																				// Catch errors
+																																				}).catch(function(error) {
 																																				
-																																					// Check spent transaction's status
-																																					switch(spentTransaction.getStatus()) {
-																																				
-																																						// Spent
-																																						case Transaction.STATUS_SPENT:
-																																						
-																																							// Subtract spent transaction's amount from spent amount change
-																																							spentAmountChange = spentAmountChange.minus(spentTransaction.getAmount());
-																																							
-																																							// Check if the spent transaction's is expired
-																																							if(spentTransaction.getBroadcast() === false && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
-																																							
-																																								// Check if spent transaction isn't change output
-																																								if(spentTransaction.getDisplay() === true) {
-																																							
-																																									// Add spent transaction's amount to expired amount change
-																																									expiredAmountChange = expiredAmountChange.plus(spentTransaction.getAmount());
-																																								}
-																																							}
-																																							
-																																							// Otherwise
-																																							else {
-																																							
-																																								// Add spent transaction's amount to unconfirmed amount change
-																																								unconfirmedAmountChange = unconfirmedAmountChange.plus(spentTransaction.getAmount());
-																																							}
-																																							
-																																							// Break
-																																							break;
-																																						
-																																						// Unconfirmed
-																																						case Transaction.STATUS_UNCONFIRMED:
-																																						
-																																							// Check if the spent transaction's is expired
-																																							if(spentTransaction.getBroadcast() === false && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
-																																							
-																																								// Check if spent transaction isn't expired
-																																								if(spentTransaction.getExpired() === false) {
-																																								
-																																									// Subtract spent transaction's amount from unconfirmed amount change
-																																									unconfirmedAmountChange = unconfirmedAmountChange.minus(spentTransaction.getAmount());
-																																									
-																																									// Check if spent transaction isn't change output
-																																									if(spentTransaction.getDisplay() === true) {
-																																								
-																																										// Add spent transaction's amount to expired amount change
-																																										expiredAmountChange = expiredAmountChange.plus(spentTransaction.getAmount());
-																																									}
-																																								}
-																																							}
-																																							
-																																							// Otherwise
-																																							else {
-																																							
-																																								// Check if spent transaction is expired
-																																								if(spentTransaction.getExpired() === true) {
-																																								
-																																									// Check if spent transaction isn't change output
-																																									if(spentTransaction.getDisplay() === true) {
-																																								
-																																										// Subtract spent transaction's amount from expired amount change
-																																										expiredAmountChange = expiredAmountChange.minus(spentTransaction.getAmount());
-																																									}
-																																									
-																																									// Add spent transaction's amount to unconfirmed amount change
-																																									unconfirmedAmountChange = unconfirmedAmountChange.plus(spentTransaction.getAmount());
-																																								}
-																																							}
-																																						
-																																							// Break
-																																							break;
-																																						
-																																						// Unspent
-																																						case Transaction.STATUS_UNSPENT:
-																																						
-																																							// Check if spent transaction's amount has been released
-																																							if(spentTransaction.getAmountReleased() === true) {
-																																						
-																																								// Subtract spent transaction's amount from unspent amount change
-																																								unspentAmountChange = unspentAmountChange.minus(spentTransaction.getAmount());
-																																							}
-																																							
-																																							// Otherwis
-																																							else {
-																																						
-																																								// Subtract spent transaction's amount from pending amount change
-																																								pendingAmountChange = pendingAmountChange.minus(spentTransaction.getAmount());
-																																							}
-																																							
-																																							// Check if the spent transaction's is expired
-																																							if(spentTransaction.getBroadcast() === false && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
-																																							
-																																								// Check if spent transaction isn't change output
-																																								if(spentTransaction.getDisplay() === true) {
-																																							
-																																									// Add spent transaction's amount to expired amount change
-																																									expiredAmountChange = expiredAmountChange.plus(spentTransaction.getAmount());
-																																								}
-																																							}
-																																							
-																																							// Otherwise
-																																							else {
-																																							
-																																								// Add spent transaction's amount to unconfirmed amount change
-																																								unconfirmedAmountChange = unconfirmedAmountChange.plus(spentTransaction.getAmount());
-																																							}
-																																							
-																																							// Break
-																																							break;
-																																						
-																																						// Locked
-																																						case Transaction.STATUS_LOCKED:
-																																						
-																																							// Subtract spent transaction's amount from locked amount change
-																																							lockedAmountChange = lockedAmountChange.minus(spentTransaction.getAmount());
-																																							
-																																							// Check if the spent transaction's is expired
-																																							if(spentTransaction.getBroadcast() === false && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
-																																							
-																																								// Check if spent transaction isn't change output
-																																								if(spentTransaction.getDisplay() === true) {
-																																							
-																																									// Add spent transaction's amount to expired amount change
-																																									expiredAmountChange = expiredAmountChange.plus(spentTransaction.getAmount());
-																																								}
-																																							}
-																																							
-																																							// Otherwise
-																																							else {
-																																							
-																																								// Add spent transaction's amount to unconfirmed amount change
-																																								unconfirmedAmountChange = unconfirmedAmountChange.plus(spentTransaction.getAmount());
-																																							}
-																																							
-																																							// Break
-																																							break;
-																																					}
-																																					
-																																					// Check if spent transaction's amount released needs to be updated
-																																					if(spentTransaction.getAmountReleased() === true) {
-																																					
-																																						// Set spent transaction's amount released
-																																						spentTransaction.setAmountReleased(false);
-																																						
-																																						// Set transaction changed
-																																						transactionChanged = true;
-																																					}
-																																					
-																																					// Check if the spent transaction's is expired
-																																					if(spentTransaction.getBroadcast() === false && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && spentTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
-																																					
-																																						// Check if spent transaction's expired needs to be updated
-																																						if(spentTransaction.getExpired() === false) {
-																																						
-																																							// Set that spent transaction's is expired
-																																							spentTransaction.setExpired(true);
-																																						
-																																							// Set transaction changed
-																																							transactionChanged = true;
-																																						}
-																																					}
-																																					
-																																					// Otherwise
-																																					else {
-																																					
-																																						// Check if spent transaction's expired needs to be updated
-																																						if(spentTransaction.getExpired() === true) {
-																																						
-																																							// Set that spent transaction's isn't expired
-																																							spentTransaction.setExpired(false);
-																																						
-																																							// Set transaction changed
-																																							transactionChanged = true;
-																																						}
-																																					}
-																																					
-																																					// Check if spent transaction's status needs to be updated
-																																					if(spentTransaction.getStatus() !== Transaction.STATUS_UNCONFIRMED) {
-																																					
-																																						// Set spent transaction's status to unconfirmed
-																																						spentTransaction.setStatus(Transaction.STATUS_UNCONFIRMED);
-																																						
-																																						// Set transaction changed
-																																						transactionChanged = true;
-																																					}
-																																					
-																																					// Check if spent transaction's confirmed timestamp needs to be updated
-																																					if(spentTransaction.getConfirmedTimestamp() !== Transaction.NO_CONFIRMED_TIMESTAMP) {
-																																					
-																																						// Set spent transaction's confirmed timestamp
-																																						spentTransaction.setConfirmedTimestamp(Transaction.NO_CONFIRMED_TIMESTAMP);
-																																						
-																																						// Set transaction changed
-																																						transactionChanged = true;
-																																					}
-																																			
-																																					// Check if transaction changed
-																																					if(transactionChanged === true) {
-																																					
-																																						// Append spent transaction to list of updated transactions
-																																						updatedTransactions.push(spentTransaction);
-																																					}
-																																					
-																																					// Resolve
-																																					resolve();
-																																				}
+																																					// Reject error
+																																					reject(error);
+																																				});
 																																			
 																																			// Catch errors
 																																			}).catch(function(error) {
@@ -7175,198 +7259,481 @@ class Wallets {
 																																				// Reject error
 																																				reject(error);
 																																			});
+																																		}
 																																		
-																																		// Catch errors
-																																		}).catch(function(error) {
+																																		// Otherwise check if spent transaction is being changed to locked
+																																		else if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].indexOf(spentTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
 																																		
-																																			// Reject error
-																																			reject(error);
-																																		});
-																																	}
-																																	
-																																	// Otherwise check if spent transaction is being changed to locked
-																																	else if(spentOutputs[Wallets.SPENT_OUTPUTS_CHANGE_TO_LOCKED_INDEX].indexOf(spentTransaction.getKeyPath()) !== Common.INDEX_NOT_FOUND) {
-																																	
-																																		// Check spent transaction's status
-																																		switch(spentTransaction.getStatus()) {
-																																	
-																																			// Spent
-																																			case Transaction.STATUS_SPENT:
-																																			
-																																				// Subtract spent transaction's amount from spent amount change
-																																				spentAmountChange = spentAmountChange.minus(spentTransaction.getAmount());
+																																			// Check spent transaction's status
+																																			switch(spentTransaction.getStatus()) {
+																																		
+																																				// Spent
+																																				case Transaction.STATUS_SPENT:
 																																				
-																																				// Add spent transaction's amount to locked amount change
-																																				lockedAmountChange = lockedAmountChange.plus(spentTransaction.getAmount());
+																																					// Subtract spent transaction's amount from spent amount change
+																																					spentAmountChange = spentAmountChange.minus(spentTransaction.getAmount());
+																																					
+																																					// Add spent transaction's amount to locked amount change
+																																					lockedAmountChange = lockedAmountChange.plus(spentTransaction.getAmount());
+																																					
+																																					// Break
+																																					break;
 																																				
-																																				// Break
-																																				break;
-																																			
-																																			// Unconfirmed
-																																			case Transaction.STATUS_UNCONFIRMED:
-																																			
-																																				// Check if spent transaction is expired
-																																				if(spentTransaction.getExpired() === true) {
+																																				// Unconfirmed
+																																				case Transaction.STATUS_UNCONFIRMED:
 																																				
-																																					// Check if spent transaction isn't change output
-																																					if(spentTransaction.getDisplay() === true) {
-																																				
-																																						// Subtract spent transaction's amount from expired amount change
-																																						expiredAmountChange = expiredAmountChange.minus(spentTransaction.getAmount());
+																																					// Check if spent transaction is expired
+																																					if(spentTransaction.getExpired() === true) {
+																																					
+																																						// Check if spent transaction isn't change output
+																																						if(spentTransaction.getDisplay() === true) {
+																																					
+																																							// Subtract spent transaction's amount from expired amount change
+																																							expiredAmountChange = expiredAmountChange.minus(spentTransaction.getAmount());
+																																						}
 																																					}
-																																				}
+																																					
+																																					// Otherwise
+																																					else {
 																																				
-																																				// Otherwise
-																																				else {
+																																						// Subtract spent transaction's amount from unconfirmed amount change
+																																						unconfirmedAmountChange = unconfirmedAmountChange.minus(spentTransaction.getAmount());
+																																					}
+																																					
+																																					// Add spent transaction's amount to locked amount change
+																																					lockedAmountChange = lockedAmountChange.plus(spentTransaction.getAmount());
+																																					
+																																					// Break
+																																					break;
+																																				
+																																				// Unspent
+																																				case Transaction.STATUS_UNSPENT:
+																																				
+																																					// Check if spent transaction's amount has been released
+																																					if(spentTransaction.getAmountReleased() === true) {
+																																				
+																																						// Subtract spent transaction's amount from unspent amount change
+																																						unspentAmountChange = unspentAmountChange.minus(spentTransaction.getAmount());
+																																					}
+																																					
+																																					// Otherwis
+																																					else {
+																																				
+																																						// Subtract spent transaction's amount from pending amount change
+																																						pendingAmountChange = pendingAmountChange.minus(spentTransaction.getAmount());
+																																					}
+																																					
+																																					// Add spent transaction's amount to locked amount change
+																																					lockedAmountChange = lockedAmountChange.plus(spentTransaction.getAmount());
+																																					
+																																					// Break
+																																					break;
+																																			}
 																																			
-																																					// Subtract spent transaction's amount from unconfirmed amount change
-																																					unconfirmedAmountChange = unconfirmedAmountChange.minus(spentTransaction.getAmount());
-																																				}
-																																				
-																																				// Add spent transaction's amount to locked amount change
-																																				lockedAmountChange = lockedAmountChange.plus(spentTransaction.getAmount());
-																																				
-																																				// Break
-																																				break;
+																																			// Check if spent transaction's amount released needs to be updated
+																																			if(spentTransaction.getAmountReleased() === false) {
 																																			
-																																			// Unspent
-																																			case Transaction.STATUS_UNSPENT:
+																																				// Set spent transaction's amount has been released
+																																				spentTransaction.setAmountReleased(true);
 																																			
-																																				// Check if spent transaction's amount has been released
-																																				if(spentTransaction.getAmountReleased() === true) {
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
 																																			
-																																					// Subtract spent transaction's amount from unspent amount change
-																																					unspentAmountChange = unspentAmountChange.minus(spentTransaction.getAmount());
-																																				}
-																																				
-																																				// Otherwis
-																																				else {
+																																			// Check if spent transaction's expired needs to be updated
+																																			if(spentTransaction.getExpired() === true) {
 																																			
-																																					// Subtract spent transaction's amount from pending amount change
-																																					pendingAmountChange = pendingAmountChange.minus(spentTransaction.getAmount());
-																																				}
+																																				// Set spent transaction's expired
+																																				spentTransaction.setExpired(false);
 																																				
-																																				// Add spent transaction's amount to locked amount change
-																																				lockedAmountChange = lockedAmountChange.plus(spentTransaction.getAmount());
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if spent transaction's broadcast needs to be updated
+																																			if(spentTransaction.getBroadcast() === false) {
+																																			
+																																				// Set spent transaction's broadcast
+																																				spentTransaction.setBroadcast(true);
 																																				
-																																				// Break
-																																				break;
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if spent transaction's status needs to be updated
+																																			if(spentTransaction.getStatus() !== Transaction.STATUS_LOCKED) {
+																																			
+																																				// Set spent transaction's status to locked
+																																				spentTransaction.setStatus(Transaction.STATUS_LOCKED);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if spent transaction's checked needs to be updated
+																																			if(spentTransaction.getChecked() === false) {
+																																			
+																																				// Set spent transaction's checked
+																																				spentTransaction.setChecked(true);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
+																																			
+																																			// Check if transaction changed
+																																			if(transactionChanged === true) {
+																																			
+																																				// Append spent transaction to list of updated transactions
+																																				updatedTransactions.push(spentTransaction);
+																																			}
+																																			
+																																			// Resolve
+																																			resolve();
 																																		}
 																																		
-																																		// Check if spent transaction's amount released needs to be updated
-																																		if(spentTransaction.getAmountReleased() === false) {
+																																		// Otherwise
+																																		else {
 																																		
-																																			// Set spent transaction's amount has been released
-																																			spentTransaction.setAmountReleased(true);
-																																		
-																																			// Set transaction changed
-																																			transactionChanged = true;
-																																		}
-																																		
-																																		// Check if spent transaction's expired needs to be updated
-																																		if(spentTransaction.getExpired() === true) {
-																																		
-																																			// Set spent transaction's expired
-																																			spentTransaction.setExpired(false);
+																																			// Check if spent transaction's checked needs to be updated
+																																			if(spentTransaction.getChecked() === false) {
 																																			
-																																			// Set transaction changed
-																																			transactionChanged = true;
-																																		}
-																																		
-																																		// Check if spent transaction's broadcast needs to be updated
-																																		if(spentTransaction.getBroadcast() === false) {
-																																		
-																																			// Set spent transaction's broadcast
-																																			spentTransaction.setBroadcast(true);
+																																				// Set spent transaction's checked
+																																				spentTransaction.setChecked(true);
+																																				
+																																				// Set transaction changed
+																																				transactionChanged = true;
+																																			}
 																																			
-																																			// Set transaction changed
-																																			transactionChanged = true;
-																																		}
-																																		
-																																		// Check if spent transaction's status needs to be updated
-																																		if(spentTransaction.getStatus() !== Transaction.STATUS_LOCKED) {
-																																		
-																																			// Set spent transaction's status to locked
-																																			spentTransaction.setStatus(Transaction.STATUS_LOCKED);
+																																			// Check if transaction changed
+																																			if(transactionChanged === true) {
 																																			
-																																			// Set transaction changed
-																																			transactionChanged = true;
+																																				// Append spent transaction to list of updated transactions
+																																				updatedTransactions.push(spentTransaction);
+																																			}
+																																			
+																																			// Resolve
+																																			resolve();
 																																		}
-																																		
-																																		// Check if transaction changed
-																																		if(transactionChanged === true) {
-																																		
-																																			// Append spent transaction to list of updated transactions
-																																			updatedTransactions.push(spentTransaction);
-																																		}
-																																		
-																																		// Resolve
-																																		resolve();
-																																	}
-																																}));
-																															}
-																															
-																															// Return verifying spent transactions
-																															return Promise.all(verifyingSpentTransactions).then(function() {
-																															
-																																// Initialize verifying pending transactions
-																																var verifyingPendingTransactions = [];
+																																	}));
+																																}
 																																
-																																// Go through all groups of pending transactions
-																																for(let k = 0; k < pendingTransactions["length"]; k += Wallets.VERIFYING_OUTPUTS_GROUP_SIZE) {
+																																// Return verifying spent transactions
+																																return Promise.all(verifyingSpentTransactions).then(function() {
 																																
-																																	// Append verifying group of pending transactions to list
-																																	verifyingPendingTransactions.push(new Promise(function(resolve, reject) {
-																																			
-																																		// Return getting node's outputs for the group of pending transaction
-																																		return self.node.getOutputs(pendingTransactions.slice(k, k + Wallets.VERIFYING_OUTPUTS_GROUP_SIZE).map(function(pendingTransaction) {
+																																	// Initialize verifying pending transactions
+																																	var verifyingPendingTransactions = [];
 																																	
-																																			// Return pending transaction's commit
-																																			return pendingTransaction.getCommit();
-																																		
-																																		})).then(function(outputs) {
-																																		
-																																			// Initialize verifying pending transactions
-																																			var verifyingPendingTransactions = [];
-																																		
-																																			// Go through all outputs
-																																			for(let l = 0; l < outputs["length"]; ++l) {
-																																			
-																																				// Append verifying pending transaction to list
-																																				verifyingPendingTransactions.push(new Promise(function(resolve, reject) {
+																																	// Go through all groups of pending transactions
+																																	for(let k = 0; k < pendingTransactions["length"]; k += Wallets.VERIFYING_OUTPUTS_GROUP_SIZE) {
+																																	
+																																		// Append verifying group of pending transactions to list
+																																		verifyingPendingTransactions.push(new Promise(function(resolve, reject) {
 																																				
-																																					// Get output
-																																					var output = outputs[l];
+																																			// Return getting node's outputs for the group of pending transaction
+																																			return self.node.getOutputs(pendingTransactions.slice(k, k + Wallets.VERIFYING_OUTPUTS_GROUP_SIZE).map(function(pendingTransaction) {
+																																		
+																																				// Return pending transaction's commit
+																																				return pendingTransaction.getCommit();
+																																			
+																																			})).then(function(outputs) {
+																																			
+																																				// Initialize verifying pending transactions
+																																				var verifyingPendingTransactions = [];
+																																			
+																																				// Go through all outputs
+																																				for(let l = 0; l < outputs["length"]; ++l) {
+																																				
+																																					// Append verifying pending transaction to list
+																																					verifyingPendingTransactions.push(new Promise(function(resolve, reject) {
 																																					
-																																					// Get pending transaction
-																																					var pendingTransaction = pendingTransactions[k + l];
-																																					
-																																					// Get wallet owns output
-																																					var getWalletOwnsOutput = function() {
-																																					
-																																						// Return promise
-																																						return new Promise(function(resolve, reject) {
+																																						// Get output
+																																						var output = outputs[l];
 																																						
-																																							// Check if output was found
-																																							if(output !== Node.NO_OUTPUT_FOUND) {
+																																						// Get pending transaction
+																																						var pendingTransaction = pendingTransactions[k + l];
+																																						
+																																						// Get wallet owns output
+																																						var getWalletOwnsOutput = function() {
+																																						
+																																							// Return promise
+																																							return new Promise(function(resolve, reject) {
 																																							
-																																								// Return getting if wallet owns output
-																																								return wallet.ownsOutput(new Output(output["commit"], output["proof"], output["output_type"], output["block_height"])).then(function(outputInformation) {
+																																								// Check if output was found
+																																								if(output !== Node.NO_OUTPUT_FOUND) {
 																																								
-																																									// Check if output information exists
-																																									if(outputInformation !== Output.NO_INFORMATION) {
+																																									// Return getting if wallet owns output
+																																									return wallet.ownsOutput(new Output(output["commit"], output["proof"], output["output_type"], output["block_height"])).then(function(outputInformation) {
 																																									
-																																										// Resolve true
-																																										resolve(true);
+																																										// Check if output information exists
+																																										if(outputInformation !== Output.NO_INFORMATION) {
+																																										
+																																											// Resolve true
+																																											resolve(true);
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Resolve false
+																																											resolve(false);
+																																										}
+																																									
+																																									// Catch errors
+																																									}).catch(function(error) {
+																																									
+																																										// Reject error
+																																										reject(error);
+																																									});
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Resolve false
+																																									resolve(false);
+																																								}
+																																							});
+																																						};
+																																						
+																																						// Return getting if the wallet owns the output
+																																						return getWalletOwnsOutput().then(function(walletOwnsOutput) {
+																																					
+																																							// Set transaction changed
+																																							var transactionChanged = false;
+																																						
+																																							// Check if wallet owns output
+																																							if(walletOwnsOutput === true) {
+																																							
+																																								// Check if pending transaction's is coinbase needs to be updated
+																																								if(pendingTransaction.getIsCoinbase() !== (output["output_type"] === Output.COINBASE_TYPE)) {
+																																								
+																																									// Set pending transaction's is coinbase
+																																									pendingTransaction.setIsCoinbase(output["output_type"] === Output.COINBASE_TYPE);
+																																									
+																																									// Set transaction changed
+																																									transactionChanged = true;
+																																								}
+																																								
+																																								// Check if pending transaction's height needs to be updated
+																																								if(pendingTransaction.getHeight() === Transaction.UNKNOWN_HEIGHT || pendingTransaction.getHeight().isEqualTo(output["block_height"]) === false) {
+																																								
+																																									// Set pending transaction's height
+																																									pendingTransaction.setHeight(output["block_height"]);
+																																									
+																																									// Set transaction changed
+																																									transactionChanged = true;
+																																								}
+																																								
+																																								// Check if pending transaction's broadcast needs to be updated
+																																								if(pendingTransaction.getBroadcast() === false) {
+																																								
+																																									// Set pending transaction's broadcast
+																																									pendingTransaction.setBroadcast(true);
+																																									
+																																									// Set transaction changed
+																																									transactionChanged = true;
+																																								}
+																																								
+																																								// Get new spendable height as the output height added to the pending transaction's number of confirmations
+																																								var newSpendableHeight = output["block_height"].plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1));
+																																								
+																																								// Check if maturity height is greater than the new spendable height
+																																								if(output["block_height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0).isGreaterThan(newSpendableHeight) === true) {
+																																								
+																																									// Set the new spendable height to the maturity height
+																																									newSpendableHeight = output["block_height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0);
+																																								}
+																																								
+																																								// Check if pending transaction's lock height exists and if it added to the number of confirmation is greater than the new spendable height
+																																								if(pendingTransaction.getLockHeight() !== Transaction.UNKNOWN_LOCK_HEIGHT && pendingTransaction.getLockHeight() !== Transaction.NO_LOCK_HEIGHT && pendingTransaction.getLockHeight().plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1)).isGreaterThan(newSpendableHeight) === true) {
+																																								
+																																									// Set the new spendable height to the pending transaction's lock height added to the number of confirmation
+																																									newSpendableHeight = pendingTransaction.getLockHeight().plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1));
+																																								}
+																																								
+																																								// Check pending transaction's status
+																																								switch(pendingTransaction.getStatus()) {
+																																								
+																																									// Spent
+																																									case Transaction.STATUS_SPENT:
+																																									
+																																										// Revert pending transaction's status to locked since transaction wasn't completed yet
+																																										pendingTransaction.setStatus(Transaction.STATUS_LOCKED);
+																																										
+																																										// Add pending transaction's amount to locked amount change
+																																										lockedAmountChange = lockedAmountChange.plus(pendingTransaction.getAmount());
+																																										
+																																										// Subtract pending transaction's amount from spent amount change
+																																										spentAmountChange = spentAmountChange.minus(pendingTransaction.getAmount());
+																																										
+																																										// Set transaction changed
+																																										transactionChanged = true;
+																																									
+																																										// Break
+																																										break;
+																																									
+																																									// Unconfirmed
+																																									case Transaction.STATUS_UNCONFIRMED:
+																																									
+																																										// Update pending transaction's status to unspent since transaction is confirmed on the chain
+																																										pendingTransaction.setStatus(Transaction.STATUS_UNSPENT);
+																																										
+																																										// Check if the pending transaction's new spendable height is the next block
+																																										if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
+																																										
+																																											// Check if the pending transaction's amount hasn't been released
+																																											if(pendingTransaction.getAmountReleased() === false) {
+																																											
+																																												// Set pending transaction amount has been released
+																																												pendingTransaction.setAmountReleased(true);
+																																												
+																																												// Add pending transaction's amount to unspent amount change
+																																												unspentAmountChange = unspentAmountChange.plus(pendingTransaction.getAmount());
+																																											}
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Add pending transaction's amount to pending amount change
+																																											pendingAmountChange = pendingAmountChange.plus(pendingTransaction.getAmount());
+																																										
+																																											// Check if the pending transaction's amount has been released
+																																											if(pendingTransaction.getAmountReleased() === true) {
+																																										
+																																												// Set pending transaction amount hasn't been released
+																																												pendingTransaction.setAmountReleased(false);
+																																												
+																																												// Subtract pending transaction's amount from unspent amount change
+																																												unspentAmountChange = unspentAmountChange.minus(pendingTransaction.getAmount());
+																																											}
+																																										}
+																																										
+																																										// Check if pending transaction isn't canceled and expired
+																																										if(pendingTransaction.getCanceled() === false && pendingTransaction.getExpired() === false) {
+																																										
+																																											// Subtract pending transaction's amount from unconfirmed amount change
+																																											unconfirmedAmountChange = unconfirmedAmountChange.minus(pendingTransaction.getAmount());
+																																										}
+																																										
+																																										// Set transaction changed
+																																										transactionChanged = true;
+																																									
+																																										// Break
+																																										break;
+																																									
+																																									// Unspent
+																																									case Transaction.STATUS_UNSPENT:
+																																									
+																																										// Check if pending transaction's amount hasn't been released and the pending transaction's new spendable height is the next block
+																																										if(pendingTransaction.getAmountReleased() === false && newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
+																																										
+																																											// Set pending transaction amount has been released
+																																											pendingTransaction.setAmountReleased(true);
+																																											
+																																											// Add pending transaction's amount to unspent amount change
+																																											unspentAmountChange = unspentAmountChange.plus(pendingTransaction.getAmount());
+																																											
+																																											// Subtract pending transaction's amount from pending amount change
+																																											pendingAmountChange = pendingAmountChange.minus(pendingTransaction.getAmount());
+																																											
+																																											// Set transaction changed
+																																											transactionChanged = true;
+																																										}
+																																										
+																																										// Otherwise check if pending transaction's amount has been released and the pending transaction's new spendable height isn't the next block
+																																										else if(pendingTransaction.getAmountReleased() === true && newSpendableHeight.isGreaterThan(tipHeight.getHeight().plus(1)) === true) {
+																																										
+																																											// Set pending transaction amount hasn't been released
+																																											pendingTransaction.setAmountReleased(false);
+																																											
+																																											// Subtract pending transaction's amount from unspent amount change
+																																											unspentAmountChange = unspentAmountChange.minus(pendingTransaction.getAmount());
+																																											
+																																											// Add pending transaction's amount to pending amount change
+																																											pendingAmountChange = pendingAmountChange.plus(pendingTransaction.getAmount());
+																																											
+																																											// Set transaction changed
+																																											transactionChanged = true;
+																																										}
+																																									
+																																										// Break
+																																										break;
+																																								}
+																																								
+																																								// Check if pending transaction's spendable height needs to be updated
+																																								if(pendingTransaction.getSpendableHeight() === Transaction.UNKNOWN_SPENDABLE_HEIGHT || pendingTransaction.getSpendableHeight().isEqualTo(newSpendableHeight) === false) {
+																																								
+																																									// Set pending transaction's spendable height
+																																									pendingTransaction.setSpendableHeight(newSpendableHeight);
+																																									
+																																									// Set transaction changed
+																																									transactionChanged = true;
+																																								}
+																																								
+																																								// Check if pending transaction's canceled needs to be updated
+																																								if(pendingTransaction.getCanceled() === true) {
+																																								
+																																									// Set pending transaction's canceled
+																																									pendingTransaction.setCanceled(false);
+																																									
+																																									// Set transaction changed
+																																									transactionChanged = true;
+																																								}
+																																								
+																																								// Check if pending transaction's expired needs to be updated
+																																								if(pendingTransaction.getExpired() === true) {
+																																								
+																																									// Set pending transaction's expired
+																																									pendingTransaction.setExpired(false);
+																																									
+																																									// Check if pending transaction isn't change output
+																																									if(pendingTransaction.getDisplay() === true) {
+																																									
+																																										// Subtract pending transaction's amount from expired amount change
+																																										expiredAmountChange = expiredAmountChange.minus(pendingTransaction.getAmount());
 																																									}
 																																									
-																																									// Otherwise
-																																									else {
-																																									
-																																										// Resolve false
-																																										resolve(false);
-																																									}
+																																									// Set transaction changed
+																																									transactionChanged = true;
+																																								}
 																																								
+																																								// Check if pending transaction's checked needs to be updated
+																																								if(pendingTransaction.getChecked() === false) {
+																																								
+																																									// Set pending transaction's checked
+																																									pendingTransaction.setChecked(true);
+																																									
+																																									// Set transaction changed
+																																									transactionChanged = true;
+																																								}
+																																								
+																																								// Return getting header at output's height
+																																								return self.node.getHeader(output["block_height"]).then(function(header) {
+																																								
+																																									// Get timestamp
+																																									var timestamp = header["timestamp"];
+																																									
+																																									// Check if pending transaction's confirmed timestamp needs to be updated
+																																									if(pendingTransaction.getConfirmedTimestamp() !== timestamp) {
+																																									
+																																										// Set pending transaction's confirmed timestamp
+																																										pendingTransaction.setConfirmedTimestamp(timestamp);
+																																										
+																																										// Set transaction changed
+																																										transactionChanged = true;
+																																									}
+																																							
+																																									// Check if transaction changed
+																																									if(transactionChanged === true) {
+																																									
+																																										// Append pending transaction to list of updated transactions
+																																										updatedTransactions.push(pendingTransaction);
+																																									}
+																																									
+																																									// Resolve
+																																									resolve();
+																																									
 																																								// Catch errors
 																																								}).catch(function(error) {
 																																								
@@ -7377,482 +7744,48 @@ class Wallets {
 																																							
 																																							// Otherwise
 																																							else {
-																																							
-																																								// Resolve false
-																																								resolve(false);
-																																							}
-																																						});
-																																					};
-																																					
-																																					// Return getting if the wallet owns the output
-																																					return getWalletOwnsOutput().then(function(walletOwnsOutput) {
-																																				
-																																						// Set transaction changed
-																																						var transactionChanged = false;
-																																					
-																																						// Check if wallet owns output
-																																						if(walletOwnsOutput === true) {
-																																						
-																																							// Check if pending transaction's is coinbase needs to be updated
-																																							if(pendingTransaction.getIsCoinbase() !== (output["output_type"] === Output.COINBASE_TYPE)) {
-																																							
-																																								// Set pending transaction's is coinbase
-																																								pendingTransaction.setIsCoinbase(output["output_type"] === Output.COINBASE_TYPE);
 																																								
-																																								// Set transaction changed
-																																								transactionChanged = true;
-																																							}
-																																							
-																																							// Check if pending transaction's height needs to be updated
-																																							if(pendingTransaction.getHeight() === Transaction.UNKNOWN_HEIGHT || pendingTransaction.getHeight().isEqualTo(output["block_height"]) === false) {
-																																							
-																																								// Set pending transaction's height
-																																								pendingTransaction.setHeight(output["block_height"]);
+																																								// Check pending transaction's status
+																																								switch(pendingTransaction.getStatus()) {
 																																								
-																																								// Set transaction changed
-																																								transactionChanged = true;
-																																							}
-																																							
-																																							// Check if pending transaction's broadcast needs to be updated
-																																							if(pendingTransaction.getBroadcast() === false) {
-																																							
-																																								// Set pending transaction's broadcast
-																																								pendingTransaction.setBroadcast(true);
-																																								
-																																								// Set transaction changed
-																																								transactionChanged = true;
-																																							}
-																																							
-																																							// Get new spendable height as the output height added to the pending transaction's number of confirmations
-																																							var newSpendableHeight = output["block_height"].plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1));
-																																							
-																																							// Check if maturity height is greater than the new spendable height
-																																							if(output["block_height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0).isGreaterThan(newSpendableHeight) === true) {
-																																							
-																																								// Set the new spendable height to the maturity height
-																																								newSpendableHeight = output["block_height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0);
-																																							}
-																																							
-																																							// Check if pending transaction's lock height exists and if it added to the number of confirmation is greater than the new spendable height
-																																							if(pendingTransaction.getLockHeight() !== Transaction.UNKNOWN_LOCK_HEIGHT && pendingTransaction.getLockHeight() !== Transaction.NO_LOCK_HEIGHT && pendingTransaction.getLockHeight().plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1)).isGreaterThan(newSpendableHeight) === true) {
-																																							
-																																								// Set the new spendable height to the pending transaction's lock height added to the number of confirmation
-																																								newSpendableHeight = pendingTransaction.getLockHeight().plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1));
-																																							}
-																																							
-																																							// Check pending transaction's status
-																																							switch(pendingTransaction.getStatus()) {
-																																							
-																																								// Spent
-																																								case Transaction.STATUS_SPENT:
-																																								
-																																									// Revert pending transaction's status to locked since transaction wasn't completed yet
-																																									pendingTransaction.setStatus(Transaction.STATUS_LOCKED);
+																																									// Spent
+																																									case Transaction.STATUS_SPENT:
 																																									
-																																									// Add pending transaction's amount to locked amount change
-																																									lockedAmountChange = lockedAmountChange.plus(pendingTransaction.getAmount());
-																																									
-																																									// Subtract pending transaction's amount from spent amount change
-																																									spentAmountChange = spentAmountChange.minus(pendingTransaction.getAmount());
-																																									
-																																									// Set transaction changed
-																																									transactionChanged = true;
-																																								
-																																									// Break
-																																									break;
-																																								
-																																								// Unconfirmed
-																																								case Transaction.STATUS_UNCONFIRMED:
-																																								
-																																									// Update pending transaction's status to unspent since transaction is confirmed on the chain
-																																									pendingTransaction.setStatus(Transaction.STATUS_UNSPENT);
-																																									
-																																									// Check if the pending transaction's new spendable height is the next block
-																																									if(newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
-																																									
-																																										// Check if the pending transaction's amount hasn't been released
-																																										if(pendingTransaction.getAmountReleased() === false) {
+																																										// Check if pending transaction's checked needs to be updated
+																																										if(pendingTransaction.getChecked() === false) {
 																																										
-																																											// Set pending transaction amount has been released
-																																											pendingTransaction.setAmountReleased(true);
+																																											// Set pending transaction's checked
+																																											pendingTransaction.setChecked(true);
 																																											
-																																											// Add pending transaction's amount to unspent amount change
-																																											unspentAmountChange = unspentAmountChange.plus(pendingTransaction.getAmount());
-																																										}
-																																									}
-																																									
-																																									// Otherwise
-																																									else {
-																																									
-																																										// Add pending transaction's amount to pending amount change
-																																										pendingAmountChange = pendingAmountChange.plus(pendingTransaction.getAmount());
-																																									
-																																										// Check if the pending transaction's amount has been released
-																																										if(pendingTransaction.getAmountReleased() === true) {
-																																									
-																																											// Set pending transaction amount hasn't been released
-																																											pendingTransaction.setAmountReleased(false);
-																																											
-																																											// Subtract pending transaction's amount from unspent amount change
-																																											unspentAmountChange = unspentAmountChange.minus(pendingTransaction.getAmount());
-																																										}
-																																									}
-																																									
-																																									// Check if pending transaction isn't canceled and expired
-																																									if(pendingTransaction.getCanceled() === false && pendingTransaction.getExpired() === false) {
-																																									
-																																										// Subtract pending transaction's amount from unconfirmed amount change
-																																										unconfirmedAmountChange = unconfirmedAmountChange.minus(pendingTransaction.getAmount());
-																																									}
-																																									
-																																									// Set transaction changed
-																																									transactionChanged = true;
-																																								
-																																									// Break
-																																									break;
-																																								
-																																								// Unspent
-																																								case Transaction.STATUS_UNSPENT:
-																																								
-																																									// Check if pending transaction's amount hasn't been released and the pending transaction's new spendable height is the next block
-																																									if(pendingTransaction.getAmountReleased() === false && newSpendableHeight.isLessThanOrEqualTo(tipHeight.getHeight().plus(1)) === true) {
-																																									
-																																										// Set pending transaction amount has been released
-																																										pendingTransaction.setAmountReleased(true);
-																																										
-																																										// Add pending transaction's amount to unspent amount change
-																																										unspentAmountChange = unspentAmountChange.plus(pendingTransaction.getAmount());
-																																										
-																																										// Subtract pending transaction's amount from pending amount change
-																																										pendingAmountChange = pendingAmountChange.minus(pendingTransaction.getAmount());
-																																										
-																																										// Set transaction changed
-																																										transactionChanged = true;
-																																									}
-																																									
-																																									// Otherwise check if pending transaction's amount has been released and the pending transaction's new spendable height isn't the next block
-																																									else if(pendingTransaction.getAmountReleased() === true && newSpendableHeight.isGreaterThan(tipHeight.getHeight().plus(1)) === true) {
-																																									
-																																										// Set pending transaction amount hasn't been released
-																																										pendingTransaction.setAmountReleased(false);
-																																										
-																																										// Subtract pending transaction's amount from unspent amount change
-																																										unspentAmountChange = unspentAmountChange.minus(pendingTransaction.getAmount());
-																																										
-																																										// Add pending transaction's amount to pending amount change
-																																										pendingAmountChange = pendingAmountChange.plus(pendingTransaction.getAmount());
-																																										
-																																										// Set transaction changed
-																																										transactionChanged = true;
-																																									}
-																																								
-																																									// Break
-																																									break;
-																																							}
-																																							
-																																							// Check if pending transaction's spendable height needs to be updated
-																																							if(pendingTransaction.getSpendableHeight() === Transaction.UNKNOWN_SPENDABLE_HEIGHT || pendingTransaction.getSpendableHeight().isEqualTo(newSpendableHeight) === false) {
-																																							
-																																								// Set pending transaction's spendable height
-																																								pendingTransaction.setSpendableHeight(newSpendableHeight);
-																																								
-																																								// Set transaction changed
-																																								transactionChanged = true;
-																																							}
-																																							
-																																							// Check if pending transaction's canceled needs to be updated
-																																							if(pendingTransaction.getCanceled() === true) {
-																																							
-																																								// Set pending transaction's canceled
-																																								pendingTransaction.setCanceled(false);
-																																								
-																																								// Set transaction changed
-																																								transactionChanged = true;
-																																							}
-																																							
-																																							// Check if pending transaction's expired needs to be updated
-																																							if(pendingTransaction.getExpired() === true) {
-																																							
-																																								// Set pending transaction's expired
-																																								pendingTransaction.setExpired(false);
-																																								
-																																								// Check if pending transaction isn't change output
-																																								if(pendingTransaction.getDisplay() === true) {
-																																								
-																																									// Subtract pending transaction's amount from expired amount change
-																																									expiredAmountChange = expiredAmountChange.minus(pendingTransaction.getAmount());
-																																								}
-																																								
-																																								// Set transaction changed
-																																								transactionChanged = true;
-																																							}
-																																							
-																																							// Return getting header at output's height
-																																							return self.node.getHeader(output["block_height"]).then(function(header) {
-																																							
-																																								// Get timestamp
-																																								var timestamp = header["timestamp"];
-																																								
-																																								// Check if pending transaction's confirmed timestamp needs to be updated
-																																								if(pendingTransaction.getConfirmedTimestamp() !== timestamp) {
-																																								
-																																									// Set pending transaction's confirmed timestamp
-																																									pendingTransaction.setConfirmedTimestamp(timestamp);
-																																									
-																																									// Set transaction changed
-																																									transactionChanged = true;
-																																								}
-																																						
-																																								// Check if transaction changed
-																																								if(transactionChanged === true) {
-																																								
-																																									// Append pending transaction to list of updated transactions
-																																									updatedTransactions.push(pendingTransaction);
-																																								}
-																																								
-																																								// Resolve
-																																								resolve();
-																																								
-																																							// Catch errors
-																																							}).catch(function(error) {
-																																							
-																																								// Reject error
-																																								reject(error);
-																																							});
-																																						}
-																																						
-																																						// Otherwise
-																																						else {
-																																							
-																																							// Check pending transaction's status
-																																							switch(pendingTransaction.getStatus()) {
-																																							
-																																								// Spent
-																																								case Transaction.STATUS_SPENT:
-																																								
-																																									// Check if pending transaction's height is known
-																																									if(pendingTransaction.getHeight() !== Transaction.UNKNOWN_HEIGHT) {
-																																								
-																																										// Return getting header at pending transaction's height
-																																										return self.node.getHeader(pendingTransaction.getHeight()).then(function(header) {
-																																										
-																																											// Get timestamp
-																																											var timestamp = header["timestamp"];
-																																											
-																																											// Check if pending transaction's confirmed timestamp needs to be updated
-																																											if(pendingTransaction.getConfirmedTimestamp() !== timestamp) {
-																																											
-																																												// Set pending transaction's confirmed timestamp
-																																												pendingTransaction.setConfirmedTimestamp(timestamp);
-																																												
-																																												// Set transaction changed
-																																												transactionChanged = true;
-																																											}
-																																									
-																																											// Check if transaction changed
-																																											if(transactionChanged === true) {
-																																											
-																																												// Append pending transaction to list of updated transactions
-																																												updatedTransactions.push(pendingTransaction);
-																																											}
-																																											
-																																											// Resolve
-																																											resolve();
-																																											
-																																										// Catch errors
-																																										}).catch(function(error) {
-																																										
-																																											// Reject error
-																																											reject(error);
-																																										});
-																																									}
-																																									
-																																									// Otherwise
-																																									else {
-																																									
-																																										// Resolve
-																																										resolve();
-																																									}
-																																								
-																																									// Break
-																																									break;
-																																								
-																																								// Unconfirmed
-																																								case Transaction.STATUS_UNCONFIRMED:
-																																								
-																																									// Check if pending transaction isn't already expired and its time to live cut off height has past
-																																									if(pendingTransaction.getExpired() === false && pendingTransaction.getBroadcast() === false && pendingTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && pendingTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && pendingTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
-																																									
-																																										// Set that pending transaction is expired
-																																										pendingTransaction.setExpired(true);
-																																										
-																																										// Check if pending transaction isn't a change output
-																																										if(pendingTransaction.getDisplay() === true) {
-																																										
-																																											// Add pending transaction's amount to expired amount change
-																																											expiredAmountChange = expiredAmountChange.plus(pendingTransaction.getAmount());
-																																										}
-																																										
-																																										// Subtract pending transaction's amount from unconfirmed amount change
-																																										unconfirmedAmountChange = unconfirmedAmountChange.minus(pendingTransaction.getAmount());
-																																										
-																																										// Set transaction changed
-																																										transactionChanged = true;
-																																									}
-																																									
-																																									// Check if transaction changed
-																																									if(transactionChanged === true) {
-																																									
-																																										// Append pending transaction to list of updated transactions
-																																										updatedTransactions.push(pendingTransaction);
-																																									}
-																																									
-																																									// Resolve
-																																									resolve();
-																																								
-																																									// Break
-																																									break;
-																																								
-																																								// Unspent
-																																								case Transaction.STATUS_UNSPENT:
-																																								
-																																									// Set get transaction's kernel
-																																									var getTransactionsKernel = new Promise(function(resolve, reject) {
-																																									
-																																										// Check if pending transaction has a known kernel excess
-																																										if(pendingTransaction.getKernelExcess() !== Transaction.UNKNOWN_KERNEL_EXCESS) {
-																																										
-																																											// Check if pending transaction's height exists
-																																											if(pendingTransaction.getHeight() !== Transaction.UNKNOWN_HEIGHT) {
-																																											
-																																												// Set kernel minimum height
-																																												var kernelMinimumHeight = pendingTransaction.getHeight().minus(Wallets.VARIATION_FROM_PREVIOUS_BLOCK_HEIGHT);
-																																											
-																																												// Set kernel maximum height
-																																												var kernelMaximumHeight = pendingTransaction.getHeight().plus(Wallets.VARIATION_TO_NEXT_BLOCK_HEIGHT);
-																																											}
-																																											
-																																											// Otherwise
-																																											else {
-																																											
-																																												// Set kernel minimum height
-																																												var kernelMinimumHeight = startHeight.minus(Wallets.VARIATION_FROM_PREVIOUS_BLOCK_HEIGHT);
-																																											
-																																												// Set kernel maximum height
-																																												var kernelMaximumHeight = highestSyncedHeight.plus(Wallets.VARIATION_TO_NEXT_BLOCK_HEIGHT);
-																																											}
-																																											
-																																											// Check if kernel minimum height is less than the first block height
-																																											if(kernelMinimumHeight.isLessThan(Consensus.FIRST_BLOCK_HEIGHT) === true) {
-																																											
-																																												// Set kernel minimum height to the first block height
-																																												kernelMinimumHeight = new BigNumber(Consensus.FIRST_BLOCK_HEIGHT);
-																																											}
-																																											
-																																											// Check if kernel maximum height exceeds the tip height
-																																											if(kernelMaximumHeight.isGreaterThan(tipHeight.getHeight()) === true) {
-																																											
-																																												// Set kernel maximum height to the tip height
-																																												kernelMaximumHeight = tipHeight.getHeight();
-																																											}
-																																											
-																																											// Return getting pending transaction's kernel in the range around its height
-																																											return self.node.getKernel(pendingTransaction.getKernelExcess(), kernelMinimumHeight, kernelMaximumHeight).then(function(kernel) {
-																																											
-																																												// Resolve kernel
-																																												resolve(kernel);
-																																											
-																																											// Catch errors
-																																											}).catch(function(error) {
-																																											
-																																												// Reject error
-																																												reject(error);
-																																											});
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Resolve no kernel found
-																																											resolve(Node.NO_KERNEL_FOUND);
-																																										}
-																																									});
-																																									
-																																									// Return getting transaction's kernel
-																																									return getTransactionsKernel.then(function(kernel) {
-																																									
-																																										// Check if pending transaction's amount has been released
-																																										if(pendingTransaction.getAmountReleased() === true) {
-																																										
-																																											// Subtract pending transaction's amount from unspent amount change
-																																											unspentAmountChange = unspentAmountChange.minus(pendingTransaction.getAmount());
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Subtract pending transaction's amount from pending amount change
-																																											pendingAmountChange = pendingAmountChange.minus(pendingTransaction.getAmount());
+																																											// Set transaction changed
+																																											transactionChanged = true;
 																																										}
 																																									
-																																										// Check if kernel exists
-																																										if(kernel !== Node.NO_KERNEL_FOUND) {
-																																											
-																																											// Update pending transaction's status to spent since it was confirmed on the chain previously
-																																											pendingTransaction.setStatus(Transaction.STATUS_SPENT);
-																																											
-																																											// Add pending transaction's amount to spent amount change
-																																											spentAmountChange = spentAmountChange.plus(pendingTransaction.getAmount());
-																																											
-																																											// Set pending transaction amount has been released
-																																											pendingTransaction.setAmountReleased(true);
-																																											
-																																											// Set pending transaction isn't expired
-																																											pendingTransaction.setExpired(false);
-																																											
-																																											// Set pending transaction isn't canceled
-																																											pendingTransaction.setCanceled(false);
-																																											
-																																											// Set pending transaction is broadcast
-																																											pendingTransaction.setBroadcast(true);
-																																											
-																																											// Update pending transaction's height to the kernel's height
-																																											pendingTransaction.setHeight(kernel["height"]);
-																																											
-																																											// Update pending transaction's is coinbase to kernel's features
-																																											pendingTransaction.setIsCoinbase(SlateKernel.textToFeatures(Object.keys(kernel["tx_kernel"]["features"])[0]) === SlateKernel.COINBASE_FEATURES);
-																																											
-																																											// Get new spendable height as the kernel's height added to the pending transaction's number of confirmations
-																																											var newSpendableHeight = kernel["height"].plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1));
-																																											
-																																											// Check if maturity height is greater than the new spendable height
-																																											if(kernel["height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0).isGreaterThan(newSpendableHeight) === true) {
-																																											
-																																												// Set the new spendable height to the maturity height
-																																												newSpendableHeight = kernel["height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0);
-																																											}
-																																											
-																																											// Check if pending transaction's lock height exists and if it added to the number of confirmation is greater than the new spendable height
-																																											if(pendingTransaction.getLockHeight() !== Transaction.UNKNOWN_LOCK_HEIGHT && pendingTransaction.getLockHeight() !== Transaction.NO_LOCK_HEIGHT && pendingTransaction.getLockHeight().plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1)).isGreaterThan(newSpendableHeight) === true) {
-																																											
-																																												// Set the new spendable height to the pending transaction's lock height added to the number of confirmation
-																																												newSpendableHeight = pendingTransaction.getLockHeight().plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1));
-																																											}
-																																											
-																																											// Update pending transaction's spendable height
-																																											pendingTransaction.setSpendableHeight(newSpendableHeight);
-																																											
-																																											// Return getting header at kernel's height
-																																											return self.node.getHeader(kernel["height"]).then(function(header) {
+																																										// Check if pending transaction's height is known
+																																										if(pendingTransaction.getHeight() !== Transaction.UNKNOWN_HEIGHT) {
+																																									
+																																											// Return getting header at pending transaction's height
+																																											return self.node.getHeader(pendingTransaction.getHeight()).then(function(header) {
 																																											
 																																												// Get timestamp
 																																												var timestamp = header["timestamp"];
 																																												
-																																												// Set pending transaction's confirmed timestamp
-																																												pendingTransaction.setConfirmedTimestamp(timestamp);
+																																												// Check if pending transaction's confirmed timestamp needs to be updated
+																																												if(pendingTransaction.getConfirmedTimestamp() !== timestamp) {
 																																												
-																																												// Append pending transaction to list of updated transactions
-																																												updatedTransactions.push(pendingTransaction);
+																																													// Set pending transaction's confirmed timestamp
+																																													pendingTransaction.setConfirmedTimestamp(timestamp);
+																																													
+																																													// Set transaction changed
+																																													transactionChanged = true;
+																																												}
+																																										
+																																												// Check if transaction changed
+																																												if(transactionChanged === true) {
+																																												
+																																													// Append pending transaction to list of updated transactions
+																																													updatedTransactions.push(pendingTransaction);
+																																												}
 																																												
 																																												// Resolve
 																																												resolve();
@@ -7868,87 +7801,344 @@ class Wallets {
 																																										// Otherwise
 																																										else {
 																																										
-																																											// Revert pending transaction's status to unconfirmed since transaction is no longer confirmed on the chain
-																																											pendingTransaction.setStatus(Transaction.STATUS_UNCONFIRMED);
+																																											// Check if transaction changed
+																																											if(transactionChanged === true) {
 																																											
-																																											// Set pending transaction amount hasn't been released
-																																											pendingTransaction.setAmountReleased(false);
+																																												// Append pending transaction to list of updated transactions
+																																												updatedTransactions.push(pendingTransaction);
+																																											}
+																																										
+																																											// Resolve
+																																											resolve();
+																																										}
+																																									
+																																										// Break
+																																										break;
+																																									
+																																									// Unconfirmed
+																																									case Transaction.STATUS_UNCONFIRMED:
+																																									
+																																										// Check if pending transaction isn't already expired and its time to live cut off height has past
+																																										if(pendingTransaction.getExpired() === false && pendingTransaction.getBroadcast() === false && pendingTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && pendingTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && pendingTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																										
+																																											// Set that pending transaction is expired
+																																											pendingTransaction.setExpired(true);
 																																											
-																																											// Set pending transaction's confirmed timestamp to no confirmed timestamp
-																																											pendingTransaction.setConfirmedTimestamp(Transaction.NO_CONFIRMED_TIMESTAMP);
+																																											// Check if pending transaction isn't a change output
+																																											if(pendingTransaction.getDisplay() === true) {
 																																											
-																																											// Check if pending transaction's time to live cut off height has past
-																																											if(pendingTransaction.getBroadcast() === false && pendingTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && pendingTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && pendingTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																												// Add pending transaction's amount to expired amount change
+																																												expiredAmountChange = expiredAmountChange.plus(pendingTransaction.getAmount());
+																																											}
 																																											
-																																												// Set that pending transaction is expired
-																																												pendingTransaction.setExpired(true);
+																																											// Subtract pending transaction's amount from unconfirmed amount change
+																																											unconfirmedAmountChange = unconfirmedAmountChange.minus(pendingTransaction.getAmount());
+																																											
+																																											// Set transaction changed
+																																											transactionChanged = true;
+																																										}
+																																										
+																																										// Check if pending transaction's checked needs to be updated
+																																										if(pendingTransaction.getChecked() === false) {
+																																										
+																																											// Set pending transaction's checked
+																																											pendingTransaction.setChecked(true);
+																																											
+																																											// Set transaction changed
+																																											transactionChanged = true;
+																																										}
+																																										
+																																										// Check if transaction changed
+																																										if(transactionChanged === true) {
+																																										
+																																											// Append pending transaction to list of updated transactions
+																																											updatedTransactions.push(pendingTransaction);
+																																										}
+																																										
+																																										// Resolve
+																																										resolve();
+																																									
+																																										// Break
+																																										break;
+																																									
+																																									// Unspent
+																																									case Transaction.STATUS_UNSPENT:
+																																									
+																																										// Set get transaction's kernel
+																																										var getTransactionsKernel = new Promise(function(resolve, reject) {
+																																										
+																																											// Check if pending transaction has a known kernel excess
+																																											if(pendingTransaction.getKernelExcess() !== Transaction.UNKNOWN_KERNEL_EXCESS) {
+																																											
+																																												// Check if pending transaction's height exists
+																																												if(pendingTransaction.getHeight() !== Transaction.UNKNOWN_HEIGHT) {
 																																												
-																																												// Check if pending transaction isn't change output
-																																												if(pendingTransaction.getDisplay() === true) {
+																																													// Set kernel minimum height
+																																													var kernelMinimumHeight = pendingTransaction.getHeight().minus(Wallets.VARIATION_FROM_PREVIOUS_BLOCK_HEIGHT);
 																																												
-																																													// Add pending transaction's amount to expired amount change
-																																													expiredAmountChange = expiredAmountChange.plus(pendingTransaction.getAmount());
+																																													// Set kernel maximum height
+																																													var kernelMaximumHeight = pendingTransaction.getHeight().plus(Wallets.VARIATION_TO_NEXT_BLOCK_HEIGHT);
 																																												}
+																																												
+																																												// Otherwise
+																																												else {
+																																												
+																																													// Set kernel minimum height
+																																													var kernelMinimumHeight = startHeight.minus(Wallets.VARIATION_FROM_PREVIOUS_BLOCK_HEIGHT);
+																																												
+																																													// Set kernel maximum height
+																																													var kernelMaximumHeight = highestSyncedHeight.plus(Wallets.VARIATION_TO_NEXT_BLOCK_HEIGHT);
+																																												}
+																																												
+																																												// Check if kernel minimum height is less than the first block height
+																																												if(kernelMinimumHeight.isLessThan(Consensus.FIRST_BLOCK_HEIGHT) === true) {
+																																												
+																																													// Set kernel minimum height to the first block height
+																																													kernelMinimumHeight = new BigNumber(Consensus.FIRST_BLOCK_HEIGHT);
+																																												}
+																																												
+																																												// Check if kernel maximum height exceeds the tip height
+																																												if(kernelMaximumHeight.isGreaterThan(tipHeight.getHeight()) === true) {
+																																												
+																																													// Set kernel maximum height to the tip height
+																																													kernelMaximumHeight = tipHeight.getHeight();
+																																												}
+																																												
+																																												// Return getting pending transaction's kernel in the range around its height
+																																												return self.node.getKernel(pendingTransaction.getKernelExcess(), kernelMinimumHeight, kernelMaximumHeight).then(function(kernel) {
+																																												
+																																													// Resolve kernel
+																																													resolve(kernel);
+																																												
+																																												// Catch errors
+																																												}).catch(function(error) {
+																																												
+																																													// Reject error
+																																													reject(error);
+																																												});
 																																											}
 																																											
 																																											// Otherwise
 																																											else {
 																																											
-																																												// Add pending transaction's amount to unconfirmed amount change
-																																												unconfirmedAmountChange = unconfirmedAmountChange.plus(pendingTransaction.getAmount());
+																																												// Resolve no kernel found
+																																												resolve(Node.NO_KERNEL_FOUND);
+																																											}
+																																										});
+																																										
+																																										// Return getting transaction's kernel
+																																										return getTransactionsKernel.then(function(kernel) {
+																																										
+																																											// Check if pending transaction's amount has been released
+																																											if(pendingTransaction.getAmountReleased() === true) {
+																																											
+																																												// Subtract pending transaction's amount from unspent amount change
+																																												unspentAmountChange = unspentAmountChange.minus(pendingTransaction.getAmount());
 																																											}
 																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Subtract pending transaction's amount from pending amount change
+																																												pendingAmountChange = pendingAmountChange.minus(pendingTransaction.getAmount());
+																																											}
+																																										
+																																											// Check if kernel exists
+																																											if(kernel !== Node.NO_KERNEL_FOUND) {
+																																												
+																																												// Update pending transaction's status to spent since it was confirmed on the chain previously
+																																												pendingTransaction.setStatus(Transaction.STATUS_SPENT);
+																																												
+																																												// Add pending transaction's amount to spent amount change
+																																												spentAmountChange = spentAmountChange.plus(pendingTransaction.getAmount());
+																																												
+																																												// Set pending transaction amount has been released
+																																												pendingTransaction.setAmountReleased(true);
+																																												
+																																												// Set pending transaction isn't expired
+																																												pendingTransaction.setExpired(false);
+																																												
+																																												// Set pending transaction isn't canceled
+																																												pendingTransaction.setCanceled(false);
+																																												
+																																												// Set pending transaction is broadcast
+																																												pendingTransaction.setBroadcast(true);
+																																												
+																																												// Update pending transaction's height to the kernel's height
+																																												pendingTransaction.setHeight(kernel["height"]);
+																																												
+																																												// Update pending transaction's is coinbase to kernel's features
+																																												pendingTransaction.setIsCoinbase(SlateKernel.textToFeatures(Object.keys(kernel["tx_kernel"]["features"])[0]) === SlateKernel.COINBASE_FEATURES);
+																																												
+																																												// Get new spendable height as the kernel's height added to the pending transaction's number of confirmations
+																																												var newSpendableHeight = kernel["height"].plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1));
+																																												
+																																												// Check if maturity height is greater than the new spendable height
+																																												if(kernel["height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0).isGreaterThan(newSpendableHeight) === true) {
+																																												
+																																													// Set the new spendable height to the maturity height
+																																													newSpendableHeight = kernel["height"].plus((pendingTransaction.getIsCoinbase() === true) ? Consensus.COINBASE_MATURITY - 1 : 0);
+																																												}
+																																												
+																																												// Check if pending transaction's lock height exists and if it added to the number of confirmation is greater than the new spendable height
+																																												if(pendingTransaction.getLockHeight() !== Transaction.UNKNOWN_LOCK_HEIGHT && pendingTransaction.getLockHeight() !== Transaction.NO_LOCK_HEIGHT && pendingTransaction.getLockHeight().plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1)).isGreaterThan(newSpendableHeight) === true) {
+																																												
+																																													// Set the new spendable height to the pending transaction's lock height added to the number of confirmation
+																																													newSpendableHeight = pendingTransaction.getLockHeight().plus(pendingTransaction.getRequiredNumberOfConfirmations().minus(1));
+																																												}
+																																												
+																																												// Update pending transaction's spendable height
+																																												pendingTransaction.setSpendableHeight(newSpendableHeight);
+																																												
+																																												// Set pending transaction's checked
+																																												pendingTransaction.setChecked(true);
+																																												
+																																												// Return getting header at kernel's height
+																																												return self.node.getHeader(kernel["height"]).then(function(header) {
+																																												
+																																													// Get timestamp
+																																													var timestamp = header["timestamp"];
+																																													
+																																													// Set pending transaction's confirmed timestamp
+																																													pendingTransaction.setConfirmedTimestamp(timestamp);
+																																													
+																																													// Append pending transaction to list of updated transactions
+																																													updatedTransactions.push(pendingTransaction);
+																																													
+																																													// Resolve
+																																													resolve();
+																																													
+																																												// Catch errors
+																																												}).catch(function(error) {
+																																												
+																																													// Reject error
+																																													reject(error);
+																																												});
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Revert pending transaction's status to unconfirmed since transaction is no longer confirmed on the chain
+																																												pendingTransaction.setStatus(Transaction.STATUS_UNCONFIRMED);
+																																												
+																																												// Set pending transaction amount hasn't been released
+																																												pendingTransaction.setAmountReleased(false);
+																																												
+																																												// Set pending transaction's confirmed timestamp to no confirmed timestamp
+																																												pendingTransaction.setConfirmedTimestamp(Transaction.NO_CONFIRMED_TIMESTAMP);
+																																												
+																																												// Check if pending transaction's time to live cut off height has past
+																																												if(pendingTransaction.getBroadcast() === false && pendingTransaction.getTimeToLiveCutOffHeight() !== Transaction.UNKNOWN_TIME_TO_LIVE_CUT_OFF_HEIGHT && pendingTransaction.getTimeToLiveCutOffHeight() !== Transaction.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && pendingTransaction.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(tipHeight.getHeight()) === true) {
+																																												
+																																													// Set that pending transaction is expired
+																																													pendingTransaction.setExpired(true);
+																																													
+																																													// Check if pending transaction isn't change output
+																																													if(pendingTransaction.getDisplay() === true) {
+																																													
+																																														// Add pending transaction's amount to expired amount change
+																																														expiredAmountChange = expiredAmountChange.plus(pendingTransaction.getAmount());
+																																													}
+																																												}
+																																												
+																																												// Otherwise
+																																												else {
+																																												
+																																													// Add pending transaction's amount to unconfirmed amount change
+																																													unconfirmedAmountChange = unconfirmedAmountChange.plus(pendingTransaction.getAmount());
+																																												}
+																																												
+																																												// Set pending transaction's checked
+																																												pendingTransaction.setChecked(true);
+																																												
+																																												// Append pending transaction to list of updated transactions
+																																												updatedTransactions.push(pendingTransaction);
+																																												
+																																												// Resolve
+																																												resolve();
+																																											}
+																																										
+																																										// Catch errors
+																																										}).catch(function(error) {
+																																										
+																																											// Reject error
+																																											reject(error);
+																																										});
+																																									
+																																									// Locked
+																																									case Transaction.STATUS_LOCKED:
+																																									
+																																										// Update pending transaction's status to spent since transaction was completed
+																																										pendingTransaction.setStatus(Transaction.STATUS_SPENT);
+																																										
+																																										// Add pending transaction's amount to spent amount change
+																																										spentAmountChange = spentAmountChange.plus(pendingTransaction.getAmount());
+																																										
+																																										// Subtract pending transaction's amount from locked amount change
+																																										lockedAmountChange = lockedAmountChange.minus(pendingTransaction.getAmount());
+																																										
+																																										// Set pending transaction's checked
+																																										pendingTransaction.setChecked(true);
+																																										
+																																										// Append pending transaction to list of updated transactions
+																																										updatedTransactions.push(pendingTransaction);
+																																										
+																																										// Resolve
+																																										resolve();
+																																									
+																																										// Break
+																																										break;
+																																									
+																																									// Default
+																																									default:
+																																									
+																																										// Check if pending transaction's checked needs to be updated
+																																										if(pendingTransaction.getChecked() === false) {
+																																										
+																																											// Set pending transaction's checked
+																																											pendingTransaction.setChecked(true);
+																																											
+																																											// Set transaction changed
+																																											transactionChanged = true;
+																																										}
+																																										
+																																										// Check if transaction changed
+																																										if(transactionChanged === true) {
+																																										
 																																											// Append pending transaction to list of updated transactions
 																																											updatedTransactions.push(pendingTransaction);
-																																											
-																																											// Resolve
-																																											resolve();
 																																										}
-																																									
-																																									// Catch errors
-																																									}).catch(function(error) {
-																																									
-																																										// Reject error
-																																										reject(error);
-																																									});
-																																								
-																																								// Locked
-																																								case Transaction.STATUS_LOCKED:
-																																								
-																																									// Update pending transaction's status to spent since transaction was completed
-																																									pendingTransaction.setStatus(Transaction.STATUS_SPENT);
-																																									
-																																									// Add pending transaction's amount to spent amount change
-																																									spentAmountChange = spentAmountChange.plus(pendingTransaction.getAmount());
-																																									
-																																									// Subtract pending transaction's amount from locked amount change
-																																									lockedAmountChange = lockedAmountChange.minus(pendingTransaction.getAmount());
-																																									
-																																									// Append pending transaction to list of updated transactions
-																																									updatedTransactions.push(pendingTransaction);
-																																									
-																																									// Resolve
-																																									resolve();
-																																								
-																																									// Break
-																																									break;
+																																										
+																																										// Resolve
+																																										resolve();
+																																										
+																																										// Break
+																																										break;
+																																								}
 																																							}
-																																						}
+																																						
+																																						// Catch errors
+																																						}).catch(function(error) {
+																																						
+																																							// Reject error
+																																							reject(error);
+																																						});
+																																					}));
+																																				}
+																																				
+																																				// Return verifying pending transactions
+																																				return Promise.all(verifyingPendingTransactions).then(function() {
+																																				
+																																					// Resolve
+																																					resolve();
 																																					
-																																					// Catch errors
-																																					}).catch(function(error) {
-																																					
-																																						// Reject error
-																																						reject(error);
-																																					});
-																																				}));
-																																			}
-																																			
-																																			// Return verifying pending transactions
-																																			return Promise.all(verifyingPendingTransactions).then(function() {
-																																			
-																																				// Resolve
-																																				resolve();
+																																				// Catch errors
+																																				}).catch(function(error) {
+																																				
+																																					// Reject error
+																																					reject(error);
+																																				});
 																																				
 																																			// Catch errors
 																																			}).catch(function(error) {
@@ -7956,246 +8146,263 @@ class Wallets {
 																																				// Reject error
 																																				reject(error);
 																																			});
-																																			
-																																		// Catch errors
-																																		}).catch(function(error) {
-																																		
-																																			// Reject error
-																																			reject(error);
-																																		});
-																																	}));
-																																}
-																															
-																																// Return verifying pending transactions
-																																return Promise.all(verifyingPendingTransactions).then(function() {
+																																		}));
+																																	}
 																																
-																																	// Return creating a database transaction
-																																	return Database.createTransaction([
+																																	// Return verifying pending transactions
+																																	return Promise.all(verifyingPendingTransactions).then(function() {
 																																	
-																																		// Wallets object store
-																																		Wallets.OBJECT_STORE_NAME,
+																																		// Return creating a database transaction
+																																		return Database.createTransaction([
 																																		
-																																		// Transactions object store
-																																		Transactions.OBJECT_STORE_NAME,
-																																		
-																																	], Database.READ_AND_WRITE_MODE, Database.STRICT_DURABILITY).then(function(databaseTransaction) {
-																																
-																																		// Return saving updated transactions
-																																		return self.transactions.saveTransactions(updatedTransactions, databaseTransaction).then(function() {
-																																		
-																																			// Check if wallet exists
-																																			if(self.walletExists(keyPath) === true) {
+																																			// Wallets object store
+																																			Wallets.OBJECT_STORE_NAME,
 																																			
-																																				// Return saving wallet
-																																				return self.saveWallet(wallet, function() {
-																	
-																																					// Get values
-																																					var values = {
-																																					
-																																						// New locked amount value
-																																						[Wallets.NEW_LOCKED_AMOUNT_VALUE]: wallet.getLockedAmount().plus(lockedAmountChange),
-																																						
-																																						// New unconfirmed amount value
-																																						[Wallets.NEW_UNCONFIRMED_AMOUNT_VALUE]: wallet.getUnconfirmedAmount().plus(unconfirmedAmountChange),
-																																						
-																																						// New unspent amount value
-																																						[Wallets.NEW_UNSPENT_AMOUNT_VALUE]: wallet.getUnspentAmount().plus(unspentAmountChange),
-																																						
-																																						// New spent amount value
-																																						[Wallets.NEW_SPENT_AMOUNT_VALUE]: wallet.getSpentAmount().plus(spentAmountChange),
-																																						
-																																						// New pending amount value
-																																						[Wallets.NEW_PENDING_AMOUNT_VALUE]: wallet.getPendingAmount().plus(pendingAmountChange),
-																																						
-																																						// New expired amount value
-																																						[Wallets.NEW_EXPIRED_AMOUNT_VALUE]: wallet.getExpiredAmount().plus(expiredAmountChange)
-																																					};
-																																					
-																																					// Check if wallet's syncing status isn't resyncing
-																																					if(wallet.getSyncingStatus() !== Wallet.STATUS_RESYNCING) {
+																																			// Transactions object store
+																																			Transactions.OBJECT_STORE_NAME,
 																																			
-																																						// New synced height value
-																																						values[Wallets.NEW_SYNCED_HEIGHT_VALUE] = highestSyncedHeight;
-																																					}
-																																					
-																																					// Check if highest identifier exists and the wallet's last identifier doesn't exist or doesn't include the highest identifier
-																																					if(highestIdentifier !== Wallet.NO_LAST_IDENTIFIER && (wallet.getLastIdentifier() === Wallet.NO_LAST_IDENTIFIER || wallet.getLastIdentifier().includesValue(highestIdentifier) === false)) {
-																																					
-																																						// New last identifier value
-																																						values[Wallets.NEW_LAST_IDENTIFIER_VALUE] = highestIdentifier;
-																																					}
-																																					
-																																					// Return values
-																																					return values;
-																																					
-																																				}, databaseTransaction).then(function(newValues) {
+																																		], Database.READ_AND_WRITE_MODE, Database.STRICT_DURABILITY).then(function(databaseTransaction) {
+																																	
+																																			// Return saving updated transactions
+																																			return self.transactions.saveTransactions(updatedTransactions, databaseTransaction).then(function() {
+																																			
+																																				// Check if wallet exists
+																																				if(self.walletExists(keyPath) === true) {
 																																				
-																																					// Check if wallet exists
-																																					if(self.walletExists(keyPath) === true) {
-																																					
-																																						// Return committing database transaction
-																																						return Database.commitTransaction(databaseTransaction).then(function() {
+																																					// Return saving wallet
+																																					return self.saveWallet(wallet, function() {
+																		
+																																						// Get values
+																																						var values = {
 																																						
-																																							// Release wallet's exclusive transactions lock
-																																							self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
+																																							// New locked amount value
+																																							[Wallets.NEW_LOCKED_AMOUNT_VALUE]: wallet.getLockedAmount().plus(lockedAmountChange),
+																																							
+																																							// New unconfirmed amount value
+																																							[Wallets.NEW_UNCONFIRMED_AMOUNT_VALUE]: wallet.getUnconfirmedAmount().plus(unconfirmedAmountChange),
+																																							
+																																							// New unspent amount value
+																																							[Wallets.NEW_UNSPENT_AMOUNT_VALUE]: wallet.getUnspentAmount().plus(unspentAmountChange),
+																																							
+																																							// New spent amount value
+																																							[Wallets.NEW_SPENT_AMOUNT_VALUE]: wallet.getSpentAmount().plus(spentAmountChange),
+																																							
+																																							// New pending amount value
+																																							[Wallets.NEW_PENDING_AMOUNT_VALUE]: wallet.getPendingAmount().plus(pendingAmountChange),
+																																							
+																																							// New expired amount value
+																																							[Wallets.NEW_EXPIRED_AMOUNT_VALUE]: wallet.getExpiredAmount().plus(expiredAmountChange)
+																																						};
 																																						
-																																							// Update wallet's locked amount
-																																							wallet.setLockedAmount(newValues[Wallets.NEW_LOCKED_AMOUNT_VALUE]);
+																																						// Check if wallet's syncing status isn't resyncing
+																																						if(wallet.getSyncingStatus() !== Wallet.STATUS_RESYNCING) {
+																																				
+																																							// New synced height value
+																																							values[Wallets.NEW_SYNCED_HEIGHT_VALUE] = highestSyncedHeight;
+																																						}
 																																						
-																																							// Update wallet's unconfirmed amount
-																																							wallet.setUnconfirmedAmount(newValues[Wallets.NEW_UNCONFIRMED_AMOUNT_VALUE]);
+																																						// Check if highest identifier exists and the wallet's last identifier doesn't exist or doesn't include the highest identifier
+																																						if(highestIdentifier !== Wallet.NO_LAST_IDENTIFIER && (wallet.getLastIdentifier() === Wallet.NO_LAST_IDENTIFIER || wallet.getLastIdentifier().includesValue(highestIdentifier) === false)) {
+																																						
+																																							// New last identifier value
+																																							values[Wallets.NEW_LAST_IDENTIFIER_VALUE] = highestIdentifier;
+																																						}
+																																						
+																																						// Return values
+																																						return values;
+																																						
+																																					}, databaseTransaction).then(function(newValues) {
+																																					
+																																						// Check if wallet exists
+																																						if(self.walletExists(keyPath) === true) {
+																																						
+																																							// Return committing database transaction
+																																							return Database.commitTransaction(databaseTransaction).then(function() {
 																																							
-																																							// Update wallet's unspent amount
-																																							wallet.setUnspentAmount(newValues[Wallets.NEW_UNSPENT_AMOUNT_VALUE]);
+																																								// Release wallet's exclusive transactions lock
+																																								self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
 																																							
-																																							// Update wallet's spent amount
-																																							wallet.setSpentAmount(newValues[Wallets.NEW_SPENT_AMOUNT_VALUE]);
+																																								// Update wallet's locked amount
+																																								wallet.setLockedAmount(newValues[Wallets.NEW_LOCKED_AMOUNT_VALUE]);
 																																							
-																																							// Update wallet's pending amount
-																																							wallet.setPendingAmount(newValues[Wallets.NEW_PENDING_AMOUNT_VALUE]);
-																																							
-																																							// Update wallet's expired amount
-																																							wallet.setExpiredAmount(newValues[Wallets.NEW_EXPIRED_AMOUNT_VALUE]);
-																																							
-																																							// Check if wallet's synced height changed and its syncing status isn't resyncing
-																																							if(Wallets.NEW_SYNCED_HEIGHT_VALUE in newValues === true && wallet.getSyncingStatus() !== Wallet.STATUS_RESYNCING) {
-																																							
-																																								// Update wallet's synced height
-																																								wallet.setSyncedHeight(newValues[Wallets.NEW_SYNCED_HEIGHT_VALUE]);
-																																							}
-																																							
-																																							// Check if wallet's last identifier changed
-																																							if(Wallets.NEW_LAST_IDENTIFIER_VALUE in newValues === true) {
-																																							
-																																								// Update wallet's last identifier
-																																								wallet.setLastIdentifier(newValues[Wallets.NEW_LAST_IDENTIFIER_VALUE]);
-																																							}
-																																							
-																																							// Check if wallet exists
-																																							if(self.walletExists(keyPath) === true) {
-																																							
-																																								// Check if wallet's unspent amount changed
-																																								if(unspentAmountChange.isZero() === false) {
-																																				
-																																									// Trigger change event
-																																									$(document).trigger(Wallets.CHANGE_EVENT, [
-																																									
-																																										// Key path
-																																										keyPath,
-																																										
-																																										// Change
-																																										Wallets.UNSPENT_AMOUNT_CHANGED,
-																																										
-																																										// New value
-																																										newValues[Wallets.NEW_UNSPENT_AMOUNT_VALUE]
-																																									]);
+																																								// Update wallet's unconfirmed amount
+																																								wallet.setUnconfirmedAmount(newValues[Wallets.NEW_UNCONFIRMED_AMOUNT_VALUE]);
+																																								
+																																								// Update wallet's unspent amount
+																																								wallet.setUnspentAmount(newValues[Wallets.NEW_UNSPENT_AMOUNT_VALUE]);
+																																								
+																																								// Update wallet's spent amount
+																																								wallet.setSpentAmount(newValues[Wallets.NEW_SPENT_AMOUNT_VALUE]);
+																																								
+																																								// Update wallet's pending amount
+																																								wallet.setPendingAmount(newValues[Wallets.NEW_PENDING_AMOUNT_VALUE]);
+																																								
+																																								// Update wallet's expired amount
+																																								wallet.setExpiredAmount(newValues[Wallets.NEW_EXPIRED_AMOUNT_VALUE]);
+																																								
+																																								// Check if wallet's synced height changed and its syncing status isn't resyncing
+																																								if(Wallets.NEW_SYNCED_HEIGHT_VALUE in newValues === true && wallet.getSyncingStatus() !== Wallet.STATUS_RESYNCING) {
+																																								
+																																									// Update wallet's synced height
+																																									wallet.setSyncedHeight(newValues[Wallets.NEW_SYNCED_HEIGHT_VALUE]);
 																																								}
 																																								
-																																								// Check if wallet's unconfirmed amount changed
-																																								if(unconfirmedAmountChange.isZero() === false) {
-																																				
-																																									// Trigger change event
-																																									$(document).trigger(Wallets.CHANGE_EVENT, [
-																																									
-																																										// Key path
-																																										keyPath,
-																																										
-																																										// Change
-																																										Wallets.UNCONFIRMED_AMOUNT_CHANGED,
-																																										
-																																										// New value
-																																										newValues[Wallets.NEW_UNCONFIRMED_AMOUNT_VALUE]
-																																									]);
+																																								// Check if wallet's last identifier changed
+																																								if(Wallets.NEW_LAST_IDENTIFIER_VALUE in newValues === true) {
+																																								
+																																									// Update wallet's last identifier
+																																									wallet.setLastIdentifier(newValues[Wallets.NEW_LAST_IDENTIFIER_VALUE]);
 																																								}
 																																								
-																																								// Check if wallet's pending amount changed
-																																								if(pendingAmountChange.isZero() === false) {
-																																				
-																																									// Trigger change event
-																																									$(document).trigger(Wallets.CHANGE_EVENT, [
-																																									
-																																										// Key path
-																																										keyPath,
-																																										
-																																										// Change
-																																										Wallets.PENDING_AMOUNT_CHANGED,
-																																										
-																																										// New value
-																																										newValues[Wallets.NEW_PENDING_AMOUNT_VALUE]
-																																									]);
-																																								}
+																																								// Check if wallet exists
+																																								if(self.walletExists(keyPath) === true) {
 																																								
-																																								// Check if wallet's expired amount changed
-																																								if(expiredAmountChange.isZero() === false) {
-																																				
-																																									// Trigger change event
-																																									$(document).trigger(Wallets.CHANGE_EVENT, [
-																																									
-																																										// Key path
-																																										keyPath,
+																																									// Check if wallet's unspent amount changed
+																																									if(unspentAmountChange.isZero() === false) {
+																																					
+																																										// Trigger change event
+																																										$(document).trigger(Wallets.CHANGE_EVENT, [
 																																										
-																																										// Change
-																																										Wallets.EXPIRED_AMOUNT_CHANGED,
-																																										
-																																										// New value
-																																										newValues[Wallets.NEW_EXPIRED_AMOUNT_VALUE]
-																																									]);
-																																								}
-																																								
-																																								// Check if transactions were updated
-																																								if(updatedTransactions["length"] !== 0) {
-																																								
-																																									// Trigger transactions change event
-																																									$(self.transactions).trigger(Transactions.CHANGE_EVENT, [
-																																									
-																																										// Transactions
-																																										updatedTransactions
-																																									]);
-																																								}
-																																							
-																																								// Check if wallet's syncing status isn't resyncing
-																																								if(wallet.getSyncingStatus() !== Wallet.STATUS_RESYNCING) {
-																																								
-																																									// Check if at the last output
-																																									if(atLastOutput === true) {
-																																									
-																																										// Clear wallet's last sync index
-																																										wallet.setLastSyncIndex(Wallet.NO_SYNC_INDEX);
-																																										
-																																										// Update wallet's starting sync height
-																																										wallet.setStartingSyncHeight(wallet.getSyncedHeight());
-																																										
-																																										// Set wallet's percent synced
-																																										wallet.setPercentSynced(new BigNumber(Wallets.MAXIMUM_PERCENT));
-																																									
-																																										// Set wallet's syncing status to synced
-																																										wallet.setSyncingStatus(Wallet.STATUS_SYNCED);
-																																									
-																																										// Trigger sync done event
-																																										$(self).trigger(Wallets.SYNC_DONE_EVENT, keyPath);
-																																									}
-																																									
-																																									// Otherwise
-																																									else {
-																																									
-																																										// Set wallet's last sync index
-																																										wallet.setLastSyncIndex([
-																																										
-																																											// Start index
-																																											pmmrIndices["last_retrieved_index"],
+																																											// Key path
+																																											keyPath,
 																																											
-																																											// Last retrieved index
-																																											lastRetrievedIndex
+																																											// Change
+																																											Wallets.UNSPENT_AMOUNT_CHANGED,
+																																											
+																																											// New value
+																																											newValues[Wallets.NEW_UNSPENT_AMOUNT_VALUE]
 																																										]);
 																																									}
+																																									
+																																									// Check if wallet's unconfirmed amount changed
+																																									if(unconfirmedAmountChange.isZero() === false) {
+																																					
+																																										// Trigger change event
+																																										$(document).trigger(Wallets.CHANGE_EVENT, [
+																																										
+																																											// Key path
+																																											keyPath,
+																																											
+																																											// Change
+																																											Wallets.UNCONFIRMED_AMOUNT_CHANGED,
+																																											
+																																											// New value
+																																											newValues[Wallets.NEW_UNCONFIRMED_AMOUNT_VALUE]
+																																										]);
+																																									}
+																																									
+																																									// Check if wallet's pending amount changed
+																																									if(pendingAmountChange.isZero() === false) {
+																																					
+																																										// Trigger change event
+																																										$(document).trigger(Wallets.CHANGE_EVENT, [
+																																										
+																																											// Key path
+																																											keyPath,
+																																											
+																																											// Change
+																																											Wallets.PENDING_AMOUNT_CHANGED,
+																																											
+																																											// New value
+																																											newValues[Wallets.NEW_PENDING_AMOUNT_VALUE]
+																																										]);
+																																									}
+																																									
+																																									// Check if wallet's expired amount changed
+																																									if(expiredAmountChange.isZero() === false) {
+																																					
+																																										// Trigger change event
+																																										$(document).trigger(Wallets.CHANGE_EVENT, [
+																																										
+																																											// Key path
+																																											keyPath,
+																																											
+																																											// Change
+																																											Wallets.EXPIRED_AMOUNT_CHANGED,
+																																											
+																																											// New value
+																																											newValues[Wallets.NEW_EXPIRED_AMOUNT_VALUE]
+																																										]);
+																																									}
+																																									
+																																									// Check if transactions were updated
+																																									if(updatedTransactions["length"] !== 0) {
+																																									
+																																										// Trigger transactions change event
+																																										$(self.transactions).trigger(Transactions.CHANGE_EVENT, [
+																																										
+																																											// Transactions
+																																											updatedTransactions
+																																										]);
+																																									}
+																																								
+																																									// Check if wallet's syncing status isn't resyncing
+																																									if(wallet.getSyncingStatus() !== Wallet.STATUS_RESYNCING) {
+																																									
+																																										// Check if at the last output
+																																										if(atLastOutput === true) {
+																																										
+																																											// Clear wallet's last sync index
+																																											wallet.setLastSyncIndex(Wallet.NO_SYNC_INDEX);
+																																											
+																																											// Update wallet's starting sync height
+																																											wallet.setStartingSyncHeight(wallet.getSyncedHeight());
+																																											
+																																											// Set wallet's percent synced
+																																											wallet.setPercentSynced(new BigNumber(Wallets.MAXIMUM_PERCENT));
+																																										
+																																											// Set wallet's syncing status to synced
+																																											wallet.setSyncingStatus(Wallet.STATUS_SYNCED);
+																																										
+																																											// Trigger sync done event
+																																											$(self).trigger(Wallets.SYNC_DONE_EVENT, keyPath);
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Set wallet's last sync index
+																																											wallet.setLastSyncIndex([
+																																											
+																																												// Start index
+																																												pmmrIndices["last_retrieved_index"],
+																																												
+																																												// Last retrieved index
+																																												lastRetrievedIndex
+																																											]);
+																																										}
+																																									}
 																																								}
-																																							}
+																																								
+																																								// Resolve
+																																								resolve();
 																																							
-																																							// Resolve
-																																							resolve();
+																																							// Catch errors
+																																							}).catch(function(error) {
+																																							
+																																								// Return aborting database transaction
+																																								return Database.abortTransaction(databaseTransaction).then(function() {
+																																								
+																																									// Release wallet's exclusive transactions lock
+																																									self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
+																																								
+																																									// Reject error
+																																									reject(error);
+																																								
+																																								// Catch errors
+																																								}).catch(function(error) {
+																																								
+																																									// Release wallet's exclusive transactions lock
+																																									self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
+																																								
+																																									// Trigger a fatal error
+																																									new FatalError(FatalError.DATABASE_ERROR);
+																																								});
+																																							});
+																																						}
 																																						
-																																						// Catch errors
-																																						}).catch(function(error) {
+																																						// Otherwise
+																																						else {
 																																						
 																																							// Return aborting database transaction
 																																							return Database.abortTransaction(databaseTransaction).then(function() {
@@ -8203,11 +8410,11 @@ class Wallets {
 																																								// Release wallet's exclusive transactions lock
 																																								self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
 																																							
-																																								// Reject error
-																																								reject(error);
+																																								// Resolve
+																																								resolve();
 																																							
 																																							// Catch errors
-																																							}).catch(function(error) {
+																																							}).catch(function() {
 																																							
 																																								// Release wallet's exclusive transactions lock
 																																								self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
@@ -8215,11 +8422,10 @@ class Wallets {
 																																								// Trigger a fatal error
 																																								new FatalError(FatalError.DATABASE_ERROR);
 																																							});
-																																						});
-																																					}
+																																						}
 																																					
-																																					// Otherwise
-																																					else {
+																																					// Catch errors
+																																					}).catch(function(error) {
 																																					
 																																						// Return aborting database transaction
 																																						return Database.abortTransaction(databaseTransaction).then(function() {
@@ -8227,11 +8433,11 @@ class Wallets {
 																																							// Release wallet's exclusive transactions lock
 																																							self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
 																																						
-																																							// Resolve
-																																							resolve();
+																																							// Reject error
+																																							reject(error);
 																																						
 																																						// Catch errors
-																																						}).catch(function() {
+																																						}).catch(function(error) {
 																																						
 																																							// Release wallet's exclusive transactions lock
 																																							self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
@@ -8239,10 +8445,11 @@ class Wallets {
 																																							// Trigger a fatal error
 																																							new FatalError(FatalError.DATABASE_ERROR);
 																																						});
-																																					}
+																																					});
+																																				}
 																																				
-																																				// Catch errors
-																																				}).catch(function(error) {
+																																				// Otherwise
+																																				else {
 																																				
 																																					// Return aborting database transaction
 																																					return Database.abortTransaction(databaseTransaction).then(function() {
@@ -8250,11 +8457,11 @@ class Wallets {
 																																						// Release wallet's exclusive transactions lock
 																																						self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
 																																					
-																																						// Reject error
-																																						reject(error);
+																																						// Resolve
+																																						resolve();
 																																					
 																																					// Catch errors
-																																					}).catch(function(error) {
+																																					}).catch(function() {
 																																					
 																																						// Release wallet's exclusive transactions lock
 																																						self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
@@ -8262,11 +8469,10 @@ class Wallets {
 																																						// Trigger a fatal error
 																																						new FatalError(FatalError.DATABASE_ERROR);
 																																					});
-																																				});
-																																			}
+																																				}
 																																			
-																																			// Otherwise
-																																			else {
+																																			// Catch errors
+																																			}).catch(function(error) {
 																																			
 																																				// Return aborting database transaction
 																																				return Database.abortTransaction(databaseTransaction).then(function() {
@@ -8274,11 +8480,11 @@ class Wallets {
 																																					// Release wallet's exclusive transactions lock
 																																					self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
 																																				
-																																					// Resolve
-																																					resolve();
+																																					// Reject error
+																																					reject(error);
 																																				
 																																				// Catch errors
-																																				}).catch(function() {
+																																				}).catch(function(error) {
 																																				
 																																					// Release wallet's exclusive transactions lock
 																																					self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
@@ -8286,29 +8492,16 @@ class Wallets {
 																																					// Trigger a fatal error
 																																					new FatalError(FatalError.DATABASE_ERROR);
 																																				});
-																																			}
+																																			});
 																																		
 																																		// Catch errors
 																																		}).catch(function(error) {
 																																		
-																																			// Return aborting database transaction
-																																			return Database.abortTransaction(databaseTransaction).then(function() {
-																																			
-																																				// Release wallet's exclusive transactions lock
-																																				self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
-																																			
-																																				// Reject error
-																																				reject(error);
-																																			
-																																			// Catch errors
-																																			}).catch(function(error) {
-																																			
-																																				// Release wallet's exclusive transactions lock
-																																				self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
-																																			
-																																				// Trigger a fatal error
-																																				new FatalError(FatalError.DATABASE_ERROR);
-																																			});
+																																			// Release wallet's exclusive transactions lock
+																																			self.transactions.releaseWalletsExclusiveTransactionsLock(keyPath);
+																																		
+																																			// Reject error
+																																			reject(error);
 																																		});
 																																	
 																																	// Catch errors

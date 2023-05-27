@@ -10,7 +10,7 @@ class Transaction {
 	// Public
 	
 		// Constructor
-		constructor(walletType, networkType, commit, walletKeyPath, received, recordedTimestamp, createdTimestamp, height, lockHeight, isCoinbase, status, amount, amountReleased, kernelExcess, identifier, switchType, display, kernelOffset, id, message, timeToLiveCutOffHeight, expired, confirmedTimestamp, fee, senderAddress, receiverAddress, receiverSignature, destination, spendableHeight, requiredNumberOfConfirmations, spentOutputs, changeOutputs, broadcast, rebroadcastMessage, fileResponse, canceled = false, keyPath = Transaction.NO_KEY_PATH) {
+		constructor(walletType, networkType, commit, walletKeyPath, received, recordedTimestamp, createdTimestamp, height, lockHeight, isCoinbase, status, amount, amountReleased, kernelExcess, identifier, switchType, display, kernelOffset, id, message, timeToLiveCutOffHeight, expired, confirmedTimestamp, fee, senderAddress, receiverAddress, receiverSignature, destination, spendableHeight, requiredNumberOfConfirmations, spentOutputs, changeOutputs, broadcast, rebroadcastMessage, fileResponse, checked = false, canceled = false, keyPath = Transaction.NO_KEY_PATH) {
 		
 			// Set wallet type
 			this.setWalletType(walletType);
@@ -116,6 +116,9 @@ class Transaction {
 			
 			// Set file response
 			this.setFileResponse(fileResponse);
+			
+			// Set checked
+			this.setChecked(checked);
 			
 			// Set canceled
 			this.setCanceled(canceled);
@@ -612,6 +615,20 @@ class Transaction {
 		
 			// Set file response
 			this.fileResponse = fileResponse;
+		}
+		
+		// Get checked
+		getChecked() {
+		
+			// Return checked
+			return this.checked;
+		}
+		
+		// Set checked
+		setChecked(checked) {
+		
+			// Set checked
+			this.checked = checked;
 		}
 		
 		// Get canceled

@@ -12,6 +12,13 @@ class Mqs {
 		// Public key to MQS address
 		static publicKeyToMqsAddress(publicKey, isMainnet) {
 		
+			// Check it public key isn't the correct length
+			if(publicKey["length"] !== Crypto.SECP256K1_PUBLIC_KEY_LENGTH) {
+			
+				// Throw error
+				throw "Invalid public key.";
+			}
+			
 			// Get version
 			var version = Mqs.getAddressVersion(isMainnet);
 		
@@ -32,6 +39,13 @@ class Mqs {
 		// MQS address to public key
 		static mqsAddressToPublicKey(mqsAddress, isMainnet) {
 		
+			// Check it MQS address isn't the correct length
+			if(mqsAddress["length"] !== Mqs.ADDRESS_LENGTH) {
+			
+				// Throw error
+				throw "Invalid MQS address.";
+			}
+			
 			// Try
 			try {
 			
