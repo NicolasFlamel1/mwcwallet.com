@@ -2703,8 +2703,14 @@ class WalletSection extends Section {
 				// Create file input
 				var fileInput = $("<input type=\"file\">");
 				
+				// Set file selected to false
+				var fileSelected = false;
+				
 				// File input change event
 				fileInput.one("change", function(event) {
+				
+					// Set file selected
+					fileSelected = true;
 				
 					// Turn off window focus wallet section event
 					$(window).off("focus.walletSection");
@@ -3113,46 +3119,54 @@ class WalletSection extends Section {
 				// Window focus wallet section event
 				$(window).one("focus.walletSection", function() {
 				
-					// Turn off file input change event
-					fileInput.off("change");
+					// Set timeout
+					setTimeout(function() {
 					
-					// Allow scrolling keys
-					self.getScroll().allowKeys();
-					
-					// Unblock input
-					$("body").removeClass("blockInput");
-					
-					// Allow device to sleep and catch errors
-					self.getWakeLock().allowLock().catch(function(error) {
-					
-					// Finally
-					}).finally(function() {
-					
-						// Allow automatic lock
-						self.getAutomaticLock().allow();
-						
-						// Check if automatic lock isn't locking
-						if(self.getAutomaticLock().isLocking() === false) {
-					
-							// Set that button isn't loading
-							button.removeClass("loading");
+						// Check if a file isn't selected
+						if(fileSelected === false) {
+				
+							// Turn off file input change event
+							fileInput.off("change");
 							
-							// Hide loading
-							self.getApplication().hideLoading();
+							// Allow scrolling keys
+							self.getScroll().allowKeys();
 							
-							// Enable unlocked
-							self.getUnlocked().enable();
+							// Unblock input
+							$("body").removeClass("blockInput");
 							
-							// Set that button isn't clicked
-							button.removeClass("clicked");
+							// Allow device to sleep and catch errors
+							self.getWakeLock().allowLock().catch(function(error) {
 							
-							// Restore focus and don't blur
-							self.getFocus().restore(false);
+							// Finally
+							}).finally(function() {
 							
-							// Allow showing messages
-							self.getMessage().allow();
+								// Allow automatic lock
+								self.getAutomaticLock().allow();
+								
+								// Check if automatic lock isn't locking
+								if(self.getAutomaticLock().isLocking() === false) {
+							
+									// Set that button isn't loading
+									button.removeClass("loading");
+									
+									// Hide loading
+									self.getApplication().hideLoading();
+									
+									// Enable unlocked
+									self.getUnlocked().enable();
+									
+									// Set that button isn't clicked
+									button.removeClass("clicked");
+									
+									// Restore focus and don't blur
+									self.getFocus().restore(false);
+									
+									// Allow showing messages
+									self.getMessage().allow();
+								}
+							});
 						}
-					});
+					}, WalletSection.FILE_INPUT_CANCEL_CHECK_DELAY_MILLISECONDS);
 				});
 				
 				// Trigger file input selection
@@ -4541,6 +4555,13 @@ class WalletSection extends Section {
 		
 			// Return navigate transactions delay milliseconds
 			return 100;
+		}
+		
+		// File input cancel check delay milliseconds
+		static get FILE_INPUT_CANCEL_CHECK_DELAY_MILLISECONDS() {
+		
+			// Return file input cancel check delay milliseconds
+			return 50;
 		}
 }
 

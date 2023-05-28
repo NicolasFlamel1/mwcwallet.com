@@ -15459,9 +15459,15 @@ class Api {
 																			// Create file input
 																			var fileInput = $("<input type=\"file\">");
 																			
+																			// Set file selected to false
+																			var fileSelected = false;
+																			
 																			// File input change event
 																			fileInput.one("change", function(event) {
 																			
+																				// Set file selected
+																				fileSelected = true;
+																				
 																				// Turn off window focus API event
 																				$(window).off("focus.api");
 																				
@@ -15568,31 +15574,39 @@ class Api {
 																			// Window focus API event
 																			$(window).one("focus.api", function() {
 																			
-																				// Turn off file input change event
-																				fileInput.off("change");
+																				// Set timeout
+																				setTimeout(function() {
 																				
-																				// Allow scrolling keys
-																				self.application.scroll.allowKeys();
-																				
-																				// Unblock input
-																				$("body").removeClass("blockInput");
-																				
-																				// Hide loading
-																				self.application.hideLoading();
-																				
-																				// Check if cancel didn't occur
-																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																				
-																					// Enable message
-																					self.message.enable();
+																					// Check if a file isn't selected
+																					if(fileSelected === false) {
 																					
-																					// Check if button had focus
-																					if(button.hasClass("focus") === true) {
-																					
-																						// Focus on button and remove its focus apperance
-																						button.focus().removeClass("focus");
+																						// Turn off file input change event
+																						fileInput.off("change");
+																						
+																						// Allow scrolling keys
+																						self.application.scroll.allowKeys();
+																						
+																						// Unblock input
+																						$("body").removeClass("blockInput");
+																						
+																						// Hide loading
+																						self.application.hideLoading();
+																						
+																						// Check if cancel didn't occur
+																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																						
+																							// Enable message
+																							self.message.enable();
+																							
+																							// Check if button had focus
+																							if(button.hasClass("focus") === true) {
+																							
+																								// Focus on button and remove its focus apperance
+																								button.focus().removeClass("focus");
+																							}
+																						}
 																					}
-																				}
+																				}, Api.FILE_INPUT_CANCEL_CHECK_DELAY_MILLISECONDS);
 																			});
 																			
 																			// Trigger file input selection
@@ -16642,6 +16656,13 @@ class Api {
 		
 			// Return no response error
 			return null;
+		}
+		
+		// File input cancel check delay milliseconds
+		static get FILE_INPUT_CANCEL_CHECK_DELAY_MILLISECONDS() {
+		
+			// Return file input cancel check delay milliseconds
+			return 50;
 		}
 }
 
