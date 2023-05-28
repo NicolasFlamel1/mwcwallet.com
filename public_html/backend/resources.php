@@ -459,10 +459,10 @@
 			"Checksum" => "uf1yQ1igJdTTd3ofOTVelJpqYWF/fuczoZ4/jkp46gyesaEpYag0+eJmgLw5Qe6lu6lM1IpPtTVgMVwA9HkZ0g=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 85,
+			"Version" => 89,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "JKppoXp1oOzSZdSZEaMe6PrQnuvvtzFBI181LPTNu3Io56S8ZLWjIdQF/VaFu9IZKNfsnZGCZkiMAVKOf1p77Q=="
+			"Checksum" => "CdKdI5yPKXeK6HQZZip4jb6n2XHsY++pUh3uilJ4IwSbTcPkd0v/NrS2dxWXnNUoEbDpMXNm/jZp8HC3VXUOgQ=="
 		],
 		"./scripts/LedgerJS_Browser-0.0.2.js" => [
 			"Version" => 1,
@@ -565,6 +565,12 @@
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => "2ZFvWf9x++Vv5+5yeq1fWEHazydcrD7rc+OTWhRAr3MlyZXYsKEvBo+/ZMHnBK7e5PPW/E34GSQDrgWXz+P0gA=="
+		],
+		"./scripts/emoji.js" => [
+			"Version" => 2,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "7w6H/x3LuTlscbZGd1d8tUKm4qQmGgck8Ugp13gOyiHkx0mbopCSqVQ2CTya3/TbUfhW3+U2hkLp3Atdwj18ng=="
 		],
 		"./scripts/languages.js" => [
 			"Version" => 7,
