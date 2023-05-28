@@ -157,7 +157,7 @@ class Api {
 								try {
 								
 									// Parse data as JSON
-									data = JSONBigNumber.parse((new TextDecoder()).decode(data));
+									data = JSONBigNumber.parse((new TextDecoder("utf-8", {"fatal": true})).decode(data));
 								}
 								
 								// Catch errors

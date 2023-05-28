@@ -148,7 +148,7 @@ class Emoji {
 			var bytes = bitReader.getBytes((numberOfBits - Emoji.NUMBER_BASE - numberOfExtraBits) / Common.BITS_IN_A_BYTE);
 			
 			// Return bytes as text
-			return (new TextDecoder()).decode(bytes);
+			return (new TextDecoder("utf-8", {"fatal": true})).decode(bytes);
 		}
 	
 	// Private

@@ -581,7 +581,7 @@ class SlateParticipant {
 							}
 							
 							// Decode message
-							this.message = (new TextDecoder()).decode(this.getMessage());
+							this.message = (new TextDecoder("utf-8", {"fatal": true})).decode(this.getMessage());
 							
 							// Check if serialized slate participant's message signature is invalid
 							var messageSignature = bitReader.getBytes(Crypto.SINGLE_SIGNER_SIGNATURE_LENGTH);

@@ -1158,7 +1158,7 @@ class Wallets {
 									if(data instanceof Uint8Array === true) {
 								
 										// Set listener error to JSON-RPC internal error error response
-										var listenerError = JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, JSONBigNumber.parse((new TextDecoder()).decode(data)));
+										var listenerError = JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, JSONBigNumber.parse((new TextDecoder("utf-8", {"fatal": true})).decode(data)));
 									}
 									
 									// Otherwise

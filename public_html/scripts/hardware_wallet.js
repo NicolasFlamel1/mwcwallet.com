@@ -392,12 +392,25 @@ class HardwareWallet {
 									
 									// Check if response contains an application name
 									if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH >= Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + applicationNameLength) {
-								
-										// Get application name from the response
-										var applicationName = (new TextDecoder()).decode(response.subarray(Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"], Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + applicationNameLength));
+									
+										// Set error occured to false
+										var errorOccurred = false;
 										
-										// Check if application name is valid
-										if(applicationName === HardwareWallet.APPLICATION_NAME) {
+										// Try
+										try {
+											// Get application name from the response
+											var applicationName = (new TextDecoder("utf-8", {"fatal": true})).decode(response.subarray(Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"], Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + applicationNameLength));
+										}
+										
+										// Catch error
+										catch(error) {
+										
+											// Set error occurred
+											errorOccurred = true;
+										}
+										
+										// Check if error didn't occur and application name is valid
+										if(errorOccurred === false && applicationName === HardwareWallet.APPLICATION_NAME) {
 										
 											// Check if response contains an application version length
 											if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH >= Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + applicationNameLength + Uint8Array["BYTES_PER_ELEMENT"]) {
@@ -407,12 +420,23 @@ class HardwareWallet {
 												
 												// Check if response contains an application version
 												if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH >= Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + applicationNameLength + Uint8Array["BYTES_PER_ELEMENT"] + applicationVersionLength) {
-										
-													// Get application version from the response
-													var applicationVersion = (new TextDecoder()).decode(response.subarray(Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + applicationNameLength + Uint8Array["BYTES_PER_ELEMENT"], Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + applicationNameLength + Uint8Array["BYTES_PER_ELEMENT"] + applicationVersionLength));
+												
+													// Try
+													try {
 													
-													// Check if application version is compatible
-													if(HardwareWallet.isCompatibleApplicationVersion(applicationVersion) === true) {
+														// Get application version from the response
+														var applicationVersion = (new TextDecoder("utf-8", {"fatal": true})).decode(response.subarray(Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + applicationNameLength + Uint8Array["BYTES_PER_ELEMENT"], Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + applicationNameLength + Uint8Array["BYTES_PER_ELEMENT"] + applicationVersionLength));
+													}
+													
+													// Catch error
+													catch(error) {
+													
+														// Set error occurred
+														errorOccurred = true;
+													}
+													
+													// Check if error didn't occur and application version is compatible
+													if(errorOccurred === false && HardwareWallet.isCompatibleApplicationVersion(applicationVersion) === true) {
 													
 														// Return requesting getting the seed cookie from the hardware wallet
 														return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_SEED_COOKIE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)), HardwareWallet.NO_TEXT, [], false, failOnLock).then(function(response) {
@@ -1117,7 +1141,7 @@ class HardwareWallet {
 									try {
 									
 										// Get Tor address from response
-										var torAddress = (new TextDecoder()).decode(response.subarray(0, Tor.ADDRESS_LENGTH));
+										var torAddress = (new TextDecoder("utf-8", {"fatal": true})).decode(response.subarray(0, Tor.ADDRESS_LENGTH));
 									
 										// Get public key from Tor address
 										Tor.torAddressToPublicKey(torAddress);
@@ -1310,7 +1334,7 @@ class HardwareWallet {
 									try {
 									
 										// Get MQS address from response
-										var mqsAddress = (new TextDecoder()).decode(response.subarray(0, Mqs.ADDRESS_LENGTH));
+										var mqsAddress = (new TextDecoder("utf-8", {"fatal": true})).decode(response.subarray(0, Mqs.ADDRESS_LENGTH));
 									
 										// Get public key from MQS address
 										Mqs.mqsAddressToPublicKey(mqsAddress, Consensus.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE);
@@ -1503,7 +1527,7 @@ class HardwareWallet {
 									try {
 									
 										// Get Slatepack address from response
-										var slatepackAddress = (new TextDecoder()).decode(response.subarray(0, Slatepack.ADDRESS_LENGTH));
+										var slatepackAddress = (new TextDecoder("utf-8", {"fatal": true})).decode(response.subarray(0, Slatepack.ADDRESS_LENGTH));
 									
 										// Get public key from Slatepack address
 										Slatepack.slatepackAddressToPublicKey(slatepackAddress);

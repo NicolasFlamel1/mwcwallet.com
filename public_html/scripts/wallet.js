@@ -820,8 +820,19 @@ class Wallet {
 						// Check if BIP39 salt exists
 						if(self.bip39Salt !== Wallet.NO_BIP39_SALT) {
 						
-							// Resolve mnemonic with BIP39 salt
-							resolve(mnemonic + " " + (new TextDecoder()).decode(self.bip39Salt));
+							// Try
+							try {
+						
+								// Resolve mnemonic with BIP39 salt
+								resolve(mnemonic + " " + (new TextDecoder("utf-8", {"fatal": true})).decode(self.bip39Salt));
+							}
+							
+							// Catch errors
+							catch(error) {
+							
+								// Reject error
+								reject(Language.getDefaultTranslation('Invalid wallet.'));
+							}
 						}
 						
 						// Otherwise
