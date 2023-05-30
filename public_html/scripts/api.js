@@ -8471,8 +8471,31 @@ class Api {
 								// Trim url
 								url = url.trim();
 								
-								// Check if not sending as file
-								if(sendAsFile === false) {
+								// Check wallet type
+								switch(Consensus.getWalletType()) {
+								
+									// MWC or GRIN wallet
+									case Consensus.MWC_WALLET_TYPE:
+									case Consensus.GRIN_WALLET_TYPE:
+									
+										// Clear send as MQS
+										var sendAsMqs = false;
+									
+										// Break
+										break;
+								
+									// EPIC wallet
+									case Consensus.EPIC_WALLET_TYPE:
+									
+										// Set send as MQS to if the URL is an MQS address with host
+										var sendAsMqs = Mqs.isValidAddressWithHost(url, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE) === true;
+										
+										// Break
+										break;
+								}
+								
+								// Check if not sending as file or as MQS
+								if(sendAsFile === false && sendAsMqs === false) {
 						
 									// Check wallet type
 									switch(Consensus.getWalletType()) {
@@ -8586,7 +8609,7 @@ class Api {
 								}
 								
 								// Return checking if receiver is compatible
-								return self.isCompatible(receiverUrl, sendAsFile, cancelOccurred).then(function(compatibleSlateVersions) {
+								return self.isCompatible(receiverUrl, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, sendAsFile, cancelOccurred).then(function(compatibleSlateVersions) {
 								
 									// Check if cancel didn't occur
 									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -9727,8 +9750,8 @@ class Api {
 																return;
 															}
 															
-															// Check if not sending as file slate's version isn't supported
-															if(sendAsFile === false && compatibleSlateVersions.indexOf((slate.getVersion() instanceof BigNumber === true) ? "V" + slate.getVersion().toFixed() : slate.getVersion()) === Common.INDEX_NOT_FOUND) {
+															// Check if not sending as file or as MQS and the slate's version isn't supported
+															if(sendAsFile === false && sendAsMqs === false && compatibleSlateVersions.indexOf((slate.getVersion() instanceof BigNumber === true) ? "V" + slate.getVersion().toFixed() : slate.getVersion()) === Common.INDEX_NOT_FOUND) {
 															
 																// Reject unsupported response
 																reject(Message.createText(Language.getDefaultTranslation('Recipient doesn\'t support any available slate versions.')));
@@ -14413,7 +14436,7 @@ class Api {
 	// Private
 		
 		// Is compatible
-		isCompatible(url, sendAsFile = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
+		isCompatible(url, isMainnet, sendAsFile = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
 		
 			// Set self
 			var self = this;
@@ -14426,150 +14449,184 @@ class Api {
 				
 					// Check if not sending as file
 					if(sendAsFile === false) {
+					
+						// Check wallet type
+						switch(Consensus.getWalletType()) {
+						
+							// MWC or GRIN wallet
+							case Consensus.MWC_WALLET_TYPE:
+							case Consensus.GRIN_WALLET_TYPE:
+							
+								// Clear send as MQS
+								var sendAsMqs = false;
+							
+								// Break
+								break;
+						
+							// EPIC wallet
+							case Consensus.EPIC_WALLET_TYPE:
+							
+								// Set send as MQS to if the URL is an MQS address with host
+								var sendAsMqs = Mqs.isValidAddressWithHost(url, isMainnet) === true;
+								
+								// Break
+								break;
+						}
+						
+						// Check if not sending to MQS address
+						if(sendAsMqs === false) {
 			
-						// Get proxy request
-						var proxyRequest = Tor.isTorUrl(url) === true && Tor.isSupported() === false;
-						
-						// Upgrade URL if applicable
-						url = Common.upgradeApplicableInsecureUrl(url);
-				
-						// Return sending JSON-RPC request to check version
-						return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.CHECK_VERSION_METHOD, [], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
-						
-							// Check if cancel didn't occur
-							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-						
-								// Check if response contains a result
-								if(Object.isObject(response) === true && "Ok" in response === true) {
-								
-									// Set response to its value
-									response = response["Ok"];
+							// Get proxy request
+							var proxyRequest = Tor.isTorUrl(url) === true && Tor.isSupported() === false;
+							
+							// Upgrade URL if applicable
+							url = Common.upgradeApplicableInsecureUrl(url);
+					
+							// Return sending JSON-RPC request to check version
+							return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.CHECK_VERSION_METHOD, [], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
+							
+								// Check if cancel didn't occur
+								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+							
+									// Check if response contains a result
+									if(Object.isObject(response) === true && "Ok" in response === true) {
 									
-									// Check if response's foreign API version isn't supported
-									if(Object.isObject(response) === false || "foreign_api_version" in response === false || (Common.isNumberString(response["foreign_api_version"]) === false && response["foreign_api_version"] instanceof BigNumber === false) || (new BigNumber(response["foreign_api_version"])).isInteger() === false || (new BigNumber(response["foreign_api_version"])).isLessThan(Api.FOREIGN_API_VERSION_ONE) === true) {
-									
-										// Reject unsupported response
-										reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+										// Set response to its value
+										response = response["Ok"];
 										
-										// Return
-										return;
-									}
-									
-									// Get foreign API version
-									var foreignApiVersion = new BigNumber(response["foreign_api_version"]);
-									
-									// Check if foreign API version isn't supported
-									if(foreignApiVersion.isEqualTo(Api.CURRENT_FOREIGN_API_VERSION) === false) {
-									
-										// Reject unsupported foreign API version
-										reject(Message.createText(Language.getDefaultTranslation('Recipient\'s foreign API version isn\'t supported.')));
+										// Check if response's foreign API version isn't supported
+										if(Object.isObject(response) === false || "foreign_api_version" in response === false || (Common.isNumberString(response["foreign_api_version"]) === false && response["foreign_api_version"] instanceof BigNumber === false) || (new BigNumber(response["foreign_api_version"])).isInteger() === false || (new BigNumber(response["foreign_api_version"])).isLessThan(Api.FOREIGN_API_VERSION_ONE) === true) {
 										
-										// Return
-										return;
-									}
-									
-									// Check if response's supported slate versions isn't supported
-									if(Object.isObject(response) === false || "supported_slate_versions" in response === false || Array.isArray(response["supported_slate_versions"]) === false || response["supported_slate_versions"].every(function(supportedSlateVersion) {
-									
-										// Return if supported slate version is a string
-										return typeof supportedSlateVersion === "string";
-										
-									}) === false) {
-									
-										// Reject unsupported response
-										reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-										
-										// Return
-										return;
-									}
-									
-									// Get supported slate versions
-									var supportedSlateVersions = response["supported_slate_versions"];
-									
-									// Initialize compatible slate versions
-									var compatibleSlateVersions = [];
-									
-									// Go through all supported slate versions
-									for(var i = 0; i < supportedSlateVersions["length"]; ++i) {
-									
-										// Get supported slate version
-										var supportedSlateVersion = supportedSlateVersions[i];
-										
-										// Check if supported slate version is compatible
-										if(Slate.SUPPORTED_VERSIONS.indexOf(supportedSlateVersion) !== Common.INDEX_NOT_FOUND) {
-										
-											// Append supported slate version to list of compatible slate versions
-											compatibleSlateVersions.push(supportedSlateVersion);
+											// Reject unsupported response
+											reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+											
+											// Return
+											return;
 										}
-									}
-									
-									// Check if there no supported slate versions are compatible
-									if(compatibleSlateVersions["length"] === 0) {
-									
-										// Reject unsupported slate versions
-										reject(Message.createText(Language.getDefaultTranslation('Recipient\'s slate versions aren\'t supported.')));
 										
-										// Return
-										return;
+										// Get foreign API version
+										var foreignApiVersion = new BigNumber(response["foreign_api_version"]);
+										
+										// Check if foreign API version isn't supported
+										if(foreignApiVersion.isEqualTo(Api.CURRENT_FOREIGN_API_VERSION) === false) {
+										
+											// Reject unsupported foreign API version
+											reject(Message.createText(Language.getDefaultTranslation('Recipient\'s foreign API version isn\'t supported.')));
+											
+											// Return
+											return;
+										}
+										
+										// Check if response's supported slate versions isn't supported
+										if(Object.isObject(response) === false || "supported_slate_versions" in response === false || Array.isArray(response["supported_slate_versions"]) === false || response["supported_slate_versions"].every(function(supportedSlateVersion) {
+										
+											// Return if supported slate version is a string
+											return typeof supportedSlateVersion === "string";
+											
+										}) === false) {
+										
+											// Reject unsupported response
+											reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+											
+											// Return
+											return;
+										}
+										
+										// Get supported slate versions
+										var supportedSlateVersions = response["supported_slate_versions"];
+										
+										// Initialize compatible slate versions
+										var compatibleSlateVersions = [];
+										
+										// Go through all supported slate versions
+										for(var i = 0; i < supportedSlateVersions["length"]; ++i) {
+										
+											// Get supported slate version
+											var supportedSlateVersion = supportedSlateVersions[i];
+											
+											// Check if supported slate version is compatible
+											if(Slate.SUPPORTED_VERSIONS.indexOf(supportedSlateVersion) !== Common.INDEX_NOT_FOUND) {
+											
+												// Append supported slate version to list of compatible slate versions
+												compatibleSlateVersions.push(supportedSlateVersion);
+											}
+										}
+										
+										// Check if there no supported slate versions are compatible
+										if(compatibleSlateVersions["length"] === 0) {
+										
+											// Reject unsupported slate versions
+											reject(Message.createText(Language.getDefaultTranslation('Recipient\'s slate versions aren\'t supported.')));
+											
+											// Return
+											return;
+										}
+									
+										// Resolve compatible slate versions
+										resolve(compatibleSlateVersions);
 									}
 								
-									// Resolve compatible slate versions
-									resolve(compatibleSlateVersions);
+									// Otherwise
+									else {
+									
+										// Reject invalid response
+										reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+									}
 								}
-							
+						
 								// Otherwise
 								else {
 								
-									// Reject invalid response
-									reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+									// Reject canceled error
+									reject(Common.CANCELED_ERROR);
 								}
-							}
-					
-							// Otherwise
-							else {
 							
-								// Reject canceled error
-								reject(Common.CANCELED_ERROR);
-							}
-						
-						// Catch errors
-						}).catch(function(responseStatusOrResponse) {
-						
-							// Check if cancel didn't occur
-							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-						
-								// Check if response status is provided
-								if(typeof responseStatusOrResponse === "number") {
-								
-									// Reject status as text
-									reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
+							// Catch errors
+							}).catch(function(responseStatusOrResponse) {
+							
+								// Check if cancel didn't occur
+								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+							
+									// Check if response status is provided
+									if(typeof responseStatusOrResponse === "number") {
+									
+										// Reject status as text
+										reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
+									}
+									
+									// Otherwise check if response contains an error message
+									else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
+									
+										// Get is raw data
+										var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
+									
+										// Reject the response's error message
+										reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+									}
+									
+									// Otherwise
+									else {
+									
+										// Reject invalid response
+										reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+									}
 								}
-								
-								// Otherwise check if response contains an error message
-								else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
-								
-									// Get is raw data
-									var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
-								
-									// Reject the response's error message
-									reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
-								}
-								
+						
 								// Otherwise
 								else {
 								
-									// Reject invalid response
-									reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+									// Reject canceled error
+									reject(Common.CANCELED_ERROR);
 								}
-							}
-					
-							// Otherwise
-							else {
-							
-								// Reject canceled error
-								reject(Common.CANCELED_ERROR);
-							}
-						});
+							});
+						}
+						
+						// Otherwise
+						else {
+						
+							// Resolve compatible slate versions
+							resolve([]);
+						}
 					}
 					
 					// Otherwise
@@ -14603,266 +14660,300 @@ class Api {
 				
 					// Check if not sending as file
 					if(sendAsFile === false) {
-			
-						// Get proxy request
-						var proxyRequest = Tor.isTorUrl(url) === true && Tor.isSupported() === false;
-						
-						// Upgrade URL if applicable
-						url = Common.upgradeApplicableInsecureUrl(url);
 					
-						// Return sending JSON-RPC request to get proof address
-						return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.GET_PROOF_ADDRESS_METHOD, [], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
+						// Check wallet type
+						switch(Consensus.getWalletType()) {
 						
-							// Check if cancel didn't occur
-							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+							// MWC or GRIN wallet
+							case Consensus.MWC_WALLET_TYPE:
+							case Consensus.GRIN_WALLET_TYPE:
+							
+								// Clear send as MQS
+								var sendAsMqs = false;
+							
+								// Break
+								break;
 						
-								// Check if response contains a result
-								if(Object.isObject(response) === true && "Ok" in response === true) {
+							// EPIC wallet
+							case Consensus.EPIC_WALLET_TYPE:
+							
+								// Set send as MQS to if the URL is an MQS address with host
+								var sendAsMqs = Mqs.isValidAddressWithHost(url, isMainnet) === true;
 								
-									// Set response to its value
-									response = response["Ok"];
+								// Break
+								break;
+						}
+						
+						// Check if not sending to MQS address
+						if(sendAsMqs === false) {
+			
+							// Get proxy request
+							var proxyRequest = Tor.isTorUrl(url) === true && Tor.isSupported() === false;
+							
+							// Upgrade URL if applicable
+							url = Common.upgradeApplicableInsecureUrl(url);
+						
+							// Return sending JSON-RPC request to get proof address
+							return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.GET_PROOF_ADDRESS_METHOD, [], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
+							
+								// Check if cancel didn't occur
+								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+							
+									// Check if response contains a result
+									if(Object.isObject(response) === true && "Ok" in response === true) {
 									
-									// Check if response isn't supported
-									if(typeof response !== "string") {
-									
-										// Reject unsupported response
-										reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+										// Set response to its value
+										response = response["Ok"];
 										
-										// Return
-										return;
+										// Check if response isn't supported
+										if(typeof response !== "string") {
+										
+											// Reject unsupported response
+											reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+											
+											// Return
+											return;
+										}
+										
+										// Get proof address
+										var proofAddress = response.replace(Common.DOUBLE_QUOTE_PATTERN, "");
+										
+										// Check wallet type
+										switch(Consensus.getWalletType()) {
+										
+											// MWC wallet
+											case Consensus.MWC_WALLET_TYPE:
+										
+												// Check proof address's length
+												switch(proofAddress["length"]) {
+												
+													// Tor address length
+													case Tor.ADDRESS_LENGTH:
+													
+														// Try
+														try {
+														
+															// Get public key from proof address
+															Tor.torAddressToPublicKey(proofAddress);
+														}
+														
+														// Catch errors
+														catch(error) {
+														
+															// Reject unsupported response
+															reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+															
+															// Return
+															return;
+														}
+													
+														// Break
+														break;
+													
+													// MQS address length
+													case Mqs.ADDRESS_LENGTH:
+													
+														// Try
+														try {
+														
+															// Get public key from proof address
+															Mqs.mqsAddressToPublicKey(proofAddress, isMainnet);
+														}
+														
+														// Catch errors
+														catch(error) {
+														
+															// Reject unsupported response
+															reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+															
+															// Return
+															return;
+														}
+													
+														// Break
+														break;
+													
+													// Default
+													default:
+													
+														// Reject unsupported response
+														reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+														
+														// Return
+														return;
+												}
+											
+												// Break
+												break;
+											
+											// GRIN wallet
+											case Consensus.GRIN_WALLET_TYPE:
+											
+												// Check proof address's length
+												switch(proofAddress["length"]) {
+												
+													// Slatepack address length
+													case Slatepack.ADDRESS_LENGTH:
+													
+														// Try
+														try {
+														
+															// Get public key from proof address
+															Slatepack.slatepackAddressToPublicKey(proofAddress);
+														}
+														
+														// Catch errors
+														catch(error) {
+														
+															// Reject unsupported response
+															reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+															
+															// Return
+															return;
+														}
+													
+														// Break
+														break;
+													
+													// Default
+													default:
+													
+														// Reject unsupported response
+														reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+														
+														// Return
+														return;
+												}
+												
+												// Break
+												break;
+											
+											// EPIC wallet
+											case Consensus.EPIC_WALLET_TYPE:
+										
+												// Check proof address's length
+												switch(proofAddress["length"]) {
+												
+													// Tor address length
+													case Tor.ADDRESS_LENGTH:
+													
+														// Try
+														try {
+														
+															// Get public key from proof address
+															Tor.torAddressToPublicKey(proofAddress);
+														}
+														
+														// Catch errors
+														catch(error) {
+														
+															// Reject unsupported response
+															reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+															
+															// Return
+															return;
+														}
+													
+														// Break
+														break;
+													
+													// Default
+													default:
+													
+														// Reject unsupported response
+														reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+														
+														// Return
+														return;
+												}
+											
+												// Break
+												break;
+										}
+									
+										// Resolve proof address
+										resolve(proofAddress);
 									}
 									
-									// Get proof address
-									var proofAddress = response.replace(Common.DOUBLE_QUOTE_PATTERN, "");
+									// Otherwise
+									else {
 									
-									// Check wallet type
-									switch(Consensus.getWalletType()) {
-									
-										// MWC wallet
-										case Consensus.MWC_WALLET_TYPE:
-									
-											// Check proof address's length
-											switch(proofAddress["length"]) {
-											
-												// Tor address length
-												case Tor.ADDRESS_LENGTH:
-												
-													// Try
-													try {
-													
-														// Get public key from proof address
-														Tor.torAddressToPublicKey(proofAddress);
-													}
-													
-													// Catch errors
-													catch(error) {
-													
-														// Reject unsupported response
-														reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-														
-														// Return
-														return;
-													}
-												
-													// Break
-													break;
-												
-												// MQS address length
-												case Mqs.ADDRESS_LENGTH:
-												
-													// Try
-													try {
-													
-														// Get public key from proof address
-														Mqs.mqsAddressToPublicKey(proofAddress, isMainnet);
-													}
-													
-													// Catch errors
-													catch(error) {
-													
-														// Reject unsupported response
-														reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-														
-														// Return
-														return;
-													}
-												
-													// Break
-													break;
-												
-												// Default
-												default:
-												
-													// Reject unsupported response
-													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-													
-													// Return
-													return;
-											}
-										
-											// Break
-											break;
-										
-										// GRIN wallet
-										case Consensus.GRIN_WALLET_TYPE:
-										
-											// Check proof address's length
-											switch(proofAddress["length"]) {
-											
-												// Slatepack address length
-												case Slatepack.ADDRESS_LENGTH:
-												
-													// Try
-													try {
-													
-														// Get public key from proof address
-														Slatepack.slatepackAddressToPublicKey(proofAddress);
-													}
-													
-													// Catch errors
-													catch(error) {
-													
-														// Reject unsupported response
-														reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-														
-														// Return
-														return;
-													}
-												
-													// Break
-													break;
-												
-												// Default
-												default:
-												
-													// Reject unsupported response
-													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-													
-													// Return
-													return;
-											}
-											
-											// Break
-											break;
-										
-										// EPIC wallet
-										case Consensus.EPIC_WALLET_TYPE:
-									
-											// Check proof address's length
-											switch(proofAddress["length"]) {
-											
-												// Tor address length
-												case Tor.ADDRESS_LENGTH:
-												
-													// Try
-													try {
-													
-														// Get public key from proof address
-														Tor.torAddressToPublicKey(proofAddress);
-													}
-													
-													// Catch errors
-													catch(error) {
-													
-														// Reject unsupported response
-														reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-														
-														// Return
-														return;
-													}
-												
-													// Break
-													break;
-												
-												// Default
-												default:
-												
-													// Reject unsupported response
-													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
-													
-													// Return
-													return;
-											}
-										
-											// Break
-											break;
+										// Reject invalid response
+										reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
 									}
-								
-									// Resolve proof address
-									resolve(proofAddress);
 								}
 								
 								// Otherwise
 								else {
 								
-									// Reject invalid response
-									reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+									// Reject canceled error
+									reject(Common.CANCELED_ERROR);
 								}
-							}
 							
-							// Otherwise
-							else {
+							// Catch errors
+							}).catch(function(responseStatusOrResponse) {
 							
-								// Reject canceled error
-								reject(Common.CANCELED_ERROR);
-							}
-						
-						// Catch errors
-						}).catch(function(responseStatusOrResponse) {
-						
-							// Check if cancel didn't occur
-							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-						
-								// Check if response status is provided
-								if(typeof responseStatusOrResponse === "number") {
-								
-									// Check if the status is ok or bad request
-									if(responseStatusOrResponse === Common.HTTP_OK_STATUS || responseStatusOrResponse === Common.HTTP_BAD_REQUEST_STATUS) {
+								// Check if cancel didn't occur
+								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+							
+									// Check if response status is provided
+									if(typeof responseStatusOrResponse === "number") {
+									
+										// Check if the status is ok or bad request
+										if(responseStatusOrResponse === Common.HTTP_OK_STATUS || responseStatusOrResponse === Common.HTTP_BAD_REQUEST_STATUS) {
+										
+											// Resolve no proof address
+											resolve(Api.NO_PROOF_ADDRESS);
+										}
+										
+										// Otherwise
+										else {
+									
+											// Reject status as text
+											reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
+										}
+									}
+									
+									// Otherwise check if response is a method not found error
+									else if(Object.isObject(responseStatusOrResponse) === true && "code" in responseStatusOrResponse && responseStatusOrResponse["code"] instanceof BigNumber === true && responseStatusOrResponse["code"].isEqualTo(JsonRpc.METHOD_NOT_FOUND_ERROR) === true) {
 									
 										// Resolve no proof address
 										resolve(Api.NO_PROOF_ADDRESS);
 									}
 									
+									// Otherwise check if response contains an error message
+									else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
+									
+										// Get is raw data
+										var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
+										
+										// Reject the response's error message
+										reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+									}
+									
 									// Otherwise
 									else {
-								
-										// Reject status as text
-										reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
-									}
-								}
-								
-								// Otherwise check if response is a method not found error
-								else if(Object.isObject(responseStatusOrResponse) === true && "code" in responseStatusOrResponse && responseStatusOrResponse["code"] instanceof BigNumber === true && responseStatusOrResponse["code"].isEqualTo(JsonRpc.METHOD_NOT_FOUND_ERROR) === true) {
-								
-									// Resolve no proof address
-									resolve(Api.NO_PROOF_ADDRESS);
-								}
-								
-								// Otherwise check if response contains an error message
-								else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
-								
-									// Get is raw data
-									var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
 									
-									// Reject the response's error message
-									reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+										// Reject invalid response
+										reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+									}
 								}
 								
 								// Otherwise
 								else {
 								
-									// Reject invalid response
-									reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+									// Reject canceled error
+									reject(Common.CANCELED_ERROR);
 								}
-							}
-							
-							// Otherwise
-							else {
-							
-								// Reject canceled error
-								reject(Common.CANCELED_ERROR);
-							}
-						});
+							});
+						}
+						
+						// Otherwise
+						else {
+						
+							// Resolve no proof address
+							resolve(Api.NO_PROOF_ADDRESS);
+						}
 					}
 					
 					// Otherwise
@@ -15285,99 +15376,182 @@ class Api {
 							
 										// Check if not sending as file
 										if(sendAsFile === false) {
+										
+											// Check wallet type
+											switch(Consensus.getWalletType()) {
+											
+												// MWC or GRIN wallet
+												case Consensus.MWC_WALLET_TYPE:
+												case Consensus.GRIN_WALLET_TYPE:
+												
+													// Clear send as MQS
+													var sendAsMqs = false;
+												
+													// Break
+													break;
+											
+												// EPIC wallet
+												case Consensus.EPIC_WALLET_TYPE:
+												
+													// Set send as MQS to if the URL is an MQS address with host
+													var sendAsMqs = Mqs.isValidAddressWithHost(url, isMainnet) === true;
+													
+													// Break
+													break;
+											}
+											
+											// Check if not sending to MQS address
+											if(sendAsMqs === false) {
 									
-											// Get proxy request
-											var proxyRequest = Tor.isTorUrl(url) === true && Tor.isSupported() === false;
-											
-											// Upgrade URL if applicable
-											url = Common.upgradeApplicableInsecureUrl(url);
-											
-											// Set current slate send ID to the slate's ID
-											self.currentSlateSendId = slate.getId();
-											
-											// Return sending JSON-RPC request to get slate response
-											return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.RECEIVE_TRANSACTION_METHOD, [
-											
-												// Slate
-												encodedSlate,
+												// Get proxy request
+												var proxyRequest = Tor.isTorUrl(url) === true && Tor.isSupported() === false;
 												
-												// Destination account name
-												null,
+												// Upgrade URL if applicable
+												url = Common.upgradeApplicableInsecureUrl(url);
 												
-												// Message
-												null,
-											
-											], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
-											
-												// Set current slate send ID to no current slate send ID
-												self.currentSlateSendId = Api.NO_CURRENT_SLATE_SEND_ID;
-											
-												// Check if cancel didn't occur
-												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+												// Set current slate send ID to the slate's ID
+												self.currentSlateSendId = slate.getId();
 												
-													// Check if response contains a result
-													if(Object.isObject(response) === true && "Ok" in response === true) {
-													
-														// Resolve response's result
-														resolve(response["Ok"]);
-													}
+												// Return sending JSON-RPC request to get slate response
+												return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.RECEIVE_TRANSACTION_METHOD, [
 												
-													// Otherwise
-													else {
+													// Slate
+													encodedSlate,
 													
-														// Reject invalid response
-														reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
-													}
-												}
-											
-												// Otherwise
-												else {
+													// Destination account name
+													null,
+													
+													// Message
+													null,
 												
-													// Reject canceled error
-													reject(Common.CANCELED_ERROR);
-												}
-											
-											// Catch errors
-											}).catch(function(responseStatusOrResponse) {
-											
-												// Set current slate send ID to no current slate send ID
-												self.currentSlateSendId = Api.NO_CURRENT_SLATE_SEND_ID;
-											
-												// Check if cancel didn't occur
-												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-											
-													// Check if response status is provided
-													if(typeof responseStatusOrResponse === "number") {
+												], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
+												
+													// Set current slate send ID to no current slate send ID
+													self.currentSlateSendId = Api.NO_CURRENT_SLATE_SEND_ID;
+												
+													// Check if cancel didn't occur
+													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 													
-														// Reject status as text
-														reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
-													}
-													
-													// Otherwise check if response contains an error message
-													else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
-													
-														// Get is raw data
-														var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
+														// Check if response contains a result
+														if(Object.isObject(response) === true && "Ok" in response === true) {
 														
-														// Reject the response's error message
-														reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+															// Resolve response's result
+															resolve(response["Ok"]);
+														}
+													
+														// Otherwise
+														else {
+														
+															// Reject invalid response
+															reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+														}
+													}
+												
+													// Otherwise
+													else {
+													
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
+													}
+												
+												// Catch errors
+												}).catch(function(responseStatusOrResponse) {
+												
+													// Set current slate send ID to no current slate send ID
+													self.currentSlateSendId = Api.NO_CURRENT_SLATE_SEND_ID;
+												
+													// Check if cancel didn't occur
+													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+												
+														// Check if response status is provided
+														if(typeof responseStatusOrResponse === "number") {
+														
+															// Reject status as text
+															reject(self.statusToText(responseStatusOrResponse, url, proxyRequest));
+														}
+														
+														// Otherwise check if response contains an error message
+														else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
+														
+															// Get is raw data
+															var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
+															
+															// Reject the response's error message
+															reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+														}
+														
+														// Otherwise
+														else {
+														
+															// Reject invalid response
+															reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+														}
 													}
 													
 													// Otherwise
 													else {
 													
-														// Reject invalid response
-														reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
 													}
-												}
+												});
+											}
+											
+											// Otherwise
+											else {
+											
+												// Create ephemeral secret key
+												var ephemeralSecretKey = new Uint8Array(Crypto.SECP256K1_SECRET_KEY_LENGTH);
+											
+												// While ephemeral secret key isn't a valid secret key
+												do {
 												
-												// Otherwise
-												else {
+													// Fill ephemeral secret key with random values
+													crypto.getRandomValues(ephemeralSecretKey);
+													
+												} while(Secp256k1Zkp.isValidSecretKey(ephemeralSecretKey) !== true);
+											
+												// Return sending MQS request to get slate response
+												return Mqs.sendRequest(url, encodedSlate, ephemeralSecretKey, isMainnet, cancelOccurred).then(function(response) {
 												
-													// Reject canceled error
-													reject(Common.CANCELED_ERROR);
-												}
-											});
+													// Securely clear ephemeral secret key
+													ephemeralSecretKey.fill(0);
+												
+													// Check if cancel didn't occur
+													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+													
+														// Resolve response
+														resolve(response);
+													}
+												
+													// Otherwise
+													else {
+													
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
+													}
+													
+												// Catch errors
+												}).catch(function(error) {
+												
+													// Securely clear ephemeral secret key
+													ephemeralSecretKey.fill(0);
+												
+													// Check if cancel didn't occur
+													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+													
+														// Reject error
+														reject(error);
+													}
+													
+													// Otherwise
+													else {
+													
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
+													}
+												});
+											}
 										}
 										
 										// Otherwise

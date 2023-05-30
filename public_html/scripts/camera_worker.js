@@ -105,7 +105,7 @@ self.addEventListener("message", function(event) {
 			var qrCode = jsQR(imageData, width, height, {
 			
 				// Inversion attempts
-				"inversionAttempts": "dontInvert"
+				"inversionAttempts": "attemptBoth"
 			});
 			
 			// Check if getting QR code failed

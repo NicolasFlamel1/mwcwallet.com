@@ -667,6 +667,47 @@ class SendPaymentSection extends Section {
 														// Check if value exists
 														if(value !== Camera.NO_VALUE && value["length"] !== 0) {
 														
+															// Check wallet type
+															switch(Consensus.getWalletType()) {
+															
+																// EPIC wallet
+																case Consensus.EPIC_WALLET_TYPE:
+																
+																	// Initialize error occurred
+																	var errorOccurred = false;
+																
+																	// Try
+																	try {
+																	
+																		// Parse values as a URL
+																		var parsedUrl = new URL(value);
+																	}
+																	
+																	// Catch errors
+																	catch(error) {
+																	
+																		// Set error occurred
+																		errorOccurred = true;
+																	}
+																	
+																	// Check if an error didn't occur
+																	if(errorOccurred === false) {
+																	
+																		// Check if parsed URL's protocol isn't needed
+																		if(parsedUrl["protocol"] === "epic:") {
+																		
+																			// Remove protocol from value
+																			value = Common.ltrim(value).substring("epic:"["length"]);
+																		}
+																	}
+																	
+																	// Break
+																	break;
+															}
+															
+															// Remove handled protocols from value
+															value = ProtocolHandler.standardizeUrlProtocol(value);
+														
 															// Set recipient address to the value
 															self.getDisplay().find("input.recipientAddress").val(value).trigger("input", [
 															
@@ -1276,8 +1317,31 @@ class SendPaymentSection extends Section {
 					// Base fee
 					var baseFee = (self.allowChangingBaseFee === true) ? (new BigNumber(self.getDisplay().find("input.baseFee").val())).multipliedBy(Consensus.VALUE_NUMBER_BASE) : Api.DEFAULT_BASE_FEE;
 					
-					// Check if not sending as file
-					if(sendAsFile === false) {
+					// Check wallet type
+					switch(Consensus.getWalletType()) {
+					
+						// MWC or GRIN wallet
+						case Consensus.MWC_WALLET_TYPE:
+						case Consensus.GRIN_WALLET_TYPE:
+						
+							// Clear send as MQS
+							var sendAsMqs = false;
+						
+							// Break
+							break;
+					
+						// EPIC wallet
+						case Consensus.EPIC_WALLET_TYPE:
+						
+							// Set send as MQS to if the URL is an MQS address with host
+							var sendAsMqs = Mqs.isValidAddressWithHost(recipientAddress, Consensus.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE) === true;
+							
+							// Break
+							break;
+					}
+					
+					// Check if not sending as file or as MQS
+					if(sendAsFile === false && sendAsMqs === false) {
 					
 						// Check wallet type
 						switch(Consensus.getWalletType()) {
@@ -1400,8 +1464,8 @@ class SendPaymentSection extends Section {
 						return;
 					}
 					
-					// Check if not sending as file
-					if(sendAsFile === false) {
+					// Check if not sending as file or as MQS
+					if(sendAsFile === false && sendAsMqs === false) {
 					
 						// Check if wallet has an address suffix
 						if(wallet.getAddressSuffix() !== Wallet.NO_ADDRESS_SUFFIX) {

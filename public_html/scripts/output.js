@@ -480,13 +480,37 @@ class Output {
 			// Return promise
 			return new Promise(function(resolve, reject) {
 			
-				// Check if output could be legacy
-				var legacyPreviousWeeksAgo = self.getHeight().minus(Output.LEGACY_PREVIOUS_BLOCKS_CHECK_DURATION);
+				// Check wallet type
+				switch(Consensus.getWalletType()) {
 				
-				if(legacyPreviousWeeksAgo.isLessThan(0) === true)
-					legacyPreviousWeeksAgo = new BigNumber(0);
-				
-				if(Consensus.isValidHeaderVersion(isMainnet, legacyPreviousWeeksAgo, Consensus.LEGACY_HEADER_VERSION) === true) {
+					// MWC or GRIN wallet
+					case Consensus.MWC_WALLET_TYPE:
+					case Consensus.GRIN_WALLET_TYPE:
+			
+						// Get legacy previous weeks ago
+						var legacyPreviousWeeksAgo = self.getHeight().minus(Output.LEGACY_PREVIOUS_BLOCKS_CHECK_DURATION);
+						
+						if(legacyPreviousWeeksAgo.isLessThan(0) === true)
+							legacyPreviousWeeksAgo = new BigNumber(0);
+						
+						// Set perform legacy check to if the output could be legacy
+						var performLegacyCheck = Consensus.isValidHeaderVersion(isMainnet, legacyPreviousWeeksAgo, Consensus.LEGACY_HEADER_VERSION) === true;
+						
+						// Break
+						break;
+					
+					// EPIC wallet
+					case Consensus.EPIC_WALLET_TYPE:
+					
+						// Set perform legacy check
+						var performLegacyCheck = true;
+						
+						// Break
+						break;
+				}
+			
+				// Check if performing legacy check
+				if(performLegacyCheck === true) {
 				
 					// Return sending legacy information request
 					return Output.sendRequest([

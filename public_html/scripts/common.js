@@ -1248,6 +1248,20 @@ class Common {
 			// Return hex prefix
 			return "0x";
 		}
+		
+		// Default HTTP port
+		static get DEFAULT_HTTP_PORT() {
+		
+			// Return default HTTP port
+			return 80;
+		}
+		
+		// Default HTTPS port
+		static get DEFAULT_HTTPS_PORT() {
+		
+			// Return default HTTPS port
+			return 443;
+		}
 	
 	// Private
 		
