@@ -22,18 +22,19 @@ class Transactions {
 			this.exclusiveWalletTransactionsLocksPriorityCounters = {};
 		
 			// Create database
-			Database.createDatabase(function(database, currentVersion) {
+			Database.createDatabase(function(database, currentVersion, databaseTransaction) {
 			
+				// Create or get transactions object store
+				var transactionsObjectStore = (currentVersion === Database.NO_CURRENT_VERSION) ? database.createObjectStore(Transactions.OBJECT_STORE_NAME, {
+				
+					// Auto increment
+					"autoIncrement": true
+				
+				}) : databaseTransaction.objectStore(Transactions.OBJECT_STORE_NAME);
+				
 				// Check if no database version exists
 				if(currentVersion === Database.NO_CURRENT_VERSION) {
 			
-					// Create transactions object store
-					var transactionsObjectStore = database.createObjectStore(Transactions.OBJECT_STORE_NAME, {
-					
-						// Auto increment
-						"autoIncrement": true
-					});
-					
 					// Create index to search transactions object store by wallet type, network type, and commit
 					transactionsObjectStore.createIndex(Transactions.DATABASE_WALLET_TYPE_NETWORK_TYPE_AND_COMMIT_NAME, [
 					
@@ -248,7 +249,11 @@ class Transactions {
 						// Unique
 						"unique": false
 					});
-					
+				}
+				
+				// Check if database version is less than or equal to version one
+				if(currentVersion <= Database.VERSION_ONE) {
+				
 					// Create index to search transactions object store by wallet key path and checked
 					transactionsObjectStore.createIndex(Transactions.DATABASE_WALLET_KEY_PATH_AND_CHECKED_NAME, [
 					

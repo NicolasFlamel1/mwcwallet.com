@@ -114,12 +114,6 @@ tar -xf "./v0.9.0.tar.gz"
 mv "./js-sha256-0.9.0/src/sha256.js" "./js-sha256-0.9.0.js"
 rm -rf "./v0.9.0.tar.gz" "./js-sha256-0.9.0"
 
-# How to build /public_html/scripts/LedgerJS_Browser-0.0.2.js
-wget "https://github.com/NicolasFlamel1/LedgerJS-Browser/releases/download/v0.0.2/LedgerJS_Browser-0.0.2.zip"
-unzip "./LedgerJS_Browser-0.0.2.zip"
-mv "./LedgerJS_Browser.js" "./LedgerJS_Browser-0.0.2.js"
-rm -rf "./LedgerJS_Browser-0.0.2.zip"
-
 # How to build /public_html/scripts/qrcode-generator-1.4.4.js
 wget "https://github.com/kazuhikoarase/qrcode-generator/archive/refs/tags/js1.4.4.tar.gz"
 tar -xf "./js1.4.4.tar.gz"

@@ -3337,7 +3337,7 @@ class Api {
 																																													// Kernel features
 																																													slate.getDisplayKernelFeatures()
 																																													
-																																												]) + ((slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? (Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu rawData\">" + Common.htmlEncode(slate.getSenderAddress()) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak()) : ""), allowUnlock, preventMessages, cancelOccurred).then(function(canceled) {
+																																												]) + ((slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? (Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(slate.getSenderAddress()) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak()) : ""), allowUnlock, preventMessages, cancelOccurred).then(function(canceled) {
 																																												
 																																													// Initialize hardware wallet disconnected
 																																													var hardwareWalletDisconnected = false;
@@ -13807,7 +13807,7 @@ class Api {
 																																			var isRawData = Common.hasWhitespace(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"]) === false;
 																																		
 																																			// Reject error
-																																			reject(Message.createText(Language.getDefaultTranslation('Broadcasting the transaction failed for the following reason.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+																																			reject(Message.createText(Language.getDefaultTranslation('Broadcasting the transaction failed for the following reason.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak());
 																																		}
 																																		
 																																		// Otherwise
@@ -14601,7 +14601,7 @@ class Api {
 										var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
 									
 										// Reject the response's error message
-										reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+										reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak());
 									}
 									
 									// Otherwise
@@ -14928,7 +14928,7 @@ class Api {
 										var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
 										
 										// Reject the response's error message
-										reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+										reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak());
 									}
 									
 									// Otherwise
@@ -15477,7 +15477,7 @@ class Api {
 															var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
 															
 															// Reject the response's error message
-															reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+															reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(responseStatusOrResponse["message"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak());
 														}
 														
 														// Otherwise

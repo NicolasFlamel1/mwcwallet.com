@@ -483,6 +483,7 @@
 			'Syncing failed' => 'Synchronisierung fehlgeschlagen',
 			//'Testnet' => 'Testnet',
 			/*TODO*///'That file is invalid, contains unsupported features, or was already used.' => '',
+			/*TODO*///'That hardware wallet is already being used.' => '',
 			'That hardware wallet isn\'t connected.' => 'Diese Hardware Wallet ist nicht verbunden.',
 			'That hardware wallet isn\'t for %1$y.' => 'Diese Hardware Wallet ist nichts für %1$y.',
 			'That hardware wallet isn\'t for Wallet %1$s.' => 'Diese Hardware-Wallet ist nicht für Wallet %1$s.',

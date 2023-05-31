@@ -28,27 +28,28 @@ class RecentHeights {
 			this.initialHeightsObtained = new InitialHeightsObtained();
 		
 			// Create database
-			Database.createDatabase(function(database, currentVersion) {
+			Database.createDatabase(function(database, currentVersion, databaseTransaction) {
 			
+				// Create or get recent heights object store
+				var recentHeightsObjectStore = (currentVersion === Database.NO_CURRENT_VERSION) ? database.createObjectStore(RecentHeights.OBJECT_STORE_NAME, {
+				
+					// Key path
+					"keyPath": [
+					
+						// Wallet type
+						Database.toKeyPath(RecentHeights.DATABASE_WALLET_TYPE_NAME),
+						
+						// Network type
+						Database.toKeyPath(RecentHeights.DATABASE_NETWORK_TYPE_NAME),
+					
+						// Height
+						Database.toKeyPath(RecentHeights.DATABASE_HEIGHT_NAME)
+					]
+					
+				}) : databaseTransaction.objectStore(RecentHeights.OBJECT_STORE_NAME);
+				
 				// Check if no database version exists
 				if(currentVersion === Database.NO_CURRENT_VERSION) {
-			
-					// Create recent heights object store
-					var recentHeightsObjectStore = database.createObjectStore(RecentHeights.OBJECT_STORE_NAME, {
-					
-						// Key path
-						"keyPath": [
-						
-							// Wallet type
-							Database.toKeyPath(RecentHeights.DATABASE_WALLET_TYPE_NAME),
-							
-							// Network type
-							Database.toKeyPath(RecentHeights.DATABASE_NETWORK_TYPE_NAME),
-						
-							// Height
-							Database.toKeyPath(RecentHeights.DATABASE_HEIGHT_NAME)
-						]
-					});
 					
 					// Create index to search recent heights object store by wallet type and network type
 					recentHeightsObjectStore.createIndex(RecentHeights.DATABASE_WALLET_TYPE_AND_NETWORK_TYPE_NAME, [

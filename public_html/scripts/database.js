@@ -54,6 +54,9 @@ class Database {
 					// Get database
 					var database = event["target"]["result"];
 					
+					// Get database transaction
+					var databaseTransaction = event["target"]["transaction"];
+					
 					// Get current version
 					var currentVersion = event["oldVersion"];
 					
@@ -71,7 +74,7 @@ class Database {
 						for(var i = 0; i < Database.newDatabases["length"]; ++i)
 						
 							// Create new database
-							Database.newDatabases[i](database, currentVersion);
+							Database.newDatabases[i](database, currentVersion, databaseTransaction);
 					}
 				};
 				
@@ -1712,11 +1715,18 @@ class Database {
 			return "Database";
 		}
 		
+		// Version one
+		static get VERSION_ONE() {
+		
+			// Return version one
+			return 1;
+		}
+		
 		// Version
 		static get VERSION() {
 		
 			// Return version
-			return 1;
+			return 2;
 		}
 		
 		// No records match get result

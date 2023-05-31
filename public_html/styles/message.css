@@ -48,6 +48,11 @@ aside.message > div > div > p > span.text a[tabindex="-1"] {
 	pointer-events: none;
 }
 
+aside.message > div > div > p > span.text span.messageContainer {
+	padding: 0 1.4em;
+	display: inline-block;
+}
+
 aside.message > div > div > p > span.text span.passphrase, aside.message > div > div > p > span.text span.message {
 	font-weight: bold;
 	font-family: monospace;
@@ -473,6 +478,7 @@ aside.message > div > div > p > span.text span.copy {
 	cursor: copy;
 	line-height: 1em;
 	transition: opacity 0.1s ease-in-out;
+	position: absolute;
 }
 
 aside.message > div > div > p > span.text span.copy.clicked {

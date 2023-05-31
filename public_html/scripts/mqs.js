@@ -460,7 +460,7 @@ class Mqs {
 											case "Ok":
 											
 												// Check if subscription was requested
-												if(subscriptionRequested == true) {
+												if(subscriptionRequested === true) {
 												
 													// Clear subscription request
 													subscriptionRequested = false;

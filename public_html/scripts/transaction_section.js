@@ -213,7 +213,7 @@ class TransactionSection extends Section {
 					self.getClipboard().copy(value).then(function() {
 					
 						// Show message and allow showing messages
-						self.getMessage().show(Language.getDefaultTranslation('Value Copied'), Message.createText(Language.getDefaultTranslation('The value was successfully copied to your clipboard.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the pasted value matches the following value when you paste it.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Common.htmlEncode(value) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak(), false, function() {
+						self.getMessage().show(Language.getDefaultTranslation('Value Copied'), Message.createText(Language.getDefaultTranslation('The value was successfully copied to your clipboard.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the pasted value matches the following value when you paste it.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Common.htmlEncode(value) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak(), false, function() {
 						
 							// Hide loading
 							self.getApplication().hideLoading();
@@ -459,7 +459,7 @@ class TransactionSection extends Section {
 									var isRawData = Common.hasWhitespace(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"]) === false;
 								
 									// Show rebroadcast transaction error
-									showRebroadcastTransactionError(Message.createText(Language.getDefaultTranslation('Rebroadcasting the transaction failed for the following reason.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + Message.createLineBreak());
+									showRebroadcastTransactionError(Message.createText(Language.getDefaultTranslation('Rebroadcasting the transaction failed for the following reason.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak());
 								}
 								
 								// Otherwise check if error is a connection error

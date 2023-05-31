@@ -480,6 +480,7 @@
 			'Syncing failed' => '同步失败',
 			'Testnet' => '测试网络',
 			/*TODO*///'That file is invalid, contains unsupported features, or was already used.' => '',
+			/*TODO*///'That hardware wallet is already being used.' => '',
 			'That hardware wallet isn\'t connected.' => '该硬件钱包未连接。',
 			'That hardware wallet isn\'t for %1$y.' => '该硬件钱包不适用于%1$y。',
 			'That hardware wallet isn\'t for Wallet %1$s.' => '该硬件钱包不适用于钱包%1$s。',

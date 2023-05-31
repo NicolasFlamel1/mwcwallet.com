@@ -197,7 +197,7 @@ class HardwareWallet {
 									if("usb" in navigator === true) {
 								
 										// Return connecting to any USB hardware wallet
-										return TransportWebUSB.request().then(function(transport) {
+										return HardwareWalletUsbTransport.request().then(function(transport) {
 										
 											// Set connection type to USB connection type
 											self.connectionType = HardwareWallet.USB_CONNECTION_TYPE;
@@ -215,7 +215,7 @@ class HardwareWallet {
 												if("bluetooth" in navigator === true) {
 												
 													// Return connecting to any Bluetooth hardware wallet
-													return TransportWebBluetooth.request().then(function(transport) {
+													return HardwareWalletBluetoothTransport.request().then(function(transport) {
 													
 														// Set connection type to Bluetooth connection type
 														self.connectionType = HardwareWallet.BLUETOOTH_CONNECTION_TYPE;
@@ -258,6 +258,13 @@ class HardwareWallet {
 															}
 														}
 														
+														// Otherwise check if error was an invalid state error
+														else if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.INVALID_STATE_ERROR_CODE) || ("name" in error === true && error["name"] === "InvalidStateError"))) {
+														
+															// Reject error
+															reject(Message.createText(Language.getDefaultTranslation('That hardware wallet is already being used.')));
+														}
+														
 														// Otherwise
 														else {
 														
@@ -275,6 +282,13 @@ class HardwareWallet {
 												}
 											}
 											
+											// Otherwise check if error was an invalid state error
+											else if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.INVALID_STATE_ERROR_CODE) || ("name" in error === true && error["name"] === "InvalidStateError"))) {
+											
+												// Reject error
+												reject(Message.createText(Language.getDefaultTranslation('That hardware wallet is already being used.')));
+											}
+											
 											// Otherwise
 											else {
 											
@@ -288,7 +302,7 @@ class HardwareWallet {
 									else if("bluetooth" in navigator === true) {
 									
 										// Return connecting to any Bluetooth hardware wallet
-										return TransportWebBluetooth.request().then(function(transport) {
+										return HardwareWalletBluetoothTransport.request().then(function(transport) {
 										
 											// Set connection type to Bluetooth connection type
 											self.connectionType = HardwareWallet.BLUETOOTH_CONNECTION_TYPE;
@@ -309,8 +323,33 @@ class HardwareWallet {
 											// Otherwise check if error was a connection error
 											else if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NETWORK_ERROR_CODE) || ("name" in error === true && error["name"] === "NetworkError"))) {
 											
+												// Check if is an extension
+												if(Common.isExtension() === true) {
+											
+													// Reject error
+													reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this extension can connect to it.')));
+												}
+												
+												// Otherwise check if is an app
+												else if(Common.isApp() === true) {
+												
+													// Reject error
+													reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this app can connect to it.')));
+												}
+												
+												// Otherwise
+												else {
+												
+													// Reject error
+													reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this site can connect to it.')));
+												}
+											}
+											
+											// Otherwise check if error was an invalid state error
+											else if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.INVALID_STATE_ERROR_CODE) || ("name" in error === true && error["name"] === "InvalidStateError"))) {
+											
 												// Reject error
-												reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this site can connect to it.')));
+												reject(Message.createText(Language.getDefaultTranslation('That hardware wallet is already being used.')));
 											}
 											
 											// Otherwise
@@ -327,7 +366,7 @@ class HardwareWallet {
 								else {
 								
 									// Return connecting to provided hardware wallet descriptor
-									return TransportWebUSB.open(hardwareWalletDescriptor).then(function(transport) {
+									return HardwareWalletUsbTransport.request(hardwareWalletDescriptor).then(function(transport) {
 									
 										// Set connection type to USB connection type
 										self.connectionType = HardwareWallet.USB_CONNECTION_TYPE;
@@ -439,7 +478,7 @@ class HardwareWallet {
 													if(errorOccurred === false && HardwareWallet.isCompatibleApplicationVersion(applicationVersion) === true) {
 													
 														// Return requesting getting the seed cookie from the hardware wallet
-														return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_SEED_COOKIE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)), HardwareWallet.NO_TEXT, [], false, failOnLock).then(function(response) {
+														return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_SEED_COOKIE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, (new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32), HardwareWallet.NO_TEXT, [], false, failOnLock).then(function(response) {
 														
 															// Check if response is valid
 															if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === HardwareWallet.SEED_COOKIE_LENGTH) {
@@ -737,7 +776,7 @@ class HardwareWallet {
 						var productName = self.transport["deviceModel"]["productName"];
 					
 						// Return requesting getting the root public key from the hardware wallet
-						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_ROOT_PUBLIC_KEY_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32))).then(function(response) {
+						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_ROOT_PUBLIC_KEY_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, (new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)).then(function(response) {
 						
 							// Check if response is valid
 							if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === Crypto.SECP256K1_PUBLIC_KEY_LENGTH && Secp256k1Zkp.isValidPublicKey(response.subarray(0, Crypto.SECP256K1_PUBLIC_KEY_LENGTH)) === true) {
@@ -769,7 +808,7 @@ class HardwareWallet {
 							self.releaseExclusiveLock();
 						
 							// Check if user rejected the request
-							if(typeof error === "object" && error !== null && "statusCode" in error === true && error["statusCode"] === HardwareWallet.USER_REJECTED_RESPONSE_STATUS) {
+							if(Object.isObject(error) === true && "statusCode" in error === true && error["statusCode"] === HardwareWallet.USER_REJECTED_RESPONSE_STATUS) {
 							
 								// Reject error
 								reject(Message.createText(Language.getDefaultTranslation('Exporting the root public key on that %1$x hardware wallet was denied.'), [productName]));
@@ -816,19 +855,19 @@ class HardwareWallet {
 						try {
 					
 							// Return requesting getting the commit from the hardware wallet
-							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_COMMITMENT_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.concat([
+							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_COMMITMENT_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 							
 								// Account
-								Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 								// Identifier
-								Buffer.from(identifier.getValue()),
+								identifier.getValue(),
 								
 								// Amount
-								Buffer.from(amount.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64)),
+								amount.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64),
 								
 								// Switch type
-								Buffer.from(new Uint8Array([switchType]))
+								new Uint8Array([switchType])
 								
 							]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 							
@@ -906,19 +945,19 @@ class HardwareWallet {
 						try {
 					
 							// Return requesting getting the commit from the hardware wallet
-							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_COMMITMENT_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.concat([
+							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_COMMITMENT_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 							
 								// Account
-								Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 								// Identifier
-								Buffer.from(identifier.getValue()),
+								identifier.getValue(),
 								
 								// Amount
-								Buffer.from(amount.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64)),
+								amount.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64),
 								
 								// Switch type
-								Buffer.from(new Uint8Array([switchType]))
+								new Uint8Array([switchType])
 								
 							]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 							
@@ -935,19 +974,19 @@ class HardwareWallet {
 										try {
 									
 											// Return requesting getting the proof components from the hardware wallet
-											return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_BULLETPROOF_COMPONENTS_INSTRUCTION, message, HardwareWallet.NO_PARAMETER, Buffer.concat([
+											return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_BULLETPROOF_COMPONENTS_INSTRUCTION, message, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 											
 												// Account
-												Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+												(new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 												
 												// Identifier
-												Buffer.from(identifier.getValue()),
+												identifier.getValue(),
 												
 												// Amount
-												Buffer.from(amount.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64)),
+												amount.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64),
 												
 												// Switch type
-												Buffer.from(new Uint8Array([switchType]))
+												new Uint8Array([switchType])
 												
 											]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 											
@@ -1121,13 +1160,13 @@ class HardwareWallet {
 						try {
 					
 							// Return requesting getting the Tor address from the hardware wallet
-							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_ADDRESS_INSTRUCTION, HardwareWallet.TOR_ADDRESS_TYPE, HardwareWallet.NO_PARAMETER, Buffer.concat([
+							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_ADDRESS_INSTRUCTION, HardwareWallet.TOR_ADDRESS_TYPE, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 							
 								// Account
-								Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 								// Index
-								Buffer.from((new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 							]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 							
@@ -1222,13 +1261,13 @@ class HardwareWallet {
 						try {
 					
 							// Return requesting verifying the Tor address on the hardware wallet
-							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_VERIFY_ADDRESS_INSTRUCTION, HardwareWallet.TOR_ADDRESS_TYPE, HardwareWallet.NO_PARAMETER, Buffer.concat([
+							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_VERIFY_ADDRESS_INSTRUCTION, HardwareWallet.TOR_ADDRESS_TYPE, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 							
 								// Account
-								Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 								// Index
-								Buffer.from((new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 							]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 							
@@ -1256,7 +1295,7 @@ class HardwareWallet {
 								self.releaseExclusiveLock();
 							
 								// Check if user rejected the request
-								if(typeof error === "object" && error !== null && "statusCode" in error === true && error["statusCode"] === HardwareWallet.USER_REJECTED_RESPONSE_STATUS) {
+								if(Object.isObject(error) === true && "statusCode" in error === true && error["statusCode"] === HardwareWallet.USER_REJECTED_RESPONSE_STATUS) {
 								
 									// Reject user rejected error
 									reject(HardwareWallet.USER_REJECTED_ERROR);
@@ -1314,13 +1353,13 @@ class HardwareWallet {
 						try {
 					
 							// Return requesting getting the MQS address from the hardware wallet
-							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_ADDRESS_INSTRUCTION, HardwareWallet.MQS_ADDRESS_TYPE, HardwareWallet.NO_PARAMETER, Buffer.concat([
+							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_ADDRESS_INSTRUCTION, HardwareWallet.MQS_ADDRESS_TYPE, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 							
 								// Account
-								Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 								// Index
-								Buffer.from((new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 							]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 							
@@ -1415,13 +1454,13 @@ class HardwareWallet {
 						try {
 					
 							// Return requesting verifying the MQS address on the hardware wallet
-							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_VERIFY_ADDRESS_INSTRUCTION, HardwareWallet.MQS_ADDRESS_TYPE, HardwareWallet.NO_PARAMETER, Buffer.concat([
+							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_VERIFY_ADDRESS_INSTRUCTION, HardwareWallet.MQS_ADDRESS_TYPE, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 							
 								// Account
-								Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 								// Index
-								Buffer.from((new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 							]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 							
@@ -1449,7 +1488,7 @@ class HardwareWallet {
 								self.releaseExclusiveLock();
 							
 								// Check if user rejected the request
-								if(typeof error === "object" && error !== null && "statusCode" in error === true && error["statusCode"] === HardwareWallet.USER_REJECTED_RESPONSE_STATUS) {
+								if(Object.isObject(error) === true && "statusCode" in error === true && error["statusCode"] === HardwareWallet.USER_REJECTED_RESPONSE_STATUS) {
 								
 									// Reject user rejected error
 									reject(HardwareWallet.USER_REJECTED_ERROR);
@@ -1507,13 +1546,13 @@ class HardwareWallet {
 						try {
 					
 							// Return requesting getting the Slatepack address from the hardware wallet
-							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_ADDRESS_INSTRUCTION, HardwareWallet.SLATEPACK_ADDRESS_TYPE, HardwareWallet.NO_PARAMETER, Buffer.concat([
+							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_GET_ADDRESS_INSTRUCTION, HardwareWallet.SLATEPACK_ADDRESS_TYPE, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 							
 								// Account
-								Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 								// Index
-								Buffer.from((new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 							]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 							
@@ -1608,13 +1647,13 @@ class HardwareWallet {
 						try {
 					
 							// Return requesting verifying the Slatepack address on the hardware wallet
-							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_VERIFY_ADDRESS_INSTRUCTION, HardwareWallet.SLATEPACK_ADDRESS_TYPE, HardwareWallet.NO_PARAMETER, Buffer.concat([
+							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_VERIFY_ADDRESS_INSTRUCTION, HardwareWallet.SLATEPACK_ADDRESS_TYPE, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 							
 								// Account
-								Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 								// Index
-								Buffer.from((new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 							]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 							
@@ -1642,7 +1681,7 @@ class HardwareWallet {
 								self.releaseExclusiveLock();
 							
 								// Check if user rejected the request
-								if(typeof error === "object" && error !== null && "statusCode" in error === true && error["statusCode"] === HardwareWallet.USER_REJECTED_RESPONSE_STATUS) {
+								if(Object.isObject(error) === true && "statusCode" in error === true && error["statusCode"] === HardwareWallet.USER_REJECTED_RESPONSE_STATUS) {
 								
 									// Reject user rejected error
 									reject(HardwareWallet.USER_REJECTED_ERROR);
@@ -1703,22 +1742,22 @@ class HardwareWallet {
 							try {
 						
 								// Return requesting start decrypting on the hardware wallet
-								return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_START_DECRYPTING_SLATE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.concat([
+								return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_START_DECRYPTING_SLATE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 								
 									// Account
-									Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+									(new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 									
 									// Index
-									Buffer.from((new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+									(new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 									
 									// Nonce
-									Buffer.from(nonce),
+									nonce,
 									
 									// Address
-									Buffer.from(address),
+									(new TextEncoder()).encode(address),
 									
 									// Salt
-									Buffer.from((salt !== HardwareWallet.NO_SALT) ? salt : [])
+									(salt !== HardwareWallet.NO_SALT) ? salt : new Uint8Array([])
 									
 								]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 								
@@ -1748,7 +1787,7 @@ class HardwareWallet {
 												return new Promise(function(resolve, reject) {
 												
 													// Return decrypting chunk on the hardware wallet
-													return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_DECRYPTING_SLATE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from(encryptedData.subarray(i * HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE, Math.min(encryptedData["length"], i * HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE + HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE))), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
+													return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_DECRYPTING_SLATE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, encryptedData.subarray(i * HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE, Math.min(encryptedData["length"], i * HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE + HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE)), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 													
 														// Check if response is valid
 														if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH > 0) {
@@ -1797,7 +1836,7 @@ class HardwareWallet {
 											var tag = slate.subarray(slate["length"] - Slatepack.TAG_LENGTH);
 										
 											// Return requesting finish decrypting on the hardware wallet
-											return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_FINISH_DECRYPTING_SLATE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from(tag), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
+											return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_FINISH_DECRYPTING_SLATE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, tag, text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 											
 												// Release exclusive lock
 												self.releaseExclusiveLock();
@@ -1961,16 +2000,16 @@ class HardwareWallet {
 							try {
 						
 								// Return requesting start encrypting on the hardware wallet
-								return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_START_ENCRYPTING_SLATE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.concat([
+								return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_START_ENCRYPTING_SLATE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 								
 									// Account
-									Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+									(new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 									
 									// Index
-									Buffer.from((new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+									(new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 									
 									// Address
-									Buffer.from(address)
+									(new TextEncoder()).encode(address)
 									
 								]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 								
@@ -2003,7 +2042,7 @@ class HardwareWallet {
 												return new Promise(function(resolve, reject) {
 												
 													// Return encrypting chunk on the hardware wallet
-													return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_ENCRYPTING_SLATE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from(decryptedData.subarray(i * HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE, Math.min(decryptedData["length"], i * HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE + HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE))), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
+													return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_ENCRYPTING_SLATE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, decryptedData.subarray(i * HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE, Math.min(decryptedData["length"], i * HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE + HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE)), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 													
 														// Check if response is valid
 														if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH > 0) {
@@ -2184,28 +2223,28 @@ class HardwareWallet {
 						try {
 					
 							// Return requesting starting transaction on the hardware wallet
-							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_START_TRANSACTION_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.concat([
+							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_START_TRANSACTION_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 							
 								// Account
-								Buffer.from((new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(HardwareWallet.ACCOUNT)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 								// Index
-								Buffer.from((new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32)),
+								(new BigNumber(index)).toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT32),
 								
 								// Output
-								Buffer.from(output.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64)),
+								output.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64),
 								
 								// Input
-								Buffer.from(input.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64)),
+								input.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64),
 								
 								// Fee
-								Buffer.from(fee.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64)),
+								fee.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64),
 								
 								// Secret nonce index
-								Buffer.from(new Uint8Array([secretNonceIndex])),
+								new Uint8Array([secretNonceIndex]),
 								
 								// Address
-								Buffer.from((address !== HardwareWallet.NO_ADDRESS) ? address : [])
+								(address !== HardwareWallet.NO_ADDRESS) ? (new TextEncoder()).encode(address) : new Uint8Array([])
 								
 							]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 							
@@ -2280,16 +2319,16 @@ class HardwareWallet {
 						try {
 					
 							// Return requesting including output in transaction on the hardware wallet
-							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_INCLUDE_OUTPUT_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.concat([
+							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_INCLUDE_OUTPUT_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 							
 								// Identifier
-								Buffer.from(identifier.getValue()),
+								identifier.getValue(),
 								
 								// Amount
-								Buffer.from(amount.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64)),
+								amount.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64),
 								
 								// Switch type
-								Buffer.from(new Uint8Array([switchType]))
+								new Uint8Array([switchType])
 								
 							]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 							
@@ -2359,16 +2398,16 @@ class HardwareWallet {
 						try {
 					
 							// Return requesting including input in transaction on the hardware wallet
-							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_INCLUDE_INPUT_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.concat([
+							return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_INCLUDE_INPUT_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 							
 								// Identifier
-								Buffer.from(identifier.getValue()),
+								identifier.getValue(),
 								
 								// Amount
-								Buffer.from(amount.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64)),
+								amount.toBytes(BigNumber.LITTLE_ENDIAN, Common.BYTES_IN_A_UINT64),
 								
 								// Switch type
-								Buffer.from(new Uint8Array([switchType]))
+								new Uint8Array([switchType])
 								
 							]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 							
@@ -2435,7 +2474,7 @@ class HardwareWallet {
 					if(self.isConnected() === true) {
 					
 						// Return requesting applying an offset to the transaction on the hardware wallet
-						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_APPLY_OFFSET_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from(offset), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
+						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_APPLY_OFFSET_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, offset, text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 						
 							// Check if response is valid
 							if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === 0 || response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === 1) {
@@ -2615,7 +2654,7 @@ class HardwareWallet {
 					if(self.isConnected() === true) {
 					
 						// Return requesting getting the transaction message signature from the hardware wallet
-						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_GET_MESSAGE_SIGNATURE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, Buffer.from((new TextEncoder()).encode(message)), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
+						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_CONTINUE_TRANSACTION_GET_MESSAGE_SIGNATURE_INSTRUCTION, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, (new TextEncoder()).encode(message), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 						
 							// Check if response is valid
 							if(response["length"] - HardwareWallet.RESPONSE_DELIMITER_LENGTH === Crypto.SINGLE_SIGNER_SIGNATURE_LENGTH && Secp256k1Zkp.isValidSingleSignerSignature(response.subarray(0, Crypto.SINGLE_SIGNER_SIGNATURE_LENGTH)) === true) {
@@ -2796,22 +2835,22 @@ class HardwareWallet {
 						}
 						
 						// Return requesting finishing the transaction on the hardware wallet
-						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_FINISH_TRANSACTION_INSTRUCTION, addressType, HardwareWallet.NO_PARAMETER, Buffer.concat([
+						return self.send(HardwareWallet.REQUEST_CLASS, HardwareWallet.REQUEST_FINISH_TRANSACTION_INSTRUCTION, addressType, HardwareWallet.NO_PARAMETER, Common.mergeArrays([
 						
 							// Public nonce
-							Buffer.from(publicNonce),
+							publicNonce,
 							
 							// Public key
-							Buffer.from(publicKey),
+							publicKey,
 							
 							// Kernel information
-							Buffer.from(kernelInformation),
+							kernelInformation,
 							
 							// Kernel commit
-							Buffer.from((kernelCommit !== HardwareWallet.NO_KERNEL_COMMIT) ? kernelCommit : []),
+							(kernelCommit !== HardwareWallet.NO_KERNEL_COMMIT) ? kernelCommit : new Uint8Array([]),
 							
 							// Receiver signature
-							Buffer.from((receiverSignature !== Slate.NO_RECEIVER_SIGNATURE) ? receiverSignature : [])
+							(receiverSignature !== Slate.NO_RECEIVER_SIGNATURE) ? receiverSignature : new Uint8Array([])
 							
 						]), text, textArguments, allowUnlock, false, preventMessages, cancelOccurred).then(function(response) {
 						
@@ -2857,7 +2896,7 @@ class HardwareWallet {
 						}).catch(function(error) {
 						
 							// Check if user rejected the request
-							if(typeof error === "object" && error !== null && "statusCode" in error === true && error["statusCode"] === HardwareWallet.USER_REJECTED_RESPONSE_STATUS) {
+							if(Object.isObject(error) === true && "statusCode" in error === true && error["statusCode"] === HardwareWallet.USER_REJECTED_RESPONSE_STATUS) {
 							
 								// Reject user rejected error
 								reject(HardwareWallet.USER_REJECTED_ERROR);
@@ -2966,7 +3005,7 @@ class HardwareWallet {
 			return new Promise(function(resolve, reject) {
 			
 				// Return getting available hardware wallet descriptors
-				return TransportWebUSB.list().then(function(availableHardwareWalletDescriptors) {
+				return HardwareWalletUsbTransport.list().then(function(availableHardwareWalletDescriptors) {
 				
 					// Resolve available hardware wallet descriptors
 					resolve(availableHardwareWalletDescriptors);
@@ -2983,8 +3022,8 @@ class HardwareWallet {
 		// Is supported
 		static isSupported() {
 		
-			// Return if USB or Bluetooth and BigInt are supported
-			return ("usb" in navigator === true || "bluetooth" in navigator === true) && typeof BigInt === "function";
+			// Return if USB or Bluetooth are supported
+			return "usb" in navigator === true || "bluetooth" in navigator === true;
 		}
 		
 		// Any hardware wallet descriptor
@@ -3203,7 +3242,7 @@ class HardwareWallet {
 				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 				
 					// Return performing the instruction on the hardware wallet
-					return self.transport.send(requestClass, requestInstruction, parameterOne, parameterTwo, (data !== HardwareWallet.NO_DATA) ? data : Buffer.from([])).then(function(response) {
+					return self.transport.send(requestClass, requestInstruction, parameterOne, parameterTwo, (data !== HardwareWallet.NO_DATA) ? data : new Uint8Array([])).then(function(response) {
 					
 						// Resolve response
 						resolve(response);
@@ -3211,15 +3250,8 @@ class HardwareWallet {
 					// Catch errors
 					}).catch(function(error) {
 					
-						// Check if error doesn't contain a status code but does contain a message with a status code
-						if(typeof error === "object" && error !== null && "statusCode" in error === false && "message" in error === true && typeof error["message"] === "string" && HardwareWallet.ERROR_MESSAGE_STATUS_PATTERN.test(error["message"]) === true) {
-						
-							// Set error's status code
-							error["statusCode"] = parseInt(error["message"].match(HardwareWallet.ERROR_MESSAGE_STATUS_PATTERN)[1], Common.HEX_NUMBER_BASE);
-						}
-						
 						// Check if the hardware wallet is locked and not set to fail on lock
-						if(typeof error === "object" && error !== null && "statusCode" in error === true && (error["statusCode"] === HardwareWallet.DEVICE_LOCKED_RESPONSE_STATUS || error["statusCode"] === HardwareWallet.OPERATING_SYSTEM_LOCKED_RESPONSE_STATUS) && failOnLock === false) {
+						if(Object.isObject(error) === true && "statusCode" in error === true && (error["statusCode"] === HardwareWallet.DEVICE_LOCKED_RESPONSE_STATUS || error["statusCode"] === HardwareWallet.OPERATING_SYSTEM_LOCKED_RESPONSE_STATUS) && failOnLock === false) {
 						
 							// Set locked
 							self.locked = true;
@@ -3267,7 +3299,7 @@ class HardwareWallet {
 											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 									
 												// Return performing the instruction on the hardware wallet
-												return self.transport.send(requestClass, requestInstruction, parameterOne, parameterTwo, (data !== HardwareWallet.NO_DATA) ? data : Buffer.from([])).then(function(response) {
+												return self.transport.send(requestClass, requestInstruction, parameterOne, parameterTwo, (data !== HardwareWallet.NO_DATA) ? data : new Uint8Array([])).then(function(response) {
 												
 													// Clear locked
 													self.locked = false;
@@ -3296,15 +3328,8 @@ class HardwareWallet {
 												// Catch errors
 												}).catch(function(error) {
 												
-													// Check if error doesn't contain a status code but does contain a message with a status code
-													if(typeof error === "object" && error !== null && "statusCode" in error === false && "message" in error === true && typeof error["message"] === "string" && HardwareWallet.ERROR_MESSAGE_STATUS_PATTERN.test(error["message"]) === true) {
-													
-														// Set error's status code
-														error["statusCode"] = parseInt(error["message"].match(HardwareWallet.ERROR_MESSAGE_STATUS_PATTERN)[1], Common.HEX_NUMBER_BASE);
-													}
-												
 													// Check if the hardware wallet is locked and not set to fail on lock
-													if(typeof error === "object" && error !== null && "statusCode" in error === true && (error["statusCode"] === HardwareWallet.DEVICE_LOCKED_RESPONSE_STATUS || error["statusCode"] === HardwareWallet.OPERATING_SYSTEM_LOCKED_RESPONSE_STATUS) && failOnLock === false) {
+													if(Object.isObject(error) === true && "statusCode" in error === true && (error["statusCode"] === HardwareWallet.DEVICE_LOCKED_RESPONSE_STATUS || error["statusCode"] === HardwareWallet.OPERATING_SYSTEM_LOCKED_RESPONSE_STATUS) && failOnLock === false) {
 													
 														// Return resend
 														return resend().then(function(response) {
@@ -3909,6 +3934,13 @@ class HardwareWallet {
 			return 8;
 		}
 		
+		// Invalid state error code
+		static get INVALID_STATE_ERROR_CODE() {
+		
+			// Return invalid state error code
+			return 11;
+		}
+		
 		// Network error code
 		static get NETWORK_ERROR_CODE() {
 		
@@ -3928,13 +3960,6 @@ class HardwareWallet {
 		
 			// Return encryption and decryption maximum chunk size
 			return 64;
-		}
-		
-		// Error message status pattern
-		static get ERROR_MESSAGE_STATUS_PATTERN() {
-		
-			// Return error message status pattern
-			return /\(0x([A-F0-9]+)\)$/ui;
 		}
 }
 

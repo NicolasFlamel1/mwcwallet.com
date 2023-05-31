@@ -1,6 +1,6 @@
 # Sending MWC To Exchanges Compatibility
 
-Compatibility for sending MWC from the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile  to exchanges:
+Compatibility for sending MWC from the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile to exchanges:
 
 || [Hotbit](https://www.hotbit.io/exchange?symbol=MWC_USDT) | [TradeOgre](https://tradeogre.com/exchange/BTC-MWC) | [BitForex](https://www.bitforex.com/en/spot/mwc_usdt) |
 |-|-|-|-|
@@ -34,4 +34,4 @@ Compatibility for receiving MWC from exchanges to the MimbleWimble Coin web wall
  
 \* [WhiteBIT](https://whitebit.com/trade/MWC-BTC) had temporarily suspended depositing and withdrawing MWC when this table was created which is why they aren't included.
  
-\*  It's unlikely that any exchanges currently supports sending MWC to the MimbleWimble Coin web wallet when using a hardware wallet due to that [needing a longer network read timeout](https://github.com/mwcproject/mwc-wallet/pull/17).
+\* It's unlikely that any exchanges currently supports sending MWC to the MimbleWimble Coin web wallet when using a hardware wallet due to that [needing a longer network read timeout](https://github.com/mwcproject/mwc-wallet/pull/17).

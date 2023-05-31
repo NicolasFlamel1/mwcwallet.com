@@ -19,27 +19,28 @@ class Settings {
 			var self = this;
 		
 			// Create database
-			Database.createDatabase(function(database, currentVersion) {
+			Database.createDatabase(function(database, currentVersion, databaseTransaction) {
+			
+				// Create or get settings object store
+				var settingsObjectStore = (currentVersion === Database.NO_CURRENT_VERSION) ? database.createObjectStore(Settings.OBJECT_STORE_NAME, {
+				
+					// Key path
+					"keyPath": [
+					
+						// Wallet type
+						Database.toKeyPath(Settings.DATABASE_WALLET_TYPE_NAME),
+						
+						// Network type
+						Database.toKeyPath(Settings.DATABASE_NETWORK_TYPE_NAME),
+						
+						// Setting
+						Database.toKeyPath(Settings.DATABASE_SETTING_NAME)
+					]
+					
+				}) : databaseTransaction.objectStore(Settings.OBJECT_STORE_NAME);
 			
 				// Check if no database version exists
 				if(currentVersion === Database.NO_CURRENT_VERSION) {
-			
-					// Create settings object store
-					var settingsObjectStore = database.createObjectStore(Settings.OBJECT_STORE_NAME, {
-					
-						// Key path
-						"keyPath": [
-						
-							// Wallet type
-							Database.toKeyPath(Settings.DATABASE_WALLET_TYPE_NAME),
-							
-							// Network type
-							Database.toKeyPath(Settings.DATABASE_NETWORK_TYPE_NAME),
-							
-							// Setting
-							Database.toKeyPath(Settings.DATABASE_SETTING_NAME)
-						]
-					});
 					
 					// Create index to search settings object store by wallet type and network type
 					settingsObjectStore.createIndex(Settings.DATABASE_WALLET_TYPE_AND_NETWORK_TYPE_NAME, [

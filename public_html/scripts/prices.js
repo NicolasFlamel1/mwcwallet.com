@@ -34,24 +34,25 @@ class Prices {
 			this.canGetPrices = false;
 		
 			// Create database
-			Database.createDatabase(function(database, currentVersion) {
+			Database.createDatabase(function(database, currentVersion, databaseTransaction) {
 			
+				// Create or get prices object store
+				var pricesObjectStore = (currentVersion === Database.NO_CURRENT_VERSION) ? database.createObjectStore(Prices.OBJECT_STORE_NAME, {
+				
+					// Key path
+					"keyPath": [
+					
+						// Wallet type
+						Database.toKeyPath(Prices.DATABASE_WALLET_TYPE_NAME),
+					
+						// Currency
+						Database.toKeyPath(Prices.DATABASE_CURRENCY_NAME)
+					]
+					
+				}) : databaseTransaction.objectStore(Prices.OBJECT_STORE_NAME);
+				
 				// Check if no database version exists
 				if(currentVersion === Database.NO_CURRENT_VERSION) {
-			
-					// Create prices object store
-					var pricesObjectStore = database.createObjectStore(Prices.OBJECT_STORE_NAME, {
-					
-						// Key path
-						"keyPath": [
-						
-							// Wallet type
-							Database.toKeyPath(Prices.DATABASE_WALLET_TYPE_NAME),
-						
-							// Currency
-							Database.toKeyPath(Prices.DATABASE_CURRENCY_NAME)
-						]
-					});
 					
 					// Create index to search prices object store by wallet type
 					pricesObjectStore.createIndex(Prices.DATABASE_WALLET_TYPE_NAME, Database.toKeyPath(Prices.DATABASE_WALLET_TYPE_NAME), {

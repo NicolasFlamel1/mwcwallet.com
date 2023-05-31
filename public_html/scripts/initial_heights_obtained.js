@@ -13,25 +13,22 @@ class InitialHeightsObtained {
 		constructor(node) {
 		
 			// Create database
-			Database.createDatabase(function(database, currentVersion) {
+			Database.createDatabase(function(database, currentVersion, databaseTransaction) {
 			
-				// Check if no database version exists
-				if(currentVersion === Database.NO_CURRENT_VERSION) {
-			
-					// Create initial heights obtained object store
-					var initialHeightsObtainedObjectStore = database.createObjectStore(InitialHeightsObtained.OBJECT_STORE_NAME, {
+				// Create or get initial heights obtained object store
+				var initialHeightsObtainedObjectStore = (currentVersion === Database.NO_CURRENT_VERSION) ? database.createObjectStore(InitialHeightsObtained.OBJECT_STORE_NAME, {
+				
+					// Key path
+					"keyPath": [
 					
-						// Key path
-						"keyPath": [
+						// Wallet type
+						Database.toKeyPath(InitialHeightsObtained.DATABASE_WALLET_TYPE_NAME),
 						
-							// Wallet type
-							Database.toKeyPath(InitialHeightsObtained.DATABASE_WALLET_TYPE_NAME),
-							
-							// Network type
-							Database.toKeyPath(InitialHeightsObtained.DATABASE_NETWORK_TYPE_NAME)
-						]
-					});
-				}
+						// Network type
+						Database.toKeyPath(InitialHeightsObtained.DATABASE_NETWORK_TYPE_NAME)
+					]
+					
+				}) : databaseTransaction.objectStore(InitialHeightsObtained.OBJECT_STORE_NAME);
 			});
 		}
 		

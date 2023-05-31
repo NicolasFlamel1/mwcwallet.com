@@ -187,17 +187,18 @@ class Wallets {
 			}
 			
 			// Create database
-			Database.createDatabase(function(database, currentVersion) {
+			Database.createDatabase(function(database, currentVersion, databaseTransaction) {
 			
+				// Create or get wallets object store
+				var walletsObjectStore = (currentVersion === Database.NO_CURRENT_VERSION) ? database.createObjectStore(Wallets.OBJECT_STORE_NAME, {
+				
+					// Auto increment
+					"autoIncrement": true
+					
+				}) : databaseTransaction.objectStore(Wallets.OBJECT_STORE_NAME);
+				
 				// Check if no database version exists
 				if(currentVersion === Database.NO_CURRENT_VERSION) {
-			
-					// Create wallets object store
-					var walletsObjectStore = database.createObjectStore(Wallets.OBJECT_STORE_NAME, {
-					
-						// Auto increment
-						"autoIncrement": true
-					});
 					
 					// Create index to search wallets object store by wallet type, network type, and address suffix
 					walletsObjectStore.createIndex(Wallets.DATABASE_WALLET_TYPE_NETWORK_TYPE_AND_ADDRESS_SUFFIX_NAME, [

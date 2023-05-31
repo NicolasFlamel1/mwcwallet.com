@@ -483,6 +483,7 @@
 			'Syncing failed' => 'Ο συγχρονισμός απέτυχε',
 			'Testnet' => 'Δίκτυο δοκιμής',
 			/*TODO*///'That file is invalid, contains unsupported features, or was already used.' => '',
+			/*TODO*///'That hardware wallet is already being used.' => '',
 			'That hardware wallet isn\'t connected.' => 'Αυτό το πορτοφόλι υλικού δεν είναι συνδεδεμένο.',
 			'That hardware wallet isn\'t for %1$y.' => 'Αυτό το πορτοφόλι υλικού δεν είναι για %1$y.',
 			'That hardware wallet isn\'t for Wallet %1$s.' => 'Αυτό το πορτοφόλι υλικού δεν είναι για το Πορτοφόλι %1$s.',
