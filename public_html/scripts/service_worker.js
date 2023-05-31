@@ -270,6 +270,13 @@ self.addEventListener("activate", function(event) {
 // Fetch event
 self.addEventListener("fetch", function(event) {
 
+	// Check if request isn't a GET request
+	if(event["request"]["method"] !== "GET") {
+	
+		// Use default fetch
+		return;
+	}
+
 	// Respond with
 	event.respondWith(new Promise(function(resolve, reject) {
 
