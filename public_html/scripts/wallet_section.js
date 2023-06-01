@@ -3875,11 +3875,17 @@ class WalletSection extends Section {
 								// Prevent balance display from transitioning
 								self.balanceDisplay.addClass("instant");
 								
+								// Prevent balance display sync status from transitioning
+								self.balanceDisplay.find("div.syncStatus").addClass("noTransition");
+								
 								// Section shown event
 								$(self).one(Section.SHOWN_EVENT, function() {
 								
 									// Allow balance display to transition
 									self.balanceDisplay.removeClass("instant");
+									
+									// Allow balance display sync status to transition
+									self.balanceDisplay.find("div.syncStatus").removeClass("noTransition");
 								});
 								
 								// Break

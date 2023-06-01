@@ -3609,7 +3609,7 @@ class HardwareWallet {
 		static get APPLICATION_VERSION_STRING_PATTERN() {
 		
 			// Return hex string pattern
-			return /^(\d+)\.(\d+)\.(\d+)$/u;
+			return /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/u;
 		}
 		
 		// Minimum compatible application version

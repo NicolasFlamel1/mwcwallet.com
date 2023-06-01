@@ -1612,7 +1612,7 @@ class Language {
 		static get PLACEHOLDER_PATTERN() {
 		
 			// Return placeholder pattern
-			return new RegExp("^" + Common.escapeRegularExpression(Language.ESCAPE_CHARACTER) + "(\\d+)\\$([" + Common.escapeRegularExpression(Language.NUMBER_PLACEHOLDER_TYPE + Language.CURRENCY_PLACEHOLDER_TYPE + Language.TRANSLATED_TEXT_PLACEHOLDER_TYPE + Language.NOT_TRANSLATED_TEXT_PLACEHOLDER_TYPE + Language.TIME_PLACEHOLDER_TYPE + Language.DATE_PLACEHOLDER_TYPE + Language.TIMESTAMP_PLACEHOLDER_TYPE + Language.TRANSLATED_LINK_PLACEHOLDER_TYPE + Language.NOT_TRANSLATED_LINK_PLACEHOLDER_TYPE + Language.VERSION_PLACEHOLDER_TYPE) + "])$", "u");
+			return new RegExp("^" + Common.escapeRegularExpression(Language.ESCAPE_CHARACTER) + "([1-9]\\d*)\\$([" + Common.escapeRegularExpression(Language.NUMBER_PLACEHOLDER_TYPE + Language.CURRENCY_PLACEHOLDER_TYPE + Language.TRANSLATED_TEXT_PLACEHOLDER_TYPE + Language.NOT_TRANSLATED_TEXT_PLACEHOLDER_TYPE + Language.TIME_PLACEHOLDER_TYPE + Language.DATE_PLACEHOLDER_TYPE + Language.TIMESTAMP_PLACEHOLDER_TYPE + Language.TRANSLATED_LINK_PLACEHOLDER_TYPE + Language.NOT_TRANSLATED_LINK_PLACEHOLDER_TYPE + Language.VERSION_PLACEHOLDER_TYPE) + "])$", "u");
 		}
 		
 		// Default formatter locale
@@ -1849,7 +1849,7 @@ class Language {
 		static get NUMERIC_STRING_PATTERN() {
 		
 			// Return numeric string pattern
-			return /^\d+$/u;
+			return /^(?:0|[1-9]\d*)$/u;
 		}
 }
 

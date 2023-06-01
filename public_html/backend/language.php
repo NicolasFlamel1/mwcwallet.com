@@ -33,7 +33,7 @@
 	const ESCAPE_CHARACTER = "%";
 	
 	// Placeholder pattern
-	const PLACEHOLDER_PATTERN = '/^' . ESCAPE_CHARACTER . '\d+\$s$/u';
+	const PLACEHOLDER_PATTERN = '/^' . ESCAPE_CHARACTER . '[1-9]\d*\$s$/u';
 	
 	
 	// Supporting function implementation

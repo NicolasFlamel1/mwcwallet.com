@@ -2814,54 +2814,40 @@ class Node {
 				// Return true
 				return true;
 			
-			// Get version components
-			var firstVersionComponents = firstVersion.split(Node.VERSION_COMPONENT_PATTERN);
-			var secondVersionComponents = secondVersion.split(Node.VERSION_COMPONENT_PATTERN);
+			// Get first version components
+			var firstVersionComponents = firstVersion.split(Node.VERSION_COMPONENT_PATTERN).map(function(versionComponent) {
+			
+				// Return version component as a number
+				return (Common.isNumberString(versionComponent) === false || (new BigNumber(versionComponent)).isInteger() === false) ? Node.versionComponentTextToNumber(versionComponent).toFixed() : versionComponent;
+			});
+			
+			// Get second version components
+			var secondVersionComponents = secondVersion.split(Node.VERSION_COMPONENT_PATTERN).map(function(versionComponent) {
+			
+				// Return version component as a number
+				return (Common.isNumberString(versionComponent) === false || (new BigNumber(versionComponent)).isInteger() === false) ? Node.versionComponentTextToNumber(versionComponent).toFixed() : versionComponent;
+			});
 			
 			// Go through all version components
 			for(var i = 0; i < Math.max(firstVersionComponents["length"], secondVersionComponents["length"]); ++i) {
 			
-				// Check if first version component isn't a number
-				if(i < firstVersionComponents["length"] && (Common.isNumberString(firstVersionComponents[i]) === false || (new BigNumber(firstVersionComponents[i])).isInteger() === false)) {
-				
-					// Set first version component to its number value
-					firstVersionComponents[i] = Node.versionComponentTextToNumber(firstVersionComponents[i]).toFixed();
-					
-					// Check if second version component is a number
-					if(i < secondVersionComponents["length"] && Common.isNumberString(secondVersionComponents[i]) === true && (new BigNumber(secondVersionComponents[i])).isInteger() === true)
-					
-						// Insert release version component into the second version
-						secondVersionComponents.splice(i, 0, Node.RELEASE_VERSION_COMPONENT_TEXT_VALUE.toFixed());
-				}
-				
-				// Check if second version component isn't a number
-				if(i < secondVersionComponents["length"] && (Common.isNumberString(secondVersionComponents[i]) === false || (new BigNumber(secondVersionComponents[i])).isInteger() === false)) {
-				
-					// Set second version component to its number value
-					secondVersionComponents[i] = Node.versionComponentTextToNumber(secondVersionComponents[i]).toFixed();
-					
-					// Check if first version component is a number
-					if(i < firstVersionComponents["length"] && Common.isNumberString(firstVersionComponents[i]) === true && (new BigNumber(firstVersionComponents[i])).isInteger() === true)
-					
-						// Insert release version component into the first version
-						firstVersionComponents.splice(i, 0, Node.RELEASE_VERSION_COMPONENT_TEXT_VALUE.toFixed());
-				}
-				
 				// Get version component numbers
 				var firstVersionComponentNumber = new BigNumber((i < firstVersionComponents["length"]) ? firstVersionComponents[i] : Node.RELEASE_VERSION_COMPONENT_TEXT_VALUE.toFixed());
 				var secondVersionComponentNumber = new BigNumber((i < secondVersionComponents["length"]) ? secondVersionComponents[i] : Node.RELEASE_VERSION_COMPONENT_TEXT_VALUE.toFixed());
 			
 				// Check if first version component number is greater than second version component number
-				if(firstVersionComponentNumber.isGreaterThan(secondVersionComponentNumber) === true)
+				if(firstVersionComponentNumber.isGreaterThan(secondVersionComponentNumber) === true) {
 				
 					// Return true
 					return true;
+				}
 				
 				// Otherwise check if first version component number is less than second version component number
-				else if(firstVersionComponentNumber.isLessThan(secondVersionComponentNumber) === true)
+				else if(firstVersionComponentNumber.isLessThan(secondVersionComponentNumber) === true) {
 				
 					// Return false
 					return false;
+				}
 			}
 			
 			// Return true
@@ -2896,7 +2882,7 @@ class Node {
 		static get VERSION_PATTERN() {
 		
 			// Return version pattern
-			return /^(?:\d\.?)+(?:[^\.]-[^\d].*)?$/u;
+			return /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[^\d].*)?$/u;
 		}
 		
 		// Version component text values
