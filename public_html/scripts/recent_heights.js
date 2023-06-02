@@ -251,7 +251,7 @@ class RecentHeights {
 					});
 					
 					// Initialize verifying heights
-					var verifyingHeights = [];
+					var verifyingHeights = [verifyingHeight];
 				
 					// Go through all heights from highest to lowest
 					var verifiedHeightFound = false;

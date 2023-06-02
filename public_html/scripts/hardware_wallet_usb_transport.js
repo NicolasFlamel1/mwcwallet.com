@@ -315,7 +315,7 @@ class HardwareWalletUsbTransport {
 								var interfaceFound = false;
 									
 								// Go through all the configuration's interfaces
-								for(var i = 0; i < device["configurations"][0]["interfaces"]["length"]; ++i) {
+								for(var i = 0; i < device["configurations"][0]["interfaces"]["length"] && interfaceFound === false; ++i) {
 								
 									// Go through all of the interface's alternates
 									for(var j = 0; j < device["configurations"][0]["interfaces"][i]["alternates"]["length"]; ++j) {
@@ -328,6 +328,9 @@ class HardwareWalletUsbTransport {
 											
 											// Set interface number
 											var interfaceNumber = device["configurations"][0]["interfaces"][i]["interfaceNumber"];
+											
+											// Break
+											break;
 										}
 									}
 								}
@@ -510,6 +513,9 @@ class HardwareWalletUsbTransport {
 					resolve();
 				});
 				
+				// Initialize sending packets
+				var sendingPackets = [sendPacket];
+				
 				// Go through all packets
 				for(var i = 0; i < packets["length"]; ++i) {
 				
@@ -546,10 +552,13 @@ class HardwareWalletUsbTransport {
 							reject(error);
 						});
 					});
+					
+					// Append sending packet to list
+					sendingPackets.push(sendPacket);
 				}
 				
 				// Return sending all packets
-				return sendPacket.then(function() {
+				return Promise.all(sendingPackets).then(function() {
 				
 					// Receive packet
 					var receivePacket = function(expectedSequenceIndex) {

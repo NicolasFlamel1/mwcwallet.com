@@ -920,37 +920,37 @@ class Logo {
 									for(var i = 0; i < Logo.MAX_NUMBER_OF_LIGHTS; ++i) {
 									
 										// Get light type location in the shader
-										lightTypeLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i + "].type"));
+										lightTypeLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i.toFixed() + "].type"));
 									
 										// Get light position location in the shader
-										lightPositionLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i + "].position"));
+										lightPositionLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i.toFixed() + "].position"));
 										
 										// Get gight constant attenuation factor location in the shader
-										lightConstantAttenuationFactorLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i + "].constantAttenuationFactor"));
+										lightConstantAttenuationFactorLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i.toFixed() + "].constantAttenuationFactor"));
 										
 										// Get light linear attenuation factor location in the shader
-										lightLinearAttenuationFactorLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i + "].linearAttenuationFactor"));
+										lightLinearAttenuationFactorLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i.toFixed() + "].linearAttenuationFactor"));
 										
 										// Get light quadratic attenuation factor location in the shader
-										lightQuadraticAttenuationFactorLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i + "].quadraticAttenuationFactor"));
+										lightQuadraticAttenuationFactorLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i.toFixed() + "].quadraticAttenuationFactor"));
 										
 										// Get light direction location in the shader
-										lightDirectionLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i + "].direction"));
+										lightDirectionLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i.toFixed() + "].direction"));
 										
 										// Get light inner cut off angle location in the shader
-										lightInnerCutOffAngleLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i + "].innerCutOffAngle"));
+										lightInnerCutOffAngleLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i.toFixed() + "].innerCutOffAngle"));
 										
 										// Get light outer cut off angle location in the shader
-										lightOuterCutOffAngleLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i + "].outerCutOffAngle"));
+										lightOuterCutOffAngleLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i.toFixed() + "].outerCutOffAngle"));
 										
 										// Get light ambient color location in the shader
-										lightAmbientColorLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i + "].ambientColor"));
+										lightAmbientColorLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i.toFixed() + "].ambientColor"));
 										
 										// Get light diffuse color location in the shader
-										lightDiffuseColorLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i + "].diffuseColor"));
+										lightDiffuseColorLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i.toFixed() + "].diffuseColor"));
 										
 										// Get light specular color location in the shader
-										lightSpecularColorLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i + "].specularColor"));
+										lightSpecularColorLocations.push(self.gl.getUniformLocation(self.shaderProgram, "lights[" + i.toFixed() + "].specularColor"));
 									}
 									
 									// Create lights

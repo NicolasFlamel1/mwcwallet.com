@@ -1775,7 +1775,7 @@ class HardwareWallet {
 										});
 										
 										// Initialize decrypting chunks
-										var decryptingChunks = [];
+										var decryptingChunks = [decryptChunk];
 									
 										// Go through all of the encrypted data chunks
 										for(let i = 0; i < Math.ceil(encryptedData["length"] / HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE); ++i) {
@@ -1851,7 +1851,7 @@ class HardwareWallet {
 													var aesDecryptChunks = [];
 													
 													// Go through all decrypted chunks
-													for(var i = 0; i < decryptedDataChunks["length"]; ++i) {
+													for(var i = 1; i < decryptedDataChunks["length"]; ++i) {
 													
 														// Get decrypted data chunk
 														let decryptedDataChunk = decryptedDataChunks[i];
@@ -2026,11 +2026,11 @@ class HardwareWallet {
 										var encryptChunk = new Promise(function(resolve, reject) {
 										
 											// Resolve
-											resolve();
+											resolve(new Uint8Array([]));
 										});
 										
 										// Initialize encrypting chunks
-										var encryptingChunks = [];
+										var encryptingChunks = [encryptChunk];
 									
 										// Go through all of the decrypted data chunks
 										for(let i = 0; i < Math.ceil(decryptedData["length"] / HardwareWallet.ENCRYPTION_AND_DECRYPTION_MAXIMUM_CHUNK_SIZE); ++i) {

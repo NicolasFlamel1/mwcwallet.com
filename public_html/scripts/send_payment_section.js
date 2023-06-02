@@ -232,7 +232,7 @@ class SendPaymentSection extends Section {
 								if(step !== Common.NO_ATTRIBUTE && input.hasClass("value") === false) {
 								
 									// Get step as a number
-									var step = new BigNumber(step);
+									step = new BigNumber(step);
 									
 									// Check if value isn't evenly divisible by the step
 									if(value.modulo(step).isInteger() === false) {

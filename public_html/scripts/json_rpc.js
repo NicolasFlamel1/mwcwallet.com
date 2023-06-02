@@ -23,7 +23,7 @@ class JsonRpc {
 				});
 				
 				// Initiaize attempts
-				var attempts = [];
+				var attempts = [currentAttempt];
 			
 				// Go through all attempts or URLs
 				for(let i = 0; i < Math.max(numberOfAttempts, (Array.isArray(urlOrUrls) === true) ? urlOrUrls["length"] : [urlOrUrls]["length"]); ++i) {
@@ -117,7 +117,7 @@ class JsonRpc {
 				});
 				
 				// Initiaize attempts
-				var attempts = [];
+				var attempts = [currentAttempt];
 			
 				// Go through all attempts or URLs
 				for(let i = 0; i < Math.max(numberOfAttempts, (Array.isArray(urlOrUrls) === true) ? urlOrUrls["length"] : [urlOrUrls]["length"]); ++i) {

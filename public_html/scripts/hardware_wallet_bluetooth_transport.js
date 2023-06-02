@@ -334,7 +334,7 @@ class HardwareWalletBluetoothTransport {
 										var deviceFound = false;
 									
 										// Go through all services
-										for(var i = 0; i < services["length"]; ++i) {
+										for(var i = 0; i < services["length"] && deviceFound === false; ++i) {
 										
 											// Check if service has a UUID
 											if("uuid" in services[i] === true) {
@@ -947,6 +947,9 @@ class HardwareWalletBluetoothTransport {
 						}
 					});
 					
+					// Initialize sending packets
+					var sendingPackets = [sendPacket];
+					
 					// Go through all packets
 					for(var i = 0; i < packets["length"]; ++i) {
 					
@@ -1027,10 +1030,13 @@ class HardwareWalletBluetoothTransport {
 								}
 							});
 						});
+						
+						// Append sending packet to list
+						sendingPackets.push(sendPacket);
 					}
 					
 					// Return sending all packets and catch errors
-					return sendPacket.catch(function(error) {
+					return Promise.all(sendingPackets).catch(function(error) {
 					
 						// Remove GATT server disconnected event
 						connection["device"].removeEventListener("gattserverdisconnected", disconnectedHandler);

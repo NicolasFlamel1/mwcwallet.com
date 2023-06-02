@@ -1100,9 +1100,6 @@ class Listener {
 						this.reconnectTimeout = Listener.NO_TIMEOUT;
 					}
 					
-					// Set self
-					var self = this;
-				
 					// Set reconnect timeout
 					this.reconnectTimeout = setTimeout(function() {
 					

@@ -7438,14 +7438,14 @@ class Wallets {
 																																			
 																																			})).then(function(outputs) {
 																																			
-																																				// Initialize verifying pending transactions
-																																				var verifyingPendingTransactions = [];
+																																				// Initialize verifying pending transactions group
+																																				var verifyingPendingTransactionsGroup = [];
 																																			
 																																				// Go through all outputs
 																																				for(let l = 0; l < outputs["length"]; ++l) {
 																																				
-																																					// Append verifying pending transaction to list
-																																					verifyingPendingTransactions.push(new Promise(function(resolve, reject) {
+																																					// Append verifying pending transaction group to list
+																																					verifyingPendingTransactionsGroup.push(new Promise(function(resolve, reject) {
 																																					
 																																						// Get output
 																																						var output = outputs[l];
@@ -8128,8 +8128,8 @@ class Wallets {
 																																					}));
 																																				}
 																																				
-																																				// Return verifying pending transactions
-																																				return Promise.all(verifyingPendingTransactions).then(function() {
+																																				// Return verifying pending transactions group
+																																				return Promise.all(verifyingPendingTransactionsGroup).then(function() {
 																																				
 																																					// Resolve
 																																					resolve();
