@@ -1560,7 +1560,7 @@ class Common {
 		static get REQUEST_ANIMATION_FRAME_TIMEOUT_MILLISECONDS() {
 		
 			// Return request animation frame timeout milliseconds
-			return 50;
+			return 100;
 		}
 		
 		// Leading whitespace pattern
@@ -1675,11 +1675,23 @@ if(typeof jQuery === "function") {
 			// Self scroll scroll stopped index event
 			self.on("scroll.scrollStopped" + index.toFixed(), function(event) {
 			
-				// Clear scroll stopped timeout index
-				clearTimeout(self.data("scrollStoppedTimeout" + index.toFixed()));
+				// Check if scroll stopped timeout index exists
+				if(typeof self.data("scrollStoppedTimeout" + index.toFixed()) !== "undefined") {
+			
+					// Clear scroll stopped timeout index
+					clearTimeout(self.data("scrollStoppedTimeout" + index.toFixed()));
+				}
 				
 				// Set scroll stopped timeout index
-				self.data("scrollStoppedTimeout" + index.toFixed(), setTimeout(callback.bind(self), SCROLL_IDLE_DURATION_MILLISECONDS, event));
+				self.data("scrollStoppedTimeout" + index.toFixed(), setTimeout(function() {
+				
+					// Remove scroll stopped timeout index
+					self.removeData("scrollStoppedTimeout" + index.toFixed());
+					
+					// Run callback
+					callback.bind(self)(event);
+					
+				}, SCROLL_IDLE_DURATION_MILLISECONDS));
 			});
 			
 			// Increment index
@@ -1691,7 +1703,7 @@ if(typeof jQuery === "function") {
 	};
 	
 	// Transition end timeout milliseconds
-	var TRANSITION_END_TIMEOUT_MILLISECONDS = 50;
+	var TRANSITION_END_TIMEOUT_MILLISECONDS = 100;
 	
 	// Transition end or timeout
 	$["fn"].transitionEndOrTimeout = function(callback, property) {
@@ -1735,6 +1747,9 @@ if(typeof jQuery === "function") {
 				// Turn off transition end transition end or timeout index event
 				self.off("transitionend.transitionEndOrTimeout" + index.toFixed());
 				
+				// Remove transition end or timeout timeout index
+				self.removeData("transitionEndOrTimeoutTimeout" + index.toFixed());
+				
 				// Run callback
 				callback.bind(self)();
 				
@@ -1746,12 +1761,52 @@ if(typeof jQuery === "function") {
 				// Clear transition end or timeout timeout index
 				clearTimeout(self.data("transitionEndOrTimeoutTimeout" + index.toFixed()));
 				
+				// Remove transition end or timeout timeout index
+				self.removeData("transitionEndOrTimeoutTimeout" + index.toFixed());
+				
 				// Run callback
 				callback.bind(self)(event);
 			});
 			
 			// Increment index
 			self.data("transitionEndOrTimeoutIndex", (index === Number.MAX_SAFE_INTEGER) ? 0 : index + 1);
+		});
+		
+		// Return elements
+		return this;
+	};
+	
+	// Off transition end or timeout
+	$["fn"].offTransitionEndOrTimeout = function() {
+	
+		// Go through each element
+		this.each(function() {
+		
+			// Set self
+			var self = $(this);
+			
+			// Turn off transition end event
+			self.off("transitionend");
+			
+			// Get data
+			var data = self.data();
+			
+			// Go through all data
+			for(var key in data) {
+						
+				if(data.hasOwnProperty(key) === true) {
+				
+					// Check if data is a transition end or timeout timeout index
+					if(key.indexOf("transitionEndOrTimeoutTimeout") === 0) {
+					
+						// Clear transition end or timeout timeout index
+						clearTimeout(self.data(key));
+						
+						// Remove transition end or timeout timeout index
+						self.removeData(key);
+					}
+				}
+			}
 		});
 		
 		// Return elements

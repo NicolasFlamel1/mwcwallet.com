@@ -16411,18 +16411,53 @@ class Api {
 											// Check if cancel didn't occur
 											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 										
-												// Check if slate response hasn't changed too much from the sent slate and at least one output was added
-												if(slate.isEqualTo(slateResponse) === true && slateResponse.getOutputs()["length"] > slate.getOutputs()["length"]) {
+												// Check if slate response isn't for the slate
+												if(slate.isEqualTo(slateResponse) === false) {
 												
-													// Resolve slate response
-													resolve(slateResponse);
+													// Reject unsupported response
+													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+												}
+												
+												// Otherwise check if no new outputs were added to the slate response
+												else if(slateResponse.getOutputs()["length"] <= slate.getOutputs()["length"]) {
+												
+													// Reject unsupported response
+													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+												}
+											
+												// Otherwise check if a participant is missing from the slate response
+												else if(slateResponse.getNumberOfParticipants().isEqualTo(slateResponse.getParticipants()["length"]) === false) {
+												
+													// Reject unsupported response
+													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+												}
+												
+												// Check if slate response's receiver participant doesn't exist
+												else if(slateResponse.getParticipant(SlateParticipant.SENDER_ID.plus(1)) === Slate.NO_PARTICIPANT) {
+												
+													// Reject unsupported response
+													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+												}
+												
+												// Otherwise check if slate response's receiver participant isn't complete
+												else if(slateResponse.getParticipant(SlateParticipant.SENDER_ID.plus(1)).isComplete() === false) {
+												
+													// Reject unsupported response
+													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+												}
+												
+												// Check if slate response has a payment proof but no receiver signature
+												else if(slateResponse.hasPaymentProof() === true && slateResponse.getReceiverSignature() === Slate.NO_RECEIVER_SIGNATURE) {
+												
+													// Reject unsupported response
+													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
 												}
 												
 												// Otherwise
 												else {
-												
-													// Reject unsupported response
-													reject(Message.createText(Language.getDefaultTranslation('Unsupported response from the recipient.')));
+											
+													// Resolve slate response
+													resolve(slateResponse);
 												}
 											
 											}

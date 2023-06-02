@@ -3667,14 +3667,14 @@ class WalletSection extends Section {
 			// Set that buttons aren't clicked or loading
 			this.getDisplay().find("button").removeClass("clicked loading");
 			
-			// Turn off address display loading transition end event
-			this.addressDisplay.find("div.loading").off("transitionend");
+			// Turn off address display loading transition end or timeout event
+			this.addressDisplay.find("div.loading").offTransitionEndOrTimeout();
 			
-			// Turn off balance syncing status transition end event
-			this.balanceDisplay.find("div.syncStatus").off("transitionend");
+			// Turn off balance syncing status transition end or timeout event
+			this.balanceDisplay.find("div.syncStatus").offTransitionEndOrTimeout();
 			
-			// Turn off shown syncing percent transition end event
-			this.balanceDisplay.find("circle.foreground").off("transitionend");
+			// Turn off shown syncing percent transition end or timeout event
+			this.balanceDisplay.find("circle.foreground").offTransitionEndOrTimeout();
 			
 			// Set that transactions navigation display buttons are enabled and not clicked
 			this.transactionsNavigationDisplay.find("button").removeClass("disabled clicked");

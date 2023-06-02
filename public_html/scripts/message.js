@@ -1188,6 +1188,13 @@ class Message {
 		// Disable
 		disable() {
 		
+			// Check if no message display buttons have a focus apperance
+			if(this.messageDisplay.find("button.focus")["length"] === 0) {
+			
+				// Set focused button to have a focus apperance and blur it
+				this.messageDisplay.find("button:focus").addClass("focus").blur();
+			}
+		
 			// Disable tabbing to everything in message display and disable everything in message display
 			this.messageDisplay.find("*").disableTab().disable();
 			

@@ -1816,16 +1816,20 @@ class Unlocked {
 								}
 								
 								// TODO Securely clear mnemonic words
-							
-								// Allow automatic lock
-								self.automaticLock.allow();
 								
-								// Check if automatic lock isn't locking
-								if(self.automaticLock.isLocking() === false) {
-							
-									// Show recover wallet error
-									showRecoverWalletError(error);
-								}
+								// Set timeout
+								setTimeout(function() {
+								
+									// Allow automatic lock
+									self.automaticLock.allow();
+									
+									// Check if automatic lock isn't locking
+									if(self.automaticLock.isLocking() === false) {
+								
+										// Show recover wallet error
+										showRecoverWalletError(error);
+									}
+								}, Unlocked.RECOVER_WALLET_INITIAL_DELAY_MILLISECONDS);
 							});
 						}
 						
