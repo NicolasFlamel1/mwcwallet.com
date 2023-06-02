@@ -6,7 +6,7 @@
 	const VERSION_NUMBER = "2.2.0";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "11 May 2023 14:18:00 UTC";
+	const VERSION_RELEASE_DATE = "02 Jun 2023 22:13:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
