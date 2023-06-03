@@ -4583,7 +4583,7 @@ class WalletSection extends Section {
 		static get FILE_INPUT_CANCEL_CHECK_DELAY_MILLISECONDS() {
 		
 			// Return file input cancel check delay milliseconds
-			return 50;
+			return 250;
 		}
 }
 
