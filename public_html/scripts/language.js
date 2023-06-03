@@ -871,6 +871,13 @@ class Language {
 									var translatedTextArgumentIsExternal = textArguments[argumentIndex][Language.LINK_IS_EXTERNAL_ARGUMENT_INDEX];
 									var translatedTextArgumentIsBlob = textArguments[argumentIndex][Language.LINK_IS_BLOB_ARGUMENT_INDEX];
 									
+									// Check if loading from file and translated text argument URL is a relative path
+									if(location["protocol"] === Common.FILE_PROTOCOL && translatedTextArgumentUrl.substring(0, "./"["length"]) === "./") {
+									
+										// Set translated text argument URL to be an absolute path
+										translatedTextArgumentUrl = HTTPS_SERVER_ADDRESS + translatedTextArgumentUrl.substring("."["length"]);
+									}
+									
 									// Append argument to result and encode it if specified
 									result += (encodeHtml === false) ? translatedTextArgumentText : ("<a href=\"" + Common.htmlEncode(translatedTextArgumentUrl) + "\" referrerpolicy=\"same-origin\" " + ((translatedTextArgumentIsBlob === true) ? "download=\"" + Common.htmlEncode(translatedTextArgumentText) + "\" " : "") + ((translatedTextArgumentIsExternal === true) ? "target=\"_blank\" rel=\"nofollow noopener noreferrer\"" : "target=\"_self\" hreflang=\"" + Common.htmlEncode(Language.currentLanguage) + "\"") + ">" + Common.htmlEncode(translatedTextArgumentText) + "</a>");
 								
@@ -885,6 +892,13 @@ class Language {
 									var notTranslatedTextArgumentUrl = textArguments[argumentIndex][Language.LINK_URL_ARGUMENT_INDEX];
 									var notTranslatedTextArgumentIsExternal = textArguments[argumentIndex][Language.LINK_IS_EXTERNAL_ARGUMENT_INDEX];
 									var notTranslatedTextArgumentIsBlob = textArguments[argumentIndex][Language.LINK_IS_BLOB_ARGUMENT_INDEX];
+									
+									// Check if loading from file and not translated text argument URL is a relative path
+									if(location["protocol"] === Common.FILE_PROTOCOL && notTranslatedTextArgumentUrl.substring(0, "./"["length"]) === "./") {
+									
+										// Set not translated text argument URL to be an absolute path
+										notTranslatedTextArgumentUrl = HTTPS_SERVER_ADDRESS + notTranslatedTextArgumentUrl.substring("."["length"]);
+									}
 									
 									// Append argument to result and encode it if specified
 									result += (encodeHtml === false) ? notTranslatedTextArgumentText : ("<a href=\"" + Common.htmlEncode(notTranslatedTextArgumentUrl) + "\" referrerpolicy=\"same-origin\" " + ((notTranslatedTextArgumentIsBlob === true) ? "download=\"" + Common.htmlEncode(notTranslatedTextArgumentText) + "\" " : "") + ((notTranslatedTextArgumentIsExternal === true) ? "target=\"_blank\" rel=\"nofollow noopener noreferrer\"" : "target=\"_self\" hreflang=\"" + Common.htmlEncode(Language.currentLanguage) + "\"") + ">" + Common.htmlEncode(notTranslatedTextArgumentText) + "</a>");
