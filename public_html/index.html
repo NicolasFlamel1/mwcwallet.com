@@ -2021,7 +2021,7 @@
 												--><div class="value" data-type="select"><!--
 													--><select data-private><!--
 														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Match connection')); ?>" value="Match Connection"><?= encodeString(getTranslation('Match connection')); ?></option><!--
-														--><option class="translatable" data-text="<?= encodeString((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? getDefaultTranslation('HTTPS') : getDefaultTranslation('HTTP')); ?>" value="HTTP"><?= encodeString((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? getTranslation('HTTPS') : getTranslation('HTTP')); ?></option><!--
+														--><option class="translatable" data-text="<?= encodeString(((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") || array_key_exists("HTTPS_SERVER_ADDRESS", $_SERVER) === TRUE) ? getDefaultTranslation('HTTPS') : getDefaultTranslation('HTTP')); ?>" value="HTTP"><?= encodeString(((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") || array_key_exists("HTTPS_SERVER_ADDRESS", $_SERVER) === TRUE) ? getTranslation('HTTPS') : getTranslation('HTTP')); ?></option><!--
 														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Onion Service')); ?>" value="Tor"><?= encodeString(getTranslation('Onion Service')); ?></option><!--
 													--></select><!--
 													--><span></span><!--
