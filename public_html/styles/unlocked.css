@@ -497,6 +497,16 @@ main > div.unlocked > div > div > div.wallets > div > div.list > button.ledger::
 	background-size: 2.5em;
 }
 
+main > div.unlocked > div > div > div.wallets > div > div.list > button.trezor::before {
+	background-image: url(".<?= escapeString(getResource("./images/trezor.svg")); ?>");
+	opacity: 0.1;
+	background-size: 2.1em;
+}
+
+main > div.unlocked > div > div > div.wallets > div > div.list > button.noOverlay::before {
+	opacity: 0;
+}
+
 main > div.unlocked > div > div > div.wallets > div > div.list > button.hide {
 	display: flex;
 	visibility: hidden;

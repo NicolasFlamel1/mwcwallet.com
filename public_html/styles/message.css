@@ -304,6 +304,24 @@ aside.message > div > div > p > span.text span.radio input[type="radio"]:disable
 	cursor: default;
 }
 
+aside.message > div > div > p > span.text span.pinMatrix {
+	display: inline-grid;
+	grid-gap: 1px;
+	gap: 1px;
+	grid-template-columns: repeat(3, 1fr);
+	justify-items: center;
+	background-color: #3600C9;
+	border: 1px solid #3600C9;
+}
+
+aside.message > div > div > p > span.text span.pinMatrix > span {
+	background-color: white;
+	width: 2.3em;
+	height: 2.3em;
+	line-height: 2.3em;
+	font-family: monospace;
+}
+
 aside.message > div > div > p > span > ul {
 	list-style-position: inside;
 	margin: 0;

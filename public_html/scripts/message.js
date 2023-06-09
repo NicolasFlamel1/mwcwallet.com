@@ -987,9 +987,10 @@ class Message {
 					// Resolve replace not displayed result
 					resolve(Message.REPLACE_NOT_DISPLAYED_RESULT);
 				});
-		
-				// Trigger replace event
-				$(self).trigger(Message.REPLACE_EVENT, [
+				
+				// Trigger before replace event
+				var event = $.Event(Message.BEFORE_REPLACE_EVENT);
+				$(self).trigger(event, [
 				
 					// Message type
 					messageType,
@@ -997,6 +998,20 @@ class Message {
 					// Message data
 					messageData
 				]);
+				
+				// Check if event wasn't canceled
+				if(event["result"] !== false) {
+		
+					// Trigger replace event
+					$(self).trigger(Message.REPLACE_EVENT, [
+					
+						// Message type
+						messageType,
+						
+						// Message data
+						messageData
+					]);
+				}
 			});
 		}
 		
@@ -1351,6 +1366,23 @@ class Message {
 			return "<video playsinline></video>";
 		}
 		
+		// Create pin matrix
+		static createPinMatrix() {
+		
+			// Return pin matrix
+			return "<span class=\"pinMatrix\">" +
+				"<span>A</span>" +
+				"<span>B</span>" +
+				"<span>C</span>" +
+				"<span>D</span>" +
+				"<span>E</span>" +
+				"<span>F</span>" +
+				"<span>G</span>" +
+				"<span>H</span>" +
+				"<span>I</span>" +
+			"</span>";
+		}
+		
 		// Create line break
 		static createLineBreak() {
 		
@@ -1496,6 +1528,13 @@ class Message {
 		
 			// Return before show event
 			return "MessageBeforeShowNotCancelableEvent";
+		}
+		
+		// Before replace event
+		static get BEFORE_REPLACE_EVENT() {
+		
+			// Return before replace event
+			return "MessageBeforeReplaceEvent";
 		}
 		
 		// Replace event

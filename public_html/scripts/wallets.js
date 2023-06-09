@@ -1323,6 +1323,53 @@ class Wallets {
 						}
 				}
 			});
+			
+			// Document wallet hardware type change event
+			$(document).on(Wallet.HARDWARE_TYPE_CHANGE_EVENT, function(event, keyPath, newHardwareType) {
+			
+				// Check if wallet exists
+				if(self.walletExists(keyPath.toFixed()) === true) {
+				
+					// Get wallet
+					var wallet = self.wallets[keyPath.toFixed()];
+			
+					// Save wallet
+					self.saveWallet(wallet, function() {
+			
+						// Return
+						return {
+						
+							// New hardware type value
+							[Wallets.NEW_HARDWARE_TYPE_VALUE]: newHardwareType
+						};
+						
+					}).then(function(newValues) {
+					
+						// Check if wallet exists
+						if(self.walletExists(keyPath) === true) {
+						
+							// Trigger change event
+							$(document).trigger(Wallets.CHANGE_EVENT, [
+							
+								// Key path
+								keyPath,
+								
+								// Change
+								Wallets.HARDWARE_TYPE_CHANGED,
+								
+								// New value
+								newValues[Wallets.NEW_HARDWARE_TYPE_VALUE]
+							]);
+						}
+						
+					// Catch errors
+					}).catch(function(error) {
+					
+						// Trigger a fatal error
+						new FatalError(FatalError.DATABASE_ERROR);
+					});
+				}
+			});
 		}
 		
 		// Start syncing
@@ -4916,6 +4963,13 @@ class Wallets {
 			// Return name changed
 			return Wallets.EXPIRED_AMOUNT_CHANGED + 1;
 		}
+		
+		// Hardware type changed
+		static get HARDWARE_TYPE_CHANGED() {
+		
+			// Return hardware type changed
+			return Wallets.NAME_CHANGED + 1;
+		}
 	
 	// Private
 	
@@ -5476,7 +5530,7 @@ class Wallets {
 																											identifierHeight = identifierHeight.minus(Identifier.MAXIMUM_HEIGHT + 1);
 																										}
 																										
-																										// Check if output height exceeds the identifer height by at least the replay detection threshold
+																										// Check if output height exceeds the identifier height by at least the replay detection threshold
 																										if(outputHeight.minus(identifierHeight).isGreaterThan(Wallets.REPLAY_DETECTION_THRESHOLD) === true) {
 																										
 																											// Resolve
@@ -5490,7 +5544,7 @@ class Wallets {
 																									// Check if highest identifier doesn't exist
 																									if(highestIdentifier === Wallet.NO_LAST_IDENTIFIER) {
 																									
-																										// Get default identifer
+																										// Get default identifier
 																										var defaultIdentifier = new Identifier();
 																										
 																										// Set the highest identifier to the default identifier's child identifier
@@ -9086,6 +9140,13 @@ class Wallets {
 									// Set wallet's encrypted BIP39 salt to its new value
 									wallet.setEncryptedBip39Salt(newValues[Wallets.NEW_ENCRYPTED_BIP39_SALT_VALUE]);
 								}
+								
+								// Check if a new hardware type value is set
+								if(Wallets.NEW_HARDWARE_TYPE_VALUE in newValues === true) {
+								
+									// Set wallet's hardware type to its new value
+									wallet.setHardwareType(newValues[Wallets.NEW_HARDWARE_TYPE_VALUE]);
+								}
 							
 								// Resolve new values
 								resolve(newValues);
@@ -9200,7 +9261,7 @@ class Wallets {
 									[Database.toKeyPath(Wallets.DATABASE_LAST_IDENTIFIER_NAME)]: (Wallets.NEW_LAST_IDENTIFIER_VALUE in newValues === true) ? ((newValues[Wallets.NEW_LAST_IDENTIFIER_VALUE] !== Wallet.NO_LAST_IDENTIFIER) ? newValues[Wallets.NEW_LAST_IDENTIFIER_VALUE].getValue() : Wallet.NO_LAST_IDENTIFIER) : ((wallet.getLastIdentifier() !== Wallet.NO_LAST_IDENTIFIER) ? wallet.getLastIdentifier().getValue() : Wallet.NO_LAST_IDENTIFIER),
 									
 									// Hardware type
-									[Database.toKeyPath(Wallets.DATABASE_HARDWARE_TYPE_NAME)]: wallet.getHardwareType(),
+									[Database.toKeyPath(Wallets.DATABASE_HARDWARE_TYPE_NAME)]: (Wallets.NEW_HARDWARE_TYPE_VALUE in newValues === true) ? newValues[Wallets.NEW_HARDWARE_TYPE_VALUE] : wallet.getHardwareType(),
 									
 									// Encrypted root public key
 									[Database.toKeyPath(Wallets.DATABASE_ENCRYPTED_ROOT_PUBLIC_KEY_NAME)]: (Wallets.NEW_ENCRYPTED_ROOT_PUBLIC_KEY_VALUE in newValues === true) ? newValues[Wallets.NEW_ENCRYPTED_ROOT_PUBLIC_KEY_VALUE] : wallet.getEncryptedRootPublicKey(),
@@ -9357,6 +9418,13 @@ class Wallets {
 												wallet.setEncryptedBip39Salt(newValues[Wallets.NEW_ENCRYPTED_BIP39_SALT_VALUE]);
 											}
 											
+											// Check if a new hardware type value is set
+											if(Wallets.NEW_HARDWARE_TYPE_VALUE in newValues === true) {
+											
+												// Set wallet's hardware type to its new value
+												wallet.setHardwareType(newValues[Wallets.NEW_HARDWARE_TYPE_VALUE]);
+											}
+											
 											// Resolve new values
 											resolve(newValues);
 										
@@ -9496,7 +9564,7 @@ class Wallets {
 								[Database.toKeyPath(Wallets.DATABASE_LAST_IDENTIFIER_NAME)]: (Wallets.NEW_LAST_IDENTIFIER_VALUE in newValues === true) ? ((newValues[Wallets.NEW_LAST_IDENTIFIER_VALUE] !== Wallet.NO_LAST_IDENTIFIER) ? newValues[Wallets.NEW_LAST_IDENTIFIER_VALUE].getValue() : Wallet.NO_LAST_IDENTIFIER) : ((wallet.getLastIdentifier() !== Wallet.NO_LAST_IDENTIFIER) ? wallet.getLastIdentifier().getValue() : Wallet.NO_LAST_IDENTIFIER),
 								
 								// Hardware type
-								[Database.toKeyPath(Wallets.DATABASE_HARDWARE_TYPE_NAME)]: wallet.getHardwareType(),
+								[Database.toKeyPath(Wallets.DATABASE_HARDWARE_TYPE_NAME)]: (Wallets.NEW_HARDWARE_TYPE_VALUE in newValues === true) ? newValues[Wallets.NEW_HARDWARE_TYPE_VALUE] : wallet.getHardwareType(),
 								
 								// Encrypted root public key
 								[Database.toKeyPath(Wallets.DATABASE_ENCRYPTED_ROOT_PUBLIC_KEY_NAME)]: (Wallets.NEW_ENCRYPTED_ROOT_PUBLIC_KEY_VALUE in newValues === true) ? newValues[Wallets.NEW_ENCRYPTED_ROOT_PUBLIC_KEY_VALUE] : wallet.getEncryptedRootPublicKey(),
@@ -9645,6 +9713,13 @@ class Wallets {
 										
 											// Set wallet's encrypted BIP39 salt to its new value
 											wallet.setEncryptedBip39Salt(newValues[Wallets.NEW_ENCRYPTED_BIP39_SALT_VALUE]);
+										}
+										
+										// Check if a new hardware type value is set
+										if(Wallets.NEW_HARDWARE_TYPE_VALUE in newValues === true) {
+										
+											// Set wallet's hardware type to its new value
+											wallet.setHardwareType(newValues[Wallets.NEW_HARDWARE_TYPE_VALUE]);
 										}
 										
 										// Resolve new values
@@ -10097,7 +10172,7 @@ class Wallets {
 		// Database last identifier name
 		static get DATABASE_LAST_IDENTIFIER_NAME() {
 		
-			// Return database last identifer name
+			// Return database last identifier name
 			return "Last Identifier";
 		}
 		
@@ -10394,6 +10469,13 @@ class Wallets {
 		
 			// Return new encrypted BIP39 salt value
 			return "New Encrypted BIP39 Salt Value";
+		}
+		
+		// New hardware type value
+		static get NEW_HARDWARE_TYPE_VALUE() {
+		
+			// Return new hardware type value
+			return "New Hardware Type Value";
 		}
 		
 		// Change password salt index

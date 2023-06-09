@@ -26,6 +26,9 @@ class HardwareWalletBluetoothTransport {
 		
 			// Set allow disconnect event to true
 			this.allowDisconnectEvent = true;
+			
+			// Set type to Ledger
+			this.type = HardwareWalletDefinitions.LEDGER_TRANSPORT_TYPE;
 		
 			// Set device model
 			this["deviceModel"] = {
@@ -64,6 +67,23 @@ class HardwareWalletBluetoothTransport {
 					// Device GATT server disconnected event
 					this.connection["device"].addEventListener("gattserverdisconnected", callbackOnce);
 				
+					// Return callback once
+					return callbackOnce;
+			}
+		}
+		
+		// Off
+		off(event, callback) {
+		
+			// Check event
+			switch(event) {
+			
+				// Disconnect
+				case "disconnect":
+				
+					// Remove GATT server disconnected event
+					this.connection["device"].removeEventListener("gattserverdisconnected", callback);
+					
 					// Break
 					break;
 			}
@@ -91,7 +111,7 @@ class HardwareWalletBluetoothTransport {
 		}
 		
 		// Send
-		send(requestClass, requestInstruction, parameterOne, parameterTwo, data) {
+		send(messageType, parameterOne, parameterTwo, data) {
 		
 			// Set self
 			var self = this;
@@ -103,42 +123,34 @@ class HardwareWalletBluetoothTransport {
 				if(self.connection["connected"] === true) {
 				
 					// Create header
-					var header = new Uint8Array([requestClass, requestInstruction, parameterOne, parameterTwo, data["length"]]);
+					var header = new Uint8Array([messageType >>> HardwareWalletBluetoothTransport.BITS_IN_A_BYTE, messageType, parameterOne, parameterTwo, data["length"]]);
 					
-					// Create APDU
-					var apdu = new Uint8Array(header["length"] + data["length"]);
-					apdu.set(header);
-					apdu.set(data, header["length"]);
+					// Create payload
+					var payload = new Uint8Array(header["length"] + data["length"]);
+					payload.set(header);
+					payload.set(data, header["length"]);
 			
-					// Return getting APDU response from device
-					return HardwareWalletBluetoothTransport.sendRequest(self.connection, self.writeCharacteristic, self.notifyCharacteristic, HardwareWalletBluetoothTransport.APDU_COMMAND_TAG, apdu, self.mtu).then(function(response) {
+					// Return sending request to the device
+					return HardwareWalletBluetoothTransport.sendRequest(self.connection, self.writeCharacteristic, self.notifyCharacteristic, HardwareWalletBluetoothTransport.LEDGER_SEND_REQUEST_COMMAND_TAG, payload, self.mtu).then(function(response) {
 					
 						// Check if connection is connected
 						if(self.connection["connected"] === true) {
 						
-							// Check if response contains a status
-							if(response["length"] >= HardwareWalletBluetoothTransport.APDU_STATUS_LENGTH) {
+							// Check if response contains a message type
+							if(response["length"] >= HardwareWalletBluetoothTransport.MESSAGE_TYPE_LENGTH) {
 							
-								// Get status
-								var status = response[response["length"] - 1] | (response[response["length"] - 2] << HardwareWalletBluetoothTransport.BITS_IN_A_BYTE);
+								// Get message type
+								var messageType = (response[response["length"] - HardwareWalletBluetoothTransport.MESSAGE_TYPE_LENGTH] << HardwareWalletBluetoothTransport.BITS_IN_A_BYTE) | response[response["length"] - (HardwareWalletBluetoothTransport.MESSAGE_TYPE_LENGTH - 1)];
 								
-								// Check if status is success
-								if(status === HardwareWalletBluetoothTransport.APDU_SUCCESS_STATUS) {
+								// Resolve
+								resolve({
 								
-									// Resolve response
-									resolve(response);
-								}
-								
-								// Otherwise
-								else {
-								
-									// Reject error
-									reject({
+									// Message type
+									"Message Type": messageType,
 									
-										// Status code
-										"statusCode": status
-									});
-								}
+									// Data
+									"Data": response.subarray(0, response["length"] - HardwareWalletBluetoothTransport.MESSAGE_TYPE_LENGTH)
+								});
 							}
 							
 							// Otherwise
@@ -397,8 +409,8 @@ class HardwareWalletBluetoothTransport {
 																	// Device GATT server disconnected event
 																	device.addEventListener("gattserverdisconnected", disconnectedHandler);
 																	
-																	// Return getting MTU from device
-																	return HardwareWalletBluetoothTransport.sendRequest(connection, writeCharacteristic, notifyCharacteristic, HardwareWalletBluetoothTransport.GET_MTU_COMMAND_TAG).then(function(response) {
+																	// Return getting MTU from the device
+																	return HardwareWalletBluetoothTransport.sendRequest(connection, writeCharacteristic, notifyCharacteristic, HardwareWalletBluetoothTransport.LEDGER_GET_MTU_COMMAND_TAG).then(function(response) {
 																	
 																		// Check if connection is connected
 																		if(connection["connected"] === true) {
@@ -714,7 +726,7 @@ class HardwareWalletBluetoothTransport {
 						var responsePacket = new Uint8Array(event["target"]["value"]["buffer"]);
 						
 						// Check if response packet is too short
-						if((firstResponsePacket === true && responsePacket["length"] < HardwareWalletBluetoothTransport.PAYLOAD_INDEX) || (firstResponsePacket === false && responsePacket["length"] <= HardwareWalletBluetoothTransport.PAYLOAD_INDEX - 2)) {
+						if((firstResponsePacket === true && responsePacket["length"] < HardwareWalletBluetoothTransport.LEDGER_FIRST_PACKET_HEADER_LENGTH) || (firstResponsePacket === false && responsePacket["length"] <= HardwareWalletBluetoothTransport.LEDGER_NEXT_PACKETS_HEADER_LENGTH)) {
 						
 							// Remove GATT server disconnected event
 							connection["device"].removeEventListener("gattserverdisconnected", disconnectedHandler);
@@ -741,7 +753,7 @@ class HardwareWalletBluetoothTransport {
 						else {
 						
 							// Get tag
-							var tag = responsePacket[HardwareWalletBluetoothTransport.COMMAND_TAG_INDEX];
+							var tag = responsePacket[0];
 							
 							// Check if tag is invalid
 							if(tag !== commandTag) {
@@ -771,7 +783,7 @@ class HardwareWalletBluetoothTransport {
 							else {
 							
 								// Get sequence index
-								var sequenceIndex = (responsePacket[HardwareWalletBluetoothTransport.SEQUENCE_INDEX_INDEX] << HardwareWalletBluetoothTransport.BITS_IN_A_BYTE) | responsePacket[HardwareWalletBluetoothTransport.SEQUENCE_INDEX_INDEX + 1];
+								var sequenceIndex = (responsePacket[Uint8Array["BYTES_PER_ELEMENT"]] << HardwareWalletBluetoothTransport.BITS_IN_A_BYTE) | responsePacket[Uint8Array["BYTES_PER_ELEMENT"] + 1];
 								
 								// Check if first response packet
 								if(firstResponsePacket === true) {
@@ -807,10 +819,10 @@ class HardwareWalletBluetoothTransport {
 									firstResponsePacket = false;
 									
 									// Get response size
-									responseSize = (responsePacket[HardwareWalletBluetoothTransport.PAYLOAD_SIZE_INDEX] << HardwareWalletBluetoothTransport.BITS_IN_A_BYTE) | responsePacket[HardwareWalletBluetoothTransport.PAYLOAD_SIZE_INDEX + 1];
+									responseSize = (responsePacket[Uint8Array["BYTES_PER_ELEMENT"] + Uint16Array["BYTES_PER_ELEMENT"]] << HardwareWalletBluetoothTransport.BITS_IN_A_BYTE) | responsePacket[Uint8Array["BYTES_PER_ELEMENT"] + Uint16Array["BYTES_PER_ELEMENT"] + 1];
 									
 									// Get response part
-									var responsePart = responsePacket.subarray(HardwareWalletBluetoothTransport.PAYLOAD_INDEX);
+									var responsePart = responsePacket.subarray(HardwareWalletBluetoothTransport.LEDGER_FIRST_PACKET_HEADER_LENGTH);
 								}
 								
 								// Otherwise
@@ -844,7 +856,7 @@ class HardwareWalletBluetoothTransport {
 									}
 									
 									// Get response part
-									var responsePart = responsePacket.subarray(HardwareWalletBluetoothTransport.PAYLOAD_INDEX - 2);
+									var responsePart = responsePacket.subarray(HardwareWalletBluetoothTransport.LEDGER_NEXT_PACKETS_HEADER_LENGTH);
 								}
 								
 								// Update last sequence index
@@ -1137,32 +1149,25 @@ class HardwareWalletBluetoothTransport {
 			return null;
 		}
 		
-		// Get MTU command tag
-		static get GET_MTU_COMMAND_TAG() {
+		// Ledger get MTU command tag
+		static get LEDGER_GET_MTU_COMMAND_TAG() {
 		
-			// Return get MTU command tag
+			// Return Ledger get MTU command tag
 			return 0x08;
 		}
 		
-		// APDU command tag
-		static get APDU_COMMAND_TAG() {
+		// Ledger send request command tag
+		static get LEDGER_SEND_REQUEST_COMMAND_TAG() {
 		
-			// Return APDU command tag
+			// Return Ledger send request command tag
 			return 0x05;
 		}
 		
-		// APDU status length
-		static get APDU_STATUS_LENGTH() {
+		// Message type length
+		static get MESSAGE_TYPE_LENGTH() {
 		
-			// Return APDU status length
-			return (new Uint8Array([0x00, 0x00]))["length"];
-		}
-		
-		// APDU success status
-		static get APDU_SUCCESS_STATUS() {
-		
-			// Return APDU success status
-			return 0x9000;
+			// Return message type length
+			return Uint16Array["BYTES_PER_ELEMENT"];
 		}
 		
 		// No device
@@ -1186,32 +1191,18 @@ class HardwareWalletBluetoothTransport {
 			return 8;
 		}
 		
-		// Command tag index
-		static get COMMAND_TAG_INDEX() {
-	
-			// Return command tag index
-			return 0;
+		// Ledger first packet header length
+		static get LEDGER_FIRST_PACKET_HEADER_LENGTH() {
+		
+			// Return Ledger first packet header length
+			return 5;
 		}
 		
-		// Sequence index index
-		static get SEQUENCE_INDEX_INDEX() {
+		// Ledger next packets header length
+		static get LEDGER_NEXT_PACKETS_HEADER_LENGTH() {
 		
-			// Return sequence index index
-			return HardwareWalletBluetoothTransport.COMMAND_TAG_INDEX + 1;
-		}
-		
-		// Payload size index
-		static get PAYLOAD_SIZE_INDEX() {
-		
-			// Return payload size index
-			return HardwareWalletBluetoothTransport.SEQUENCE_INDEX_INDEX + 2;
-		}
-		
-		// Payload index
-		static get PAYLOAD_INDEX() {
-		
-			// Return payload index
-			return HardwareWalletBluetoothTransport.PAYLOAD_SIZE_INDEX + 2;
+			// Return Ledger next packets header length
+			return 3;
 		}
 }
 

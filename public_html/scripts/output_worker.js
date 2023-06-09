@@ -326,7 +326,7 @@ function getInformation(proof, commit, extendedPrivateKeyOrRootPublicKey, proofB
 					// Return having the proof builder get the output
 					return proofBuilder.getOutput(extendedPrivateKeyOrRootPublicKey, amount, commit, message).then(function(output) {
 					
-						// Get identifer from output
+						// Get identifier from output
 						var identifier = output[ProofBuilder.OUTPUT_IDENTIFIER_INDEX];
 						
 						// Get switch type from output

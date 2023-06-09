@@ -21,11 +21,39 @@ class HardwareWalletUsbTransport {
 			// Set allow disconnect event to true
 			this.allowDisconnectEvent = true;
 			
+			// Set product name
+			var productName = device["manufacturerName"] + " " + device["productName"];
+			
+			// Go through all devices
+			for(var i = 0; i < HardwareWalletUsbTransport.DEVICES["length"]; ++i) {
+			
+				// Check if device's vendor ID matches the device's
+				if(device["vendorId"] === HardwareWalletUsbTransport.DEVICES[i]["Vendor ID"]) {
+				
+					// Set type to device's type
+					this.type = HardwareWalletUsbTransport.DEVICES[i]["Type"];
+					
+					// Check if device's product ID matches the device's
+					if("Product ID" in HardwareWalletUsbTransport.DEVICES[i] === false || device["productId"] === HardwareWalletUsbTransport.DEVICES[i]["Product ID"]) {
+					
+						// Check if device has a product name
+						if("Product Name" in HardwareWalletUsbTransport.DEVICES[i] === true) {
+					
+							// Set product name
+							productName = HardwareWalletUsbTransport.DEVICES[i]["Product Name"];
+						}
+						
+						// Break
+						break;
+					}
+				}
+			}
+			
 			// Set device model
 			this["deviceModel"] = {
 			
 				// Product name
-				"productName": device["manufacturerName"] + " " + device["productName"]
+				"productName": productName
 			};
 		}
 		
@@ -61,7 +89,24 @@ class HardwareWalletUsbTransport {
 				
 					// USB disconnect event
 					navigator["usb"].addEventListener("disconnect", callbackOnce);
+					
+					// Return callback once
+					return callbackOnce;
+			}
+		}
+		
+		// Off
+		off(event, callback) {
+		
+			// Check event
+			switch(event) {
+			
+				// Disconnect
+				case "disconnect":
 				
+					// Remove USB disconnect event
+					navigator["usb"].removeEventListener("disconnect", callback);
+					
 					// Break
 					break;
 			}
@@ -109,7 +154,7 @@ class HardwareWalletUsbTransport {
 		}
 		
 		// Send
-		send(requestClass, requestInstruction, parameterOne, parameterTwo, data) {
+		send(messageType, parameterOne, parameterTwo, data) {
 		
 			// Set self
 			var self = this;
@@ -117,40 +162,51 @@ class HardwareWalletUsbTransport {
 			// Return promise
 			return new Promise(function(resolve, reject) {
 			
-				// Create header
-				var header = new Uint8Array([requestClass, requestInstruction, parameterOne, parameterTwo, data["length"]]);
+				// Check type
+				switch(self.type) {
 				
-				// Create APDU
-				var apdu = new Uint8Array(header["length"] + data["length"]);
-				apdu.set(header);
-				apdu.set(data, header["length"]);
-		
-				// Return getting APDU response from device
-				return HardwareWalletUsbTransport.sendRequest(self.device, apdu).then(function(response) {
-				
-					// Check if response contains a status
-					if(response["length"] >= HardwareWalletUsbTransport.APDU_STATUS_LENGTH) {
+					// Ledger type
+					case HardwareWalletDefinitions.LEDGER_TRANSPORT_TYPE:
 					
-						// Get status
-						var status = response[response["length"] - 1] | (response[response["length"] - 2] << HardwareWalletUsbTransport.BITS_IN_A_BYTE);
+						// Create header
+						var header = new Uint8Array([messageType >>> HardwareWalletUsbTransport.BITS_IN_A_BYTE, messageType, parameterOne, parameterTwo, data["length"]]);
 						
-						// Check if status is success
-						if(status === HardwareWalletUsbTransport.APDU_SUCCESS_STATUS) {
+						// Break
+						break;
+					
+					// Trezor type
+					case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+					
+						// Create header
+						var header = new Uint8Array([messageType >>> HardwareWalletUsbTransport.BITS_IN_A_BYTE, messageType, data["length"] >>> (HardwareWalletUsbTransport.BITS_IN_A_BYTE * 3), data["length"] >>> (HardwareWalletUsbTransport.BITS_IN_A_BYTE * 2), data["length"] >>> HardwareWalletUsbTransport.BITS_IN_A_BYTE, data["length"]]);
+					
+						// Break
+						break;
+				}
+				
+				// Create message
+				var message = new Uint8Array(header["length"] + data["length"]);
+				message.set(header);
+				message.set(data, header["length"]);
+		
+				// Return sending message to the device
+				return HardwareWalletUsbTransport.sendRequest(self.device, self.type, message).then(function(response) {
+				
+					// Check if response contains a message type
+					if(response["length"] >= HardwareWalletUsbTransport.MESSAGE_TYPE_LENGTH) {
+					
+						// Get message type
+						var messageType = (response[response["length"] - HardwareWalletUsbTransport.MESSAGE_TYPE_LENGTH] << HardwareWalletUsbTransport.BITS_IN_A_BYTE) | response[response["length"] - (HardwareWalletUsbTransport.MESSAGE_TYPE_LENGTH - 1)];
 						
-							// Resolve response
-							resolve(response);
-						}
+						// Resolve
+						resolve({
 						
-						// Otherwise
-						else {
-						
-							// Reject error
-							reject({
+							// Message type
+							"Message Type": messageType,
 							
-								// Status code
-								"statusCode": status
-							});
-						}
+							// Data
+							"Data": response.subarray(0, response["length"] - HardwareWalletUsbTransport.MESSAGE_TYPE_LENGTH)
+						});
 					}
 					
 					// Otherwise
@@ -199,14 +255,32 @@ class HardwareWalletUsbTransport {
 							return navigator["usb"].requestDevice({
 							
 								// Filters
-								"filters": HardwareWalletUsbTransport.VENDOR_IDS.map(function(vendorId) {
+								"filters": HardwareWalletUsbTransport.DEVICES.map(function(device) {
 								
-									// Return vendor ID
-									return {
+									// Check if device has a product ID
+									if("Product ID" in device === true) {
 									
-										// Vendor ID
-										"vendorId": vendorId
-									};
+										// Return device's vendor ID and product ID
+										return {
+										
+											// Vendor ID
+											"vendorId": device["Vendor ID"],
+											
+											// Product ID
+											"productId": device["Product ID"]
+										};
+									}
+									
+									// Otherwise
+									else {
+								
+										// Return device's vendor ID
+										return {
+										
+											// Vendor ID
+											"vendorId": device["Vendor ID"]
+										};
+									}
 								})
 								
 							}).then(function(device) {
@@ -236,8 +310,25 @@ class HardwareWalletUsbTransport {
 						// Otherwise
 						else {
 						
-							// Check if device has an applicable vendor ID
-							if(HardwareWalletUsbTransport.VENDOR_IDS.indexOf(device["vendorId"]) !== HardwareWalletUsbTransport.INDEX_NOT_FOUND) {
+							// Initialize device applicable
+							var deviceApplicable = false;
+						
+							// Go through all devices
+							for(var i = 0; i < HardwareWalletUsbTransport.DEVICES["length"]; ++i) {
+							
+								// Check if device's vendor ID and product ID match the device's
+								if(device["vendorId"] === HardwareWalletUsbTransport.DEVICES[i]["Vendor ID"] && ("Product ID" in HardwareWalletUsbTransport.DEVICES[i] === false || device["productId"] === HardwareWalletUsbTransport.DEVICES[i]["Product ID"])) {
+								
+									// Set device applicable
+									deviceApplicable = true;
+									
+									// Break
+									break;
+								}
+							}
+						
+							// Check if device is applicable
+							if(deviceApplicable === true) {
 							
 								// Check if device isn't opened
 								if(device["opened"] === false) {
@@ -270,40 +361,8 @@ class HardwareWalletUsbTransport {
 					// Return opening device
 					return device.open().then(function() {
 					
-						// Select configuration
-						var selectConfiguration = function() {
-						
-							// Return promise
-							return new Promise(function(resolve, reject) {
-							
-								// Check if device's configuration has been selected
-								if(device["configuration"] === null) {
-								
-									// Return selecting device's configuration
-									return device.selectConfiguration(HardwareWalletUsbTransport.CONFIGURATION).then(function() {
-									
-										// Resolve
-										resolve();
-										
-									// Catch errors
-									}).catch(function(error) {
-									
-										// Reject error
-										reject(error);
-									});
-								}
-								
-								// Otherwise
-								else {
-								
-									// Resolve
-									resolve();
-								}
-							});
-						};
-						
-						// Return selecting configuration
-						return selectConfiguration().then(function() {
+						// Return selecting device's configuration
+						return device.selectConfiguration(HardwareWalletUsbTransport.CONFIGURATION).then(function() {
 						
 							// Return resetting device and catch errors
 							return device.reset().catch(function(error) {
@@ -422,11 +481,32 @@ class HardwareWalletUsbTransport {
 					// Go through all devices
 					for(var i = 0; i < devices["length"]; ++i) {
 					
-						// Check if device has an applicable vendor ID and it's not opened
-						if(HardwareWalletUsbTransport.VENDOR_IDS.indexOf(devices[i]["vendorId"]) !== HardwareWalletUsbTransport.INDEX_NOT_FOUND && devices[i]["opened"] === false) {
+						// Check if device isn't opened
+						if(devices[i]["opened"] === false) {
+					
+							// Initialize device applicable
+							var deviceApplicable = false;
 						
-							// Append device to list
-							applicableDevices.push(devices[i]);
+							// Go through all devices
+							for(var j = 0; j < HardwareWalletUsbTransport.DEVICES["length"]; ++j) {
+							
+								// Check if device's vendor ID and product ID match the device's
+								if(devices[i]["vendorId"] === HardwareWalletUsbTransport.DEVICES[j]["Vendor ID"] && ("Product ID" in HardwareWalletUsbTransport.DEVICES[j] === false || devices[i]["productId"] === HardwareWalletUsbTransport.DEVICES[j]["Product ID"])) {
+								
+									// Set device aapplicable
+									deviceApplicable = true;
+									
+									// Break
+									break;
+								}
+							}
+						
+							// Check if device is applicable
+							if(deviceApplicable === true) {
+						
+								// Append device to list
+								applicableDevices.push(devices[i]);
+							}
 						}
 					}
 				
@@ -445,7 +525,7 @@ class HardwareWalletUsbTransport {
 	// Private
 	
 		// Create packets
-		static createPackets(channel, payload = HardwareWalletUsbTransport.NO_PAYLOAD) {
+		static createPackets(channel, type, payload = HardwareWalletUsbTransport.NO_PAYLOAD) {
 		
 			// Initialize packets
 			var packets = [];
@@ -457,11 +537,44 @@ class HardwareWalletUsbTransport {
 				payload = new Uint8Array([]);
 			}
 			
-			// Create padded payload
-			var numberOfPackets = Math.ceil((2 + payload["length"]) / (HardwareWalletUsbTransport.PACKET_SIZE - 5));
-			var paddedPayload = (new Uint8Array(numberOfPackets * (HardwareWalletUsbTransport.PACKET_SIZE - 5))).fill(0);
-			paddedPayload.set(new Uint8Array([payload["length"] >>> HardwareWalletUsbTransport.BITS_IN_A_BYTE, payload["length"]]));
-			paddedPayload.set(payload, 2);
+			// Check type
+			switch(type) {
+			
+				// Ledger type
+				case HardwareWalletDefinitions.LEDGER_TRANSPORT_TYPE:
+			
+					// Create padded payload
+					var numberOfPackets = Math.ceil((HardwareWalletUsbTransport.MESSAGE_TYPE_LENGTH + payload["length"]) / (HardwareWalletUsbTransport.PACKET_SIZE - HardwareWalletUsbTransport.LEDGER_PACKET_HEADER_LENGTH));
+					var paddedPayload = (new Uint8Array(numberOfPackets * (HardwareWalletUsbTransport.PACKET_SIZE - HardwareWalletUsbTransport.LEDGER_PACKET_HEADER_LENGTH))).fill(0);
+					paddedPayload.set(new Uint8Array([payload["length"] >>> HardwareWalletUsbTransport.BITS_IN_A_BYTE, payload["length"]]));
+					paddedPayload.set(payload, Uint16Array["BYTES_PER_ELEMENT"]);
+					
+					// Break
+					break;
+				
+				// Trezor type
+				case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+				
+					// Check if more than one packet will be used
+					if(payload["length"] > HardwareWalletUsbTransport.PACKET_SIZE - HardwareWalletUsbTransport.TREZOR_FIRST_PACKET_HEADER["length"]) {
+					
+						// Create padded payload
+						var numberOfPackets = Math.ceil((payload["length"] - (HardwareWalletUsbTransport.PACKET_SIZE - HardwareWalletUsbTransport.TREZOR_FIRST_PACKET_HEADER["length"])) / (HardwareWalletUsbTransport.PACKET_SIZE - HardwareWalletUsbTransport.TREZOR_NEXT_PACKETS_HEADER["length"]));
+						var paddedPayload = (new Uint8Array(HardwareWalletUsbTransport.PACKET_SIZE - HardwareWalletUsbTransport.TREZOR_FIRST_PACKET_HEADER["length"] + numberOfPackets * (HardwareWalletUsbTransport.PACKET_SIZE - HardwareWalletUsbTransport.TREZOR_NEXT_PACKETS_HEADER["length"]))).fill(0);
+						paddedPayload.set(payload);
+					}
+					
+					// Otherwise
+					else {
+					
+						// Create padded payload
+						var paddedPayload = (new Uint8Array(HardwareWalletUsbTransport.PACKET_SIZE - HardwareWalletUsbTransport.TREZOR_FIRST_PACKET_HEADER["length"])).fill(0);
+						paddedPayload.set(payload);
+					}
+					
+					// Break
+					break;
+			}
 			
 			// Set payload to padded payload
 			payload = paddedPayload;
@@ -472,8 +585,38 @@ class HardwareWalletUsbTransport {
 			// Go through all packets required to send the payload
 			for(var i = 0; payloadOffset !== payload["length"]; ++i) {
 			
-				// Create header
-				var header = new Uint8Array([channel >>> HardwareWalletUsbTransport.BITS_IN_A_BYTE, channel, HardwareWalletUsbTransport.APDU_TAG, i >>> HardwareWalletUsbTransport.BITS_IN_A_BYTE, i]);
+				// Check type
+				switch(type) {
+				
+					// Ledger type
+					case HardwareWalletDefinitions.LEDGER_TRANSPORT_TYPE:
+					
+						// Create header
+						var header = new Uint8Array([channel >>> HardwareWalletUsbTransport.BITS_IN_A_BYTE, channel, HardwareWalletUsbTransport.LEDGER_PACKET_HEADER_TAG, i >>> HardwareWalletUsbTransport.BITS_IN_A_BYTE, i]);
+						
+						// Break
+						break;
+					
+					// Trezor type
+					case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+					
+						// Check if at the first packet
+						if(i === 0) {
+						
+							// Create header
+							var header = HardwareWalletUsbTransport.TREZOR_FIRST_PACKET_HEADER;
+						}
+						
+						// Otherwise
+						else {
+					
+							// Create header
+							var header = HardwareWalletUsbTransport.TREZOR_NEXT_PACKETS_HEADER;
+						}
+						
+						// Break
+						break;
+				}
 				
 				// Get payload part length
 				var payloadPartLength = HardwareWalletUsbTransport.PACKET_SIZE - header["length"];
@@ -495,7 +638,7 @@ class HardwareWalletUsbTransport {
 		}
 		
 		// Send request
-		static sendRequest(device, payload = HardwareWalletUsbTransport.NO_PAYLOAD) {
+		static sendRequest(device, type, payload = HardwareWalletUsbTransport.NO_PAYLOAD) {
 		
 			// Return promise
 			return new Promise(function(resolve, reject) {
@@ -504,7 +647,29 @@ class HardwareWalletUsbTransport {
 				var channel = Math.floor(Math.random() * HardwareWalletUsbTransport.MAX_CHANNEL);
 			
 				// Get packets
-				var packets = HardwareWalletUsbTransport.createPackets(channel, payload);
+				var packets = HardwareWalletUsbTransport.createPackets(channel, type, payload);
+				
+				// Check type
+				switch(type) {
+				
+					// Ledger type
+					case HardwareWalletDefinitions.LEDGER_TRANSPORT_TYPE:
+					
+						// Set endpoint
+						var endpoint = HardwareWalletUsbTransport.LEDGER_ENDPOINT;
+						
+						// Break
+						break;
+					
+					// Trezor type
+					case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+					
+						// Set endpoint
+						var endpoint = HardwareWalletUsbTransport.TREZOR_ENDPOINT;
+						
+						// Break
+						break;
+				}
 				
 				// Send packet
 				var sendPacket = new Promise(function(resolve, reject) {
@@ -529,7 +694,7 @@ class HardwareWalletUsbTransport {
 						return new Promise(function(resolve, reject) {
 						
 							// Return transfering out packet
-							return device.transferOut(HardwareWalletUsbTransport.APDU_ENDPOINT, packet).then(function() {
+							return device.transferOut(endpoint, packet).then(function() {
 							
 								// Resolve
 								resolve();
@@ -567,7 +732,7 @@ class HardwareWalletUsbTransport {
 						return new Promise(function(resolve, reject) {
 						
 							// Return transfering in packet
-							return device.transferIn(HardwareWalletUsbTransport.APDU_ENDPOINT, HardwareWalletUsbTransport.PACKET_SIZE).then(function(response) {
+							return device.transferIn(endpoint, HardwareWalletUsbTransport.PACKET_SIZE).then(function(response) {
 							
 								// Get packet from response
 								var packet = new Uint8Array(response["data"]["buffer"]);
@@ -575,26 +740,45 @@ class HardwareWalletUsbTransport {
 								// Check if packet's size is correct
 								if(packet["length"] === HardwareWalletUsbTransport.PACKET_SIZE) {
 								
-									// Get response channel
-									var responseChannel = (packet[HardwareWalletUsbTransport.CHANNEL_INDEX] << HardwareWalletUsbTransport.BITS_IN_A_BYTE) | packet[HardwareWalletUsbTransport.CHANNEL_INDEX + 1];
+									// Check type
+									switch(type) {
 									
-									// Check if response channel is correct
-									if(responseChannel === channel) {
-									
-										// Get tag
-										var tag = packet[HardwareWalletUsbTransport.TAG_INDEX];
-										
-										// Check if tag is correct
-										if(tag === HardwareWalletUsbTransport.APDU_TAG) {
-										
-											// Get sequence index
-											var sequenceIndex = (packet[HardwareWalletUsbTransport.SEQUENCE_INDEX_INDEX] << HardwareWalletUsbTransport.BITS_IN_A_BYTE) | packet[HardwareWalletUsbTransport.SEQUENCE_INDEX_INDEX + 1];
+										// Ledger type
+										case HardwareWalletDefinitions.LEDGER_TRANSPORT_TYPE:
+								
+											// Get response channel
+											var responseChannel = (packet[0] << HardwareWalletUsbTransport.BITS_IN_A_BYTE) | packet[1];
 											
-											// Check if sequence index is correct
-											if(sequenceIndex === expectedSequenceIndex) {
-										
-												// Resolve packet's payload
-												resolve(packet.subarray(HardwareWalletUsbTransport.PAYLOAD_INDEX));
+											// Check if response channel is correct
+											if(responseChannel === channel) {
+											
+												// Check if tag is correct
+												if(packet[Uint16Array["BYTES_PER_ELEMENT"]] === HardwareWalletUsbTransport.LEDGER_PACKET_HEADER_TAG) {
+												
+													// Get sequence index
+													var sequenceIndex = (packet[Uint16Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"]] << HardwareWalletUsbTransport.BITS_IN_A_BYTE) | packet[Uint16Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + 1];
+													
+													// Check if sequence index is correct
+													if(sequenceIndex === expectedSequenceIndex) {
+												
+														// Resolve packet's payload
+														resolve(packet.subarray(HardwareWalletUsbTransport.LEDGER_PACKET_HEADER_LENGTH));
+													}
+													
+													// Otherwise
+													else {
+													
+														// Reject
+														reject();
+													}
+												}
+												
+												// Otherwise
+												else {
+												
+													// Reject
+													reject();
+												}
 											}
 											
 											// Otherwise
@@ -603,21 +787,63 @@ class HardwareWalletUsbTransport {
 												// Reject
 												reject();
 											}
-										}
+											
+											// Break
+											break;
 										
-										// Otherwise
-										else {
+										// Trezor type
+										case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
 										
-											// Reject
-											reject();
-										}
-									}
-									
-									// Otherwise
-									else {
-									
-										// Reject
-										reject();
+											// Check if at the first packet
+											if(expectedSequenceIndex === 0) {
+											
+												// Get magic numbers
+												var magicNumbers = packet.subarray(0, HardwareWalletUsbTransport.TREZOR_FIRST_PACKET_HEADER["length"]);
+												
+												// Go through all magic numbers
+												for(var i = 0; i < magicNumbers["length"]; ++i) {
+												
+													// Check if magic number isn't correct
+													if(magicNumbers[i] !== HardwareWalletUsbTransport.TREZOR_FIRST_PACKET_HEADER[i]) {
+													
+														// Reject
+														reject();
+														
+														// Return
+														return;
+													}
+												}
+												
+												// Resolve packet's payload
+												resolve(packet.subarray(HardwareWalletUsbTransport.TREZOR_FIRST_PACKET_HEADER["length"]));
+											}
+											
+											// Otherwise
+											else {
+											
+												// Get magic numbers
+												var magicNumbers = packet.subarray(0, HardwareWalletUsbTransport.TREZOR_NEXT_PACKETS_HEADER["length"]);
+												
+												// Go through all magic numbers
+												for(var i = 0; i < magicNumbers["length"]; ++i) {
+												
+													// Check if magic number isn't correct
+													if(magicNumbers[i] !== HardwareWalletUsbTransport.TREZOR_NEXT_PACKETS_HEADER[i]) {
+													
+														// Reject
+														reject();
+														
+														// Return
+														return;
+													}
+												}
+												
+												// Resolve packet's payload
+												resolve(packet.subarray(HardwareWalletUsbTransport.TREZOR_NEXT_PACKETS_HEADER["length"]));
+											}
+											
+											// Break
+											break;
 									}
 								
 								}
@@ -641,11 +867,39 @@ class HardwareWalletUsbTransport {
 					// Return receiving first packet
 					return receivePacket(0).then(function(responsePart) {
 					
-						// Get response size
-						var responseSize = (responsePart[0] << HardwareWalletUsbTransport.BITS_IN_A_BYTE) | responsePart[1];
+						// Check type
+						switch(type) {
 						
-						// Set response
-						var response = responsePart.subarray(2);
+							// Ledger type
+							case HardwareWalletDefinitions.LEDGER_TRANSPORT_TYPE:
+					
+								// Get message type
+								var messageType = new Uint8Array([]);
+								
+								// Get response size
+								var responseSize = (responsePart[0] << HardwareWalletUsbTransport.BITS_IN_A_BYTE) | responsePart[1];
+								
+								// Set response
+								var response = responsePart.subarray(Uint16Array["BYTES_PER_ELEMENT"]);
+								
+								// Break
+								break;
+							
+							// Trezor type
+							case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+							
+								// Get message type
+								var messageType = responsePart.subarray(0, HardwareWalletUsbTransport.MESSAGE_TYPE_LENGTH);
+								
+								// Get response size
+								var responseSize = (responsePart[HardwareWalletUsbTransport.MESSAGE_TYPE_LENGTH] << (HardwareWalletUsbTransport.BITS_IN_A_BYTE * 3)) | (responsePart[HardwareWalletUsbTransport.MESSAGE_TYPE_LENGTH + 1] << (HardwareWalletUsbTransport.BITS_IN_A_BYTE * 2)) | (responsePart[HardwareWalletUsbTransport.MESSAGE_TYPE_LENGTH + 2] << HardwareWalletUsbTransport.BITS_IN_A_BYTE) | responsePart[HardwareWalletUsbTransport.MESSAGE_TYPE_LENGTH + 3];
+								
+								// Set response
+								var response = responsePart.subarray(HardwareWalletUsbTransport.MESSAGE_TYPE_LENGTH + Uint32Array["BYTES_PER_ELEMENT"]);
+								
+								// Break
+								break;
+						}
 						
 						// Set next sequence index
 						var nextSequenceIndex = 1;
@@ -704,8 +958,13 @@ class HardwareWalletUsbTransport {
 						// Return getting next response part
 						return getNextResponsePart().then(function() {
 						
-							// Resolve response
-							resolve(response.subarray(0, responseSize));
+							// Append message type to response
+							var finalResponse = new Uint8Array(responseSize + messageType["length"]);
+							finalResponse.set(response.subarray(0, responseSize));
+							finalResponse.set(messageType, responseSize);
+							
+							// Resolve final response
+							resolve(finalResponse);
 						
 						// Catch errors
 						}).catch(function(error) {
@@ -744,36 +1003,84 @@ class HardwareWalletUsbTransport {
 			return null;
 		}
 		
-		// Vendor IDs
-		static get VENDOR_IDS() {
+		// Devices
+		static get DEVICES() {
 		
-			// Return vendor IDs
+			// Return devices
 			return [
 			
 				// Ledger
-				0x2C97
+				{
+				
+					// Type
+					"Type": HardwareWalletDefinitions.LEDGER_TRANSPORT_TYPE,
+					
+					// Vendor ID
+					"Vendor ID": 0x2C97
+				},
+				
+				// Trezor
+				{
+				
+					// Type
+					"Type": HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE,
+					
+					// Product name
+					"Product Name": "Trezor One",
+				
+					// Vendor ID
+					"Vendor ID": 0x534C,
+					
+					// Product ID
+					"Product ID": 0x0001
+				},
+				
+				// Trezor v2
+				// TODO Support Trezor Model T
+				/*{
+				
+					// Type
+					"Type": HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE,
+					
+					// Product name
+					"Product Name": "Trezor Model T",
+					
+					// Vendor ID
+					"Vendor ID": 0x1209,
+					
+					// Product ID
+					"Product ID": 0x53C0
+				},*/
+				
+				{
+				
+					// Type
+					"Type": HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE,
+					
+					// Product name
+					"Product Name": "Trezor One",
+					
+					// Vendor ID
+					"Vendor ID": 0x1209,
+					
+					// Product ID
+					"Product ID": 0x53C1
+				}
 			];
-		}
-		
-		// Index not found
-		static get INDEX_NOT_FOUND() {
-		
-			// Return index not found
-			return -1;
 		}
 		
 		// WebUSB interface class
 		static get WEBUSB_INTERFACE_CLASS() {
 		
 			// Return WebUSB interface class
-			return 255;
+			return 0xFF;
 		}
 		
 		// Configuration
 		static get CONFIGURATION() {
 		
 			// Return configuration
-			return 1;
+			return 0x01;
 		}
 		
 		// Packet size
@@ -783,18 +1090,11 @@ class HardwareWalletUsbTransport {
 			return 64;
 		}
 		
-		// APDU status length
-		static get APDU_STATUS_LENGTH() {
+		// Message type length
+		static get MESSAGE_TYPE_LENGTH() {
 		
-			// Return APDU status length
-			return (new Uint8Array([0x00, 0x00]))["length"];
-		}
-		
-		// APDU success status
-		static get APDU_SUCCESS_STATUS() {
-		
-			// Return APDU success status
-			return 0x9000;
+			// Return message type length
+			return Uint16Array["BYTES_PER_ELEMENT"];
 		}
 		
 		// Bits in a byte
@@ -804,53 +1104,18 @@ class HardwareWalletUsbTransport {
 			return 8;
 		}
 		
-		// APDU endpoint
-		static get APDU_ENDPOINT() {
+		// Ledger endpoint
+		static get LEDGER_ENDPOINT() {
 		
-			// Return APDU endpoint
-			return 3;
+			// Return Ledger endpoint
+			return 0x03;
 		}
 		
-		// APDU tag
-		static get APDU_TAG() {
+		// Trezor endpoint
+		static get TREZOR_ENDPOINT() {
 		
-			// Return APDU tag
-			return 0x05;
-		}
-		
-		// Max channel
-		static get MAX_CHANNEL() {
-		
-			// Return max channel
-			return 0xFFFF;
-		}
-		
-		// Channel index
-		static get CHANNEL_INDEX() {
-		
-			// Return channel index
-			return 0;
-		}
-		
-		// Tag index
-		static get TAG_INDEX() {
-		
-			// Return tag index
-			return HardwareWalletUsbTransport.CHANNEL_INDEX + 2;
-		}
-		
-		// Sequence index index
-		static get SEQUENCE_INDEX_INDEX() {
-		
-			// Return sequence index index
-			return HardwareWalletUsbTransport.TAG_INDEX + 1;
-		}
-		
-		// Payload index
-		static get PAYLOAD_INDEX() {
-		
-			// Return payload index
-			return HardwareWalletUsbTransport.SEQUENCE_INDEX_INDEX + 2;
+			// Return Trezor endpoint
+			return 0x01;
 		}
 		
 		// Not found error code
@@ -858,6 +1123,41 @@ class HardwareWalletUsbTransport {
 		
 			// Return not found error code
 			return 8;
+		}
+		
+		// Ledger packet header length
+		static get LEDGER_PACKET_HEADER_LENGTH() {
+		
+			// Return Ledger packet header length
+			return 5;
+		}
+		
+		// Ledger packet header tag
+		static get LEDGER_PACKET_HEADER_TAG() {
+		
+			// Return Ledger packet header tag
+			return 0x05;
+		}
+		
+		// Trezor first packet header
+		static get TREZOR_FIRST_PACKET_HEADER() {
+		
+			// Return Trezor packet header
+			return new Uint8Array([0x3F, 0x23, 0x23]);
+		}
+		
+		// Trezor next packets header
+		static get TREZOR_NEXT_PACKETS_HEADER() {
+		
+			// Return Trezor next packets header
+			return new Uint8Array([0x3F]);
+		}
+		
+		// Max channel
+		static get MAX_CHANNEL() {
+		
+			// Return max channel
+			return 0xFFFF;
 		}
 }
 

@@ -1223,6 +1223,54 @@ class Unlocked {
 						
 							// Break
 							break;
+						
+						// Hardware type
+						case Wallets.HARDWARE_TYPE_CHANGED:
+						
+							// Check new hardware type
+							switch(newValue) {
+							
+								// Legder hardware type
+								case HardwareWallet.LEDGER_HARDWARE_TYPE:
+								
+									// Remove overlays from button and transition end or timeout event
+									button.addClass("noOverlay").transitionEndOrTimeout(function() {
+									
+										// Set timeout
+										setTimeout(function() {
+										
+											// Add Ledger overlay to button
+											button.addClass("ledger").removeClass("noOverlay trezor");
+											
+										}, Unlocked.SHOW_HARDWARE_TYPE_DELAY_MILLISECONDS);
+										
+									}, "opacity");
+								
+									// Break
+									break;
+								
+								// Trezor hardware type
+								case HardwareWallet.TREZOR_HARDWARE_TYPE:
+								
+									// Remove overlays from button and transition end or timeout event
+									button.addClass("noOverlay").transitionEndOrTimeout(function() {
+									
+										// Set timeout
+										setTimeout(function() {
+										
+											// Add Trezor overlay to button
+											button.addClass("trezor").removeClass("noOverlay ledger");
+											
+										}, Unlocked.SHOW_HARDWARE_TYPE_DELAY_MILLISECONDS);
+										
+									}, "opacity");
+								
+									// Break
+									break;
+							}
+						
+							// Break
+							break;
 					}
 				}
 				
@@ -1915,6 +1963,9 @@ class Unlocked {
 				// Check if hardware wallets are supported
 				if(HardwareWallet.isSupported() === true) {
 				
+					// Prevent automatic lock
+					self.automaticLock.prevent();
+				
 					// Initialize canceled
 					var canceled = false;
 					
@@ -1939,208 +1990,270 @@ class Unlocked {
 									// Set release wallets exclusive hardware lock if canceled
 									releaseWalletsExclusiveHardwareLockIfCanceled = true;
 									
-									// Prevent automatic lock
-									self.automaticLock.prevent();
-								
-									// Connect to any hardware wallet descriptor
-									hardwareWallet.connect(HardwareWallet.ANY_HARDWARE_WALLET_DESCRIPTOR, true).then(function() {
+									// Message before replace unlocked event
+									$(self.message).on(Message.BEFORE_REPLACE_EVENT + ".unlocked", function(event, messageType, messageData) {
 									
-										// Allow automatic lock
-										self.automaticLock.allow();
+										// Check if not canceled
+										if(canceled === false) {
 										
-										// Check if automatic lock isn't locking
-										if(self.automaticLock.isLocking() === false) {
-									
-											// Check if not canceled
-											if(canceled === false) {
+											// Check message type
+											switch(messageType) {
 											
-												// Clear release wallets exclusive hardware lock if canceled
-												releaseWalletsExclusiveHardwareLockIfCanceled = false;
-											
-												// Initialize prevent cancel on hide
-												var preventCancelOnHide = false;
+												// Application hardware wallet unlock message
+												case Application.HARDWARE_WALLET_UNLOCK_MESSAGE:
 												
-												// Prevent automatic lock
-												self.automaticLock.prevent();
-											
-												// Show message immediately
-												self.message.show(Language.getDefaultTranslation('Hardware Wallet'), Message.createPendingResult() + Message.createLineBreak() + Message.createText(Language.getDefaultTranslation('Approve exporting the root public key for the account at index %1$s on that hardware wallet.'), [HardwareWallet.ACCOUNT.toFixed()]), true, function() {
-												
-													// Check if not canceled
-													if(canceled === false) {
+													// Cancel replacing message
+													self.message.cancelReplace();
 													
-														// Message show unlocked confirm event
-														$(self.message).one(Message.SHOW_EVENT + ".unlockedConfirm", function() {
+													// Return false to stop other replace message
+													return false;
+											
+												// Application hardware wallet disconnect message
+												case Application.HARDWARE_WALLET_DISCONNECT_MESSAGE:
+												
+													// Set canceled
+													canceled = true;
+												
+													// Turn off message before replace unlocked event
+													$(self.message).off(Message.BEFORE_REPLACE_EVENT + ".unlocked");
+												
+													// Clear release wallets exclusive hardware lock if canceled
+													releaseWalletsExclusiveHardwareLockIfCanceled = false;
+													
+													// Release wallets exclusive hardware lock
+													self.wallets.releaseExclusiveHardwareLock();
+											
+													// Allow automatic lock
+													self.automaticLock.allow();
+													
+													// Check if automatic lock isn't locking
+													if(self.automaticLock.isLocking() === false) {
+													
+														// Show hardware wallet error immediately
+														showHardwareWalletError(Message.createText(Language.getDefaultTranslation('That hardware wallet was disconnected.')), true);
+													}
+													
+													// Return false to stop other replace message
+													return false;
+											}
+										}
+									});
+									
+									// Connect to any hardware wallet descriptor
+									hardwareWallet.connect(HardwareWallet.ANY_HARDWARE_WALLET_DESCRIPTOR, false, Language.getDefaultTranslation('Unlock that hardware wallet to continue connecting to it.'), [], false, true, function() {
+																			
+										// Return if canceled
+										return canceled === true;
+										
+									}).then(function() {
+									
+										// Check if not canceled
+										if(canceled === false) {
+									
+											// Turn off message before replace unlocked event
+											$(self.message).off(Message.BEFORE_REPLACE_EVENT + ".unlocked");
+											
+											// Clear release wallets exclusive hardware lock if canceled
+											releaseWalletsExclusiveHardwareLockIfCanceled = false;
+											
+											// Allow automatic lock
+											self.automaticLock.allow();
+											
+											// Check if automatic lock isn't locking
+											if(self.automaticLock.isLocking() === false) {
+											
+												// Check if not canceled
+												if(canceled === false) {
+									
+													// Initialize prevent cancel on hide
+													var preventCancelOnHide = false;
+													
+													// Prevent automatic lock
+													self.automaticLock.prevent();
+												
+													// Show message immediately
+													self.message.show(Language.getDefaultTranslation('Hardware Wallet'), Message.createPendingResult() + Message.createLineBreak() + Message.createText(Language.getDefaultTranslation('Approve exporting the root public key for the account at index %1$s on that hardware wallet.'), [HardwareWallet.ACCOUNT.toFixed()]), true, function() {
+													
+														// Check if not canceled
+														if(canceled === false) {
 														
-															// Initialize canceled
-															canceled = false;
-														
-															// Set prevent cancel on hide
-															preventCancelOnHide = true;
+															// Message show unlocked confirm event
+															$(self.message).one(Message.SHOW_EVENT + ".unlockedConfirm", function() {
 															
-															// Set release wallets exclusive hardware lock if canceled
-															releaseWalletsExclusiveHardwareLockIfCanceled = true;
-															
-															// Get root public key from the hardware wallet
-															hardwareWallet.getPublicKey().then(function(rootPublicKey) {
-															
-																// Securely clear root public key
-																rootPublicKey.fill(0);
-															
-																// Allow automatic lock
-																self.automaticLock.allow();
+																// Set prevent cancel on hide
+																preventCancelOnHide = true;
 																
-																// Check if automatic lock isn't locking
-																if(self.automaticLock.isLocking() === false) {
-															
-																	// Check if not canceled
-																	if(canceled === false) {
-																							
-																		// Clear release wallets exclusive hardware lock if canceled
-																		releaseWalletsExclusiveHardwareLockIfCanceled = false;
+																// Set release wallets exclusive hardware lock if canceled
+																releaseWalletsExclusiveHardwareLockIfCanceled = true;
+																
+																// Get root public key from the hardware wallet
+																hardwareWallet.getPublicKey().then(function(rootPublicKey) {
+																
+																	// Securely clear root public key
+																	rootPublicKey.fill(0);
+																
+																	// Allow automatic lock
+																	self.automaticLock.allow();
 																	
-																		// Disable message
-																		self.message.disable();
+																	// Check if automatic lock isn't locking
+																	if(self.automaticLock.isLocking() === false) {
+																
+																		// Check if not canceled
+																		if(canceled === false) {
+																								
+																			// Clear release wallets exclusive hardware lock if canceled
+																			releaseWalletsExclusiveHardwareLockIfCanceled = false;
 																		
-																		// Prevent automatic lock
-																		self.automaticLock.prevent();
-																	
-																		// Create a wallet
-																		self.wallets.create(Wallet.NO_NAME, Consensus.getWalletType(), Consensus.getNetworkType(), (self.node.connectionFailed() === true) ? Wallet.STATUS_ERROR : Wallet.STATUS_SYNCING, hardwareWallet, Wallet.NO_PASSPHRASE, false, Wallet.NO_BIP39_SALT, true, new BigNumber(Consensus.HARDWARE_WALLET_STARTING_HEIGHT)).then(function(wallet) {
+																			// Disable message
+																			self.message.disable();
 																			
-																			// Log message
-																			Log.logMessage(Language.getDefaultTranslation('Created hardware wallet Wallet %1$s.'), [
-																			
-																				// Wallet key path
-																				wallet.getKeyPath().toFixed()
-																			]);
-																			
-																			// Release wallets exclusive hardware lock
-																			self.wallets.releaseExclusiveHardwareLock();
-																			
-																			// Prevent showing messages
-																			self.message.prevent();
-																			
-																			// Hide message
-																			self.message.hide();
-																			
-																			// Show loading
-																			self.application.showLoading();
-																			
-																			// Show wallet's loading
-																			self.walletsDisplay.find("div.loading").removeClass("hide");
+																			// Prevent automatic lock
+																			self.automaticLock.prevent();
 																		
-																			// Set timeout
-																			setTimeout(function() {
-																		
-																				// Set currency to the language's currency if specified or the currency display otherwise
-																				var currency = (self.currencyDisplay === Unlocked.SETTINGS_CURRENCY_DISPLAY_LANGUAGES_CURRENCY_VALUE) ? Language.getConstant(Language.CURRENCY_CONSTANT) : self.currencyDisplay;
+																			// Create a wallet
+																			self.wallets.create(Wallet.NO_NAME, Consensus.getWalletType(), Consensus.getNetworkType(), (self.node.connectionFailed() === true) ? Wallet.STATUS_ERROR : Wallet.STATUS_SYNCING, hardwareWallet, Wallet.NO_PASSPHRASE, false, Wallet.NO_BIP39_SALT, true, new BigNumber(Consensus.HARDWARE_WALLET_STARTING_HEIGHT)).then(function(wallet) {
 																				
-																				// Get the price in the currency
-																				var price = self.prices.getPrice(currency);
+																				// Log message
+																				Log.logMessage(Language.getDefaultTranslation('Created hardware wallet Wallet %1$s.'), [
+																				
+																					// Wallet key path
+																					wallet.getKeyPath().toFixed()
+																				]);
+																				
+																				// Release wallets exclusive hardware lock
+																				self.wallets.releaseExclusiveHardwareLock();
+																				
+																				// Prevent showing messages
+																				self.message.prevent();
+																				
+																				// Hide message
+																				self.message.hide();
+																				
+																				// Show loading
+																				self.application.showLoading();
+																				
+																				// Show wallet's loading
+																				self.walletsDisplay.find("div.loading").removeClass("hide");
 																			
-																				// Add wallet button
-																				var walletButtonAndScrollDuration = self.addWalletButton(wallet, price, currency, true, true);
-																				
-																				// Create address suffix for the wallet
-																				self.wallets.createAddressSuffix(wallet.getKeyPath());
-																				
 																				// Set timeout
 																				setTimeout(function() {
-																				
-																					// Get wallets display list
-																					var walletsDisplayList = self.walletsDisplay.find("div.list");
+																			
+																					// Set currency to the language's currency if specified or the currency display otherwise
+																					var currency = (self.currencyDisplay === Unlocked.SETTINGS_CURRENCY_DISPLAY_LANGUAGES_CURRENCY_VALUE) ? Language.getConstant(Language.CURRENCY_CONSTANT) : self.currencyDisplay;
 																					
-																					// Set that clicked wallet button isn't clicked
-																					walletsDisplayList.find("button.clicked").removeClass("clicked");
+																					// Get the price in the currency
+																					var price = self.prices.getPrice(currency);
+																				
+																					// Add wallet button
+																					var walletButtonAndScrollDuration = self.addWalletButton(wallet, price, currency, true, true);
 																					
-																					// Set that added wallet button is clicked
-																					walletButtonAndScrollDuration[Unlocked.ADD_WALLET_BUTTON_INDEX].addClass("clicked");
-																				
-																					// Update wallets order buttons
-																					self.updateWalletsOrderButtons();
-																				
-																					// Set that menu display buttons aren't clicked
-																					self.menuDisplay.find("button").removeClass("clicked");
+																					// Create address suffix for the wallet
+																					self.wallets.createAddressSuffix(wallet.getKeyPath());
 																					
 																					// Set timeout
 																					setTimeout(function() {
 																					
-																						// Show wallet section
-																						self.walletSection.show(false, false, false, {
+																						// Get wallets display list
+																						var walletsDisplayList = self.walletsDisplay.find("div.list");
 																						
-																							// Wallet key path
-																							[WalletSection.STATE_WALLET_KEY_PATH_NAME]: wallet.getKeyPath()
+																						// Set that clicked wallet button isn't clicked
+																						walletsDisplayList.find("button.clicked").removeClass("clicked");
 																						
-																						}).then(function() {
-																						
-																							// Allow automatic lock
-																							self.automaticLock.allow();
-																							
-																							// Check if automatic lock isn't locking
-																							if(self.automaticLock.isLocking() === false) {
-																						
-																								// Hide loading
-																								self.application.hideLoading();
-																								
-																								// Hide wallet's loading
-																								self.walletsDisplay.find("div.loading").addClass("hide");
-																							
-																								// Enable
-																								self.enable();
-																								
-																								// Set that button isn't clicked
-																								button.removeClass("clicked");
-																								
-																								// Delete focus
-																								self.focus.delete();
-																								
-																								// Allow showing messages
-																								self.message.allow();
-																							}
-																						
-																						// Catch errors
-																						}).catch(function(error) {
-																						
-																							// Allow automatic lock
-																							self.automaticLock.allow();
-																							
-																							// Check if automatic lock isn't locking
-																							if(self.automaticLock.isLocking() === false) {
-																						
-																								// Show hardware wallet error immediately
-																								showHardwareWalletError(Message.createText(error), true, walletButtonAndScrollDuration[Unlocked.ADD_WALLET_BUTTON_INDEX]);
-																							}
-																						});
-																					}, (self.walletsDisplay.find("button.expand").is(":hidden") === true) ? 0 : Unlocked.CREATE_WALLET_EXPAND_DELAY_MILLISECONDS);
+																						// Set that added wallet button is clicked
+																						walletButtonAndScrollDuration[Unlocked.ADD_WALLET_BUTTON_INDEX].addClass("clicked");
 																					
-																				}, walletButtonAndScrollDuration[Unlocked.ADD_WALLET_SCROLL_DURATION_INDEX]);
+																						// Update wallets order buttons
+																						self.updateWalletsOrderButtons();
+																					
+																						// Set that menu display buttons aren't clicked
+																						self.menuDisplay.find("button").removeClass("clicked");
+																						
+																						// Set timeout
+																						setTimeout(function() {
+																						
+																							// Show wallet section
+																							self.walletSection.show(false, false, false, {
+																							
+																								// Wallet key path
+																								[WalletSection.STATE_WALLET_KEY_PATH_NAME]: wallet.getKeyPath()
+																							
+																							}).then(function() {
+																							
+																								// Allow automatic lock
+																								self.automaticLock.allow();
+																								
+																								// Check if automatic lock isn't locking
+																								if(self.automaticLock.isLocking() === false) {
+																							
+																									// Hide loading
+																									self.application.hideLoading();
+																									
+																									// Hide wallet's loading
+																									self.walletsDisplay.find("div.loading").addClass("hide");
+																								
+																									// Enable
+																									self.enable();
+																									
+																									// Set that button isn't clicked
+																									button.removeClass("clicked");
+																									
+																									// Delete focus
+																									self.focus.delete();
+																									
+																									// Allow showing messages
+																									self.message.allow();
+																								}
+																							
+																							// Catch errors
+																							}).catch(function(error) {
+																							
+																								// Allow automatic lock
+																								self.automaticLock.allow();
+																								
+																								// Check if automatic lock isn't locking
+																								if(self.automaticLock.isLocking() === false) {
+																							
+																									// Show hardware wallet error immediately
+																									showHardwareWalletError(Message.createText(error), true, walletButtonAndScrollDuration[Unlocked.ADD_WALLET_BUTTON_INDEX]);
+																								}
+																							});
+																						}, (self.walletsDisplay.find("button.expand").is(":hidden") === true) ? 0 : Unlocked.CREATE_WALLET_EXPAND_DELAY_MILLISECONDS);
+																						
+																					}, walletButtonAndScrollDuration[Unlocked.ADD_WALLET_SCROLL_DURATION_INDEX]);
+																					
+																				}, Unlocked.CREATE_WALLET_INITIAL_DELAY_MILLISECONDS);
+																			
+																			// Catch errors
+																			}).catch(function(error) {
+																			
+																				// Check if hardware wallet isn't in use
+																				if(hardwareWallet.getInUse() === false) {
+																			
+																					// Close the hardware wallet
+																					hardwareWallet.close();
+																				}
 																				
-																			}, Unlocked.CREATE_WALLET_INITIAL_DELAY_MILLISECONDS);
-																		
-																		// Catch errors
-																		}).catch(function(error) {
-																		
-																			// Check if hardware wallet isn't in use
-																			if(hardwareWallet.getInUse() === false) {
-																		
-																				// Close the hardware wallet
-																				hardwareWallet.close();
-																			}
+																				// Release wallets exclusive hardware lock
+																				self.wallets.releaseExclusiveHardwareLock();
+																				
+																				// Allow automatic lock
+																				self.automaticLock.allow();
+																				
+																				// Check if automatic lock isn't locking
+																				if(self.automaticLock.isLocking() === false) {
 																			
-																			// Release wallets exclusive hardware lock
-																			self.wallets.releaseExclusiveHardwareLock();
-																			
-																			// Allow automatic lock
-																			self.automaticLock.allow();
-																			
-																			// Check if automatic lock isn't locking
-																			if(self.automaticLock.isLocking() === false) {
+																					// Show hardware wallet error immediately
+																					showHardwareWalletError(Message.createText(error), true);
+																				}
+																			});
+																		}
 																		
-																				// Show hardware wallet error immediately
-																				showHardwareWalletError(Message.createText(error), true);
-																			}
-																		});
+																		// Otherwise
+																		else {
+																		
+																			// Close the hardware wallet
+																			hardwareWallet.close();
+																		}
 																	}
 																	
 																	// Otherwise
@@ -2149,106 +2262,109 @@ class Unlocked {
 																		// Close the hardware wallet
 																		hardwareWallet.close();
 																	}
-																}
 																
-																// Otherwise
-																else {
+																// Catch errors
+																}).catch(function(error) {
 																
 																	// Close the hardware wallet
 																	hardwareWallet.close();
-																}
-															
-															// Catch errors
-															}).catch(function(error) {
-															
-																// Close the hardware wallet
-																hardwareWallet.close();
-																
-																// Check if not canceled
-																if(canceled === false) {
-																
-																	// Clear release wallets exclusive hardware lock if canceled
-																	releaseWalletsExclusiveHardwareLockIfCanceled = false;
-																
-																	// Release wallets exclusive hardware lock
-																	self.wallets.releaseExclusiveHardwareLock();
-																}
-																
-																// Allow automatic lock
-																self.automaticLock.allow();
-																
-																// Check if automatic lock isn't locking
-																if(self.automaticLock.isLocking() === false) {
-																
+																	
 																	// Check if not canceled
 																	if(canceled === false) {
-																
-																		// Show hardware wallet error immediately
-																		showHardwareWalletError(error, true);
+																	
+																		// Clear release wallets exclusive hardware lock if canceled
+																		releaseWalletsExclusiveHardwareLockIfCanceled = false;
+																	
+																		// Release wallets exclusive hardware lock
+																		self.wallets.releaseExclusiveHardwareLock();
 																	}
-																}
+																	
+																	// Allow automatic lock
+																	self.automaticLock.allow();
+																	
+																	// Check if automatic lock isn't locking
+																	if(self.automaticLock.isLocking() === false) {
+																	
+																		// Check if not canceled
+																		if(canceled === false) {
+																	
+																			// Show hardware wallet error immediately
+																			showHardwareWalletError(error, true);
+																		}
+																	}
+																});
 															});
-														});
-													}
-													
-													// Otherwise
-													else {
-													
-														// Return false
-														return false;
-													}
-												
-												}, Language.getDefaultTranslation('Cancel'), Message.NO_BUTTON, true, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
-												
-													// Turn off message show unlocked confirm event
-													$(self.message).off(Message.SHOW_EVENT + ".unlockedConfirm");
-									
-													// Set canceled
-													canceled = true;
-													
-													// Check if releasing wallets exclusive hardware lock if canceled
-													if(releaseWalletsExclusiveHardwareLockIfCanceled === true) {
-													
-														// Release wallets exclusive hardware lock
-														self.wallets.releaseExclusiveHardwareLock();
-													}
-												
-													// Check if message was displayed
-													if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
-													
-														// Allow automatic lock
-														self.automaticLock.allow();
-														
-														// Check if automatic lock isn't locking
-														if(self.automaticLock.isLocking() === false) {
-													
-															// Enable
-															self.enable();
-															
-															// Set that button isn't clicked
-															button.removeClass("clicked");
-															
-															// Restore focus and don't blur
-															self.focus.restore(false);
-															
-															// Hide message
-															self.message.hide();
 														}
-													}
+														
+														// Otherwise
+														else {
+														
+															// Return false
+															return false;
+														}
 													
-													// Check if not preventing cancel on hide
-													else if(preventCancelOnHide === false) {
+													}, Language.getDefaultTranslation('Cancel'), Message.NO_BUTTON, true, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
 													
-														// Close the hardware wallet
-														hardwareWallet.close();
+														// Turn off message show unlocked confirm event
+														$(self.message).off(Message.SHOW_EVENT + ".unlockedConfirm");
+										
+														// Set canceled
+														canceled = true;
+														
+														// Check if releasing wallets exclusive hardware lock if canceled
+														if(releaseWalletsExclusiveHardwareLockIfCanceled === true) {
+														
+															// Release wallets exclusive hardware lock
+															self.wallets.releaseExclusiveHardwareLock();
+														}
 													
-														// Release wallets exclusive hardware lock
-														self.wallets.releaseExclusiveHardwareLock();
+														// Check if message was displayed
+														if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
+														
+															// Allow automatic lock
+															self.automaticLock.allow();
+															
+															// Check if automatic lock isn't locking
+															if(self.automaticLock.isLocking() === false) {
+														
+																// Enable
+																self.enable();
+																
+																// Set that button isn't clicked
+																button.removeClass("clicked");
+																
+																// Restore focus and don't blur
+																self.focus.restore(false);
+																
+																// Hide message
+																self.message.hide();
+															}
+														}
+														
+														// Check if not preventing cancel on hide
+														else if(preventCancelOnHide === false) {
+														
+															// Close the hardware wallet
+															hardwareWallet.close();
+														
+															// Release wallets exclusive hardware lock
+															self.wallets.releaseExclusiveHardwareLock();
+														
+															// Allow automatic lock
+															self.automaticLock.allow();
+														}
+													});
+												}
+												
+												// Otherwise
+												else {
+												
+													// Close the hardware wallet
+													hardwareWallet.close();
 													
-														// Allow automatic lock
-														self.automaticLock.allow();
-													}
-												});
+													// Release wallets exclusive hardware lock
+													self.wallets.releaseExclusiveHardwareLock();
+												}
 											}
 											
 											// Otherwise
@@ -2256,6 +2372,9 @@ class Unlocked {
 											
 												// Close the hardware wallet
 												hardwareWallet.close();
+												
+												// Release wallets exclusive hardware lock
+												self.wallets.releaseExclusiveHardwareLock();
 											}
 										}
 										
@@ -2272,24 +2391,46 @@ class Unlocked {
 										// Check if not canceled
 										if(canceled === false) {
 										
+											// Set canceled
+											canceled = true;
+										
+											// Turn off message before replace unlocked event
+											$(self.message).off(Message.BEFORE_REPLACE_EVENT + ".unlocked");
+										
 											// Clear release wallets exclusive hardware lock if canceled
 											releaseWalletsExclusiveHardwareLockIfCanceled = false;
 											
 											// Release wallets exclusive hardware lock
 											self.wallets.releaseExclusiveHardwareLock();
-										}
 									
-										// Allow automatic lock
-										self.automaticLock.allow();
-										
-										// Check if automatic lock isn't locking
-										if(self.automaticLock.isLocking() === false) {
-									
-											// Check if not canceled
-											if(canceled === false) {
+											// Allow automatic lock
+											self.automaticLock.allow();
+											
+											// Check if automatic lock isn't locking
+											if(self.automaticLock.isLocking() === false) {
+											
+												// Check if error is canceled
+												if(error === Common.CANCELED_ERROR) {
 												
-												// Show hardware wallet error immediately
-												showHardwareWalletError(error, true);
+													// Enable
+													self.enable();
+													
+													// Set that button isn't clicked
+													button.removeClass("clicked");
+													
+													// Restore focus and don't blur
+													self.focus.restore(false);
+													
+													// Hide message
+													self.message.hide();
+												}
+												
+												// Otherwise
+												else {
+												
+													// Show hardware wallet error immediately
+													showHardwareWalletError(error, true);
+												}
 											}
 										}
 									});
@@ -2309,30 +2450,44 @@ class Unlocked {
 						// Turn off message show unlocked connecting event
 						$(self.message).off(Message.SHOW_EVENT + ".unlockedConnecting");
 						
-						// Set canceled
-						canceled = true;
-						
-						// Check if releasing wallets exclusive hardware lock if canceled
-						if(releaseWalletsExclusiveHardwareLockIfCanceled === true) {
-						
-							// Release wallets exclusive hardware lock
-							self.wallets.releaseExclusiveHardwareLock();
-						}
-					
 						// Check if message was displayed
 						if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
 						
-							// Enable
-							self.enable();
+							// Check if not canceled
+							if(canceled === false) {
+						
+								// Set canceled
+								canceled = true;
+								
+								// Turn off message before replace unlocked event
+								$(self.message).off(Message.BEFORE_REPLACE_EVENT + ".unlocked");
+								
+								// Check if releasing wallets exclusive hardware lock if canceled
+								if(releaseWalletsExclusiveHardwareLockIfCanceled === true) {
+								
+									// Release wallets exclusive hardware lock
+									self.wallets.releaseExclusiveHardwareLock();
+								}
+								
+								// Allow automatic lock
+								self.automaticLock.allow();
+								
+								// Check if automatic lock isn't locking
+								if(self.automaticLock.isLocking() === false) {
 							
-							// Set that button isn't clicked
-							button.removeClass("clicked");
-							
-							// Restore focus and don't blur
-							self.focus.restore(false);
-							
-							// Hide message
-							self.message.hide();
+									// Enable
+									self.enable();
+									
+									// Set that button isn't clicked
+									button.removeClass("clicked");
+									
+									// Restore focus and don't blur
+									self.focus.restore(false);
+									
+									// Hide message
+									self.message.hide();
+								}
+							}
 						}
 					});
 				}
@@ -3358,6 +3513,15 @@ class Unlocked {
 				
 					// Break
 					break;
+				
+				// Trezor hardware type
+				case HardwareWallet.TREZOR_HARDWARE_TYPE:
+				
+					// Add Trezor overlay to button
+					button.addClass("trezor");
+				
+					// Break
+					break;
 			}
 			
 			// Disable tabbing to button and disable button
@@ -3927,6 +4091,13 @@ class Unlocked {
 		
 			// Return show wallets after delay milliseconds
 			return 200;
+		}
+		
+		// Show hardware type delay milliseconds
+		static get SHOW_HARDWARE_TYPE_DELAY_MILLISECONDS() {
+		
+			// Return show hardware type delay milliseconds
+			return 100;
 		}
 }
 

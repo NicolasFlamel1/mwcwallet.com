@@ -284,7 +284,7 @@ class Api {
 														// Try
 														try {
 														
-															// Create identifier from key ID or set it to no identifer it not available
+															// Create identifier from key ID or set it to no identifier it not available
 															var identifier = (keyId !== Common.JSON_NULL_VALUE) ? new Identifier(keyId) : Identifier.NO_IDENTIFIER;
 														}
 														

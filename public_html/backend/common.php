@@ -3,18 +3,15 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.2.0";
+	const VERSION_NUMBER = "2.3.0";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "02 Jun 2023 22:13:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Added support for sending and receiving payments as files.",
-		"Fixed a deadlock that can occur when receiving a payment to a hardware wallet.",
-		"Fixed displaying version numbers that include non-numeric text.",
-		"Prevents word breaks from happening before commas and copy icons.",
-		"Fixed using node foreign API secrets containing non-ASCII characters."
+		"Fixed payment files not opening on slower devices.",
+		"Added support for Trezor One hardware wallets."
 	];
 	
 	// Maintenance start time
