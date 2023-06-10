@@ -2241,7 +2241,7 @@
 															foreach(VERSION_CHANGES as $versionChange) {
 															
 																// Display version change
-																echo "<li><span class=\"translatable\" data-text=\"" . encodeString(escapeText($versionChange)) . "\">" . encodeString(getTranslation(escapeText($versionChange))) . "</span></li>";
+																echo "<li><span class=\"translatable contextMenu\" data-text=\"" . encodeString(escapeText($versionChange)) . "\">" . encodeString(getTranslation(escapeText($versionChange))) . "</span></li>";
 															}
 														}
 													?><!--
@@ -2295,14 +2295,14 @@
 																if(is_int($link) === TRUE) {
 																
 																	// Display translation contributor
-																	echo "<li><span>" . encodeString($translationContributor) . "</span></li>";
+																	echo "<li><span class=\"contextMenu\">" . encodeString($translationContributor) . "</span></li>";
 																}
 																
 																// Otherwise
 																else {
 																
 																	// Display translation contributor
-																	echo "<li><a href=\"" . encodeString($link) . "\" referrerpolicy=\"same-origin\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">" . encodeString($translationContributor) . "</a></li>";
+																	echo "<li><a class=\"contextMenu\" href=\"" . encodeString($link) . "\" referrerpolicy=\"same-origin\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">" . encodeString($translationContributor) . "</a></li>";
 																}
 															}
 														}

@@ -107,7 +107,7 @@ class Version {
 							// Show message and allow showing messages
 							self.message.show(Language.getDefaultTranslation('Version Changes'), "<b>" + Message.createText(Language.getDefaultTranslation('Version %1$v'), [VERSION_NUMBER]) + "</b>" + Message.createLineBreak() + "<ul>" + VERSION_CHANGES.map(function(versionChange) {
 				
-								return "<li>" + Message.createText(Language.escapeText(versionChange)) + "</li>";
+								return "<li>" + Language.createTranslatableContainer("<span>", Language.escapeText(versionChange), [], "contextMenu") + "</li>";
 							
 							}).join("") + "</ul>" + Message.createLineBreak(), false, function() {
 							

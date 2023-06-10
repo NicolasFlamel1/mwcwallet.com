@@ -98,16 +98,16 @@ class AboutSection extends Section {
 			var versionReleaseTimestamp = Date.parse(VERSION_RELEASE_DATE) / Common.MILLISECONDS_IN_A_SECOND;
 			
 			// Add version number to version information display
-			versionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Version number: %1$v'), [VERSION_NUMBER]));
+			versionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Version number:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$v", [VERSION_NUMBER], "contextMenu") + "</p>");
 			
 			// Add release date to version information display
-			versionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Release date: %1$d'), [versionReleaseTimestamp.toFixed()]));
+			versionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Release date:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$d", [versionReleaseTimestamp.toFixed()], "contextMenu") + "</p>");
 			
 			// Add wallet type to version information display
-			versionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Wallet type: %1$x'), [Consensus.walletTypeToText(Consensus.getWalletType())]));
+			versionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Wallet type:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Consensus.walletTypeToText(Consensus.getWalletType())], "contextMenu") + "</p>");
 			
 			// Add network type to version information display
-			versionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Network type: %1$x'), [Consensus.networkTypeToText(Consensus.getNetworkType())]));
+			versionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Network type:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Consensus.networkTypeToText(Consensus.getNetworkType())], "contextMenu") + "</p>");
 		}
 		
 		// Update copyright
@@ -298,7 +298,7 @@ class AboutSection extends Section {
 								// Is blob
 								false
 							]
-						]) + "</li>");
+						], "contextMenu") + "</li>");
 					}
 					
 					// Otherwise
@@ -323,7 +323,7 @@ class AboutSection extends Section {
 								// Is blob
 								false
 							]
-						]) + "</li>");
+						], "contextMenu") + "</li>");
 					}
 				}
 			}

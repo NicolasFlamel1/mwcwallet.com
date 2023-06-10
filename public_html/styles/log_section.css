@@ -27,6 +27,7 @@ main > div.unlocked > div > div > div.sections > div > div.log > div > div.messa
 	line-height: 1.9em;
 	color: rgb(12, 12, 13);
 	padding: 0.3em 0;
+	width: 100%;
 }
 
 main > div.unlocked > div > div > div.sections > div > div.log > div > div.messages > p:first-child {

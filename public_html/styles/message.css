@@ -346,7 +346,16 @@ aside.message > div > div > p > span > ul > li:last-child {
 }
 
 aside.message > div > div > p > span > ul > li > span {
-	padding-left: 0.5em;
+	margin-left: 0.5em;
+}
+
+aside.message > div > div > p > span > ul > li > span.contextMenu {
+	cursor: text;
+	-moz-user-select: text;
+	-webkit-user-select: text;
+	-o-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
 }
 
 aside.message > div > div > p > span.text span.result {
@@ -514,6 +523,10 @@ aside.message > div > div > p > span.text span.copy::after {
 
 @media only screen and (max-width: 600px) {
 
+	aside.message > div > div > p > span.text span.copy {
+		position: relative;
+	}
+	
 	aside.message > div > div > p > span.text span.copy::after {
 		font-size: 15.5pt;
 	}

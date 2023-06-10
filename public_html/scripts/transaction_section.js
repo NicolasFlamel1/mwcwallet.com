@@ -96,7 +96,7 @@ class TransactionSection extends Section {
 									else {
 							
 										// Replace number of confirmations display
-										numberOfConfirmationsDisplay.replaceWith(Language.createTranslatableContainer("<span>", "%1$s", [height.minus(self.transaction.getHeight()).plus(1).toFixed()], "numberOfConfirmations"));
+										numberOfConfirmationsDisplay.replaceWith(Language.createTranslatableContainer("<span>", "%1$s", [height.minus(self.transaction.getHeight()).plus(1).toFixed()], "numberOfConfirmations contextMenu"));
 									}
 								}
 							}
@@ -119,7 +119,7 @@ class TransactionSection extends Section {
 								else {
 						
 									// Replace number of confirmations display
-									numberOfConfirmationsDisplay.replaceWith(Language.createTranslatableContainer("<span>", "%1$s", [height.minus(self.transaction.getHeight()).plus(1).toFixed()], "numberOfConfirmations"));
+									numberOfConfirmationsDisplay.replaceWith(Language.createTranslatableContainer("<span>", "%1$s", [height.minus(self.transaction.getHeight()).plus(1).toFixed()], "numberOfConfirmations contextMenu"));
 								}
 							}
 						}
@@ -955,21 +955,21 @@ class TransactionSection extends Section {
 			if(this.transaction.getIsCoinbase() === true) {
 			
 				// Add type to transaction information display
-				transactionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Type: %1$x'), [Language.getDefaultTranslation('Coinbase')]));
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Type:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Coinbase')], "contextMenu") + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Add type to transaction information display
-				transactionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Type: %1$x'), [(this.transaction.getReceived() === true) ? Language.getDefaultTranslation('Received') : Language.getDefaultTranslation('Sent')]));
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Type:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [(this.transaction.getReceived() === true) ? Language.getDefaultTranslation('Received') : Language.getDefaultTranslation('Sent')], "contextMenu") + "</p>");
 			}
 			
 			// Check if transaction is expired or canceled
 			if(this.transaction.getExpired() === true || this.transaction.getCanceled() === true) {
 			
 				// Add status to transaction information display
-				transactionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Status: %1$x'), [(this.transaction.getCanceled() === true) ? Language.getDefaultTranslation('Canceled') : Language.getDefaultTranslation('Expired')]));
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Status:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [(this.transaction.getCanceled() === true) ? Language.getDefaultTranslation('Canceled') : Language.getDefaultTranslation('Expired')], "contextMenu") + "</p>");
 				
 				// Add number of confirmations to transaction information display
 				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')], "numberOfConfirmations") + "</p>");
@@ -979,7 +979,7 @@ class TransactionSection extends Section {
 			else if(this.transaction.getStatus() === Transaction.UNKNOWN_STATUS) {
 			
 				// Add status to transaction information display
-				transactionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Status: %1$x'), [(this.transaction.getAmountReleased() === false) ? Language.getDefaultTranslation('Unconfirmed') : Language.getDefaultTranslation('Confirmed')]));
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Status:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [(this.transaction.getAmountReleased() === false) ? Language.getDefaultTranslation('Unconfirmed') : Language.getDefaultTranslation('Confirmed')], "contextMenu") + "</p>");
 				
 				// Check if transaction's amount was released
 				if(this.transaction.getAmountReleased() === true) {
@@ -998,7 +998,7 @@ class TransactionSection extends Section {
 					else {
 				
 						// Add number of confirmations to transaction information display
-						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [currentHeight.minus(this.transaction.getHeight()).plus(1).toFixed()], "numberOfConfirmations") + "</p>");
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [currentHeight.minus(this.transaction.getHeight()).plus(1).toFixed()], "numberOfConfirmations contextMenu") + "</p>");
 					}
 				}
 				
@@ -1017,14 +1017,14 @@ class TransactionSection extends Section {
 				if(this.transaction.getAmountReleased() === true) {
 				
 					// Add status to transaction information display
-					transactionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Status: %1$x'), [Language.getDefaultTranslation('Spendable')]));
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Status:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Spendable')], "contextMenu") + "</p>");
 				}
 				
 				// Otherwise
 				else {
 			
 					// Add status to transaction information display
-					transactionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Status: %1$x'), [(this.transaction.getStatus() === Transaction.STATUS_UNCONFIRMED) ? Language.getDefaultTranslation('Unconfirmed') : Language.getDefaultTranslation('Confirmed')]));
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Status:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [(this.transaction.getStatus() === Transaction.STATUS_UNCONFIRMED) ? Language.getDefaultTranslation('Unconfirmed') : Language.getDefaultTranslation('Confirmed')], "contextMenu") + "</p>");
 				}
 				
 				// Check if transaction's status isn't unconfirmed
@@ -1044,7 +1044,7 @@ class TransactionSection extends Section {
 					else {
 				
 						// Add number of confirmations to transaction information display
-						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [currentHeight.minus(this.transaction.getHeight()).plus(1).toFixed()], "numberOfConfirmations") + "</p>");
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [currentHeight.minus(this.transaction.getHeight()).plus(1).toFixed()], "numberOfConfirmations contextMenu") + "</p>");
 					}
 				}
 				
@@ -1166,7 +1166,7 @@ class TransactionSection extends Section {
 				else {
 				
 					// Add confirmed height to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getHeight().toFixed()]) + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getHeight().toFixed()], "contextMenu") + "</p>");
 				}
 			}
 			
@@ -1191,7 +1191,7 @@ class TransactionSection extends Section {
 				else {
 				
 					// Add confirmed height to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getHeight().toFixed()]) + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Confirmed height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getHeight().toFixed()], "contextMenu") + "</p>");
 				}
 			}
 			
@@ -1213,7 +1213,7 @@ class TransactionSection extends Section {
 			else {
 			
 				// Add lock height to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Lock height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getLockHeight().toFixed()]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Lock height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getLockHeight().toFixed()], "contextMenu") + "</p>");
 			}
 			
 			// Check if transaction's time to live cut off height is unknown and transaction isn't a coinbase transaction
@@ -1234,7 +1234,7 @@ class TransactionSection extends Section {
 			else {
 			
 				// Add time to live cut off height to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Expire height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getTimeToLiveCutOffHeight().toFixed()]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Expire height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getTimeToLiveCutOffHeight().toFixed()], "contextMenu") + "</p>");
 			}
 			
 			// Check if transaction was sent
@@ -1254,7 +1254,7 @@ class TransactionSection extends Section {
 					if(this.transaction.getIsCoinbase() === true) {
 					
 						// Add required number of confirmations to transaction information display
-						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Required number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [Consensus.COINBASE_MATURITY.toFixed()]) + "</p>");
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Required number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [Consensus.COINBASE_MATURITY.toFixed()], "contextMenu") + "</p>");
 					}
 					
 					// Otherwise
@@ -1269,7 +1269,7 @@ class TransactionSection extends Section {
 				else {
 				
 					// Add required number of confirmations to transaction information display
-					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Required number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [(this.transaction.getIsCoinbase() === false || this.transaction.getRequiredNumberOfConfirmations().isGreaterThan(Consensus.COINBASE_MATURITY) === true) ? this.transaction.getRequiredNumberOfConfirmations().toFixed() : Consensus.COINBASE_MATURITY.toFixed()]) + "</p>");
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Required number of confirmations:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [(this.transaction.getIsCoinbase() === false || this.transaction.getRequiredNumberOfConfirmations().isGreaterThan(Consensus.COINBASE_MATURITY) === true) ? this.transaction.getRequiredNumberOfConfirmations().toFixed() : Consensus.COINBASE_MATURITY.toFixed()], "contextMenu") + "</p>");
 				}
 			}
 			
@@ -1291,7 +1291,7 @@ class TransactionSection extends Section {
 			else {
 			
 				// Add spendable height to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Spendable height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getSpendableHeight().toFixed()]) + "</p>");
+				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Spendable height:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$s", [this.transaction.getSpendableHeight().toFixed()], "contextMenu") + "</p>");
 			}
 			
 			// Check if transaction is a coinbase transaction
@@ -1479,14 +1479,15 @@ class TransactionSection extends Section {
 			}
 			
 			// Add recorded timestamp to transaction information display
-			transactionInformationDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('Recorded time: %1$d at %2$t'), [
+			transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Recorded time:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('%1$d at %2$t'), [
 			
 				// Recorded timestamp
 				(this.transaction.getRecordedTimestamp() / Common.MILLISECONDS_IN_A_SECOND).toFixed(),
 				
 				// Recorded timestamp
 				(this.transaction.getRecordedTimestamp() / Common.MILLISECONDS_IN_A_SECOND).toFixed()
-			]));
+				
+			], "contextMenu") + "</p>");
 			
 			// Check wallet type
 			switch(Consensus.getWalletType()) {
