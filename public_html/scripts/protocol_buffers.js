@@ -564,8 +564,8 @@ class ProtocolBuffers {
 					result[i] |= bitReader.getBits(8);
 				}
 				
-				// Otherwise check at the ending byte
-				else if(i === result["length"] - 1) {
+				// Otherwise check at the ending byte and a fewer than seven bits remain
+				else if(i === result["length"] - 1 && bytes["length"] * Common.BITS_IN_A_BYTE % 7 !== 0) {
 				
 					// Set byte's payload
 					result[i] |= bitReader.getBits(bytes["length"] * Common.BITS_IN_A_BYTE % 7);

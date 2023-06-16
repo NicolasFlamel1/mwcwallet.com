@@ -50,9 +50,16 @@ class BitReader {
 			
 			// Otherwise
 			else {
+			
+				// Check if no bits requested
+				if(numberOfBits === 0) {
+				
+					// Return zero
+					return 0;
+				}
 		
 				// Check if number of bits is invalid
-				if(numberOfBits === 0 || this.byteIndex === this.data["length"] || (this.byteIndex === this.data["length"] - 1 && this.bitIndex + numberOfBits > Common.BITS_IN_A_BYTE)) {
+				if(this.byteIndex === this.data["length"] || (this.byteIndex === this.data["length"] - 1 && this.bitIndex + numberOfBits > Common.BITS_IN_A_BYTE)) {
 				
 					// Throw error
 					throw "Invalid number of bits.";

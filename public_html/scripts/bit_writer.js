@@ -35,11 +35,11 @@ class BitWriter {
 				numberOfBits -= Common.BITS_IN_A_BYTE;
 			}
 			
-			// Check if number of bits is invalid
+			// Check if no bits requested
 			if(numberOfBits === 0) {
 			
-				// Throw error
-				throw "Invalid number of bits.";
+				// Return
+				return;
 			}
 			
 			// Check if more data is needed

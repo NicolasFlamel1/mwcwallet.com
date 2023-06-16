@@ -771,11 +771,11 @@ class HardwareWalletDefinitions {
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
 					},
 					
-					// Amount
+					// Value
 					"5": {
 					
 						// Name
-						"Name": "Amount",
+						"Name": "Value",
 						
 						// Type
 						"Type": ProtocolBuffers.UINT_SCHEMA_DATA_TYPE,
@@ -865,11 +865,11 @@ class HardwareWalletDefinitions {
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
 					},
 					
-					// Amount
+					// Value
 					"6": {
 					
 						// Name
-						"Name": "Amount",
+						"Name": "Value",
 						
 						// Type
 						"Type": ProtocolBuffers.UINT_SCHEMA_DATA_TYPE,
@@ -1397,11 +1397,11 @@ class HardwareWalletDefinitions {
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
 					},
 					
-					// Amount
+					// Value
 					"2": {
 					
 						// Name
-						"Name": "Amount",
+						"Name": "Value",
 						
 						// Type
 						"Type": ProtocolBuffers.UINT_SCHEMA_DATA_TYPE,
@@ -1434,11 +1434,11 @@ class HardwareWalletDefinitions {
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
 					},
 					
-					// Amount
+					// Value
 					"2": {
 					
 						// Name
-						"Name": "Amount",
+						"Name": "Value",
 						
 						// Type
 						"Type": ProtocolBuffers.UINT_SCHEMA_DATA_TYPE,

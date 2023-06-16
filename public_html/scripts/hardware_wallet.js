@@ -1367,8 +1367,8 @@ class HardwareWallet {
 								// Identifier
 								"Identifier": identifier.getValue(),
 								
-								// Amount
-								"Amount": amount,
+								// Value
+								"Value": amount,
 								
 								// Switch type
 								"Switch Type": switchType
@@ -1463,8 +1463,8 @@ class HardwareWallet {
 								// Identifier
 								"Identifier": identifier.getValue(),
 								
-								// Amount
-								"Amount": amount,
+								// Value
+								"Value": amount,
 								
 								// Switch type
 								"Switch Type": switchType
@@ -1501,8 +1501,8 @@ class HardwareWallet {
 												// Identifier
 												"Identifier": identifier.getValue(),
 												
-												// Amount
-												"Amount": amount,
+												// Value
+												"Value": amount,
 												
 												// Switch type
 												"Switch Type": switchType
@@ -3092,8 +3092,8 @@ class HardwareWallet {
 								// Identifier
 								"Identifier": identifier.getValue(),
 								
-								// Amount
-								"Amount": amount,
+								// Value
+								"Value": amount,
 								
 								// Switch type
 								"Switch Type": switchType
@@ -3171,8 +3171,8 @@ class HardwareWallet {
 								// Identifier
 								"Identifier": identifier.getValue(),
 								
-								// Amount
-								"Amount": amount,
+								// Value
+								"Value": amount,
 								
 								// Switch type
 								"Switch Type": switchType

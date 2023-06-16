@@ -660,11 +660,13 @@ main > div.unlocked > div > div > div.wallets > div > div.list > button > span.n
 	height: 1.3em;
 	opacity: 0;
 	transition: opacity 0.2s ease-in-out;
+	position: relative;
 }
 
 main > div.unlocked > div > div > div.wallets > div > div.list > button > span.name > span > span.status.bluetooth::before {
 	background-image: url(".<?= escapeString(getResource("./images/bluetooth.svg")); ?>");
 	width: 0.63em;
+	top: 1px;
 }
 
 main > div.unlocked > div > div > div.wallets > div > div.list > button > span.name > span > span.status.connected::before {
