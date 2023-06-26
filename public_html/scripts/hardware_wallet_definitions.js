@@ -79,6 +79,13 @@ class HardwareWalletDefinitions {
 			return 0x0003;
 		}
 		
+		// Trezor Load device message type
+		static get TREZOR_LOAD_DEVICE_MESSAGE_TYPE() {
+		
+			// Return Trezor load device message type
+			return 0x000D;
+		}
+		
 		// Trezor features message type
 		static get TREZOR_FEATURES_MESSAGE_TYPE() {
 		
@@ -268,10 +275,10 @@ class HardwareWalletDefinitions {
 			return 0xC709;
 		}
 		
-		// MimbleWimble Coin encrypted slate tag message type
-		static get MIMBLEWIMBLE_COIN_ENCRYPTED_SLATE_TAG_MESSAGE_TYPE() {
+		// MimbleWimble Coin encrypted slate tag and signature message type
+		static get MIMBLEWIMBLE_COIN_ENCRYPTED_SLATE_TAG_AND_SIGNATURE_MESSAGE_TYPE() {
 		
-			// Return MimbleWimble Coin encrypted slate tag message type
+			// Return MimbleWimble Coin encrypted slate tag and signature message type
 			return HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_FINISH_ENCRYPTING_SLATE_MESSAGE_TYPE | HardwareWalletDefinitions.MESSAGE_RESPONSE_MASK;
 		}
 		
@@ -435,6 +442,20 @@ class HardwareWalletDefinitions {
 						
 						// Type
 						"Type": ProtocolBuffers.ENUM_SCHEMA_DATA_TYPE
+					}
+				},
+				
+				// Trezor load device
+				[HardwareWalletDefinitions.TREZOR_LOAD_DEVICE_MESSAGE_TYPE.toFixed()]: {
+				
+					// Mnemonic
+					"1": {
+					
+						// Name
+						"Name": "Mnemonic",
+						
+						// Type
+						"Type": ProtocolBuffers.STRING_SCHEMA_DATA_TYPE
 					}
 				},
 				
@@ -1069,14 +1090,14 @@ class HardwareWalletDefinitions {
 						"Size": Common.BYTES_IN_A_UINT32
 					},
 					
-					// Address
+					// Recipient address
 					"5": {
 					
 						// Name
-						"Name": "Address",
+						"Name": "Recipient Address",
 						
 						// Type
-						"Type": ProtocolBuffers.STRING_SCHEMA_DATA_TYPE
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
 					}
 				},
 
@@ -1091,6 +1112,19 @@ class HardwareWalletDefinitions {
 						
 						// Type
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
+					},
+					
+					// Salt
+					"2": {
+					
+						// Name
+						"Name": "Salt",
+						
+						// Type
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE,
+						
+						// Optional
+						"Optional": true
 					}
 				},
 
@@ -1111,11 +1145,11 @@ class HardwareWalletDefinitions {
 				// MimbleWimble Coin encrypted slate data
 				[HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_ENCRYPTED_SLATE_DATA_MESSAGE_TYPE.toFixed()]: {
 				
-					// Data
+					// Encrypted data
 					"1": {
 					
 						// Name
-						"Name": "Data",
+						"Name": "Encrypted Data",
 						
 						// Type
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
@@ -1125,8 +1159,8 @@ class HardwareWalletDefinitions {
 				// MimbleWimble Coin finish encrypting slate
 				[HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_FINISH_ENCRYPTING_SLATE_MESSAGE_TYPE.toFixed()]: {},
 
-				// MimbleWimble Coin encrypted slate tag
-				[HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_ENCRYPTED_SLATE_TAG_MESSAGE_TYPE.toFixed()]: {
+				// MimbleWimble Coin encrypted slate tag and signature
+				[HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_ENCRYPTED_SLATE_TAG_AND_SIGNATURE_MESSAGE_TYPE.toFixed()]: {
 				
 					// Tag
 					"1": {
@@ -1136,6 +1170,19 @@ class HardwareWalletDefinitions {
 						
 						// Type
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
+					},
+					
+					// MQS message signature
+					"2": {
+					
+						// Name
+						"Name": "MQS Message Signature",
+						
+						// Type
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE,
+						
+						// Optional
+						"Optional": true
 					}
 				},
 
@@ -1198,35 +1245,51 @@ class HardwareWalletDefinitions {
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
 					},
 					
-					// Address
+					// Sender address or ephemeral X25519 public key
 					"6": {
 					
 						// Name
-						"Name": "Address",
-						
-						// Type
-						"Type": ProtocolBuffers.STRING_SCHEMA_DATA_TYPE
-					},
-					
-					// Salt
-					"7": {
-					
-						// Name
-						"Name": "Salt",
+						"Name": "Sender Address Or Ephemeral X25519 Public Key",
 						
 						// Type
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
+					},
+					
+					// Salt or encrypted file key
+					"7": {
+					
+						// Name
+						"Name": "Salt Or Encrypted File Key",
+						
+						// Type
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE,
+						
+						// Optional
+						"Optional": true
+					},
+					
+					// Payload nonce
+					"8": {
+					
+						// Name
+						"Name": "Payload Nonce",
+						
+						// Type
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE,
+						
+						// Optional
+						"Optional": true
 					}
 				},
 
 				// MimbleWimble Coin continue decrypting slate
 				[HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_CONTINUE_DECRYPTING_SLATE_MESSAGE_TYPE.toFixed()]: {
 				
-					// Data
+					// Encrypted data
 					"1": {
 					
 						// Name
-						"Name": "Data",
+						"Name": "Encrypted Data",
 						
 						// Type
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
@@ -1380,7 +1443,10 @@ class HardwareWalletDefinitions {
 						"Name": "Address",
 						
 						// Type
-						"Type": ProtocolBuffers.STRING_SCHEMA_DATA_TYPE
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE,
+						
+						// Optional
+						"Optional": true
 					}
 				},
 
@@ -1482,7 +1548,10 @@ class HardwareWalletDefinitions {
 						"Name": "Secret Nonce Index",
 						
 						// Type
-						"Type": ProtocolBuffers.ENUM_SCHEMA_DATA_TYPE
+						"Type": ProtocolBuffers.ENUM_SCHEMA_DATA_TYPE,
+						
+						// Optional
+						"Optional": true
 					}
 				},
 
@@ -1530,18 +1599,18 @@ class HardwareWalletDefinitions {
 						"Name": "Message",
 						
 						// Type
-						"Type": ProtocolBuffers.STRING_SCHEMA_DATA_TYPE
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
 					}
 				},
 
 				// MimbleWimble Coin transaction message signature
 				[HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_TRANSACTION_MESSAGE_SIGNATURE_MESSAGE_TYPE.toFixed()]: {
 				
-					// Signature
+					// Message signature
 					"1": {
 					
 						// Name
-						"Name": "Signature",
+						"Name": "Message Signature",
 						
 						// Type
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
@@ -1591,24 +1660,30 @@ class HardwareWalletDefinitions {
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
 					},
 					
-					// Kernel commit
+					// Kernel commitment
 					"5": {
 					
 						// Name
-						"Name": "Kernel Commit",
+						"Name": "Kernel Commitment",
 						
 						// Type
-						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE,
+						
+						// Optional
+						"Optional": true
 					},
 					
-					// Receiver signature
+					// Payment proof
 					"6": {
 					
 						// Name
-						"Name": "Receiver Signature",
+						"Name": "Payment Proof",
 						
 						// Type
-						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE,
+						
+						// Optional
+						"Optional": true
 					}
 				},
 
@@ -1632,7 +1707,10 @@ class HardwareWalletDefinitions {
 						"Name": "Payment Proof",
 						
 						// Type
-						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE,
+						
+						// Optional
+						"Optional": true
 					}
 				},
 
@@ -1695,7 +1773,10 @@ class HardwareWalletDefinitions {
 						"Type": ProtocolBuffers.UINT_SCHEMA_DATA_TYPE,
 						
 						// Size
-						"Size": Common.BYTES_IN_A_UINT64
+						"Size": Common.BYTES_IN_A_UINT64,
+						
+						// Optional
+						"Optional": true
 					},
 					
 					// Time zone offset
@@ -1708,18 +1789,21 @@ class HardwareWalletDefinitions {
 						"Type": ProtocolBuffers.UINT_SCHEMA_DATA_TYPE,
 						
 						// Size
-						"Size": Common.BYTES_IN_A_UINT16
+						"Size": Common.BYTES_IN_A_UINT16,
+						
+						// Optional
+						"Optional": true
 					}
 				},
 
 				// MimbleWimble Coin MQS challenge signature
 				[HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_MQS_CHALLENGE_SIGNATURE_MESSAGE_TYPE.toFixed()]: {
 				
-					// Signature
+					// MQS challenge signature
 					"1": {
 					
 						// Name
-						"Name": "Signature",
+						"Name": "MQS Challenge Signature",
 						
 						// Type
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE

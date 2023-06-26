@@ -212,6 +212,9 @@ class HardwareWalletUsbTransport {
 					// Otherwise
 					else {
 					
+						// Securely clear response
+						response.fill(0);
+					
 						// Reject
 						reject();
 					}
@@ -768,6 +771,9 @@ class HardwareWalletUsbTransport {
 													// Otherwise
 													else {
 													
+														// Securely clear packet
+														packet.fill(0);
+													
 														// Reject
 														reject();
 													}
@@ -776,6 +782,9 @@ class HardwareWalletUsbTransport {
 												// Otherwise
 												else {
 												
+													// Securely clear packet
+													packet.fill(0);
+												
 													// Reject
 													reject();
 												}
@@ -783,6 +792,9 @@ class HardwareWalletUsbTransport {
 											
 											// Otherwise
 											else {
+											
+												// Securely clear packet
+												packet.fill(0);
 											
 												// Reject
 												reject();
@@ -806,6 +818,9 @@ class HardwareWalletUsbTransport {
 													// Check if magic number isn't correct
 													if(magicNumbers[i] !== HardwareWalletUsbTransport.TREZOR_FIRST_PACKET_HEADER[i]) {
 													
+														// Securely clear packet
+														packet.fill(0);
+														
 														// Reject
 														reject();
 														
@@ -830,6 +845,9 @@ class HardwareWalletUsbTransport {
 													// Check if magic number isn't correct
 													if(magicNumbers[i] !== HardwareWalletUsbTransport.TREZOR_NEXT_PACKETS_HEADER[i]) {
 													
+														// Securely clear packet
+														packet.fill(0);
+														
 														// Reject
 														reject();
 														
@@ -850,6 +868,9 @@ class HardwareWalletUsbTransport {
 									
 								// Otherwise
 								else {
+								
+									// Securely clear packet
+									packet.fill(0);
 								
 									// Reject
 									reject();
@@ -920,6 +941,8 @@ class HardwareWalletUsbTransport {
 										var currentResponse = new Uint8Array(response["length"] + responsePart["length"]);
 										currentResponse.set(response);
 										currentResponse.set(responsePart, response["length"]);
+										response.fill(0);
+										responsePart.fill(0);
 										response = currentResponse;
 										
 										// Increment next sequence index
@@ -962,12 +985,16 @@ class HardwareWalletUsbTransport {
 							var finalResponse = new Uint8Array(responseSize + messageType["length"]);
 							finalResponse.set(response.subarray(0, responseSize));
 							finalResponse.set(messageType, responseSize);
+							response.fill(0);
 							
 							// Resolve final response
 							resolve(finalResponse);
 						
 						// Catch errors
 						}).catch(function(error) {
+						
+							// Securely clear response
+							response.fill(0);
 						
 							// Reject error
 							reject(error);
@@ -1026,7 +1053,7 @@ class HardwareWalletUsbTransport {
 					"Type": HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE,
 					
 					// Product name
-					"Product Name": "Trezor One",
+					"Product Name": "Trezor Model One",
 				
 					// Vendor ID
 					"Vendor ID": 0x534C,
@@ -1058,7 +1085,7 @@ class HardwareWalletUsbTransport {
 					"Type": HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE,
 					
 					// Product name
-					"Product Name": "Trezor One",
+					"Product Name": "Trezor Model One",
 					
 					// Vendor ID
 					"Vendor ID": 0x1209,

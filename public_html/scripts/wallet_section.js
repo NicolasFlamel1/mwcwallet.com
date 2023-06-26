@@ -2265,6 +2265,9 @@ class WalletSection extends Section {
 							// Check if canceled
 							if(error === Common.CANCELED_ERROR) {
 							
+								// Hide loading
+								self.getApplication().hideLoading();
+							
 								// Set that button isn't loading
 								button.removeClass("loading");
 								

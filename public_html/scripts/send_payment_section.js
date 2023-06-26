@@ -1933,7 +1933,7 @@ class SendPaymentSection extends Section {
 																									url = URL.createObjectURL(new Blob([
 																									
 																										// Contents
-																										fileContents 
+																										fileContents
 																									], {
 																									
 																										// Type

@@ -381,18 +381,29 @@ class ProtocolBuffers {
 											throw "Value's type isn't correct.";
 										}
 										
-										// Set field wire type
-										var fieldWireType = ProtocolBuffers.LEN_WIRE_TYPE;
+										// Check if no data exists and data is optional
+										if(data[name]["length"] === 0 && "Optional" in messageSchema[fieldNumber] === true && messageSchema[fieldNumber]["Optional"] === true) {
 										
-										// Set field payload
-										var fieldPayload = Common.mergeArrays([
+											// Clear value found
+											valueFound = false;
+										}
 										
-											// Length
-											ProtocolBuffers.encodeVarint(new BigNumber(data[name]["length"])),
+										// Otherwise
+										else {
+										
+											// Set field wire type
+											var fieldWireType = ProtocolBuffers.LEN_WIRE_TYPE;
 											
-											// Data
-											data[name]
-										]);
+											// Set field payload
+											var fieldPayload = Common.mergeArrays([
+											
+												// Length
+												ProtocolBuffers.encodeVarint(new BigNumber(data[name]["length"])),
+												
+												// Data
+												data[name]
+											]);
+										}
 									
 										// Break
 										break;

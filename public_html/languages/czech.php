@@ -575,6 +575,8 @@
 			'Transactions' => 'Transakce',
 			'Transactions Navigation Error' => 'Chyba navigace transakcí',
 			'Translation Contributors' => 'Na překladu se podíleli',
+			/*TODO*///'Trezor Model One' => '',
+			/*TODO*///'Trezor Model T' => '',
 			'Trying to connect to the listener at %1$y.' => 'Pokouším se připojit k listeneru na %1$y.',
 			'Trying to connect to the node at %1$y.' => 'Pokouším se připojit k uzlu na %1$y.',
 			'Trying to connect to the prices server at %1$y.' => 'Pokouším se připojit k cenovému serveru na %1$y.',

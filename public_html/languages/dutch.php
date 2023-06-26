@@ -575,6 +575,8 @@
 			'Transactions' => 'Transacties',
 			'Transactions Navigation Error' => 'Transacties Navigatie Fout',
 			'Translation Contributors' => 'Bijdragers Vertaling',
+			/*TODO*///'Trezor Model One' => '',
+			/*TODO*///'Trezor Model T' => '',
 			'Trying to connect to the listener at %1$y.' => 'Proberen verbinding tot stand te brengen met de luisteraar op %1$y.',
 			'Trying to connect to the node at %1$y.' => 'Proberen verbinding to stand te brengen met de node op %1$y.',
 			'Trying to connect to the prices server at %1$y.' => 'Proberen verbinding to stand te brengen met de prijzen server op %1$y.',

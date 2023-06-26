@@ -345,10 +345,10 @@
 			"Checksum" => "tqmVQJNEuYFXvEXJG+1ps/DJvK58dqALOAajoneRQsSOj4aYLiVsZxidMZlelHQd8XJ/mL6QSawQ9V21EXbKYg=="
 		],
 		"./scripts/application.js" => [
-			"Version" => 60,
+			"Version" => 62,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "KmQkk44HwhABtsChd1kLASFKQd/MHKALp3I5Z9bT6ltBiy6LTl8B0DHJ4llMpYf8DXF/GiT7QeK3MP3DkUqzQA=="
+			"Checksum" => "PI2iHfo1LkE6qdcLzb3O7etBR1euI46I39vCK/FoB6E2xg2Xst1yMhEBfNX0HUGTL92KHsAAO1hENz+KNZPp1A=="
 		],
 		"./scripts/automatic_lock.js" => [
 			"Version" => 5,
@@ -423,10 +423,10 @@
 			"Checksum" => "/V2aSG855keRK+2APJuqH8r5ryWi7RrQgGPApB1AzGaUgQiY+vwW4IscN3wyDwgXjn2jwWNxCY0lVkQQbmBRyw=="
 		],
 		"./scripts/consensus.js" => [
-			"Version" => 26,
+			"Version" => 28,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "4sbBVImdwbDktX8/MuQetocPQCpZQ7vJ6vsdRA1bXibXLLlUiI5HrtUzWUlAThE+S5NBPSyGhJXS56/5gHF9ew=="
+			"Checksum" => "4k0+Pf/Yd8SLVrHggwHuHPuU8MtyXz7WW/nLSQNVCrp/0/mm461hYcejqP19U9LDP8zBBh84KdHbVW+6OQetYg=="
 		],
 		"./scripts/transaction.js" => [
 			"Version" => 10,
@@ -459,40 +459,40 @@
 			"Checksum" => "uf1yQ1igJdTTd3ofOTVelJpqYWF/fuczoZ4/jkp46gyesaEpYag0+eJmgLw5Qe6lu6lM1IpPtTVgMVwA9HkZ0g=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 101,
+			"Version" => 102,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => "SCSdrVP552CVh9TpCN0XGPpQ0828owyS7XqU28fTY+fNRRRyUpWe5h3tAxkE9uq50C4SDavY6FzH80dxl376GA=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 61,
+			"Version" => 65,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "dX21naW7n8Ok/MCbi3WQDLmxOgAbLlsjn3pcuDiwzeJu+n17zpnWwkYHBdDY81V8Cifok6eF6hG8PL3OuBNwSA=="
+			"Checksum" => "DQ2/d94YgV7W434Or/Q70MFJicV2qLDMJbd/BnNIHmHQjsVHoNRCCAf3HWD4HKVsvfPMLzLsVsFrmr5jt8JpTQ=="
 		],
 		"./scripts/hardware_wallet_usb_transport.js" => [
-			"Version" => 4,
+			"Version" => 7,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "npV99drxHDCGSPo66p6Qa64paanCq0yVt8LIKOuCsi1F6nPjLreX0UznL5ohA/Kmv0uuDUX/pgUlqAHFVkurOg=="
+			"Checksum" => "55UWwbjhKCBtxt3NocNHozo2eoxobDpVoKbAD5PXy85cTnWYHi7aRMdbhKXPeMM4LAucGbH43rpRGmZvDUBZqQ=="
 		],
 		"./scripts/hardware_wallet_bluetooth_transport.js" => [
+			"Version" => 6,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "lztGUSXmklvHdS7kX7k7ovIE5VjiHzA0UiatxMWHd92xDeJqk29KTx+V8XGZSb1o//blNJKSiEVi6ldcvaU/Qw=="
+		],
+		"./scripts/hardware_wallet_definitions.js" => [
+			"Version" => 5,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "rKZl+LVQuxMuYuoPRmpPm8fkIhYJdW4UcubkAABTzXfliP2p4yi68gjpmGpnCiQc2LUblpZsetdCA4zJYIinpg=="
+		],
+		"./scripts/protocol_buffers.js" => [
 			"Version" => 4,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "1Xw0paGkb2spSwTw00Y353eEfOLSs9c0aqRe9ZDC7u8Ff5Gx8K2WUPpbwCXVcX2tjZPmhhqJzKK9HrBmQSrrRA=="
-		],
-		"./scripts/hardware_wallet_definitions.js" => [
-			"Version" => 2,
-			"Cache" => TRUE,
-			"Minified" => FALSE,
-			"Checksum" => "oTH0wG6Pt4+vElc4Pq7Jpd07M3u+7SwBzYsElvQP+IF7kMZK7DUNtghREaqDgvGDZYS3yH+GXNtO9M+2LF2g9Q=="
-		],
-		"./scripts/protocol_buffers.js" => [
-			"Version" => 3,
-			"Cache" => TRUE,
-			"Minified" => FALSE,
-			"Checksum" => NULL//"C3QDS4VcZykC6tr8Yh7D0NHNx7APyRHsNgiMazr2zzqWyUzzt+ALklbgV3yNE3mvmTi2N96uxNxIr2d7nDIVqg=="
+			"Checksum" => "tUrh9IlyVHKE+XevVP+GZdRuj1Tj0Ythi28bDubTWJttSvD2Mj4PlfgG0n6NQqX1ogqoiJZ/stAClmHHBwy8Zg=="
 		],
 		"./scripts/proof_builder.js" => [
 			"Version" => 5,
@@ -567,13 +567,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 68,
+			"Version" => 69,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 135,
+			"Version" => 136,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -591,13 +591,13 @@
 			"Checksum" => "RFXyJdMBrFe0rBAKTOwmTVcZzI6V3Pf7HHizK+RQVHguh/pCOTPV0Jj+EB7cvP1/wpuUAyh1SnWVZ01qLg4emg=="
 		],
 		"./scripts/languages.js" => [
-			"Version" => 10,
+			"Version" => 11,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 63,
+			"Version" => 64,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -747,16 +747,16 @@
 			"Checksum" => "HwyLsaJHxvqWABtdvOaA8gFj4EqbrnnTIvO+7qAEOiwfHJsK35xtybtmHYempe/yp4cvnTcLpr5twWiLX0VlKg=="
 		],
 		"./scripts/bit_reader.js" => [
-			"Version" => 5,
+			"Version" => 6,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => NULL//"yms2TjlwJtaup+5xUoaB0fVpOy5xExGy7dseVb9c9A5DHy29P22GyNmBtOAe595a4UscRC5zJcOXEVk0rCLFzQ=="
+			"Checksum" => "sZRRsnad/mXhGEl07hGYP/Ov+rf0+sbLcI1SSh8Na1b9E5m4edQYgpqr9W4PF0YfQdN+HqQZFPFQkQMyfAcpLw=="
 		],
 		"./scripts/bit_writer.js" => [
-			"Version" => 5,
+			"Version" => 6,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => NULL//"G9MztHfbLzg6SFOSXQhW1M4R+tPmAR6Z4Jvpap4gYC0s3tOYsEsGUSNJ/ZlS2JOThLAI0Vdo6LdA2u1QaO1y8g=="
+			"Checksum" => "HPq8AJb3mxHLLkhUQpLCNbHRt/Xk7JwByYUQD8KCFBmI0UjSBAwvJOtEvPlivCg5AiRo7IKMwxUzUMQ+AQIwgw=="
 		],
 		"./scripts/hi-base32-0.5.1.js" => [
 			"Version" => 6,
@@ -873,16 +873,16 @@
 			"Checksum" => "S4qtse2vQnhId38WZuCVF1jdkzQJyxGtlXrt/IgH8gdjQrvRaF3gJcMlx1KUFx6ZUwl3mQlsA4xC5J4xIpT+Sg=="
 		],
 		"./scripts/wallet_section.js" => [
-			"Version" => 60,
+			"Version" => 62,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "kEgtpyOgc5L+SrIfI/YZzzViueKlLPLWcxhVFKBSxKJZhZMZnEYR6HMOhTO2SmQGa/6eV3zuVpwVWcvGZ4c4Ag=="
+			"Checksum" => "0p0L05b+UJBwWMDcdPptsgFLB7kkTZHlYcqQM4l8yGvX4Kl4tORqqc6y0R2spwmrpJPJZLSI6DfYhNuW3ptX6A=="
 		],
 		"./scripts/send_payment_section.js" => [
-			"Version" => 68,
+			"Version" => 70,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "wSoyYpKYZEuXuYJwgy7c3DEpKIbozaBP4TOLeYcBtIJQg6/t+cnWghL+1ladFL0B8jPbDfcTT7cH2Ckoc85kBg=="
+			"Checksum" => "vixEZLYVT13yaRfJjjDMaQzykPMNgVwZ6fAxw/Q6NT/oxel6C05+xdlRK0JWtnL9R3x8bt9lVkFys1iiUKNMVw=="
 		],
 		"./scripts/log_section.js" => [
 			"Version" => 7,

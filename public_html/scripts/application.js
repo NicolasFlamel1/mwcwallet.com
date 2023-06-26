@@ -3179,7 +3179,12 @@ class Application {
 													return new Promise(function(resolve, reject) {
 												
 														// Return showing message immediately and allow showing messages
-														return self.message.show(Language.getDefaultTranslation('Hardware Wallet Error'), message, true, Message.NO_BEFORE_SHOW_FUNCTION, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true, (allowUnlock === true) ? Message.VISIBLE_STATE_UNLOCK | Message.VISIBLE_STATE_UNLOCKED : Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+														return self.message.show(Language.getDefaultTranslation('Hardware Wallet Error'), message, true, function() {
+														
+															// Hide loading
+															self.hideLoading();
+															
+														}, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true, (allowUnlock === true) ? Message.VISIBLE_STATE_UNLOCK | Message.VISIBLE_STATE_UNLOCKED : Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
 														
 															// Check if message was displayed
 															if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
@@ -3299,12 +3304,7 @@ class Application {
 															});
 															
 															// Return connecting to any hardware wallet descriptor
-															return hardwareWallet.connect(HardwareWallet.ANY_HARDWARE_WALLET_DESCRIPTOR, false, Language.getDefaultTranslation('Unlock that hardware wallet to continue connecting to it.'), [], allowUnlock, true, function() {
-																			
-																// Return if cancel occurred or canceled
-																return (cancelOccurred !== Common.NO_CANCEL_OCCURRED && cancelOccurred() === true) || canceled === true;
-																
-															}).then(function() {
+															return hardwareWallet.connect(HardwareWallet.ANY_HARDWARE_WALLET_DESCRIPTOR, false, Language.getDefaultTranslation('Unlock that hardware wallet to continue connecting to it.'), [], allowUnlock, true, cancelOccurred).then(function() {
 															
 																// Check if not canceled
 																if(canceled === false) {
@@ -4391,7 +4391,7 @@ class Application {
 		}
 		
 		// Hardware wallet unlock message done
-		hardwareWalletUnlockMessageDone(preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
+		hardwareWalletUnlockMessageDone(preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED, replaceMessage = true) {
 		
 			// Set self
 			var self = this;
@@ -4412,8 +4412,8 @@ class Application {
 						self.message.prevent();
 					}
 					
-					// Otherwise
-					else {
+					// Otherwise check if replacing message
+					else if(replaceMessage === true) {
 					
 						// Hide loading
 						self.hideLoading();
@@ -4423,45 +4423,71 @@ class Application {
 				// Otherwise
 				else {
 				
-					// Hide loading
-					self.hideLoading();
-		
-					// Check if unlock display is shown
-					if(self.isUnlockDisplayShown() === true)
-					
-						// Enable tabbing to everything in unlock display and enable everything in unlock display
-						self.unlockDisplay.find("*").enableTab().enable();
+					// Check if replacing message
+					if(replaceMessage === true) {
+				
+						// Hide loading
+						self.hideLoading();
 			
-					// Otherwise check if unlocked display is shown
-					else if(self.isUnlockedDisplayShown() === true)
-					
-						// Enable unlocked
-						self.unlocked.enable();
-					
-					// Restore focus and don't blur
-					self.focus.restore(false);
+						// Check if unlock display is shown
+						if(self.isUnlockDisplayShown() === true)
+						
+							// Enable tabbing to everything in unlock display and enable everything in unlock display
+							self.unlockDisplay.find("*").enableTab().enable();
+				
+						// Otherwise check if unlocked display is shown
+						else if(self.isUnlockedDisplayShown() === true)
+						
+							// Enable unlocked
+							self.unlocked.enable();
+						
+						// Restore focus and don't blur
+						self.focus.restore(false);
+					}
 				}
 				
 				// Check if preventing messages and it can be canceled
 				if(preventMessages === true && cancelOccurred !== Common.NO_CANCEL_OCCURRED) {
 				
-					// Return replacing message
-					return self.message.replace(Application.HARDWARE_WALLET_UNLOCK_MESSAGE).then(function() {
+					// Check if replacing message
+					if(replaceMessage === true) {
 				
+						// Return replacing message
+						return self.message.replace(Application.HARDWARE_WALLET_UNLOCK_MESSAGE).then(function() {
+					
+							// Resolve
+							resolve();
+						});
+					}
+					
+					// Otherwise
+					else {
+					
 						// Resolve
 						resolve();
-					});
+					}
 				}
 				
 				// Otherwise
 				else {
 				
-					// Return hiding message
-					return self.message.hide().then(function() {
+					// Check if replacing message
+					if(replaceMessage === true) {
+				
+						// Return hiding message
+						return self.message.hide().then(function() {
+						
+							// Resolve
+							resolve();
+						});
+					}
+					
+					// Otherwise
+					else {
 					
 						// Resolve
 						resolve();
-					});
+					}
 				}
 			});
 		}

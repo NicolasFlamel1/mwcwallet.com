@@ -156,6 +156,9 @@ class HardwareWalletBluetoothTransport {
 							// Otherwise
 							else {
 							
+								// Securely clear response
+								response.fill(0);
+							
 								// Reject
 								reject();
 							}
@@ -163,6 +166,9 @@ class HardwareWalletBluetoothTransport {
 						
 						// Otherwise
 						else {
+						
+							// Securely clear response
+							response.fill(0);
 						
 							// Reject error
 							reject(new DOMException("", "NetworkError"));
@@ -588,7 +594,7 @@ class HardwareWalletBluetoothTransport {
 									}
 									
 									// Check if disconnected error occurred
-									if(error["code"] === (new DOMException("", "NetworkError"))["code"]) {
+									if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWalletBluetoothTransport.NETWORK_ERROR_CODE) || ("name" in error === true && error["name"] === "NetworkError"))) {
 									
 										// Return requesting transport
 										return HardwareWalletBluetoothTransport.request(device).then(function(transport) {
@@ -734,6 +740,12 @@ class HardwareWalletBluetoothTransport {
 							// Remove notify characteristic value changed event
 							notifyCharacteristic.removeEventListener("characteristicvaluechanged", processResponsePacket);
 							
+							// Securely clear response packet
+							responsePacket.fill(0);
+							
+							// Securely clear response
+							response.fill(0);
+							
 							// Check if connection is connected
 							if(connection["connected"] === true) {
 						
@@ -763,6 +775,12 @@ class HardwareWalletBluetoothTransport {
 							
 								// Remove notify characteristic value changed event
 								notifyCharacteristic.removeEventListener("characteristicvaluechanged", processResponsePacket);
+								
+								// Securely clear response packet
+								responsePacket.fill(0);
+								
+								// Securely clear response
+								response.fill(0);
 								
 								// Check if connection is connected
 								if(connection["connected"] === true) {
@@ -796,6 +814,12 @@ class HardwareWalletBluetoothTransport {
 									
 										// Remove notify characteristic value changed event
 										notifyCharacteristic.removeEventListener("characteristicvaluechanged", processResponsePacket);
+										
+										// Securely clear response packet
+										responsePacket.fill(0);
+										
+										// Securely clear response
+										response.fill(0);
 										
 										// Check if connection is connected
 										if(connection["connected"] === true) {
@@ -836,7 +860,13 @@ class HardwareWalletBluetoothTransport {
 									
 										// Remove notify characteristic value changed event
 										notifyCharacteristic.removeEventListener("characteristicvaluechanged", processResponsePacket);
-									
+										
+										// Securely clear response packet
+										responsePacket.fill(0);
+										
+										// Securely clear response
+										response.fill(0);
+										
 										// Check if connection is connected
 										if(connection["connected"] === true) {
 									
@@ -866,6 +896,8 @@ class HardwareWalletBluetoothTransport {
 								var currentResponse = new Uint8Array(response["length"] + responsePart["length"]);
 								currentResponse.set(response);
 								currentResponse.set(responsePart, response["length"]);
+								response.fill(0);
+								responsePart.fill(0);
 								response = currentResponse;
 								
 								// Check if response is too large
@@ -876,7 +908,10 @@ class HardwareWalletBluetoothTransport {
 								
 									// Remove notify characteristic value changed event
 									notifyCharacteristic.removeEventListener("characteristicvaluechanged", processResponsePacket);
-								
+									
+									// Securely clear response
+									response.fill(0);
+									
 									// Check if connection is connected
 									if(connection["connected"] === true) {
 								
@@ -927,6 +962,9 @@ class HardwareWalletBluetoothTransport {
 					
 						// Remove notify characteristic value changed event
 						notifyCharacteristic.removeEventListener("characteristicvaluechanged", processResponsePacket);
+						
+						// Securely clear response
+						response.fill(0);
 						
 						// Reject error
 						reject(new DOMException("", "NetworkError"));
@@ -1055,6 +1093,9 @@ class HardwareWalletBluetoothTransport {
 					
 						// Remove notify characteristic value changed event
 						notifyCharacteristic.removeEventListener("characteristicvaluechanged", processResponsePacket);
+						
+						// Securely clear response
+						response.fill(0);
 						
 						// Check if connection is connected
 						if(connection["connected"] === true) {
@@ -1203,6 +1244,13 @@ class HardwareWalletBluetoothTransport {
 		
 			// Return Ledger next packets header length
 			return 3;
+		}
+		
+		// Network error code
+		static get NETWORK_ERROR_CODE() {
+		
+			// Return network error code
+			return 19;
 		}
 }
 
