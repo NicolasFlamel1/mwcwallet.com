@@ -345,10 +345,10 @@
 			"Checksum" => "tqmVQJNEuYFXvEXJG+1ps/DJvK58dqALOAajoneRQsSOj4aYLiVsZxidMZlelHQd8XJ/mL6QSawQ9V21EXbKYg=="
 		],
 		"./scripts/application.js" => [
-			"Version" => 62,
+			"Version" => 63,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "PI2iHfo1LkE6qdcLzb3O7etBR1euI46I39vCK/FoB6E2xg2Xst1yMhEBfNX0HUGTL92KHsAAO1hENz+KNZPp1A=="
+			"Checksum" => "phaqhlKHjGQIN571dvxONTzwOalUc+R1FO3npojhqDWCkv85Z0KVjDyIEb3yjDL9X4BT57ODvUYLBm8pGx3V2A=="
 		],
 		"./scripts/automatic_lock.js" => [
 			"Version" => 5,
@@ -459,16 +459,16 @@
 			"Checksum" => "uf1yQ1igJdTTd3ofOTVelJpqYWF/fuczoZ4/jkp46gyesaEpYag0+eJmgLw5Qe6lu6lM1IpPtTVgMVwA9HkZ0g=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 102,
+			"Version" => 103,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "SCSdrVP552CVh9TpCN0XGPpQ0828owyS7XqU28fTY+fNRRRyUpWe5h3tAxkE9uq50C4SDavY6FzH80dxl376GA=="
+			"Checksum" => "fMUgA0f0Y9sEtcBMApkh+BjRH3vmcZUJdbnU8Z89kuVD/s1HLPX8TpIodhyuVmaMVPk0fzG2B8Dh4X4rlDyVVg=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 65,
+			"Version" => 67,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "DQ2/d94YgV7W434Or/Q70MFJicV2qLDMJbd/BnNIHmHQjsVHoNRCCAf3HWD4HKVsvfPMLzLsVsFrmr5jt8JpTQ=="
+			"Checksum" => "HLTJT680YnUisYGxnJRPWjdhVrPs/kTA/g1buFZQMlVSKiTUF+mMzp1Jpd+TYYAlKoqAZmarO9b6+Kgjq5yvEQ=="
 		],
 		"./scripts/hardware_wallet_usb_transport.js" => [
 			"Version" => 7,
@@ -477,10 +477,10 @@
 			"Checksum" => "55UWwbjhKCBtxt3NocNHozo2eoxobDpVoKbAD5PXy85cTnWYHi7aRMdbhKXPeMM4LAucGbH43rpRGmZvDUBZqQ=="
 		],
 		"./scripts/hardware_wallet_bluetooth_transport.js" => [
-			"Version" => 6,
+			"Version" => 7,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "lztGUSXmklvHdS7kX7k7ovIE5VjiHzA0UiatxMWHd92xDeJqk29KTx+V8XGZSb1o//blNJKSiEVi6ldcvaU/Qw=="
+			"Checksum" => "inHK4CWMcLQO/obdN8+9PVZi7lSe2aPiDlU93XaWv6CFEaV3pjdDoikzSu5S79JnzJRcy72yH55/eSRh0zLCMw=="
 		],
 		"./scripts/hardware_wallet_definitions.js" => [
 			"Version" => 5,
@@ -741,10 +741,10 @@
 			"Checksum" => "pF+fedQkQaBflAY4jUUY4DpxQswhDgQWIki0Tl1rnbnolMfTLk1MidZpeUNH2c+nVw79lFK/ZsWG/f1X6aKRMw=="
 		],
 		"./scripts/common.js" => [
-			"Version" => 97,
+			"Version" => 99,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "HwyLsaJHxvqWABtdvOaA8gFj4EqbrnnTIvO+7qAEOiwfHJsK35xtybtmHYempe/yp4cvnTcLpr5twWiLX0VlKg=="
+			"Checksum" => "yz7IYNSytlt8MyGkYDItTUmeH09sulfoMk3CFHdWKwDSc4E8pATwZtTP3ANj+zf12L/NCrh248rB0ShDIESAwA=="
 		],
 		"./scripts/bit_reader.js" => [
 			"Version" => 6,
@@ -861,10 +861,10 @@
 			"Checksum" => "u/XOhZnZ0Sv7sdaj2IPJ3svf5h2nEqoQQDrA8PgXTn3rJTC+zv8RHgA5armZIcTsXL8ulK8wF+ilQ9ephrKNFA=="
 		],
 		"./scripts/transaction_section.js" => [
-			"Version" => 25,
+			"Version" => 26,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "zp0iJJeEh9Kce1sNOjNvMKSqCBCYp9ph6TQDs8FZ3kzRLzo+WYE9AUXSXOw/le5ZEJV3xkH4khVvRpMjlBQ1zg=="
+			"Checksum" => "XSHByKi5UgOE1LC1oLgApf4nlNSGWyyRsjGXCCg/uS/A0HS2CYGKnzGaI8w/f1XvrZ2HnFfZFT0DESjiToHlaw=="
 		],
 		"./scripts/account_section.js" => [
 			"Version" => 10,
@@ -873,10 +873,10 @@
 			"Checksum" => "S4qtse2vQnhId38WZuCVF1jdkzQJyxGtlXrt/IgH8gdjQrvRaF3gJcMlx1KUFx6ZUwl3mQlsA4xC5J4xIpT+Sg=="
 		],
 		"./scripts/wallet_section.js" => [
-			"Version" => 62,
+			"Version" => 63,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "0p0L05b+UJBwWMDcdPptsgFLB7kkTZHlYcqQM4l8yGvX4Kl4tORqqc6y0R2spwmrpJPJZLSI6DfYhNuW3ptX6A=="
+			"Checksum" => "nxA5UCj/f9s5+OYEB55mdjpo78U0JbaduUOBn2pikquAEOoL7mxG4DWatJ/h6KvrRkImvmFznGvreUzYKZp5ow=="
 		],
 		"./scripts/send_payment_section.js" => [
 			"Version" => 70,
@@ -1401,10 +1401,10 @@
 			"Checksum" => "v2/bORBcnSXsEu+hQNHiMcbkGE4r0jOv1AWaBcVRBzqKRByV8eB6CotjLwOg4Rni8+XVAbENX/HXp+ZjTZ7Ypg=="
 		],
 		"./styles/message.css" => [
-			"Version" => 23,
+			"Version" => 25,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "t+W8T1FEYwXZKOveCy7q/R3Z/uDZl7ZbV6pAMgKWwxNltJh3BiC3BfLZSRkx3PYA3qJLRDQOv6QXjXcE1CzW6w=="
+			"Checksum" => "5X+bJOMizrYB2vEnuLUSdfB6yTKtlkQRTOC4/BvI535scNxisPHzA0/ZU2k80DOUYwDTazkaChg1N0UvG0qmrA=="
 		],
 		"./styles/tetris.css" => [
 			"Version" => 3,

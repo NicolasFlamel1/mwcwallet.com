@@ -13823,7 +13823,7 @@ class Api {
 																																	}).catch(function(error) {
 																																	
 																																		// Check if error contains a message
-																																		if(Node.isMessageError(error) === true) {
+																																		if(Node.isMessageError(error) === true && error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"]["length"] !== 0) {
 																																		
 																																			// Get is raw data
 																																			var isRawData = Common.hasWhitespace(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"]) === false;
@@ -14617,7 +14617,7 @@ class Api {
 									}
 									
 									// Otherwise check if response contains an error message
-									else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
+									else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string" && responseStatusOrResponse["message"]["length"] !== 0) {
 									
 										// Get is raw data
 										var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
@@ -14944,7 +14944,7 @@ class Api {
 									}
 									
 									// Otherwise check if response contains an error message
-									else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
+									else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string" && responseStatusOrResponse["message"]["length"] !== 0) {
 									
 										// Get is raw data
 										var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;
@@ -15493,7 +15493,7 @@ class Api {
 														}
 														
 														// Otherwise check if response contains an error message
-														else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string") {
+														else if(Object.isObject(responseStatusOrResponse) === true && "message" in responseStatusOrResponse === true && typeof responseStatusOrResponse["message"] === "string" && responseStatusOrResponse["message"]["length"] !== 0) {
 														
 															// Get is raw data
 															var isRawData = Common.hasWhitespace(responseStatusOrResponse["message"]) === false;

@@ -453,7 +453,7 @@ class TransactionSection extends Section {
 							if(self.getAutomaticLock().isLocking() === false) {
 						
 								// Check if error contains a message
-								if(Node.isMessageError(error) === true) {
+								if(Node.isMessageError(error) === true && error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"]["length"] !== 0) {
 								
 									// Get is raw data
 									var isRawData = Common.hasWhitespace(error[Node.ERROR_RESPONSE_INDEX]["Err"]["Internal"]) === false;
@@ -1503,8 +1503,8 @@ class TransactionSection extends Section {
 						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Message:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 					}
 					
-					// Otherwise check if transaction's message is doesn't exist or transaction is a coinbase transaction
-					else if(this.transaction.getMessage() === Transaction.NO_MESSAGE || this.transaction.getIsCoinbase() === true) {
+					// Otherwise check if transaction's message is doesn't exist, transaction is a coinbase transaction, or transaction message is empty
+					else if(this.transaction.getMessage() === Transaction.NO_MESSAGE || this.transaction.getIsCoinbase() === true || this.transaction.getMessage()["length"] === 0) {
 					
 						// Add message to transaction information display
 						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Message:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");

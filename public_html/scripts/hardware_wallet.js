@@ -4535,7 +4535,7 @@ class HardwareWallet {
 											return self.send(HardwareWalletDefinitions.TREZOR_PIN_MATRIX_ACKNOWLEDGE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, {
 																				
 												// Pin
-												"Pin": HardwareWallet.alphabeticPinToPin(alphabeticPin)
+												"Pin": HardwareWallet.alphabeticPinToPin(Common.removeWhitespace(alphabeticPin))
 												
 											}, allowedResponseTypes, text, textArguments, allowUnlock, failOnLock, preventMessages, cancelOccurred, true, true).then(function(response) {
 											

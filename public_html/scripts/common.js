@@ -843,6 +843,13 @@ class Common {
 			return Common.HAS_WHITESPACE_PATTERN.test(text) === true;
 		}
 		
+		// Remove whitespace
+		static removeWhitespace(text) {
+		
+			// Return text with whitespace removed
+			return text.replace(Common.HAS_WHITESPACE_PATTERN, "");
+		}
+		
 		// Milliseconds in a second
 		static get MILLISECONDS_IN_A_SECOND() {
 		

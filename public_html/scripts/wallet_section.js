@@ -2907,7 +2907,7 @@ class WalletSection extends Section {
 									var isRawData = Common.hasWhitespace(message) === false;
 									
 									// Show message and allow showing messages
-									self.getMessage().show(Language.getDefaultTranslation('Payment Received'), Message.createSuccessResult() + Message.createLineBreak() + Message.createText((message === SlateParticipant.NO_MESSAGE) ? ((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('You were sent %1$c to Wallet %2$s.') : Language.getDefaultTranslation('You were sent %1$c to %2$y.')) : ((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('You were sent %1$c to Wallet %2$s with a message.') : Language.getDefaultTranslation('You were sent %1$c to %2$y with a message.')), [
+									self.getMessage().show(Language.getDefaultTranslation('Payment Received'), Message.createSuccessResult() + Message.createLineBreak() + Message.createText((message === SlateParticipant.NO_MESSAGE || message["length"] === 0) ? ((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('You were sent %1$c to Wallet %2$s.') : Language.getDefaultTranslation('You were sent %1$c to %2$y.')) : ((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('You were sent %1$c to Wallet %2$s with a message.') : Language.getDefaultTranslation('You were sent %1$c to %2$y with a message.')), [
 									
 										[
 										
@@ -2921,7 +2921,7 @@ class WalletSection extends Section {
 										// Wallet key path or name
 										(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()
 										
-									]) + ((message !== SlateParticipant.NO_MESSAGE) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Common.htmlEncode(message) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('(?<=.) '))) + Message.createText(Language.getDefaultTranslation('Give the %1$m file to the payment\'s sender for them to finalize the transaction.'), [
+									]) + ((message !== SlateParticipant.NO_MESSAGE && message["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Common.htmlEncode(message) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('(?<=.) '))) + Message.createText(Language.getDefaultTranslation('Give the %1$m file to the payment\'s sender for them to finalize the transaction.'), [
 					
 										[
 											// Text

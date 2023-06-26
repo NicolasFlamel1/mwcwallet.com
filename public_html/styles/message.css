@@ -279,8 +279,8 @@ aside.message > div > div > p > span.text span.radio input[type="radio"]:disable
 
 aside.message > div > div > p > span.text span.radio input[type="radio"]::before {
 	content: "";
-	width: 0.6em;
-	height: 0.6em;
+	width: 0.59em;
+	height: 0.59em;
 	border-radius: 50%;
 	background-color: #3600C9;
 	display: none;
