@@ -18,6 +18,9 @@ class AboutSection extends Section {
 			// Add version information
 			this.addVersionInformation();
 			
+			// Add donate information
+			this.addDonateInformation();
+			
 			// Update copyright
 			this.updateCopyright();
 			
@@ -29,6 +32,100 @@ class AboutSection extends Section {
 			
 			// Add attributions
 			this.addAttributions();
+			
+			// Set self
+			var self = this;
+			
+			// Donate address copy click and touch end event
+			this.getDisplay().find("div.donate span.copy").on("click touchend", function(event) {
+			
+				// Stop propagation
+				event.stopPropagation();
+				
+				// Prevent showing messages
+				self.getMessage().prevent();
+				
+				// Blur focus
+				$(":focus").blur();
+				
+				// Disable unlocked
+				self.getUnlocked().disable();
+				
+				// Get copy button
+				var copyButton = $(this);
+				
+				// Show loading
+				self.getApplication().showLoading();
+				
+				// Set that copy button is clicked
+				copyButton.addClass("clicked");
+				
+				// Set timeout
+				setTimeout(function() {
+				
+					// Blur copy button
+					copyButton.blur();
+				}, 0);
+				
+				// Set timeout
+				setTimeout(function() {
+				
+					// Get address
+					var address = copyButton.prev().text();
+				
+					// Copy address to clipboard
+					self.getClipboard().copy(address).then(function() {
+					
+						// Show message and allow showing messages
+						self.getMessage().show(Language.getDefaultTranslation('Address Copied'), Message.createText(Language.getDefaultTranslation('The address was successfully copied to your clipboard.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Verify that the pasted address matches the following address when you paste it.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(address) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak(), false, function() {
+						
+							// Hide loading
+							self.getApplication().hideLoading();
+						
+						}, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+						
+							// Check if message was displayed
+							if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
+						
+								// Enable unlocked
+								self.getUnlocked().enable();
+								
+								// Set that copy button isn't clicked
+								copyButton.removeClass("clicked");
+								
+								// Hide message
+								self.getMessage().hide();
+							}
+						});
+						
+					// Catch errors
+					}).catch(function(error) {
+					
+						// Show message and allow showing messages
+						self.getMessage().show(Language.getDefaultTranslation('Copy Address Error'), Message.createText(Language.getDefaultTranslation('Copying the address to your clipboard failed.')), false, function() {
+						
+							// Hide loading
+							self.getApplication().hideLoading();
+						
+						}, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+						
+							// Check if message was displayed
+							if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
+						
+								// Enable unlocked
+								self.getUnlocked().enable();
+								
+								// Set that copy button isn't clicked
+								copyButton.removeClass("clicked");
+								
+								// Hide message
+								self.getMessage().hide();
+							}
+						});
+					});
+				
+				}, ("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") ? 0 : AboutSection.COPY_ADDRESS_TO_CLIPBOARD_DELAY_MILLISECONDS);
+			});
 		}
 		
 		// Get name
@@ -103,11 +200,60 @@ class AboutSection extends Section {
 			// Add release date to version information display
 			versionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Release date:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$d", [versionReleaseTimestamp.toFixed()], "contextMenu") + "</p>");
 			
+			// Add source code to version information display
+			versionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Source code:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$m", [
+				[
+			
+					// Text
+					"https://github.com/NicolasFlamel1/mwcwallet.com",
+					
+					// URL
+					"https://github.com/NicolasFlamel1/mwcwallet.com",
+					
+					// Is external
+					true,
+					
+					// Is blob
+					false
+				]
+			], "contextMenu") + "</p>");
+			
 			// Add wallet type to version information display
 			versionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Wallet type:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Consensus.walletTypeToText(Consensus.getWalletType())], "contextMenu") + "</p>");
 			
 			// Add network type to version information display
 			versionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Network type:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Consensus.networkTypeToText(Consensus.getNetworkType())], "contextMenu") + "</p>");
+		}
+		
+		// Add donate information
+		addDonateInformation() {
+		
+			// Get donate display
+			var donateDisplay = this.getDisplay().find("div.donate");
+			
+			// Check if is an extension
+			if(Common.isExtension() === true) {
+			
+				// Set message
+				var message = Language.getDefaultTranslation('Donations are greatly appreciated and help fund the development of this extension.');
+			}
+			
+			// Otherwise check if is an app
+			else if(Common.isApp() === true) {
+			
+				// Set message
+				var message = Language.getDefaultTranslation('Donations are greatly appreciated and help fund the development of this app.');
+			}
+			
+			// Otherwise
+			else {
+			
+				// Set message
+				var message = Language.getDefaultTranslation('Donations are greatly appreciated and help fund the development of this site.');
+			}
+			
+			// Add message to donate display
+			donateDisplay.prepend(Language.createTranslatableContainer("<p>", message));
 		}
 		
 		// Update copyright
@@ -327,6 +473,13 @@ class AboutSection extends Section {
 					}
 				}
 			}
+		}
+		
+		// Copy address to clipboard delay milliseconds
+		static get COPY_ADDRESS_TO_CLIPBOARD_DELAY_MILLISECONDS() {
+		
+			// Return copy address to clipboard delay milliseconds
+			return 175;
 		}
 }
 

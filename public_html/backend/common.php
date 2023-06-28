@@ -11,7 +11,8 @@
 	// Version changes
 	const VERSION_CHANGES = [
 		"Fixed payment files not opening on slower devices.",
-		"Added support for Trezor Model One hardware wallets."
+		"Added support for Trezor Model One hardware wallets.",
+		"Added link to this wallet's source code and donation addresses in the about section."
 	];
 	
 	// Maintenance start time

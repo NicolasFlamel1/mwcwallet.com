@@ -22,6 +22,10 @@ main > div.unlocked > div > div > div.sections > div > div.about > div > div.ver
 	user-select: text;
 }
 
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.versionInformation > p > span > a {
+	word-break: break-all;
+}
+
 main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul {
 	padding: 0;
 	line-height: 1.35;
@@ -40,7 +44,7 @@ main > div.unlocked > div > div > div.sections > div > div.about > div > div > u
 	padding-bottom: 0;
 }
 
-main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul > li > span.contextMenu {
+main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul > li span.contextMenu {
 	cursor: text;
 	-moz-user-select: text;
 	-webkit-user-select: text;
@@ -49,7 +53,7 @@ main > div.unlocked > div > div > div.sections > div > div.about > div > div > u
 	user-select: text;
 }
 
-main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul > li > a.contextMenu {
+main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul > li a.contextMenu {
 	-moz-user-select: text;
 	-webkit-user-select: text;
 	-o-user-select: text;
@@ -57,12 +61,32 @@ main > div.unlocked > div > div > div.sections > div > div.about > div > div > u
 	user-select: text;
 }
 
-main > div.unlocked > div > div > div.sections > div > div.about > div > div.translationContributors, main > div.unlocked > div > div > div.sections > div > div.about > div > div.attributions {
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.donate, main > div.unlocked > div > div > div.sections > div > div.about > div > div.translationContributors, main > div.unlocked > div > div > div.sections > div > div.about > div > div.attributions {
 	flex-direction: column;
 }
 
-main > div.unlocked > div > div > div.sections > div > div.about > div > div.translationContributors > p, main > div.unlocked > div > div > div.sections > div > div.about > div > div.attributions > p {
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.donate > p, main > div.unlocked > div > div > div.sections > div > div.about > div > div.translationContributors > p, main > div.unlocked > div > div > div.sections > div > div.about > div > div.attributions > p {
 	padding-bottom: 0.6em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.donate > ul > li > span > span.contextMenu {
+	word-break: break-all;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.donate > ul > li > span > span.copy {
+	padding: 0.25em 0.4em;
+	display: inline;
+	cursor: copy;
+	line-height: 1em;
+}
+
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.donate > ul > li > span > span.copy::after {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	content: "\F0C5";
+	font-size: 15.5pt;
+	position: relative;
+	top: 1px;
 }
 
 main > div.unlocked > div > div > div.sections > div > div.about > div > div.translationContributors > p > a {
