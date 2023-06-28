@@ -4088,11 +4088,7 @@ class WalletSection extends Section {
 							if(address === wallet.getAddress(self.getUnlocked().getDisplayedAddressType())) {
 							
 								// Replace address display's QR code
-								self.addressDisplay.find("svg").replaceWith(qrCode.createSvgTag({
-								
-									// Scalable
-									"scalable": true
-								}));
+								self.addressDisplay.find("img").replaceWith(qrCode.createImgTag());
 								
 								// Replace address display's address
 								self.addressDisplay.find("p").replaceWith("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "<span class=\"contextMenu\">" + Common.htmlEncode(address) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</p>");
@@ -4120,11 +4116,7 @@ class WalletSection extends Section {
 				else {
 				
 					// Replace address display's QR code
-					this.addressDisplay.find("svg").replaceWith(qrCode.createSvgTag({
-					
-						// Scalable
-						"scalable": true
-					}));
+					this.addressDisplay.find("img").replaceWith(qrCode.createImgTag());
 					
 					// Replace address display's address
 					this.addressDisplay.find("p").replaceWith("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "<span class=\"contextMenu\">" + Common.htmlEncode(address) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</p>");

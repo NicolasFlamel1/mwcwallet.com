@@ -1405,7 +1405,7 @@ class TransactionSection extends Section {
 						// Is blob
 						false
 					]
-				], "kernelExcess rawData contextMenu"));
+				], "kernelExcess rawData"));
 				
 				// Append copy to kernel excess display
 				kernelExcessDisplay.append(Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true));
@@ -1468,7 +1468,7 @@ class TransactionSection extends Section {
 							// Is blob
 							false
 						]
-					], "outputCommit rawData contextMenu"));
+					], "outputCommit rawData"));
 					
 					// Append copy to output commit display
 					outputCommitDisplay.append(Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true));

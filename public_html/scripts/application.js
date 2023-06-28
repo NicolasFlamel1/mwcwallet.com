@@ -261,8 +261,8 @@ class Application {
 					// Get element
 					var element = $(event["target"]);
 			
-					// Check if element isn't an input or a link and doesn't allow the context menu
-					if(element.is("input") === false && element.is("a") === false && element.hasClass("contextMenu") === false)
+					// Check if element isn't a radio input or a link and doesn't allow the context menu
+					if((element.is("input") === false || element.attr("type") === "radio") && element.is("a") === false && element.hasClass("contextMenu") === false)
 					
 						// Prevent default
 						event.preventDefault();

@@ -24,6 +24,11 @@ main > div.unlocked > div > div > div.sections > div > div.about > div > div.ver
 
 main > div.unlocked > div > div > div.sections > div > div.about > div > div.versionInformation > p > span > a {
 	word-break: break-all;
+	-moz-user-select: text;
+	-webkit-user-select: text;
+	-o-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
 }
 
 main > div.unlocked > div > div > div.sections > div > div.about > div > div > ul {

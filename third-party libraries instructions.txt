@@ -117,6 +117,9 @@ rm -rf "./v0.9.0.tar.gz" "./js-sha256-0.9.0"
 # How to build /public_html/scripts/qrcode-generator-1.4.4.js
 wget "https://github.com/kazuhikoarase/qrcode-generator/archive/refs/tags/js1.4.4.tar.gz"
 tar -xf "./js1.4.4.tar.gz"
+sed -i '0,/out.writeByte(0x00);/s//out.writeByte(12);/' "./qrcode-generator-js1.4.4/js/qrcode.js"
+sed -i '0,/out.writeByte(0x00);/s//out.writeByte(12);/' "./qrcode-generator-js1.4.4/js/qrcode.js"
+sed -i '0,/out.writeByte(0x00);/s//out.writeByte(13);/' "./qrcode-generator-js1.4.4/js/qrcode.js"
 mv "./qrcode-generator-js1.4.4/js/qrcode.js" "./qrcode-generator-1.4.4.js"
 rm -rf "./js1.4.4.tar.gz" "./qrcode-generator-js1.4.4"
 

@@ -2042,9 +2042,9 @@ var qrcode = function() {
       // Global Color Map
 
       // black
-      out.writeByte(0x00);
-      out.writeByte(0x00);
-      out.writeByte(0x00);
+      out.writeByte(12);
+      out.writeByte(12);
+      out.writeByte(13);
 
       // white
       out.writeByte(0xff);

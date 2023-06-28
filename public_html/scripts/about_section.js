@@ -216,7 +216,7 @@ class AboutSection extends Section {
 					// Is blob
 					false
 				]
-			], "contextMenu") + "</p>");
+			]) + "</p>");
 			
 			// Add wallet type to version information display
 			versionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Wallet type:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Consensus.walletTypeToText(Consensus.getWalletType())], "contextMenu") + "</p>");
