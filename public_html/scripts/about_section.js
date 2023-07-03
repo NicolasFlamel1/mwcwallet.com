@@ -200,15 +200,36 @@ class AboutSection extends Section {
 			// Add release date to version information display
 			versionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Release date:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$d", [versionReleaseTimestamp.toFixed()], "contextMenu") + "</p>");
 			
+			// Check if is an extension
+			if(Common.isExtension() === true) {
+			
+				// Set source code
+				var sourceCode = "https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension";
+			}
+			
+			// Otherwise check if loading from file
+			else if(location["protocol"] === Common.FILE_PROTOCOL) {
+			
+				// Set source code
+				var sourceCode = "https://github.com/NicolasFlamel1/MWC-Wallet-Standalone";
+			}
+			
+			// Otherwise
+			else {
+			
+				// Set source code
+				var sourceCode = "https://github.com/NicolasFlamel1/mwcwallet.com";
+			}
+			
 			// Add source code to version information display
 			versionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Source code:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$m", [
 				[
 			
 					// Text
-					"https://github.com/NicolasFlamel1/mwcwallet.com",
+					sourceCode,
 					
 					// URL
-					"https://github.com/NicolasFlamel1/mwcwallet.com",
+					sourceCode,
 					
 					// Is external
 					true,

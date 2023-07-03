@@ -12,7 +12,9 @@
 	const VERSION_CHANGES = [
 		"Fixed payment files not opening on slower devices.",
 		"Added support for Trezor Model One hardware wallets.",
-		"Added links to this wallet's source code and donation addresses in the about section."
+		"Added links to this wallet's source code and donation addresses in the about section.",
+		"Fixed QR codes not displaying correctly on the newest version of Chrome.",
+		"Added support for sending and receiving unencrypted Grin Slatepacks."
 	];
 	
 	// Maintenance start time

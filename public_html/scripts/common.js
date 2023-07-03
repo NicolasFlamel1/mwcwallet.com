@@ -920,6 +920,13 @@ class Common {
 			return Math.pow(2, Common.BITS_IN_A_BYTE * Int32Array["BYTES_PER_ELEMENT"] - 1) - 1;
 		}
 		
+		// Bytes in a uint8
+		static get BYTES_IN_A_UINT8() {
+		
+			// Return bytes in a uint8
+			return 8 / Common.BITS_IN_A_BYTE;
+		}
+		
 		// Bytes in a uint16
 		static get BYTES_IN_A_UINT16() {
 		

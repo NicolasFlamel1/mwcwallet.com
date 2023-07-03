@@ -15,8 +15,21 @@ class SlateInput {
 			// Reset
 			this.reset();
 			
-			// Check if a serialized slate input is provided
-			if(Object.isObject(serializedSlateInputOrFeatures) === true) {
+			// Check if a binary serialized slate input is provided
+			if(serializedSlateInputOrFeatures instanceof BitReader === true) {
+			
+				// Get serialized slate input
+				var serializedSlateInput = serializedSlateInputOrFeatures;
+				
+				// Get slate
+				var slate = slateOrCommit;
+			
+				// Unserialize the serialized slate input
+				this.unserialize(serializedSlateInput, slate);
+			}
+			
+			// Otherwise check if a serialized slate input is provided
+			else if(Object.isObject(serializedSlateInputOrFeatures) === true) {
 			
 				// Get serialized slate input
 				var serializedSlateInput = serializedSlateInputOrFeatures;
@@ -53,7 +66,7 @@ class SlateInput {
 		}
 		
 		// Serialize
-		serialize(slateOrVersion) {
+		serialize(slateOrVersion, bitWriter) {
 		
 			// Get slate version
 			var slateVersion = (slateOrVersion instanceof Slate === true) ? slateOrVersion.getVersion() : slateOrVersion;
@@ -78,22 +91,50 @@ class SlateInput {
 				// Version four
 				case Slate.VERSION_FOUR.toFixed():
 				
-					// Create serialized slate input
-					var serializedSlateInput = {
+					// Check if serializing slate input as binary
+					if(typeof bitWriter !== "undefined") {
 					
-						// Commit
-						"c": Common.toHexString(this.getCommit())
-					};
+						// Try
+						try {
 					
-					// Check if not plain
-					if(this.isPlain() === false) {
-					
-						// Set serialized slate input's features
-						serializedSlateInput["f"] = this.getFeatures();
+							// Write features
+							bitWriter.setBytes([this.getFeatures()]);
+							
+							// Write commit
+							bitWriter.setBytes(this.getCommit());
+						}
+						
+						// Catch errors
+						catch(error) {
+						
+							// Throw error
+							throw "Unsupported input.";
+						}
 					}
 					
-					// Return serialized slate input
-					return serializedSlateInput;
+					// Otherwise
+					else {
+					
+						// Create serialized slate input
+						var serializedSlateInput = {
+						
+							// Commit
+							"c": Common.toHexString(this.getCommit())
+						};
+						
+						// Check if not plain
+						if(this.isPlain() === false) {
+						
+							// Set serialized slate input's features
+							serializedSlateInput["f"] = this.getFeatures();
+						}
+						
+						// Return serialized slate input
+						return serializedSlateInput;
+					}
+					
+					// Break
+					break;
 				
 				// Default
 				default:
@@ -223,26 +264,68 @@ class SlateInput {
 				// Version four
 				case Slate.VERSION_FOUR.toFixed():
 				
-					// Check if serialized slate input's features isn't supported
-					if("f" in serializedSlateInput === true && ((Common.isNumberString(serializedSlateInput["f"]) === false && serializedSlateInput["f"] instanceof BigNumber === false) || ((new BigNumber(serializedSlateInput["f"])).isEqualTo(SlateInput.PLAIN_FEATURES) === false && (new BigNumber(serializedSlateInput["f"])).isEqualTo(SlateInput.COINBASE_FEATURES) === false))) {
+					// Check if serialized slate input is binary
+					if(serializedSlateInput instanceof BitReader === true) {
 					
-						// Throw error
-						throw "Unsupported input.";
+						// Get bit reader
+						var bitReader = serializedSlateInput;
+						
+						// Try
+						try {
+						
+							// Set features to serialized slate input's features
+							this.features = bitReader.getBytes(1)[0];
+							
+							// Check if serialized slate input's features isn't supported
+							if(this.getFeatures() !== SlateInput.PLAIN_FEATURES && this.getFeatures() !== SlateInput.COINBASE_FEATURES) {
+							
+								// Throw error
+								throw "Unsupported input.";
+							}
+							
+							// Set commit to serialized slate input's commit
+							this.commit = bitReader.getBytes(Crypto.COMMIT_LENGTH);
+							
+							// Check if serialized slate input's commit isn't supported
+							if(Secp256k1Zkp.isValidCommit(this.getCommit()) !== true) {
+							
+								// Throw error
+								throw "Unsupported input.";
+							}
+						}
+						
+						// Catch errors
+						catch(error) {
+						
+							// Throw error
+							throw "Unsupported input.";
+						}
 					}
 					
-					// Set features to serialized slate input's features
-					this.features = ("f" in serializedSlateInput === true) ? (new BigNumber(serializedSlateInput["f"])).toNumber() : SlateInput.PLAIN_FEATURES;
-				
-					// Check if serialized slate input's commit isn't supported
-					if("c" in serializedSlateInput === false || Common.isHexString(serializedSlateInput["c"]) === false || Common.hexStringLength(serializedSlateInput["c"]) !== Crypto.COMMIT_LENGTH || Secp256k1Zkp.isValidCommit(Common.fromHexString(serializedSlateInput["c"])) !== true) {
+					// Otherwise
+					else {
 					
-						// Throw error
-						throw "Unsupported input.";
+						// Check if serialized slate input's features isn't supported
+						if("f" in serializedSlateInput === true && ((Common.isNumberString(serializedSlateInput["f"]) === false && serializedSlateInput["f"] instanceof BigNumber === false) || ((new BigNumber(serializedSlateInput["f"])).isEqualTo(SlateInput.PLAIN_FEATURES) === false && (new BigNumber(serializedSlateInput["f"])).isEqualTo(SlateInput.COINBASE_FEATURES) === false))) {
+						
+							// Throw error
+							throw "Unsupported input.";
+						}
+						
+						// Set features to serialized slate input's features
+						this.features = ("f" in serializedSlateInput === true) ? (new BigNumber(serializedSlateInput["f"])).toNumber() : SlateInput.PLAIN_FEATURES;
+					
+						// Check if serialized slate input's commit isn't supported
+						if("c" in serializedSlateInput === false || Common.isHexString(serializedSlateInput["c"]) === false || Common.hexStringLength(serializedSlateInput["c"]) !== Crypto.COMMIT_LENGTH || Secp256k1Zkp.isValidCommit(Common.fromHexString(serializedSlateInput["c"])) !== true) {
+						
+							// Throw error
+							throw "Unsupported input.";
+						}
+						
+						// Set commit to serialized slate input's commit
+						this.commit = Common.fromHexString(serializedSlateInput["c"]);
 					}
 					
-					// Set commit to serialized slate input's commit
-					this.commit = Common.fromHexString(serializedSlateInput["c"]);
-				
 					// Break
 					break;
 				

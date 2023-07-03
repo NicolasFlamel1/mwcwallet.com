@@ -15,7 +15,7 @@ class SlateParticipant {
 			// Reset
 			this.reset();
 			
-			// Check if a compact serialized slate participant is provided
+			// Check if a binary serialized slate participant is provided
 			if(serializedSlateParticipantOrId instanceof BitReader === true) {
 			
 				// Get serialized slate participant
@@ -206,25 +206,71 @@ class SlateParticipant {
 				// Version four
 				case Slate.VERSION_FOUR.toFixed():
 				
-					// Create serialized slate participant
-					var serializedSlateParticipant = {
+					// Check if serializing slate output as binary
+					if(typeof bitWriter !== "undefined") {
 					
-						// Public blind excess
-						"xs": Common.toHexString(this.getPublicBlindExcess()),
+						// Try
+						try {
+					
+							// Write has partial signature
+							bitWriter.setBytes([(this.getPartialSignature() !== SlateParticipant.NO_PARTIAL_SIGNATURE) ? 1 : 0]);
+							
+							// Write public blind excess
+							bitWriter.setBytes(this.getPublicBlindExcess());
+							
+							// Write public nonce
+							bitWriter.setBytes(this.getPublicNonce());
+							
+							// Check if partial signature exists
+							if(this.getPartialSignature() !== SlateParticipant.NO_PARTIAL_SIGNATURE) {
+							
+								// Check if uncompacting partial signature failed
+								var partialSignature = Secp256k1Zkp.uncompactSingleSignerSignature(this.getPartialSignature());
+								if(partialSignature === Secp256k1Zkp.OPERATION_FAILED) {
+								
+									// Throw error
+									throw "Unsupported participant.";
+								}
+								
+								// Write partial signature
+								bitWriter.setBytes(partialSignature);
+							}
+						}
 						
-						// Public nonce
-						"nonce": Common.toHexString(this.getPublicNonce())
-					};
-					
-					// Check if partial signature exists
-					if(this.getPartialSignature() !== SlateParticipant.NO_PARTIAL_SIGNATURE) {
-					
-						// Set serialized slate participant's partial signature
-						serializedSlateParticipant["part"] = Common.toHexString(this.getPartialSignature());
+						// Catch errors
+						catch(error) {
+						
+							// Throw error
+							throw "Unsupported participant.";
+						}
 					}
 					
-					// Return serialized slate participant
-					return serializedSlateParticipant;
+					// Otherwise
+					else {
+					
+						// Create serialized slate participant
+						var serializedSlateParticipant = {
+						
+							// Public blind excess
+							"xs": Common.toHexString(this.getPublicBlindExcess()),
+							
+							// Public nonce
+							"nonce": Common.toHexString(this.getPublicNonce())
+						};
+						
+						// Check if partial signature exists
+						if(this.getPartialSignature() !== SlateParticipant.NO_PARTIAL_SIGNATURE) {
+						
+							// Set serialized slate participant's partial signature
+							serializedSlateParticipant["part"] = Common.toHexString(this.getPartialSignature());
+						}
+						
+						// Return serialized slate participant
+						return serializedSlateParticipant;
+					}
+					
+					// Break
+					break;
 				
 				// Default
 				default:
@@ -636,55 +682,130 @@ class SlateParticipant {
 						throw "Unsupported participant.";
 					}
 					
-					// Check if serialized slate participant's public blind excess isn't supported
-					if("xs" in serializedSlateParticipant === false || Common.isHexString(serializedSlateParticipant["xs"]) === false || Secp256k1Zkp.isValidPublicKey(Common.fromHexString(serializedSlateParticipant["xs"])) !== true) {
+					// Check if serialized slate participant is binary
+					if(serializedSlateParticipant instanceof BitReader === true) {
 					
-						// Throw error
-						throw "Unsupported participant.";
+						// Get bit reader
+						var bitReader = serializedSlateParticipant;
+						
+						// Try
+						try {
+						
+							// Get if serialized slate participant has a partial signature
+							var hasPartialSignature = bitReader.getBytes(1)[0] !== 0;
+							
+							// Check if serialized slate participant's public blind excess isn't supported
+							var publicBlindExcess = bitReader.getBytes(Crypto.SECP256K1_PUBLIC_KEY_LENGTH);
+							if(Secp256k1Zkp.isValidPublicKey(publicBlindExcess) !== true) {
+							
+								// Throw error
+								throw "Unsupported participant.";
+							}
+							
+							// Set public blind excess to serialized slate participant's public blind excess
+							this.publicBlindExcess = Secp256k1Zkp.publicKeyFromData(publicBlindExcess);
+							
+							// Check if public blind excess isn't a valid public key
+							if(this.getPublicBlindExcess() === Secp256k1Zkp.OPERATION_FAILED) {
+							
+								// Throw error
+								throw "Unsupported participant.";
+							}
+							
+							// Check if serialized slate participant's public nonce isn't supported
+							var publicNonce = bitReader.getBytes(Crypto.SECP256K1_PUBLIC_KEY_LENGTH);
+							if(Secp256k1Zkp.isValidPublicKey(publicNonce) !== true) {
+							
+								// Throw error
+								throw "Unsupported participant.";
+							}
+							
+							// Set public nonce to serialized slate participant's public nonce
+							this.publicNonce = Secp256k1Zkp.publicKeyFromData(publicNonce);
+							
+							// Check if public nonce isn't a valid public key
+							if(this.getPublicNonce() === Secp256k1Zkp.OPERATION_FAILED) {
+							
+								// Throw error
+								throw "Unsupported participant.";
+							}
+							
+							// Check if serialized slate participant has a partial signature
+							if(hasPartialSignature === true) {
+							
+								// Set partial signature to serialize slate participant's partial signature
+								this.partialSignature = Secp256k1Zkp.compactSingleSignerSignature(bitReader.getBytes(Crypto.SINGLE_SIGNER_SIGNATURE_LENGTH));
+								
+								// Check if partial signature isn't a valid single-signer signature
+								if(this.getPartialSignature() === Secp256k1Zkp.OPERATION_FAILED || Secp256k1Zkp.isValidSingleSignerSignature(this.getPartialSignature()) !== true) {
+								
+									// Throw error
+									throw "Unsupported participant.";
+								}
+							}
+						}
+						
+						// Catch errors
+						catch(error) {
+						
+							// Throw error
+							throw "Unsupported participant.";
+						}
 					}
-				
-					// Set public blind excess to serialized slate participant's public blind excess
-					this.publicBlindExcess = Secp256k1Zkp.publicKeyFromData(Common.fromHexString(serializedSlateParticipant["xs"]));
 					
-					// Check if public blind excess isn't a valid public key
-					if(this.getPublicBlindExcess() === Secp256k1Zkp.OPERATION_FAILED) {
+					// Otherwise
+					else {
+						
+						// Check if serialized slate participant's public blind excess isn't supported
+						if("xs" in serializedSlateParticipant === false || Common.isHexString(serializedSlateParticipant["xs"]) === false || Secp256k1Zkp.isValidPublicKey(Common.fromHexString(serializedSlateParticipant["xs"])) !== true) {
+						
+							// Throw error
+							throw "Unsupported participant.";
+						}
 					
-						// Throw error
-						throw "Unsupported participant.";
-					}
+						// Set public blind excess to serialized slate participant's public blind excess
+						this.publicBlindExcess = Secp256k1Zkp.publicKeyFromData(Common.fromHexString(serializedSlateParticipant["xs"]));
+						
+						// Check if public blind excess isn't a valid public key
+						if(this.getPublicBlindExcess() === Secp256k1Zkp.OPERATION_FAILED) {
+						
+							// Throw error
+							throw "Unsupported participant.";
+						}
+						
+						// Check if serialized slate participant's public nonce isn't supported
+						if("nonce" in serializedSlateParticipant === false || Common.isHexString(serializedSlateParticipant["nonce"]) === false || Secp256k1Zkp.isValidPublicKey(Common.fromHexString(serializedSlateParticipant["nonce"])) !== true) {
+						
+							// Throw error
+							throw "Unsupported participant.";
+						}
 					
-					// Check if serialized slate participant's public nonce isn't supported
-					if("nonce" in serializedSlateParticipant === false || Common.isHexString(serializedSlateParticipant["nonce"]) === false || Secp256k1Zkp.isValidPublicKey(Common.fromHexString(serializedSlateParticipant["nonce"])) !== true) {
-					
-						// Throw error
-						throw "Unsupported participant.";
-					}
-				
-					// Set public nonce to serialized slate participant's public nonce
-					this.publicNonce = Secp256k1Zkp.publicKeyFromData(Common.fromHexString(serializedSlateParticipant["nonce"]));
-					
-					// Check if public nonce isn't a valid public key
-					if(this.getPublicNonce() === Secp256k1Zkp.OPERATION_FAILED) {
-					
-						// Throw error
-						throw "Unsupported participant.";
-					}
-					
-					// Check if serialized slate participant's partial signature isn't supported
-					if("part" in serializedSlateParticipant === true && serializedSlateParticipant["part"] !== null && (Common.isHexString(serializedSlateParticipant["part"]) === false || Secp256k1Zkp.isValidSingleSignerSignature(Common.fromHexString(serializedSlateParticipant["part"])) !== true)) {
-					
-						// Throw error
-						throw "Unsupported participant.";
-					}
-					
-					// Set partial signature to serialized slate participant's partial signature
-					this.partialSignature = ("part" in serializedSlateParticipant === true && serializedSlateParticipant["part"] !== null) ? Secp256k1Zkp.singleSignerSignatureFromData(Common.fromHexString(serializedSlateParticipant["part"])) : SlateParticipant.NO_PARTIAL_SIGNATURE;
-					
-					// Check if partial signature isn't a valid signature
-					if("part" in serializedSlateParticipant === true && serializedSlateParticipant["part"] !== null && this.getPartialSignature() === Secp256k1Zkp.OPERATION_FAILED) {
-					
-						// Throw error
-						throw "Unsupported participant.";
+						// Set public nonce to serialized slate participant's public nonce
+						this.publicNonce = Secp256k1Zkp.publicKeyFromData(Common.fromHexString(serializedSlateParticipant["nonce"]));
+						
+						// Check if public nonce isn't a valid public key
+						if(this.getPublicNonce() === Secp256k1Zkp.OPERATION_FAILED) {
+						
+							// Throw error
+							throw "Unsupported participant.";
+						}
+						
+						// Check if serialized slate participant's partial signature isn't supported
+						if("part" in serializedSlateParticipant === true && serializedSlateParticipant["part"] !== null && (Common.isHexString(serializedSlateParticipant["part"]) === false || Secp256k1Zkp.isValidSingleSignerSignature(Common.fromHexString(serializedSlateParticipant["part"])) !== true)) {
+						
+							// Throw error
+							throw "Unsupported participant.";
+						}
+						
+						// Set partial signature to serialized slate participant's partial signature
+						this.partialSignature = ("part" in serializedSlateParticipant === true && serializedSlateParticipant["part"] !== null) ? Secp256k1Zkp.singleSignerSignatureFromData(Common.fromHexString(serializedSlateParticipant["part"])) : SlateParticipant.NO_PARTIAL_SIGNATURE;
+						
+						// Check if partial signature isn't a valid signature
+						if("part" in serializedSlateParticipant === true && serializedSlateParticipant["part"] !== null && this.getPartialSignature() === Secp256k1Zkp.OPERATION_FAILED) {
+						
+							// Throw error
+							throw "Unsupported participant.";
+						}
 					}
 				
 					// Break

@@ -15,7 +15,7 @@ class SlateOutput {
 			// Reset
 			this.reset();
 			
-			// Check if a compact serialized slate output is provided
+			// Check if a binary serialized slate output is provided
 			if(serializedSlateOutputOrFeatures instanceof BitReader === true) {
 			
 				// Get serialized slate output
@@ -137,25 +137,59 @@ class SlateOutput {
 				// Version four
 				case Slate.VERSION_FOUR.toFixed():
 				
-					// Create serialized slate output
-					var serializedSlateOutput = {
+					// Check if serializing slate output as binary
+					if(typeof bitWriter !== "undefined") {
 					
-						// Commit
-						"c": Common.toHexString(this.getCommit()),
+						// Try
+						try {
+					
+							// Write features
+							bitWriter.setBytes([this.getFeatures()]);
+							
+							// Write commit
+							bitWriter.setBytes(this.getCommit());
+							
+							// Write proof length
+							bitWriter.setBytes((new BigNumber(this.getProof()["length"])).toBytes(BigNumber.BIG_ENDIAN, Common.BYTES_IN_A_UINT64));
+							
+							// Write proof
+							bitWriter.setBytes(this.getProof());
+						}
 						
-						// Proof
-						"p": Common.toHexString(this.getProof())
-					};
-					
-					// Check if not plain
-					if(this.isPlain() === false) {
-					
-						// Set serialized slate output's features
-						serializedSlateOutput["f"] = this.getFeatures();
+						// Catch errors
+						catch(error) {
+						
+							// Throw error
+							throw "Unsupported output.";
+						}
 					}
 					
-					// Return serialized slate output
-					return serializedSlateOutput;
+					// Otherwise
+					else {
+				
+						// Create serialized slate output
+						var serializedSlateOutput = {
+						
+							// Commit
+							"c": Common.toHexString(this.getCommit()),
+							
+							// Proof
+							"p": Common.toHexString(this.getProof())
+						};
+						
+						// Check if not plain
+						if(this.isPlain() === false) {
+						
+							// Set serialized slate output's features
+							serializedSlateOutput["f"] = this.getFeatures();
+						}
+						
+						// Return serialized slate output
+						return serializedSlateOutput;
+					}
+					
+					// Break
+					break;
 				
 				// Default
 				default:
@@ -321,7 +355,7 @@ class SlateOutput {
 						this.commit = bitReader.getBytes(Crypto.COMMIT_LENGTH);
 						
 						// Check if commit is invalid
-						if(Secp256k1Zkp.isValidCommit(this.commit) !== true) {
+						if(Secp256k1Zkp.isValidCommit(this.getCommit()) !== true) {
 						
 							// Throw error
 							throw "Unsupported output.";
@@ -354,36 +388,91 @@ class SlateOutput {
 				// Version four
 				case Slate.VERSION_FOUR.toFixed():
 				
-					// Check if serialized slate output's features isn't supported
-					if("f" in serializedSlateOutput === true && ((Common.isNumberString(serializedSlateOutput["f"]) === false && serializedSlateOutput["f"] instanceof BigNumber === false) || (new BigNumber(serializedSlateOutput["f"])).isEqualTo(SlateOutput.PLAIN_FEATURES) === false)) {
+					// Check if serialized slate output is binary
+					if(serializedSlateOutput instanceof BitReader === true) {
 					
-						// Throw error
-						throw "Unsupported output.";
+						// Get bit reader
+						var bitReader = serializedSlateOutput;
+						
+						// Try
+						try {
+						
+							// Set features to serialized slate output's features
+							this.features = bitReader.getBytes(1)[0];
+							
+							// Check if serialized slate output's features isn't supported
+							if(this.getFeatures() !== SlateOutput.PLAIN_FEATURES) {
+							
+								// Throw error
+								throw "Unsupported output.";
+							}
+							
+							// Set commit to serialized slate output's commit
+							this.commit = bitReader.getBytes(Crypto.COMMIT_LENGTH);
+							
+							// Check if serialized slate output's commit isn't supported
+							if(Secp256k1Zkp.isValidCommit(this.getCommit()) !== true) {
+							
+								// Throw error
+								throw "Unsupported output.";
+							}
+							
+							// Get serialized slate output's proof length
+							var proofLength = new BigNumber(Common.HEX_PREFIX + Common.toHexString(bitReader.getBytes(Common.BYTES_IN_A_UINT64)));
+							
+							// Check if serialized slate output's proof length is invalid
+							if(proofLength.isEqualTo(Crypto.PROOF_LENGTH) === false) {
+							
+								// Throw error
+								throw "Unsupported output.";
+							}
+							
+							// Set proof to serialized slate output's proof
+							this.proof = bitReader.getBytes(proofLength.toNumber());
+						}
+						
+						// Catch errors
+						catch(error) {
+						
+							// Throw error
+							throw "Unsupported output.";
+						}
 					}
 					
-					// Set features to serialized slate output's features
-					this.features = ("f" in serializedSlateOutput === true) ? (new BigNumber(serializedSlateOutput["f"])).toNumber() : SlateOutput.PLAIN_FEATURES;
+					// Otherwise
+					else {
 				
-					// Check if serialized slate output's commit isn't supported
-					if("c" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["c"]) === false || Common.hexStringLength(serializedSlateOutput["c"]) !== Crypto.COMMIT_LENGTH || Secp256k1Zkp.isValidCommit(Common.fromHexString(serializedSlateOutput["c"])) !== true) {
+						// Check if serialized slate output's features isn't supported
+						if("f" in serializedSlateOutput === true && ((Common.isNumberString(serializedSlateOutput["f"]) === false && serializedSlateOutput["f"] instanceof BigNumber === false) || (new BigNumber(serializedSlateOutput["f"])).isEqualTo(SlateOutput.PLAIN_FEATURES) === false)) {
+						
+							// Throw error
+							throw "Unsupported output.";
+						}
+						
+						// Set features to serialized slate output's features
+						this.features = ("f" in serializedSlateOutput === true) ? (new BigNumber(serializedSlateOutput["f"])).toNumber() : SlateOutput.PLAIN_FEATURES;
 					
-						// Throw error
-						throw "Unsupported output.";
+						// Check if serialized slate output's commit isn't supported
+						if("c" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["c"]) === false || Common.hexStringLength(serializedSlateOutput["c"]) !== Crypto.COMMIT_LENGTH || Secp256k1Zkp.isValidCommit(Common.fromHexString(serializedSlateOutput["c"])) !== true) {
+						
+							// Throw error
+							throw "Unsupported output.";
+						}
+						
+						// Set commit to serialized slate output's commit
+						this.commit = Common.fromHexString(serializedSlateOutput["c"]);
+						
+						// Check if serialized slate output's proof isn't supported
+						if("p" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["p"]) === false || Common.hexStringLength(serializedSlateOutput["p"]) !== Crypto.PROOF_LENGTH) {
+						
+							// Throw error
+							throw "Unsupported output.";
+						}
+						
+						// Set proof to serialized slate output's proof
+						this.proof = Common.fromHexString(serializedSlateOutput["p"]);
 					}
 					
-					// Set commit to serialized slate output's commit
-					this.commit = Common.fromHexString(serializedSlateOutput["c"]);
-					
-					// Check if serialized slate output's proof isn't supported
-					if("p" in serializedSlateOutput === false || Common.isHexString(serializedSlateOutput["p"]) === false || Common.hexStringLength(serializedSlateOutput["p"]) !== Crypto.PROOF_LENGTH) {
-					
-						// Throw error
-						throw "Unsupported output.";
-					}
-					
-					// Set proof to serialized slate output's proof
-					this.proof = Common.fromHexString(serializedSlateOutput["p"]);
-				
 					// Break
 					break;
 				

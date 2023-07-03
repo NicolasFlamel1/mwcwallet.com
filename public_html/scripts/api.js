@@ -1537,8 +1537,9 @@ class Api {
 																	// Check wallet type
 																	switch(Consensus.getWalletType()) {
 																	
-																		// MWC wallet
+																		// MWC or GRIN wallet
 																		case Consensus.MWC_WALLET_TYPE:
+																		case Consensus.GRIN_WALLET_TYPE:
 																
 																			// Get Slatepack
 																			var slatepack = serializedSlateSlatepackOrEmojiText;
@@ -1880,15 +1881,6 @@ class Api {
 																			// Break
 																			break;
 																			
-																		// GRIN wallet
-																		case Consensus.GRIN_WALLET_TYPE:
-																		
-																			// Reject JSON-RPC invalid parameters error response
-																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
-																			
-																			// Break
-																			break;
-																		
 																		// EPIC wallet
 																		case Consensus.EPIC_WALLET_TYPE:
 																		
@@ -2125,6 +2117,9 @@ class Api {
 																					// Check if a transaction for the wallet with the same ID doesn't exist
 																					if(transaction === Transactions.NO_TRANSACTION_FOUND) {
 																					
+																						// Get slate's offset
+																						var offset = new Uint8Array(slate.getOffset());
+																						
 																						// Is kernel offset unique
 																						var isKernelOffsetUnique = function() {
 																						
@@ -2255,182 +2250,294 @@ class Api {
 																								// Check if a the slate's kernel offset is unique
 																								if(isUnique === true) {
 																								
-																									// Get output
-																									var getOutput = function() {
+																									// Get proof address
+																									var getProofAddress = function() {
 																									
 																										// Return promise
 																										return new Promise(function(resolve, reject) {
 																										
 																											// Check if cancel didn't occur
 																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																								
-																												// Build output
-																												var buildOutput = function() {
-																												
-																													// Return promise
-																													return new Promise(function(resolve, reject) {
-																													
-																														// Check if cancel didn't occur
-																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																											
+																												// Check if slate has payment proof
+																												if(slate.hasPaymentProof() === true) {
+																											
+																													// Check if wallet isn't a hardware wallet
+																													if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
+																											
+																														// Check if the slate's sender and receiver address are the same
+																														if(slate.getReceiverAddress() === slate.getSenderAddress()) {
 																														
-																															// Check if slate has a lock height and its height doesn't exist or is less than or equal to its lock height
-																															if(slate.getLockHeight().isEqualTo(Slate.NO_LOCK_HEIGHT) === false && (slate.getHeight() === Slate.UNKNOWN_HEIGHT || slate.getLockHeight().isGreaterThan(slate.getHeight()) === true)) {
+																															// Check wallet type
+																															switch(Consensus.getWalletType()) {
 																															
-																																// Set output height to the current height if it exists and it greater than the slate's lock height or set it to the slate's lock height otherwise
-																																var outputHeight = (currentHeight !== Node.UNKNOWN_HEIGHT && currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false && currentHeight.plus(1).isGreaterThan(slate.getLockHeight()) === true) ? currentHeight.plus(1) : slate.getLockHeight();
-																															}
-																															
-																															// Otherwise
-																															else {
-																															
-																																// Set output height to the current height if it exists or the slate's height otherwise
-																																var outputHeight = (currentHeight !== Node.UNKNOWN_HEIGHT && currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false) ? currentHeight.plus(1) : slate.getHeight();
-																															}
+																																// MWC or EPIC wallet
+																																case Consensus.MWC_WALLET_TYPE:
+																																case Consensus.EPIC_WALLET_TYPE:
 																														
-																															// Return wallet building output
-																															return wallet.buildOutput(slate.getAmount(), outputHeight, HardwareWallet.RECEIVING_TRANSACTION_MESSAGE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(output) {
-																															
-																																// Check if cancel didn't occur
-																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																															
-																																	// Return getting a transaction with the output's commit
-																																	return self.transactions.getTransaction(wallet.getWalletType(), wallet.getNetworkType(), output[Wallet.OUTPUT_COMMIT_INDEX]).then(function(transaction) {
+																																	// Return getting Tor proof address
+																																	return wallet.getTorProofAddress().then(function(proofAddress) {
 																																	
 																																		// Check if cancel didn't occur
 																																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																	
-																																			// Check if a transaction with the same commit doesn't exist
-																																			if(transaction === Transactions.NO_TRANSACTION_FOUND) {
-																																	
-																																				// Resolve output
-																																				resolve(output);
-																																			}
-																																			
-																																			// Otherwise
-																																			else {
-																																			
-																																				// Return building output
-																																				return buildOutput().then(function(output) {
-																																				
-																																					// Check if cancel didn't occur
-																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																				
-																																						// Resolve output
-																																						resolve(output);
-																																					}
-																																
-																																					// Otherwise
-																																					else {
-																																					
-																																						// Reject JSON-RPC internal error error response
-																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																					}
-																																				
-																																				// Catch errors
-																																				}).catch(function(error) {
-																																				
-																																					// Check if cancel didn't occur
-																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																				
-																																						// Reject error
-																																						reject(error);
-																																					}
-																																
-																																					// Otherwise
-																																					else {
-																																					
-																																						// Reject JSON-RPC internal error error response
-																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																					}
-																																				});
-																																			}
+																																			// Set slate's receiver address to the proof address
+																																			slate.setReceiverAddress(proofAddress);
+																																		
+																																			// Resolve proof address
+																																			resolve(proofAddress);
 																																		}
-																																
+																																		
 																																		// Otherwise
 																																		else {
 																																		
 																																			// Reject JSON-RPC internal error error response
 																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																		}
-																																		
+																																	
 																																	// Catch errors
 																																	}).catch(function(error) {
 																																	
 																																		// Reject JSON-RPC internal error error response
 																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																	});
-																																}
 																																
-																																// Otherwise
-																																else {
+																																// GRIN wallet
+																																case Consensus.GRIN_WALLET_TYPE:
 																																
-																																	// Reject JSON-RPC internal error error response
-																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																}
-																															
-																															// Catch errors
-																															}).catch(function(error) {
-																															
-																																// Check if cancel didn't occur
-																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																															
-																																	// Check if hardware wallet was disconnected
-																																	if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																	// Return getting Slatepack proof address
+																																	return wallet.getSlatepackProofAddress().then(function(proofAddress) {
 																																	
-																																		// Check if wallet's hardware wallet is connected
-																																		if(wallet.isHardwareConnected() === true) {
+																																		// Check if cancel didn't occur
+																																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																	
-																																			// Wallet's hardware wallet disconnect event
-																																			$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																			// Set slate's receiver address to the proof address
+																																			slate.setReceiverAddress(proofAddress);
 																																		
-																																				// Return getting output
-																																				return getOutput().then(function(output) {
-																																				
-																																					// Check if cancel didn't occur
-																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																				
-																																						// Resolve output
-																																						resolve(output);
-																																					}
-																																					
-																																					// Otherwise
-																																					else {
-																																					
-																																						// Reject JSON-RPC internal error error response
-																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																					}
-																																				
-																																				// Catch errors
-																																				}).catch(function(error) {
-																																				
-																																					// Check if cancel didn't occur
-																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																				
-																																						// Reject error
-																																						reject(error);
-																																					}
-																																					
-																																					// Otherwise
-																																					else {
-																																					
-																																						// Reject JSON-RPC internal error error response
-																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																					}
-																																				});
-																																			});
+																																			// Resolve proof address
+																																			resolve(proofAddress);
 																																		}
 																																		
 																																		// Otherwise
 																																		else {
 																																		
-																																			// Return getting output
-																																			return getOutput().then(function(output) {
+																																			// Reject JSON-RPC internal error error response
+																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																		}
+																																	
+																																	// Catch errors
+																																	}).catch(function(error) {
+																																	
+																																		// Reject JSON-RPC internal error error response
+																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																	});
+																															}
+																														}
+																														
+																														// Otherwise
+																														else {
+																														
+																															// Check wallet type
+																															switch(Consensus.getWalletType()) {
+																															
+																																// MWC wallet
+																																case Consensus.MWC_WALLET_TYPE:
+																												
+																																	// Check receiver address length
+																																	switch(slate.getReceiverAddress()["length"]) {
+																																	
+																																		// Tor address length
+																																		case Tor.ADDRESS_LENGTH:
+																																		
+																																			// Return getting Tor proof address
+																																			return wallet.getTorProofAddress().then(function(proofAddress) {
 																																			
 																																				// Check if cancel didn't occur
 																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																			
-																																					// Resolve output
-																																					resolve(output);
+																																					// Resolve proof address
+																																					resolve(proofAddress);
+																																				}
+																																				
+																																				// Otherwise
+																																				else {
+																																				
+																																					// Reject JSON-RPC internal error error response
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																				}
+																																			
+																																			// Catch errors
+																																			}).catch(function(error) {
+																																			
+																																				// Reject JSON-RPC internal error error response
+																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																			});
+																																		
+																																		// MQS address length
+																																		case Mqs.ADDRESS_LENGTH:
+																																		
+																																			// Return getting MQS proof address
+																																			return wallet.getMqsProofAddress().then(function(proofAddress) {
+																																			
+																																				// Check if cancel didn't occur
+																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																			
+																																					// Resolve proof address
+																																					resolve(proofAddress);
+																																				}
+																																				
+																																				// Otherwise
+																																				else {
+																																				
+																																					// Reject JSON-RPC internal error error response
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																				}
+																																			
+																																			// Catch errors
+																																			}).catch(function(error) {
+																																			
+																																				// Reject JSON-RPC internal error error response
+																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																			});
+																																		
+																																		// Default
+																																		default:
+																																		
+																																			// Reject JSON-RPC invalid parameters error response
+																																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																			
+																																			// Break
+																																			break;
+																																	}
+																																	
+																																	// Break
+																																	break;
+																																
+																																// GRIN wallet
+																																case Consensus.GRIN_WALLET_TYPE:
+																																
+																																	// Check receiver address length
+																																	switch(slate.getReceiverAddress()["length"]) {
+																																	
+																																		// Slatepack address length
+																																		case Slatepack.ADDRESS_LENGTH:
+																																		
+																																			// Return getting Slatepack proof address
+																																			return wallet.getSlatepackProofAddress().then(function(proofAddress) {
+																																			
+																																				// Check if cancel didn't occur
+																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																			
+																																					// Resolve proof address
+																																					resolve(proofAddress);
+																																				}
+																																				
+																																				// Otherwise
+																																				else {
+																																				
+																																					// Reject JSON-RPC internal error error response
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																				}
+																																			
+																																			// Catch errors
+																																			}).catch(function(error) {
+																																			
+																																				// Reject JSON-RPC internal error error response
+																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																			});
+																																		
+																																		// Default
+																																		default:
+																																		
+																																			// Reject JSON-RPC invalid parameters error response
+																																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																			
+																																			// Break
+																																			break;
+																																	}
+																																	
+																																	// Break
+																																	break;
+																																
+																																// EPIC wallet
+																																case Consensus.EPIC_WALLET_TYPE:
+																												
+																																	// Check receiver address length
+																																	switch(slate.getReceiverAddress()["length"]) {
+																																	
+																																		// Tor address length
+																																		case Tor.ADDRESS_LENGTH:
+																																		
+																																			// Return getting Tor proof address
+																																			return wallet.getTorProofAddress().then(function(proofAddress) {
+																																			
+																																				// Check if cancel didn't occur
+																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																			
+																																					// Resolve proof address
+																																					resolve(proofAddress);
+																																				}
+																																				
+																																				// Otherwise
+																																				else {
+																																				
+																																					// Reject JSON-RPC internal error error response
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																				}
+																																			
+																																			// Catch errors
+																																			}).catch(function(error) {
+																																			
+																																				// Reject JSON-RPC internal error error response
+																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																			});
+																																		
+																																		// Default
+																																		default:
+																																		
+																																			// Reject JSON-RPC invalid parameters error response
+																																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																			
+																																			// Break
+																																			break;
+																																	}
+																																	
+																																	// Break
+																																	break;
+																															}
+																														}
+																													}
+																													
+																													// Otherwise
+																													else {
+																													
+																														// Return waiting for wallet's hardware wallet to connect
+																														return self.wallets.waitForHardwareWalletToConnect(wallet.getKeyPath(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Connect the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Connect the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
+																														
+																															// Check if cancel didn't occur
+																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																													
+																																// Check if the slate's sender and receiver address are the same
+																																if(slate.getReceiverAddress() === slate.getSenderAddress()) {
+																																
+																																	// Check wallet type
+																																	switch(Consensus.getWalletType()) {
+																																	
+																																		// MWC or EPIC wallet
+																																		case Consensus.MWC_WALLET_TYPE:
+																																		case Consensus.EPIC_WALLET_TYPE:
+																																
+																																			// Return getting Tor proof address
+																																			return wallet.getTorProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(proofAddress) {
+																																			
+																																				// Check if cancel didn't occur
+																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																			
+																																					// Set slate's receiver address to the proof address
+																																					slate.setReceiverAddress(proofAddress);
+																																				
+																																					// Resolve proof address
+																																					resolve(proofAddress);
 																																				}
 																																				
 																																				// Otherwise
@@ -2446,8 +2553,105 @@ class Api {
 																																				// Check if cancel didn't occur
 																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																			
-																																					// Reject error
-																																					reject(error);
+																																					// Check if hardware wallet was disconnected
+																																					if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																					
+																																						// Check if wallet's hardware wallet is connected
+																																						if(wallet.isHardwareConnected() === true) {
+																																					
+																																							// Wallet's hardware wallet disconnect event
+																																							$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																						
+																																								// Return getting proof address
+																																								return getProofAddress().then(function(proofAddress) {
+																																								
+																																									// Check if cancel didn't occur
+																																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																								
+																																										// Resolve proof address
+																																										resolve(proofAddress);
+																																									}
+																																									
+																																									// Otherwise
+																																									else {
+																																									
+																																										// Reject JSON-RPC internal error error response
+																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																									}
+																																								
+																																								// Catch errors
+																																								}).catch(function(error) {
+																																								
+																																									// Check if cancel didn't occur
+																																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																								
+																																										// Reject error
+																																										reject(error);
+																																									}
+																																									
+																																									// Otherwise
+																																									else {
+																																									
+																																										// Reject JSON-RPC internal error error response
+																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																									}
+																																								});
+																																							});
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Return getting proof address
+																																							return getProofAddress().then(function(proofAddress) {
+																																							
+																																								// Check if cancel didn't occur
+																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																							
+																																									// Resolve proof address
+																																									resolve(proofAddress);
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Reject JSON-RPC internal error error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																								}
+																																							
+																																							// Catch errors
+																																							}).catch(function(error) {
+																																							
+																																								// Check if cancel didn't occur
+																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																							
+																																									// Reject error
+																																									reject(error);
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Reject JSON-RPC internal error error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																								}
+																																							});
+																																						}
+																																					}
+																																					
+																																					// Otherwise check if canceled or user rejected on hardware wallet
+																																					else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																			
+																																						// Reject error
+																																						reject(error);
+																																					}
+																																					
+																																					// Otherwise
+																																					else {
+																																				
+																																						// Reject JSON-RPC internal error error response
+																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																					}
 																																				}
 																																				
 																																				// Otherwise
@@ -2457,144 +2661,751 @@ class Api {
 																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																				}
 																																			});
-																																		}
-																																	}
-																																	
-																																	// Otherwise check if canceled or user rejected on hardware wallet
-																																	else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																															
-																																		// Reject error
-																																		reject(error);
-																																	}
 																																		
-																																	// Otherwise
-																																	else {
-																																
-																																		// Reject JSON-RPC internal error error response
-																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																		// GRIN wallet
+																																		case Consensus.GRIN_WALLET_TYPE:
+																																		
+																																			// Return getting Slatepack proof address
+																																			return wallet.getSlatepackProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(proofAddress) {
+																																			
+																																				// Check if cancel didn't occur
+																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																			
+																																					// Set slate's receiver address to the proof address
+																																					slate.setReceiverAddress(proofAddress);
+																																				
+																																					// Resolve proof address
+																																					resolve(proofAddress);
+																																				}
+																																				
+																																				// Otherwise
+																																				else {
+																																				
+																																					// Reject JSON-RPC internal error error response
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																				}
+																																			
+																																			// Catch errors
+																																			}).catch(function(error) {
+																																			
+																																				// Check if cancel didn't occur
+																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																			
+																																					// Check if hardware wallet was disconnected
+																																					if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																					
+																																						// Check if wallet's hardware wallet is connected
+																																						if(wallet.isHardwareConnected() === true) {
+																																					
+																																							// Wallet's hardware wallet disconnect event
+																																							$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																						
+																																								// Return getting proof address
+																																								return getProofAddress().then(function(proofAddress) {
+																																								
+																																									// Check if cancel didn't occur
+																																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																								
+																																										// Resolve proof address
+																																										resolve(proofAddress);
+																																									}
+																																									
+																																									// Otherwise
+																																									else {
+																																									
+																																										// Reject JSON-RPC internal error error response
+																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																									}
+																																								
+																																								// Catch errors
+																																								}).catch(function(error) {
+																																								
+																																									// Check if cancel didn't occur
+																																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																								
+																																										// Reject error
+																																										reject(error);
+																																									}
+																																									
+																																									// Otherwise
+																																									else {
+																																									
+																																										// Reject JSON-RPC internal error error response
+																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																									}
+																																								});
+																																							});
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Return getting proof address
+																																							return getProofAddress().then(function(proofAddress) {
+																																							
+																																								// Check if cancel didn't occur
+																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																							
+																																									// Resolve proof address
+																																									resolve(proofAddress);
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Reject JSON-RPC internal error error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																								}
+																																							
+																																							// Catch errors
+																																							}).catch(function(error) {
+																																							
+																																								// Check if cancel didn't occur
+																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																							
+																																									// Reject error
+																																									reject(error);
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Reject JSON-RPC internal error error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																								}
+																																							});
+																																						}
+																																					}
+																																					
+																																					// Otherwise check if canceled or user rejected on hardware wallet
+																																					else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																			
+																																						// Reject error
+																																						reject(error);
+																																					}
+																																					
+																																					// Otherwise
+																																					else {
+																																				
+																																						// Reject JSON-RPC internal error error response
+																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																					}
+																																				}
+																																				
+																																				// Otherwise
+																																				else {
+																																				
+																																					// Reject JSON-RPC internal error error response
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																				}
+																																			});
 																																	}
 																																}
 																																
 																																// Otherwise
 																																else {
 																																
-																																	// Reject JSON-RPC internal error error response
-																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																	// Check wallet type
+																																	switch(Consensus.getWalletType()) {
+																																	
+																																		// MWC wallet
+																																		case Consensus.MWC_WALLET_TYPE:
+																														
+																																			// Check receiver address length
+																																			switch(slate.getReceiverAddress()["length"]) {
+																																			
+																																				// Tor address length
+																																				case Tor.ADDRESS_LENGTH:
+																																				
+																																					// Return getting Tor proof address
+																																					return wallet.getTorProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(proofAddress) {
+																																					
+																																						// Check if cancel didn't occur
+																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																					
+																																							// Resolve proof address
+																																							resolve(proofAddress);
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Reject JSON-RPC internal error error response
+																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																						}
+																																					
+																																					// Catch errors
+																																					}).catch(function(error) {
+																																					
+																																						// Check if cancel didn't occur
+																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																					
+																																							// Check if hardware wallet was disconnected
+																																							if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																							
+																																								// Check if wallet's hardware wallet is connected
+																																								if(wallet.isHardwareConnected() === true) {
+																																							
+																																									// Wallet's hardware wallet disconnect event
+																																									$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																								
+																																										// Return getting proof address
+																																										return getProofAddress().then(function(proofAddress) {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																										
+																																												// Resolve proof address
+																																												resolve(proofAddress);
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																										
+																																										// Catch errors
+																																										}).catch(function(error) {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																										
+																																												// Reject error
+																																												reject(error);
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																										});
+																																									});
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Return getting proof address
+																																									return getProofAddress().then(function(proofAddress) {
+																																									
+																																										// Check if cancel didn't occur
+																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																									
+																																											// Resolve proof address
+																																											resolve(proofAddress);
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Reject JSON-RPC internal error error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																										}
+																																									
+																																									// Catch errors
+																																									}).catch(function(error) {
+																																									
+																																										// Check if cancel didn't occur
+																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																									
+																																											// Reject error
+																																											reject(error);
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Reject JSON-RPC internal error error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																										}
+																																									});
+																																								}
+																																							}
+																																							
+																																							// Otherwise check if canceled or user rejected on hardware wallet
+																																							else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																					
+																																								// Reject error
+																																								reject(error);
+																																							}
+																																							
+																																							// Otherwise
+																																							else {
+																																						
+																																								// Reject JSON-RPC internal error error response
+																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																							}
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Reject JSON-RPC internal error error response
+																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																						}
+																																					});
+																																				
+																																				// MQS address length
+																																				case Mqs.ADDRESS_LENGTH:
+																																				
+																																					// Return getting MQS proof address
+																																					return wallet.getMqsProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(proofAddress) {
+																																					
+																																						// Check if cancel didn't occur
+																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																					
+																																							// Resolve proof address
+																																							resolve(proofAddress);
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Reject JSON-RPC internal error error response
+																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																						}
+																																					
+																																					// Catch errors
+																																					}).catch(function(error) {
+																																					
+																																						// Check if cancel didn't occur
+																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																					
+																																							// Check if hardware wallet was disconnected
+																																							if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																							
+																																								// Check if wallet's hardware wallet is connected
+																																								if(wallet.isHardwareConnected() === true) {
+																																							
+																																									// Wallet's hardware wallet disconnect event
+																																									$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																								
+																																										// Return getting proof address
+																																										return getProofAddress().then(function(proofAddress) {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																										
+																																												// Resolve proof address
+																																												resolve(proofAddress);
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																										
+																																										// Catch errors
+																																										}).catch(function(error) {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																										
+																																												// Reject error
+																																												reject(error);
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																										});
+																																									});
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Return getting proof address
+																																									return getProofAddress().then(function(proofAddress) {
+																																									
+																																										// Check if cancel didn't occur
+																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																									
+																																											// Resolve proof address
+																																											resolve(proofAddress);
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Reject JSON-RPC internal error error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																										}
+																																									
+																																									// Catch errors
+																																									}).catch(function(error) {
+																																									
+																																										// Check if cancel didn't occur
+																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																									
+																																											// Reject error
+																																											reject(error);
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Reject JSON-RPC internal error error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																										}
+																																									});
+																																								}
+																																							}
+																																							
+																																							// Otherwise check if canceled or user rejected on hardware wallet
+																																							else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																					
+																																								// Reject error
+																																								reject(error);
+																																							}
+																																							
+																																							// Otherwise
+																																							else {
+																																						
+																																								// Reject JSON-RPC internal error error response
+																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																							}
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Reject JSON-RPC internal error error response
+																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																						}
+																																					});
+																																				
+																																				// Default
+																																				default:
+																																				
+																																					// Reject JSON-RPC invalid parameters error response
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																					
+																																					// Break
+																																					break;
+																																			}
+																																			
+																																			// Break
+																																			break;
+																																		
+																																		// GRIN wallet
+																																		case Consensus.GRIN_WALLET_TYPE:
+																																		
+																																			// Check receiver address length
+																																			switch(slate.getReceiverAddress()["length"]) {
+																																			
+																																				// Slatepack address length
+																																				case Slatepack.ADDRESS_LENGTH:
+																																				
+																																					// Return getting Slatepack proof address
+																																					return wallet.getSlatepackProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(proofAddress) {
+																																					
+																																						// Check if cancel didn't occur
+																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																					
+																																							// Resolve proof address
+																																							resolve(proofAddress);
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Reject JSON-RPC internal error error response
+																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																						}
+																																					
+																																					// Catch errors
+																																					}).catch(function(error) {
+																																					
+																																						// Check if cancel didn't occur
+																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																					
+																																							// Check if hardware wallet was disconnected
+																																							if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																							
+																																								// Check if wallet's hardware wallet is connected
+																																								if(wallet.isHardwareConnected() === true) {
+																																							
+																																									// Wallet's hardware wallet disconnect event
+																																									$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																								
+																																										// Return getting proof address
+																																										return getProofAddress().then(function(proofAddress) {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																										
+																																												// Resolve proof address
+																																												resolve(proofAddress);
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																										
+																																										// Catch errors
+																																										}).catch(function(error) {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																										
+																																												// Reject error
+																																												reject(error);
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																										});
+																																									});
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Return getting proof address
+																																									return getProofAddress().then(function(proofAddress) {
+																																									
+																																										// Check if cancel didn't occur
+																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																									
+																																											// Resolve proof address
+																																											resolve(proofAddress);
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Reject JSON-RPC internal error error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																										}
+																																									
+																																									// Catch errors
+																																									}).catch(function(error) {
+																																									
+																																										// Check if cancel didn't occur
+																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																									
+																																											// Reject error
+																																											reject(error);
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Reject JSON-RPC internal error error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																										}
+																																									});
+																																								}
+																																							}
+																																							
+																																							// Otherwise check if canceled or user rejected on hardware wallet
+																																							else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																					
+																																								// Reject error
+																																								reject(error);
+																																							}
+																																							
+																																							// Otherwise
+																																							else {
+																																						
+																																								// Reject JSON-RPC internal error error response
+																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																							}
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Reject JSON-RPC internal error error response
+																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																						}
+																																					});
+																																				
+																																				// Default
+																																				default:
+																																				
+																																					// Reject JSON-RPC invalid parameters error response
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																					
+																																					// Break
+																																					break;
+																																			}
+																																		
+																																			// Break
+																																			break;
+																																		
+																																		// EPIC wallet
+																																		case Consensus.EPIC_WALLET_TYPE:
+																														
+																																			// Check receiver address length
+																																			switch(slate.getReceiverAddress()["length"]) {
+																																			
+																																				// Tor address length
+																																				case Tor.ADDRESS_LENGTH:
+																																				
+																																					// Return getting Tor proof address
+																																					return wallet.getTorProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(proofAddress) {
+																																					
+																																						// Check if cancel didn't occur
+																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																					
+																																							// Resolve proof address
+																																							resolve(proofAddress);
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Reject JSON-RPC internal error error response
+																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																						}
+																																					
+																																					// Catch errors
+																																					}).catch(function(error) {
+																																					
+																																						// Check if cancel didn't occur
+																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																					
+																																							// Check if hardware wallet was disconnected
+																																							if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																							
+																																								// Check if wallet's hardware wallet is connected
+																																								if(wallet.isHardwareConnected() === true) {
+																																							
+																																									// Wallet's hardware wallet disconnect event
+																																									$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																								
+																																										// Return getting proof address
+																																										return getProofAddress().then(function(proofAddress) {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																										
+																																												// Resolve proof address
+																																												resolve(proofAddress);
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																										
+																																										// Catch errors
+																																										}).catch(function(error) {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																										
+																																												// Reject error
+																																												reject(error);
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																										});
+																																									});
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Return getting proof address
+																																									return getProofAddress().then(function(proofAddress) {
+																																									
+																																										// Check if cancel didn't occur
+																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																									
+																																											// Resolve proof address
+																																											resolve(proofAddress);
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Reject JSON-RPC internal error error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																										}
+																																									
+																																									// Catch errors
+																																									}).catch(function(error) {
+																																									
+																																										// Check if cancel didn't occur
+																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																									
+																																											// Reject error
+																																											reject(error);
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Reject JSON-RPC internal error error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																										}
+																																									});
+																																								}
+																																							}
+																																							
+																																							// Otherwise check if canceled or user rejected on hardware wallet
+																																							else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																					
+																																								// Reject error
+																																								reject(error);
+																																							}
+																																							
+																																							// Otherwise
+																																							else {
+																																						
+																																								// Reject JSON-RPC internal error error response
+																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																							}
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Reject JSON-RPC internal error error response
+																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																						}
+																																					});
+																																				
+																																				// Default
+																																				default:
+																																				
+																																					// Reject JSON-RPC invalid parameters error response
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																					
+																																					// Break
+																																					break;
+																																			}
+																																			
+																																			// Break
+																																			break;
+																																	}
 																																}
-																															});
-																														}
-																														
-																														// Otherwise
-																														else {
-																														
-																															// Reject JSON-RPC internal error error response
-																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																														}
-																													});
-																												};
-																												
-																												// Check if wallet isn't a hardware wallet
-																												if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
-																												
-																													// Return building output
-																													return buildOutput().then(function(output) {
-																													
-																														// Check if cancel didn't occur
-																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																													
-																															// Resolve output
-																															resolve(output);
-																														}
-																														
-																														// Otherwise
-																														else {
-																														
-																															// Reject JSON-RPC internal error error response
-																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																														}
-																													
-																													// Catch errors
-																													}).catch(function(error) {
-																													
-																														// Check if cancel didn't occur
-																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																														
-																															// Reject error
-																															reject(error);
-																														}
-																														
-																														// Otherwise
-																														else {
-																														
-																															// Reject JSON-RPC internal error error response
-																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																														}
-																													});
-																												}
-																												
-																												// Otherwise
-																												else {
-																												
-																													// Return waiting for wallet's hardware wallet to connect
-																													return self.wallets.waitForHardwareWalletToConnect(wallet.getKeyPath(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Connect the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Connect the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
-																													
-																														// Check if cancel didn't occur
-																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																													
-																															// Return building output
-																															return buildOutput().then(function(output) {
-																															
-																																// Check if cancel didn't occur
-																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																															
-																																	// Resolve output
-																																	resolve(output);
-																																}
-																														
-																																// Otherwise
-																																else {
-																																
-																																	// Reject JSON-RPC internal error error response
-																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																}
-																															
-																															// Catch errors
-																															}).catch(function(error) {
-																															
-																																// Check if cancel didn't occur
-																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																															
-																																	// Reject error
-																																	reject(error);
-																																}
-																														
-																																// Otherwise
-																																else {
-																																
-																																	// Reject JSON-RPC internal error error response
-																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																}
-																															});
-																														}
-																														
-																														// Otherwise
-																														else {
-																														
-																															// Reject JSON-RPC internal error error response
-																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																														}
-																														
-																													// Catch errors
-																													}).catch(function(error) {
-																													
-																														// Check if cancel didn't occur
-																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																														
-																															// Check if canceled, user rejected on hardware wallet, or hardware wallet is disconnected
-																															if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR || error === HardwareWallet.DISCONNECTED_ERROR) {
-																													
-																																// Reject error
-																																reject(error);
 																															}
 																															
 																															// Otherwise
@@ -2603,15 +3414,43 @@ class Api {
 																																// Reject JSON-RPC internal error error response
 																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																															}
-																														}
-																						
-																														// Otherwise
-																														else {
 																														
-																															// Reject JSON-RPC internal error error response
-																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																														}
-																													});
+																														// Catch errors
+																														}).catch(function(error) {
+																														
+																															// Check if cancel didn't occur
+																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																															
+																																// Check if canceled, user rejected on hardware wallet, or hardware wallet is disconnected
+																																if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR || error === HardwareWallet.DISCONNECTED_ERROR) {
+																														
+																																	// Reject error
+																																	reject(error);
+																																}
+																																
+																																// Otherwise
+																																else {
+																																
+																																	// Reject JSON-RPC internal error error response
+																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																}
+																															}
+																							
+																															// Otherwise
+																															else {
+																															
+																																// Reject JSON-RPC internal error error response
+																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																															}
+																														});
+																													}
+																												}
+																												
+																												// Otherwise
+																												else {
+																												
+																													// Resolve no proof address
+																													resolve(Api.NO_PROOF_ADDRESS);
 																												}
 																											}
 																											
@@ -2624,325 +3463,79 @@ class Api {
 																										});
 																									};
 																									
-																									// Return getting output
-																									return getOutput().then(function(output) {
+																									// Return getting proof address
+																									return getProofAddress().then(function(proofAddress) {
 																									
 																										// Check if cancel didn't occur
 																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																									
-																											// Try
-																											try {
 																										
-																												// Create a slate output from the output
-																												var slateOutput = new SlateOutput(output[Wallet.OUTPUT_FEATURES_INDEX], output[Wallet.OUTPUT_COMMIT_INDEX], output[Wallet.OUTPUT_PROOF_INDEX]);
-																											}
-																											
-																											// Catch errors
-																											catch(error) {
-																											
-																												// Reject JSON-RPC internal error error response
-																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																											// Check if slate doesn't have a payment proof or its receiver address is the same as the proof address
+																											if(slate.hasPaymentProof() === false || proofAddress === slate.getReceiverAddress()) {
+																								
+																												// Get output
+																												var getOutput = function() {
 																												
-																												// Return
-																												return;
-																											}
-																											
-																											// Return adding output to slate
-																											return Slate.addOutputsAsynchronous(slate, [slateOutput]).then(function(slate) {
-																											
-																												// Check if cancel didn't occur
-																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																												
-																													// Get proof address
-																													var getProofAddress = function() {
+																													// Return promise
+																													return new Promise(function(resolve, reject) {
 																													
-																														// Return promise
-																														return new Promise(function(resolve, reject) {
-																														
-																															// Check if cancel didn't occur
-																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																														// Check if cancel didn't occur
+																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																											
+																															// Build output
+																															var buildOutput = function() {
 																															
-																																// Check if slate has payment proof
-																																if(slate.hasPaymentProof() === true) {
-																															
-																																	// Check if wallet isn't a hardware wallet
-																																	if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
-																															
-																																		// Check if the slate's sender and receiver address are the same
-																																		if(slate.getReceiverAddress() === slate.getSenderAddress()) {
+																																// Return promise
+																																return new Promise(function(resolve, reject) {
+																																
+																																	// Check if cancel didn't occur
+																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																	
+																																		// Check if slate has a lock height and its height doesn't exist or is less than or equal to its lock height
+																																		if(slate.getLockHeight().isEqualTo(Slate.NO_LOCK_HEIGHT) === false && (slate.getHeight() === Slate.UNKNOWN_HEIGHT || slate.getLockHeight().isGreaterThan(slate.getHeight()) === true)) {
 																																		
-																																			// Check wallet type
-																																			switch(Consensus.getWalletType()) {
-																																			
-																																				// MWC or EPIC wallet
-																																				case Consensus.MWC_WALLET_TYPE:
-																																				case Consensus.EPIC_WALLET_TYPE:
-																																		
-																																					// Return getting Tor proof address
-																																					return wallet.getTorProofAddress().then(function(proofAddress) {
-																																					
-																																						// Check if cancel didn't occur
-																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																					
-																																							// Set slate's receiver address to the proof address
-																																							slate.setReceiverAddress(proofAddress);
-																																						
-																																							// Resolve proof address
-																																							resolve(proofAddress);
-																																						}
-																																						
-																																						// Otherwise
-																																						else {
-																																						
-																																							// Reject JSON-RPC internal error error response
-																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																						}
-																																					
-																																					// Catch errors
-																																					}).catch(function(error) {
-																																					
-																																						// Reject JSON-RPC internal error error response
-																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																					});
-																																				
-																																				// GRIN wallet
-																																				case Consensus.GRIN_WALLET_TYPE:
-																																				
-																																					// Return getting Slatepack proof address
-																																					return wallet.getSlatepackProofAddress().then(function(proofAddress) {
-																																					
-																																						// Check if cancel didn't occur
-																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																					
-																																							// Set slate's receiver address to the proof address
-																																							slate.setReceiverAddress(proofAddress);
-																																						
-																																							// Resolve proof address
-																																							resolve(proofAddress);
-																																						}
-																																						
-																																						// Otherwise
-																																						else {
-																																						
-																																							// Reject JSON-RPC internal error error response
-																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																						}
-																																					
-																																					// Catch errors
-																																					}).catch(function(error) {
-																																					
-																																						// Reject JSON-RPC internal error error response
-																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																					});
-																																			}
+																																			// Set output height to the current height if it exists and is greater than the slate's lock height or set it to the slate's lock height otherwise
+																																			var outputHeight = (currentHeight !== Node.UNKNOWN_HEIGHT && currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false && currentHeight.plus(1).isGreaterThan(slate.getLockHeight()) === true) ? currentHeight.plus(1) : slate.getLockHeight();
 																																		}
 																																		
 																																		// Otherwise
 																																		else {
 																																		
-																																			// Check wallet type
-																																			switch(Consensus.getWalletType()) {
-																																			
-																																				// MWC wallet
-																																				case Consensus.MWC_WALLET_TYPE:
-																																
-																																					// Check receiver address length
-																																					switch(slate.getReceiverAddress()["length"]) {
-																																					
-																																						// Tor address length
-																																						case Tor.ADDRESS_LENGTH:
-																																						
-																																							// Return getting Tor proof address
-																																							return wallet.getTorProofAddress().then(function(proofAddress) {
-																																							
-																																								// Check if cancel didn't occur
-																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																							
-																																									// Resolve proof address
-																																									resolve(proofAddress);
-																																								}
-																																								
-																																								// Otherwise
-																																								else {
-																																								
-																																									// Reject JSON-RPC internal error error response
-																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																								}
-																																							
-																																							// Catch errors
-																																							}).catch(function(error) {
-																																							
-																																								// Reject JSON-RPC internal error error response
-																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																							});
-																																						
-																																						// MQS address length
-																																						case Mqs.ADDRESS_LENGTH:
-																																						
-																																							// Return getting MQS proof address
-																																							return wallet.getMqsProofAddress().then(function(proofAddress) {
-																																							
-																																								// Check if cancel didn't occur
-																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																							
-																																									// Resolve proof address
-																																									resolve(proofAddress);
-																																								}
-																																								
-																																								// Otherwise
-																																								else {
-																																								
-																																									// Reject JSON-RPC internal error error response
-																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																								}
-																																							
-																																							// Catch errors
-																																							}).catch(function(error) {
-																																							
-																																								// Reject JSON-RPC internal error error response
-																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																							});
-																																						
-																																						// Default
-																																						default:
-																																						
-																																							// Reject JSON-RPC invalid parameters error response
-																																							reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
-																																							
-																																							// Break
-																																							break;
-																																					}
-																																					
-																																					// Break
-																																					break;
-																																				
-																																				// GRIN wallet
-																																				case Consensus.GRIN_WALLET_TYPE:
-																																				
-																																					// Check receiver address length
-																																					switch(slate.getReceiverAddress()["length"]) {
-																																					
-																																						// Slatepack address length
-																																						case Slatepack.ADDRESS_LENGTH:
-																																						
-																																							// Return getting Slatepack proof address
-																																							return wallet.getSlatepackProofAddress().then(function(proofAddress) {
-																																							
-																																								// Check if cancel didn't occur
-																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																							
-																																									// Resolve proof address
-																																									resolve(proofAddress);
-																																								}
-																																								
-																																								// Otherwise
-																																								else {
-																																								
-																																									// Reject JSON-RPC internal error error response
-																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																								}
-																																							
-																																							// Catch errors
-																																							}).catch(function(error) {
-																																							
-																																								// Reject JSON-RPC internal error error response
-																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																							});
-																																						
-																																						// Default
-																																						default:
-																																						
-																																							// Reject JSON-RPC invalid parameters error response
-																																							reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
-																																							
-																																							// Break
-																																							break;
-																																					}
-																																					
-																																					// Break
-																																					break;
-																																				
-																																				// EPIC wallet
-																																				case Consensus.EPIC_WALLET_TYPE:
-																																
-																																					// Check receiver address length
-																																					switch(slate.getReceiverAddress()["length"]) {
-																																					
-																																						// Tor address length
-																																						case Tor.ADDRESS_LENGTH:
-																																						
-																																							// Return getting Tor proof address
-																																							return wallet.getTorProofAddress().then(function(proofAddress) {
-																																							
-																																								// Check if cancel didn't occur
-																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																							
-																																									// Resolve proof address
-																																									resolve(proofAddress);
-																																								}
-																																								
-																																								// Otherwise
-																																								else {
-																																								
-																																									// Reject JSON-RPC internal error error response
-																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																								}
-																																							
-																																							// Catch errors
-																																							}).catch(function(error) {
-																																							
-																																								// Reject JSON-RPC internal error error response
-																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																							});
-																																						
-																																						// Default
-																																						default:
-																																						
-																																							// Reject JSON-RPC invalid parameters error response
-																																							reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
-																																							
-																																							// Break
-																																							break;
-																																					}
-																																					
-																																					// Break
-																																					break;
-																																			}
+																																			// Set output height to the current height if it exists or the slate's height otherwise
+																																			var outputHeight = (currentHeight !== Node.UNKNOWN_HEIGHT && currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false) ? currentHeight.plus(1) : slate.getHeight();
 																																		}
-																																	}
 																																	
-																																	// Otherwise
-																																	else {
-																																	
-																																		// Return waiting for wallet's hardware wallet to connect
-																																		return self.wallets.waitForHardwareWalletToConnect(wallet.getKeyPath(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Connect the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Connect the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
+																																		// Return wallet building output
+																																		return wallet.buildOutput(slate.getAmount(), outputHeight, HardwareWallet.RECEIVING_TRANSACTION_MESSAGE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(output) {
 																																		
 																																			// Check if cancel didn't occur
 																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																	
-																																				// Check if the slate's sender and receiver address are the same
-																																				if(slate.getReceiverAddress() === slate.getSenderAddress()) {
+																																		
+																																				// Return getting a transaction with the output's commit
+																																				return self.transactions.getTransaction(wallet.getWalletType(), wallet.getNetworkType(), output[Wallet.OUTPUT_COMMIT_INDEX]).then(function(transaction) {
 																																				
-																																					// Check wallet type
-																																					switch(Consensus.getWalletType()) {
-																																					
-																																						// MWC or EPIC wallet
-																																						case Consensus.MWC_WALLET_TYPE:
-																																						case Consensus.EPIC_WALLET_TYPE:
+																																					// Check if cancel didn't occur
+																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																				
-																																							// Return getting Tor proof address
-																																							return wallet.getTorProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(proofAddress) {
+																																						// Check if a transaction with the same commit doesn't exist
+																																						if(transaction === Transactions.NO_TRANSACTION_FOUND) {
+																																				
+																																							// Resolve output
+																																							resolve(output);
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Return building output
+																																							return buildOutput().then(function(output) {
 																																							
 																																								// Check if cancel didn't occur
 																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																							
-																																									// Set slate's receiver address to the proof address
-																																									slate.setReceiverAddress(proofAddress);
-																																								
-																																									// Resolve proof address
-																																									resolve(proofAddress);
+																																									// Resolve output
+																																									resolve(output);
 																																								}
-																																								
+																																			
 																																								// Otherwise
 																																								else {
 																																								
@@ -2956,107 +3549,10 @@ class Api {
 																																								// Check if cancel didn't occur
 																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																							
-																																									// Check if hardware wallet was disconnected
-																																									if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																									
-																																										// Check if wallet's hardware wallet is connected
-																																										if(wallet.isHardwareConnected() === true) {
-																																									
-																																											// Wallet's hardware wallet disconnect event
-																																											$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																																										
-																																												// Return getting proof address
-																																												return getProofAddress().then(function(proofAddress) {
-																																												
-																																													// Check if cancel didn't occur
-																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																												
-																																														// Resolve proof address
-																																														resolve(proofAddress);
-																																													}
-																																													
-																																													// Otherwise
-																																													else {
-																																													
-																																														// Reject JSON-RPC internal error error response
-																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																													}
-																																												
-																																												// Catch errors
-																																												}).catch(function(error) {
-																																												
-																																													// Check if cancel didn't occur
-																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																												
-																																														// Reject error
-																																														reject(error);
-																																													}
-																																													
-																																													// Otherwise
-																																													else {
-																																													
-																																														// Reject JSON-RPC internal error error response
-																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																													}
-																																												});
-																																											});
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Return getting proof address
-																																											return getProofAddress().then(function(proofAddress) {
-																																											
-																																												// Check if cancel didn't occur
-																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																											
-																																													// Resolve proof address
-																																													resolve(proofAddress);
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Reject JSON-RPC internal error error response
-																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																												}
-																																											
-																																											// Catch errors
-																																											}).catch(function(error) {
-																																											
-																																												// Check if cancel didn't occur
-																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																											
-																																													// Reject error
-																																													reject(error);
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Reject JSON-RPC internal error error response
-																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																												}
-																																											});
-																																										}
-																																									}
-																																									
-																																									// Otherwise check if canceled or user rejected on hardware wallet
-																																									else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																							
-																																										// Reject error
-																																										reject(error);
-																																									}
-																																									
-																																									// Otherwise
-																																									else {
-																																								
-																																										// Reject JSON-RPC internal error error response
-																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																									}
+																																									// Reject error
+																																									reject(error);
 																																								}
-																																								
+																																			
 																																								// Otherwise
 																																								else {
 																																								
@@ -3064,751 +3560,22 @@ class Api {
 																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																								}
 																																							});
-																																						
-																																						// GRIN wallet
-																																						case Consensus.GRIN_WALLET_TYPE:
-																																						
-																																							// Return getting Slatepack proof address
-																																							return wallet.getSlatepackProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(proofAddress) {
-																																							
-																																								// Check if cancel didn't occur
-																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																							
-																																									// Set slate's receiver address to the proof address
-																																									slate.setReceiverAddress(proofAddress);
-																																								
-																																									// Resolve proof address
-																																									resolve(proofAddress);
-																																								}
-																																								
-																																								// Otherwise
-																																								else {
-																																								
-																																									// Reject JSON-RPC internal error error response
-																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																								}
-																																							
-																																							// Catch errors
-																																							}).catch(function(error) {
-																																							
-																																								// Check if cancel didn't occur
-																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																							
-																																									// Check if hardware wallet was disconnected
-																																									if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																									
-																																										// Check if wallet's hardware wallet is connected
-																																										if(wallet.isHardwareConnected() === true) {
-																																									
-																																											// Wallet's hardware wallet disconnect event
-																																											$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																																										
-																																												// Return getting proof address
-																																												return getProofAddress().then(function(proofAddress) {
-																																												
-																																													// Check if cancel didn't occur
-																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																												
-																																														// Resolve proof address
-																																														resolve(proofAddress);
-																																													}
-																																													
-																																													// Otherwise
-																																													else {
-																																													
-																																														// Reject JSON-RPC internal error error response
-																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																													}
-																																												
-																																												// Catch errors
-																																												}).catch(function(error) {
-																																												
-																																													// Check if cancel didn't occur
-																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																												
-																																														// Reject error
-																																														reject(error);
-																																													}
-																																													
-																																													// Otherwise
-																																													else {
-																																													
-																																														// Reject JSON-RPC internal error error response
-																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																													}
-																																												});
-																																											});
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Return getting proof address
-																																											return getProofAddress().then(function(proofAddress) {
-																																											
-																																												// Check if cancel didn't occur
-																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																											
-																																													// Resolve proof address
-																																													resolve(proofAddress);
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Reject JSON-RPC internal error error response
-																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																												}
-																																											
-																																											// Catch errors
-																																											}).catch(function(error) {
-																																											
-																																												// Check if cancel didn't occur
-																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																											
-																																													// Reject error
-																																													reject(error);
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Reject JSON-RPC internal error error response
-																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																												}
-																																											});
-																																										}
-																																									}
-																																									
-																																									// Otherwise check if canceled or user rejected on hardware wallet
-																																									else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																							
-																																										// Reject error
-																																										reject(error);
-																																									}
-																																									
-																																									// Otherwise
-																																									else {
-																																								
-																																										// Reject JSON-RPC internal error error response
-																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																									}
-																																								}
-																																								
-																																								// Otherwise
-																																								else {
-																																								
-																																									// Reject JSON-RPC internal error error response
-																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																								}
-																																							});
+																																						}
 																																					}
-																																				}
-																																				
-																																				// Otherwise
-																																				else {
-																																				
-																																					// Check wallet type
-																																					switch(Consensus.getWalletType()) {
+																																			
+																																					// Otherwise
+																																					else {
 																																					
-																																						// MWC wallet
-																																						case Consensus.MWC_WALLET_TYPE:
-																																		
-																																							// Check receiver address length
-																																							switch(slate.getReceiverAddress()["length"]) {
-																																							
-																																								// Tor address length
-																																								case Tor.ADDRESS_LENGTH:
-																																								
-																																									// Return getting Tor proof address
-																																									return wallet.getTorProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(proofAddress) {
-																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																									
-																																											// Resolve proof address
-																																											resolve(proofAddress);
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																									
-																																									// Catch errors
-																																									}).catch(function(error) {
-																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																									
-																																											// Check if hardware wallet was disconnected
-																																											if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																											
-																																												// Check if wallet's hardware wallet is connected
-																																												if(wallet.isHardwareConnected() === true) {
-																																											
-																																													// Wallet's hardware wallet disconnect event
-																																													$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																																												
-																																														// Return getting proof address
-																																														return getProofAddress().then(function(proofAddress) {
-																																														
-																																															// Check if cancel didn't occur
-																																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																														
-																																																// Resolve proof address
-																																																resolve(proofAddress);
-																																															}
-																																															
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Reject JSON-RPC internal error error response
-																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																															}
-																																														
-																																														// Catch errors
-																																														}).catch(function(error) {
-																																														
-																																															// Check if cancel didn't occur
-																																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																														
-																																																// Reject error
-																																																reject(error);
-																																															}
-																																															
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Reject JSON-RPC internal error error response
-																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																															}
-																																														});
-																																													});
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Return getting proof address
-																																													return getProofAddress().then(function(proofAddress) {
-																																													
-																																														// Check if cancel didn't occur
-																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																													
-																																															// Resolve proof address
-																																															resolve(proofAddress);
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Reject JSON-RPC internal error error response
-																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																														}
-																																													
-																																													// Catch errors
-																																													}).catch(function(error) {
-																																													
-																																														// Check if cancel didn't occur
-																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																													
-																																															// Reject error
-																																															reject(error);
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Reject JSON-RPC internal error error response
-																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																														}
-																																													});
-																																												}
-																																											}
-																																											
-																																											// Otherwise check if canceled or user rejected on hardware wallet
-																																											else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																									
-																																												// Reject error
-																																												reject(error);
-																																											}
-																																											
-																																											// Otherwise
-																																											else {
-																																										
-																																												// Reject JSON-RPC internal error error response
-																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																											}
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																									});
-																																								
-																																								// MQS address length
-																																								case Mqs.ADDRESS_LENGTH:
-																																								
-																																									// Return getting MQS proof address
-																																									return wallet.getMqsProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(proofAddress) {
-																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																									
-																																											// Resolve proof address
-																																											resolve(proofAddress);
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																									
-																																									// Catch errors
-																																									}).catch(function(error) {
-																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																									
-																																											// Check if hardware wallet was disconnected
-																																											if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																											
-																																												// Check if wallet's hardware wallet is connected
-																																												if(wallet.isHardwareConnected() === true) {
-																																											
-																																													// Wallet's hardware wallet disconnect event
-																																													$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																																												
-																																														// Return getting proof address
-																																														return getProofAddress().then(function(proofAddress) {
-																																														
-																																															// Check if cancel didn't occur
-																																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																														
-																																																// Resolve proof address
-																																																resolve(proofAddress);
-																																															}
-																																															
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Reject JSON-RPC internal error error response
-																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																															}
-																																														
-																																														// Catch errors
-																																														}).catch(function(error) {
-																																														
-																																															// Check if cancel didn't occur
-																																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																														
-																																																// Reject error
-																																																reject(error);
-																																															}
-																																															
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Reject JSON-RPC internal error error response
-																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																															}
-																																														});
-																																													});
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Return getting proof address
-																																													return getProofAddress().then(function(proofAddress) {
-																																													
-																																														// Check if cancel didn't occur
-																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																													
-																																															// Resolve proof address
-																																															resolve(proofAddress);
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Reject JSON-RPC internal error error response
-																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																														}
-																																													
-																																													// Catch errors
-																																													}).catch(function(error) {
-																																													
-																																														// Check if cancel didn't occur
-																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																													
-																																															// Reject error
-																																															reject(error);
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Reject JSON-RPC internal error error response
-																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																														}
-																																													});
-																																												}
-																																											}
-																																											
-																																											// Otherwise check if canceled or user rejected on hardware wallet
-																																											else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																									
-																																												// Reject error
-																																												reject(error);
-																																											}
-																																											
-																																											// Otherwise
-																																											else {
-																																										
-																																												// Reject JSON-RPC internal error error response
-																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																											}
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																									});
-																																								
-																																								// Default
-																																								default:
-																																								
-																																									// Reject JSON-RPC invalid parameters error response
-																																									reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
-																																									
-																																									// Break
-																																									break;
-																																							}
-																																							
-																																							// Break
-																																							break;
-																																						
-																																						// GRIN wallet
-																																						case Consensus.GRIN_WALLET_TYPE:
-																																						
-																																							// Check receiver address length
-																																							switch(slate.getReceiverAddress()["length"]) {
-																																							
-																																								// Slatepack address length
-																																								case Slatepack.ADDRESS_LENGTH:
-																																								
-																																									// Return getting Slatepack proof address
-																																									return wallet.getSlatepackProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(proofAddress) {
-																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																									
-																																											// Resolve proof address
-																																											resolve(proofAddress);
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																									
-																																									// Catch errors
-																																									}).catch(function(error) {
-																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																									
-																																											// Check if hardware wallet was disconnected
-																																											if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																											
-																																												// Check if wallet's hardware wallet is connected
-																																												if(wallet.isHardwareConnected() === true) {
-																																											
-																																													// Wallet's hardware wallet disconnect event
-																																													$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																																												
-																																														// Return getting proof address
-																																														return getProofAddress().then(function(proofAddress) {
-																																														
-																																															// Check if cancel didn't occur
-																																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																														
-																																																// Resolve proof address
-																																																resolve(proofAddress);
-																																															}
-																																															
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Reject JSON-RPC internal error error response
-																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																															}
-																																														
-																																														// Catch errors
-																																														}).catch(function(error) {
-																																														
-																																															// Check if cancel didn't occur
-																																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																														
-																																																// Reject error
-																																																reject(error);
-																																															}
-																																															
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Reject JSON-RPC internal error error response
-																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																															}
-																																														});
-																																													});
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Return getting proof address
-																																													return getProofAddress().then(function(proofAddress) {
-																																													
-																																														// Check if cancel didn't occur
-																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																													
-																																															// Resolve proof address
-																																															resolve(proofAddress);
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Reject JSON-RPC internal error error response
-																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																														}
-																																													
-																																													// Catch errors
-																																													}).catch(function(error) {
-																																													
-																																														// Check if cancel didn't occur
-																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																													
-																																															// Reject error
-																																															reject(error);
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Reject JSON-RPC internal error error response
-																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																														}
-																																													});
-																																												}
-																																											}
-																																											
-																																											// Otherwise check if canceled or user rejected on hardware wallet
-																																											else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																									
-																																												// Reject error
-																																												reject(error);
-																																											}
-																																											
-																																											// Otherwise
-																																											else {
-																																										
-																																												// Reject JSON-RPC internal error error response
-																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																											}
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																									});
-																																								
-																																								// Default
-																																								default:
-																																								
-																																									// Reject JSON-RPC invalid parameters error response
-																																									reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
-																																									
-																																									// Break
-																																									break;
-																																							}
-																																						
-																																							// Break
-																																							break;
-																																						
-																																						// EPIC wallet
-																																						case Consensus.EPIC_WALLET_TYPE:
-																																		
-																																							// Check receiver address length
-																																							switch(slate.getReceiverAddress()["length"]) {
-																																							
-																																								// Tor address length
-																																								case Tor.ADDRESS_LENGTH:
-																																								
-																																									// Return getting Tor proof address
-																																									return wallet.getTorProofAddress((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(proofAddress) {
-																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																									
-																																											// Resolve proof address
-																																											resolve(proofAddress);
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																									
-																																									// Catch errors
-																																									}).catch(function(error) {
-																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																									
-																																											// Check if hardware wallet was disconnected
-																																											if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																											
-																																												// Check if wallet's hardware wallet is connected
-																																												if(wallet.isHardwareConnected() === true) {
-																																											
-																																													// Wallet's hardware wallet disconnect event
-																																													$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																																												
-																																														// Return getting proof address
-																																														return getProofAddress().then(function(proofAddress) {
-																																														
-																																															// Check if cancel didn't occur
-																																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																														
-																																																// Resolve proof address
-																																																resolve(proofAddress);
-																																															}
-																																															
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Reject JSON-RPC internal error error response
-																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																															}
-																																														
-																																														// Catch errors
-																																														}).catch(function(error) {
-																																														
-																																															// Check if cancel didn't occur
-																																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																														
-																																																// Reject error
-																																																reject(error);
-																																															}
-																																															
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Reject JSON-RPC internal error error response
-																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																															}
-																																														});
-																																													});
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Return getting proof address
-																																													return getProofAddress().then(function(proofAddress) {
-																																													
-																																														// Check if cancel didn't occur
-																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																													
-																																															// Resolve proof address
-																																															resolve(proofAddress);
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Reject JSON-RPC internal error error response
-																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																														}
-																																													
-																																													// Catch errors
-																																													}).catch(function(error) {
-																																													
-																																														// Check if cancel didn't occur
-																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																													
-																																															// Reject error
-																																															reject(error);
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Reject JSON-RPC internal error error response
-																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																														}
-																																													});
-																																												}
-																																											}
-																																											
-																																											// Otherwise check if canceled or user rejected on hardware wallet
-																																											else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																									
-																																												// Reject error
-																																												reject(error);
-																																											}
-																																											
-																																											// Otherwise
-																																											else {
-																																										
-																																												// Reject JSON-RPC internal error error response
-																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																											}
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																									});
-																																								
-																																								// Default
-																																								default:
-																																								
-																																									// Reject JSON-RPC invalid parameters error response
-																																									reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
-																																									
-																																									// Break
-																																									break;
-																																							}
-																																							
-																																							// Break
-																																							break;
+																																						// Reject JSON-RPC internal error error response
+																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																					}
-																																				}
+																																					
+																																				// Catch errors
+																																				}).catch(function(error) {
+																																				
+																																					// Reject JSON-RPC internal error error response
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																				});
 																																			}
 																																			
 																																			// Otherwise
@@ -3823,22 +3590,108 @@ class Api {
 																																		
 																																			// Check if cancel didn't occur
 																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																			
-																																				// Check if canceled, user rejected on hardware wallet, or hardware wallet is disconnected
-																																				if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR || error === HardwareWallet.DISCONNECTED_ERROR) {
+																																		
+																																				// Check if hardware wallet was disconnected
+																																				if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																				
+																																					// Check if wallet's hardware wallet is connected
+																																					if(wallet.isHardwareConnected() === true) {
+																																				
+																																						// Wallet's hardware wallet disconnect event
+																																						$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																					
+																																							// Return getting output
+																																							return getOutput().then(function(output) {
+																																							
+																																								// Check if cancel didn't occur
+																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																							
+																																									// Resolve output
+																																									resolve(output);
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Reject JSON-RPC internal error error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																								}
+																																							
+																																							// Catch errors
+																																							}).catch(function(error) {
+																																							
+																																								// Check if cancel didn't occur
+																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																							
+																																									// Reject error
+																																									reject(error);
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Reject JSON-RPC internal error error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																								}
+																																							});
+																																						});
+																																					}
+																																					
+																																					// Otherwise
+																																					else {
+																																					
+																																						// Return getting output
+																																						return getOutput().then(function(output) {
+																																						
+																																							// Check if cancel didn't occur
+																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																						
+																																								// Resolve output
+																																								resolve(output);
+																																							}
+																																							
+																																							// Otherwise
+																																							else {
+																																							
+																																								// Reject JSON-RPC internal error error response
+																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																							}
+																																						
+																																						// Catch errors
+																																						}).catch(function(error) {
+																																						
+																																							// Check if cancel didn't occur
+																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																						
+																																								// Reject error
+																																								reject(error);
+																																							}
+																																							
+																																							// Otherwise
+																																							else {
+																																							
+																																								// Reject JSON-RPC internal error error response
+																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																							}
+																																						});
+																																					}
+																																				}
+																																				
+																																				// Otherwise check if canceled or user rejected on hardware wallet
+																																				else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
 																																		
 																																					// Reject error
 																																					reject(error);
 																																				}
-																																				
+																																					
 																																				// Otherwise
 																																				else {
-																																				
+																																			
 																																					// Reject JSON-RPC internal error error response
 																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																				}
 																																			}
-																											
+																																			
 																																			// Otherwise
 																																			else {
 																																			
@@ -3847,166 +3700,340 @@ class Api {
 																																			}
 																																		});
 																																	}
-																																}
+																																	
+																																	// Otherwise
+																																	else {
+																																	
+																																		// Reject JSON-RPC internal error error response
+																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																	}
+																																});
+																															};
+																															
+																															// Check if wallet isn't a hardware wallet
+																															if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
+																															
+																																// Return building output
+																																return buildOutput().then(function(output) {
 																																
-																																// Otherwise
-																																else {
+																																	// Check if cancel didn't occur
+																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																
-																																	// Resolve no proof address
-																																	resolve(Api.NO_PROOF_ADDRESS);
-																																}
+																																		// Resolve output
+																																		resolve(output);
+																																	}
+																																	
+																																	// Otherwise
+																																	else {
+																																	
+																																		// Reject JSON-RPC internal error error response
+																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																	}
+																																
+																																// Catch errors
+																																}).catch(function(error) {
+																																
+																																	// Check if cancel didn't occur
+																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																	
+																																		// Reject error
+																																		reject(error);
+																																	}
+																																	
+																																	// Otherwise
+																																	else {
+																																	
+																																		// Reject JSON-RPC internal error error response
+																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																	}
+																																});
 																															}
 																															
 																															// Otherwise
 																															else {
 																															
-																																// Reject JSON-RPC internal error error response
-																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																															}
-																														});
-																													};
-																													
-																													// Return getting proof address
-																													return getProofAddress().then(function(proofAddress) {
-																													
-																														// Check if cancel didn't occur
-																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																											
-																															// Add slate participant
-																															var addSlateParticipant = function() {
-																															
-																																// Return promise
-																																return new Promise(function(resolve, reject) {
+																																// Return waiting for wallet's hardware wallet to connect
+																																return self.wallets.waitForHardwareWalletToConnect(wallet.getKeyPath(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Connect the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Connect the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
 																																
 																																	// Check if cancel didn't occur
 																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																
-																																		// Check if wallet isn't a hardware wallet
-																																		if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
+																																		// Return building output
+																																		return buildOutput().then(function(output) {
 																																		
-																																			// Get secret key
-																																			var getSecretKey = function() {
+																																			// Check if cancel didn't occur
+																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																		
+																																				// Resolve output
+																																				resolve(output);
+																																			}
+																																	
+																																			// Otherwise
+																																			else {
 																																			
-																																				// Return promise
-																																				return new Promise(function(resolve, reject) {
+																																				// Reject JSON-RPC internal error error response
+																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																			}
+																																		
+																																		// Catch errors
+																																		}).catch(function(error) {
+																																		
+																																			// Check if cancel didn't occur
+																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																		
+																																				// Reject error
+																																				reject(error);
+																																			}
+																																	
+																																			// Otherwise
+																																			else {
+																																			
+																																				// Reject JSON-RPC internal error error response
+																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																			}
+																																		});
+																																	}
+																																	
+																																	// Otherwise
+																																	else {
+																																	
+																																		// Reject JSON-RPC internal error error response
+																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																	}
+																																	
+																																// Catch errors
+																																}).catch(function(error) {
+																																
+																																	// Check if cancel didn't occur
+																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																	
+																																		// Check if canceled, user rejected on hardware wallet, or hardware wallet is disconnected
+																																		if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR || error === HardwareWallet.DISCONNECTED_ERROR) {
+																																
+																																			// Reject error
+																																			reject(error);
+																																		}
+																																		
+																																		// Otherwise
+																																		else {
+																																		
+																																			// Reject JSON-RPC internal error error response
+																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																		}
+																																	}
+																									
+																																	// Otherwise
+																																	else {
+																																	
+																																		// Reject JSON-RPC internal error error response
+																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																	}
+																																});
+																															}
+																														}
+																														
+																														// Otherwise
+																														else {
+																														
+																															// Reject JSON-RPC internal error error response
+																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																														}
+																													});
+																												};
+																												
+																												// Return getting output
+																												return getOutput().then(function(output) {
+																												
+																													// Check if cancel didn't occur
+																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																												
+																														// Try
+																														try {
+																													
+																															// Create a slate output from the output
+																															var slateOutput = new SlateOutput(output[Wallet.OUTPUT_FEATURES_INDEX], output[Wallet.OUTPUT_COMMIT_INDEX], output[Wallet.OUTPUT_PROOF_INDEX]);
+																														}
+																														
+																														// Catch errors
+																														catch(error) {
+																														
+																															// Reject JSON-RPC internal error error response
+																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																															
+																															// Return
+																															return;
+																														}
+																														
+																														// Return adding output to slate
+																														return Slate.addOutputsAsynchronous(slate, [slateOutput]).then(function(slate) {
+																														
+																															// Check if cancel didn't occur
+																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																															
+																																// Add slate participant
+																																var addSlateParticipant = function() {
+																																
+																																	// Return promise
+																																	return new Promise(function(resolve, reject) {
+																																	
+																																		// Check if cancel didn't occur
+																																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																	
+																																			// Check if wallet isn't a hardware wallet
+																																			if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
+																																			
+																																				// Get secret key
+																																				var getSecretKey = function() {
+																																				
+																																					// Return promise
+																																					return new Promise(function(resolve, reject) {
+																																					
+																																						// Check if cancel didn't occur
+																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																						
+																																							// Return getting sum from wallet's sum
+																																							return wallet.getSum(
+																																							
+																																								// Outputs
+																																								[output],
+																																								
+																																								// Inputs
+																																								[]
+																																							
+																																							).then(function(sum) {
+																																							
+																																								// Check if cancel didn't occur
+																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																								
+																																									// Check if slate is compact
+																																									if(slate.isCompact() === true) {
+																																									
+																																										// Return applying offset to slate
+																																										return slate.applyOffset(sum).then(function(offset) {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																											
+																																												// Securely clear sum
+																																												sum.fill(0);
+																																												
+																																												// Resolve offset
+																																												resolve(offset);
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Securely clear sum and offset
+																																												sum.fill(0);
+																																												offset.fill(0);
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																											
+																																										// Catch errors
+																																										}).catch(function(error) {
+																																										
+																																											// Securely clear sum
+																																											sum.fill(0);
+																																										
+																																											// Reject JSON-RPC internal error error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																										});
+																																									}
+																																									
+																																									// Otherwise
+																																									else {
+																																								
+																																										// Resolve sum
+																																										resolve(sum);
+																																									}
+																																								}
+																																					
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Securely clear sum
+																																									sum.fill(0);
+																																								
+																																									// Reject JSON-RPC internal error error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																								}
+																																							
+																																							// Catch errors
+																																							}).catch(function(error) {
+																																							
+																																								// Reject JSON-RPC internal error error response
+																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																							});
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Reject JSON-RPC internal error error response
+																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																						}
+																																					});
+																																				};
+																																
+																																				// Return getting secret key
+																																				return getSecretKey().then(function(secretKey) {
 																																				
 																																					// Check if cancel didn't occur
 																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																					
-																																						// Return getting sum from wallet's sum
-																																						return wallet.getSum(
+																																						// Check if creating a secret nonce was successful
+																																						var secretNonce = Secp256k1Zkp.createSecretNonce();
 																																						
-																																							// Outputs
-																																							[output],
+																																						if(secretNonce !== Secp256k1Zkp.OPERATION_FAILED) {
+																																						
+																																							// Check if slate is compact
+																																							if(slate.isCompact() === true) {
 																																							
-																																							// Inputs
-																																							[]
-																																						
-																																						).then(function(sum) {
-																																						
-																																							// Check if cancel didn't occur
-																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																							
-																																								// Check if slate is compact
-																																								if(slate.isCompact() === true) {
+																																								// Check if combining the slate's offset with the offset failed
+																																								if(slate.combineOffsets(offset) === false) {
 																																								
-																																									// Return applying offset to slate
-																																									return slate.applyOffset(sum).then(function(offset) {
+																																									// Securely clear the secret nonce and secret key
+																																									secretNonce.fill(0);
+																																									secretKey.fill(0);
+																																								
+																																									// Reject JSON-RPC internal error error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																										
-																																											// Securely clear sum
-																																											sum.fill(0);
-																																											
-																																											// Resolve offset
-																																											resolve(offset);
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Securely clear sum and offset
-																																											sum.fill(0);
-																																											offset.fill(0);
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																										
-																																									// Catch errors
-																																									}).catch(function(error) {
-																																									
-																																										// Securely clear sum
-																																										sum.fill(0);
-																																									
-																																										// Reject JSON-RPC internal error error response
-																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																									});
+																																									// Return
+																																									return;
 																																								}
+																																							}
+																																					
+																																							// Return adding participant to slate
+																																							return slate.addParticipant(secretKey, secretNonce, SlateParticipant.NO_MESSAGE, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE).then(function() {
+																																							
+																																								// Check if cancel didn't occur
+																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																								
+																																									// Securely clear the secret nonce and secret key
+																																									secretNonce.fill(0);
+																																									secretKey.fill(0);
+																																							
+																																									// Resolve
+																																									resolve();
+																																								}
+																																						
 																																								// Otherwise
 																																								else {
-																																							
-																																									// Resolve sum
-																																									resolve(sum);
-																																								}
-																																							}
-																																				
-																																							// Otherwise
-																																							else {
-																																							
-																																								// Securely clear sum
-																																								sum.fill(0);
-																																							
-																																								// Reject JSON-RPC internal error error response
-																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																							}
-																																						
-																																						// Catch errors
-																																						}).catch(function(error) {
-																																						
-																																							// Reject JSON-RPC internal error error response
-																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																						});
-																																					}
-																																					
-																																					// Otherwise
-																																					else {
-																																					
-																																						// Reject JSON-RPC internal error error response
-																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																					}
-																																				});
-																																			};
-																															
-																																			// Return getting secret key
-																																			return getSecretKey().then(function(secretKey) {
-																																			
-																																				// Check if cancel didn't occur
-																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																				
-																																					// Check if creating a secret nonce was successful
-																																					var secretNonce = Secp256k1Zkp.createSecretNonce();
-																																					
-																																					if(secretNonce !== Secp256k1Zkp.OPERATION_FAILED) {
-																																				
-																																						// Return adding participant to slate
-																																						return slate.addParticipant(secretKey, secretNonce, SlateParticipant.NO_MESSAGE, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE).then(function() {
-																																						
-																																							// Check if cancel didn't occur
-																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																						
-																																								// Securely clear the secret nonce and secret key
-																																								secretNonce.fill(0);
-																																								secretKey.fill(0);
 																																								
-																																								// Resolve
-																																								resolve();
-																																							}
-																																					
-																																							// Otherwise
-																																							else {
+																																									// Securely clear the secret nonce and secret key
+																																									secretNonce.fill(0);
+																																									secretKey.fill(0);
+																																								
+																																									// Reject JSON-RPC internal error error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																								}
+																																							
+																																							// Catch errors
+																																							}).catch(function(error) {
 																																							
 																																								// Securely clear the secret nonce and secret key
 																																								secretNonce.fill(0);
@@ -4014,20 +4041,20 @@ class Api {
 																																							
 																																								// Reject JSON-RPC internal error error response
 																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																							}
+																																							});
+																																						}
+																																					
+																																						// Otherwise
+																																						else {
 																																						
-																																						// Catch errors
-																																						}).catch(function(error) {
-																																						
-																																							// Securely clear the secret nonce and secret key
-																																							secretNonce.fill(0);
+																																							// Securely clear the secret key
 																																							secretKey.fill(0);
 																																						
 																																							// Reject JSON-RPC internal error error response
 																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																						});
+																																						}
 																																					}
-																																				
+																																					
 																																					// Otherwise
 																																					else {
 																																					
@@ -4037,81 +4064,493 @@ class Api {
 																																						// Reject JSON-RPC internal error error response
 																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																					}
-																																				}
 																																				
-																																				// Otherwise
-																																				else {
+																																				// Catch errors
+																																				}).catch(function(error) {
 																																				
-																																					// Securely clear the secret key
-																																					secretKey.fill(0);
-																																				
-																																					// Reject JSON-RPC internal error error response
-																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																				}
+																																					// Check if cancel didn't occur
+																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																					
+																																						// Reject error
+																																						reject(error);
+																																					}
+																													
+																																					// Otherwise
+																																					else {
+																																					
+																																						// Reject JSON-RPC internal error error response
+																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																					}
+																																				});
+																																			}
 																																			
-																																			// Catch errors
-																																			}).catch(function(error) {
+																																			// Otherwise
+																																			else {
 																																			
-																																				// Check if cancel didn't occur
-																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																				// Return waiting for wallet's hardware wallet to connect
+																																				return self.wallets.waitForHardwareWalletToConnect(wallet.getKeyPath(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Connect the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Connect the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
 																																				
-																																					// Reject error
-																																					reject(error);
-																																				}
-																												
-																																				// Otherwise
-																																				else {
-																																				
-																																					// Reject JSON-RPC internal error error response
-																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																				}
-																																			});
-																																		}
-																																		
-																																		// Otherwise
-																																		else {
-																																		
-																																			// Return waiting for wallet's hardware wallet to connect
-																																			return self.wallets.waitForHardwareWalletToConnect(wallet.getKeyPath(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Connect the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Connect the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
+																																					// Check if cancel didn't occur
+																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																					
+																																						// Check if hardware wallet is connected
+																																						if(wallet.isHardwareConnected() === true) {
 																																			
-																																				// Check if cancel didn't occur
-																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																				
-																																					// Check if hardware wallet is connected
-																																					if(wallet.isHardwareConnected() === true) {
-																																		
-																																						// Return starting transaction for the output amount with the wallet's hardware wallet
-																																						return wallet.getHardwareWallet().startTransaction(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX, output[Wallet.OUTPUT_AMOUNT_INDEX], new BigNumber(0), slate.getFee(), HardwareWallet.NO_SECRET_NONCE_INDEX, slate.getSenderAddress(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
-																																						
-																																							// Check if cancel didn't occur
-																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																							// Return starting transaction for the output amount with the wallet's hardware wallet
+																																							return wallet.getHardwareWallet().startTransaction(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX, output[Wallet.OUTPUT_AMOUNT_INDEX], new BigNumber(0), slate.getFee(), HardwareWallet.NO_SECRET_NONCE_INDEX, slate.getSenderAddress(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
 																																							
-																																								// Check if wallet's hardware wallet is connected
-																																								if(wallet.isHardwareConnected() === true) {
-																																						
-																																									// Return including output in the transaction with the wallet's hardware wallet
-																																									return wallet.getHardwareWallet().includeOutputInTransaction(output[Wallet.OUTPUT_AMOUNT_INDEX], output[Wallet.OUTPUT_IDENTIFIER_INDEX], output[Wallet.OUTPUT_SWITCH_TYPE_INDEX], (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
-																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																								// Check if cancel didn't occur
+																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																								
+																																									// Check if wallet's hardware wallet is connected
+																																									if(wallet.isHardwareConnected() === true) {
+																																							
+																																										// Return including output in the transaction with the wallet's hardware wallet
+																																										return wallet.getHardwareWallet().includeOutputInTransaction(output[Wallet.OUTPUT_AMOUNT_INDEX], output[Wallet.OUTPUT_IDENTIFIER_INDEX], output[Wallet.OUTPUT_SWITCH_TYPE_INDEX], (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
 																																										
-																																											// Apply offset
-																																											var applyOffset = function() {
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																											
-																																												// Return promise
-																																												return new Promise(function(resolve, reject) {
+																																												// Apply offset
+																																												var applyOffset = function() {
+																																												
+																																													// Return promise
+																																													return new Promise(function(resolve, reject) {
+																																													
+																																														// Check if cancel didn't occur
+																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																														
+																																															// Check if slate is compact
+																																															if(slate.isCompact() === true) {
+																																															
+																																																// Check if wallet's hardware wallet is connected
+																																																if(wallet.isHardwareConnected() === true) {
+																																															
+																																																	// Return applying offset to slate
+																																																	return slate.applyOffset(wallet.getHardwareWallet(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
+																																																	
+																																																		// Check if cancel didn't occur
+																																																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																	
+																																																			// Resolve
+																																																			resolve();
+																																																		}
+																																																		
+																																																		// Otherwise
+																																																		else {
+																																																		
+																																																			// Reject JSON-RPC internal error error response
+																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																		}
+																																																		
+																																																	// Catch errors
+																																																	}).catch(function(error) {
+																																																	
+																																																		// Check if cancel didn't occur
+																																																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																		
+																																																			// Check if canceled, user rejected on hardware wallet, or hardware wallet is disconnected
+																																																			if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR || error === HardwareWallet.DISCONNECTED_ERROR) {
+																																																	
+																																																				// Reject error
+																																																				reject(error);
+																																																			}
+																																																			
+																																																			// Otherwise
+																																																			else {
+																																																			
+																																																				// Reject JSON-RPC internal error error response
+																																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																			}
+																																																		}
+																																														
+																																																		// Otherwise
+																																																		else {
+																																																		
+																																																			// Reject JSON-RPC internal error error response
+																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																		}
+																																																	});
+																																																}
+																																												
+																																																// Otherwise
+																																																else {
+																																																
+																																																	// Reject hardware wallet disconnected error
+																																																	reject(HardwareWallet.DISCONNECTED_ERROR);
+																																																}
+																																															}
+																																															
+																																															// Otherwise
+																																															else {
+																																															
+																																																// Resolve
+																																																resolve();
+																																															}
+																																														}
+																																														
+																																														// Otherwise
+																																														else {
+																																														
+																																															// Reject JSON-RPC internal error error response
+																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																														}
+																																													});
+																																												};
+																																												
+																																												// Return applying offset
+																																												return applyOffset().then(function() {
 																																												
 																																													// Check if cancel didn't occur
 																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																													
-																																														// Check if slate is compact
-																																														if(slate.isCompact() === true) {
+																																														// Check if slate was sent from self
+																																														if(self.currentSlateSendId !== Api.NO_CURRENT_SLATE_SEND_ID && Common.arraysAreEqualTimingSafe(slate.getId().getData(), self.currentSlateSendId.getData()) === true) {
 																																														
 																																															// Check if wallet's hardware wallet is connected
 																																															if(wallet.isHardwareConnected() === true) {
-																																														
-																																																// Return applying offset to slate
-																																																return slate.applyOffset(wallet.getHardwareWallet(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
+																																															
+																																																// Save slate's offset
+																																																var oldOffset = new Uint8Array(slate.getOffset());
+																																															
+																																																// Check if slate is compact
+																																																if(slate.isCompact() === true) {
+																																																
+																																																	// Check if combining the slate's offset with the offset failed
+																																																	if(slate.combineOffsets(offset) === false) {
+																																																	
+																																																		// Return canceling transaction with the wallet's hardware wallet and catch errors
+																																																		return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
+																																																		
+																																																		// Finally
+																																																		}).finally(function() {
+																																																	
+																																																			// Reject JSON-RPC internal error error response
+																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																		});
+																																																	}
+																																																}
+																																															
+																																																// Save slate's receiver signature
+																																																var oldReceiverSignature = slate.getReceiverSignature();
+																																													
+																																																// Return adding participant to slate
+																																																return slate.addParticipant(wallet.getHardwareWallet(), Slate.NO_SECRET_NONCE, SlateParticipant.NO_MESSAGE, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
+																																																
+																																																	// Check if cancel didn't occur
+																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																
+																																																		// Check if wallet's hardware wallet is connected
+																																																		if(wallet.isHardwareConnected() === true) {
+																																																		
+																																																			// Return completing transaction with the wallet's hardware wallet
+																																																			return wallet.getHardwareWallet().completeTransaction().then(function() {
+																																																			
+																																																				// Check if cancel didn't occur
+																																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																			
+																																																					// Resolve
+																																																					resolve();
+																																																				}
+																																																				
+																																																				// Otherwise
+																																																				else {
+																																																				
+																																																					// Reject JSON-RPC internal error error response
+																																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																				}
+																																																				
+																																																			// Catch errors
+																																																			}).catch(function(error) {
+																																																			
+																																																				// Reject JSON-RPC internal error error response
+																																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																			});
+																																																		}
+																																																		
+																																																		// Otherwise
+																																																		else {
+																																																		
+																																																			// Restore slate's old offset
+																																																			slate.offset = oldOffset;
+																																																		
+																																																			// Remove participant from slate
+																																																			slate.getParticipants().pop();
+																																																			
+																																																			// Restore slate's old receiver signature
+																																																			slate.setReceiverSignature(oldReceiverSignature);
+																																																		
+																																																			// Return adding a slate participant
+																																																			return addSlateParticipant().then(function() {
+																																																			
+																																																				// Check if cancel didn't occur
+																																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																			
+																																																					// Resolve
+																																																					resolve();
+																																																				}
+																																																				
+																																																				// Otherwise
+																																																				else {
+																																																				
+																																																					// Reject JSON-RPC internal error error response
+																																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																				}
+																																																			
+																																																			// Catch errors
+																																																			}).catch(function(error) {
+																																																			
+																																																				// Check if cancel didn't occur
+																																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																			
+																																																					// Reject error
+																																																					reject(error);
+																																																				}
+																																																				
+																																																				// Otherwise
+																																																				else {
+																																																				
+																																																					// Reject JSON-RPC internal error error response
+																																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																				}
+																																																			});
+																																																		}
+																																																	}
+																																																	
+																																																	// Otherwise
+																																																	else {
+																																																	
+																																																		// Check if wallet's hardware wallet is connected
+																																																		if(wallet.isHardwareConnected() === true) {
+																																																	
+																																																			// Return canceling transaction with the wallet's hardware wallet and catch errors
+																																																			return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
+																																																			
+																																																			// Finally
+																																																			}).finally(function() {
+																																																		
+																																																				// Reject JSON-RPC internal error error response
+																																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																			});
+																																																		}
+																																																		
+																																																		// Otherwise
+																																																		else {
+																																																		
+																																																			// Reject JSON-RPC internal error error response
+																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																		}
+																																																	}
+																																																
+																																																// Catch errors
+																																																}).catch(function(error) {
+																																																
+																																																	// Check if wallet's hardware wallet is connected
+																																																	if(wallet.isHardwareConnected() === true) {
+																																																
+																																																		// Return canceling transaction with the wallet's hardware wallet and catch errors
+																																																		return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
+																																																		
+																																																		// Finally
+																																																		}).finally(function() {
+																																																		
+																																																			// Check if cancel didn't occur
+																																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																		
+																																																				// Check if hardware wallet was disconnected
+																																																				if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																																				
+																																																					// Check if wallet's hardware wallet is connected
+																																																					if(wallet.isHardwareConnected() === true) {
+																																																				
+																																																						// Wallet's hardware wallet disconnect event
+																																																						$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																																						
+																																																							// Restore slate's old offset
+																																																							slate.offset = oldOffset;
+																																																					
+																																																							// Return adding a slate participant
+																																																							return addSlateParticipant().then(function() {
+																																																							
+																																																								// Check if cancel didn't occur
+																																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																							
+																																																									// Resolve
+																																																									resolve();
+																																																								}
+																																																								
+																																																								// Otherwise
+																																																								else {
+																																																								
+																																																									// Reject JSON-RPC internal error error response
+																																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																								}
+																																																							
+																																																							// Catch errors
+																																																							}).catch(function(error) {
+																																																							
+																																																								// Check if cancel didn't occur
+																																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																							
+																																																									// Reject error
+																																																									reject(error);
+																																																								}
+																																																								
+																																																								// Otherwise
+																																																								else {
+																																																								
+																																																									// Reject JSON-RPC internal error error response
+																																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																								}
+																																																							});
+																																																						});
+																																																					}
+																																																					
+																																																					// Otherwise
+																																																					else {
+																																																					
+																																																						// Restore slate's old offset
+																																																						slate.offset = oldOffset;
+																																																					
+																																																						// Return adding a slate participant
+																																																						return addSlateParticipant().then(function() {
+																																																						
+																																																							// Check if cancel didn't occur
+																																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																						
+																																																								// Resolve
+																																																								resolve();
+																																																							}
+																																																							
+																																																							// Otherwise
+																																																							else {
+																																																							
+																																																								// Reject JSON-RPC internal error error response
+																																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																							}
+																																																						
+																																																						// Catch errors
+																																																						}).catch(function(error) {
+																																																						
+																																																							// Check if cancel didn't occur
+																																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																						
+																																																								// Reject error
+																																																								reject(error);
+																																																							}
+																																																							
+																																																							// Otherwise
+																																																							else {
+																																																							
+																																																								// Reject JSON-RPC internal error error response
+																																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																							}
+																																																						});
+																																																					}
+																																																				}
+																																																				
+																																																				// Otherwise check if canceled or user rejected on hardware wallet
+																																																				else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																																		
+																																																					// Reject error
+																																																					reject(error);
+																																																				}
+																																																				
+																																																				// Otherwise
+																																																				else {
+																																																			
+																																																					// Reject JSON-RPC internal error error response
+																																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																				}
+																																																			}
+																																																			
+																																																			// Otherwise
+																																																			else {
+																																																			
+																																																				// Reject JSON-RPC internal error error response
+																																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																			}
+																																																		});
+																																																	}
+																																																	
+																																																	// Otherwise
+																																																	else {
+																																																	
+																																																		// Check if cancel didn't occur
+																																																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																	
+																																																			// Check if hardware wallet was disconnected
+																																																			if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																																			
+																																																				// Restore slate's old offset
+																																																				slate.offset = oldOffset;
+																																																				
+																																																				// Return adding a slate participant
+																																																				return addSlateParticipant().then(function() {
+																																																				
+																																																					// Check if cancel didn't occur
+																																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																				
+																																																						// Resolve
+																																																						resolve();
+																																																					}
+																																																					
+																																																					// Otherwise
+																																																					else {
+																																																					
+																																																						// Reject JSON-RPC internal error error response
+																																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																					}
+																																																				
+																																																				// Catch errors
+																																																				}).catch(function(error) {
+																																																				
+																																																					// Check if cancel didn't occur
+																																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																				
+																																																						// Reject error
+																																																						reject(error);
+																																																					}
+																																																					
+																																																					// Otherwise
+																																																					else {
+																																																					
+																																																						// Reject JSON-RPC internal error error response
+																																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																					}
+																																																				});
+																																																			}
+																																																			
+																																																			// Otherwise check if canceled or user rejected on hardware wallet
+																																																			else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																																	
+																																																				// Reject error
+																																																				reject(error);
+																																																			}
+																																																			
+																																																			// Otherwise
+																																																			else {
+																																																		
+																																																				// Reject JSON-RPC internal error error response
+																																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																			}
+																																																		}
+																																																		
+																																																		// Otherwise
+																																																		else {
+																																																		
+																																																			// Reject JSON-RPC internal error error response
+																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																		}
+																																																	}
+																																																});
+																																															}
+																																															
+																																															// Otherwise
+																																															else {
+																																															
+																																																// Return adding a slate participant
+																																																return addSlateParticipant().then(function() {
 																																																
 																																																	// Check if cancel didn't occur
 																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -4126,28 +4565,17 @@ class Api {
 																																																		// Reject JSON-RPC internal error error response
 																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																																	}
-																																																	
+																																																
 																																																// Catch errors
 																																																}).catch(function(error) {
 																																																
 																																																	// Check if cancel didn't occur
 																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																	
-																																																		// Check if canceled, user rejected on hardware wallet, or hardware wallet is disconnected
-																																																		if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR || error === HardwareWallet.DISCONNECTED_ERROR) {
 																																																
-																																																			// Reject error
-																																																			reject(error);
-																																																		}
-																																																		
-																																																		// Otherwise
-																																																		else {
-																																																		
-																																																			// Reject JSON-RPC internal error error response
-																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																		}
+																																																		// Reject error
+																																																		reject(error);
 																																																	}
-																																													
+																																																	
 																																																	// Otherwise
 																																																	else {
 																																																	
@@ -4156,149 +4584,932 @@ class Api {
 																																																	}
 																																																});
 																																															}
-																																											
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Reject hardware wallet disconnected error
-																																																reject(HardwareWallet.DISCONNECTED_ERROR);
-																																															}
 																																														}
 																																														
 																																														// Otherwise
 																																														else {
-																																														
-																																															// Resolve
-																																															resolve();
-																																														}
-																																													}
 																																													
-																																													// Otherwise
-																																													else {
-																																													
-																																														// Reject JSON-RPC internal error error response
-																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																													}
-																																												});
-																																											};
-																																											
-																																											// Return applying offset
-																																											return applyOffset().then(function() {
-																																											
-																																												// Check if cancel didn't occur
-																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																												
-																																													// Check if slate was sent from self
-																																													if(self.currentSlateSendId !== Api.NO_CURRENT_SLATE_SEND_ID && Common.arraysAreEqualTimingSafe(slate.getId().getData(), self.currentSlateSendId.getData()) === true) {
-																																													
-																																														// Check if wallet's hardware wallet is connected
-																																														if(wallet.isHardwareConnected() === true) {
-																																														
-																																															// Save slate's receiver signature
-																																															var oldReceiverSignature = slate.getReceiverSignature();
-																																												
-																																															// Return adding participant to slate
-																																															return slate.addParticipant(wallet.getHardwareWallet(), Slate.NO_SECRET_NONCE, SlateParticipant.NO_MESSAGE, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
-																																															
-																																																// Check if cancel didn't occur
-																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																															
-																																																	// Check if wallet's hardware wallet is connected
-																																																	if(wallet.isHardwareConnected() === true) {
+																																															// Return waiting for wallet's hardware wallet to approve
+																																															return self.wallets.waitForHardwareWalletToApprove(wallet.getKeyPath(), Message.createPendingResult() + Message.createLineBreak() + Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText((slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? Language.getDefaultTranslation('Verify that the account index displayed on the hardware wallet is %1$s, the amount displayed is %2$c, the fee displayed is %3$c, the kernel features displayed is %4$x, and the sender payment proof address displayed matches the following payment proof address.') : Language.getDefaultTranslation('Verify that the account index displayed on the hardware wallet is %1$s, the amount displayed is %2$c, the fee displayed is %3$c, the kernel features displayed is %4$x, and that there\'s no sender payment proof address displayed.'), [
+																																																						
+																																																// Account index
+																																																HardwareWallet.ACCOUNT.toFixed(),
+																																																
+																																																[
+																																				
+																																																	// Number
+																																																	slate.getAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																																																	
-																																																		// Return completing transaction with the wallet's hardware wallet
-																																																		return wallet.getHardwareWallet().completeTransaction().then(function() {
+																																																	// Currency
+																																																	Consensus.CURRENCY_NAME
+																																																],
+																																																
+																																																[
+																																																
+																																																	// Number
+																																																	slate.getFee().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
+																																																	
+																																																	// Currency
+																																																	Consensus.CURRENCY_NAME
+																																																],
+																																																
+																																																// Kernel features
+																																																slate.getDisplayKernelFeatures()
+																																																
+																																															]) + ((slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? (Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(slate.getSenderAddress()) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak()) : ""), allowUnlock, preventMessages, cancelOccurred).then(function(canceled) {
+																																															
+																																																// Initialize hardware wallet disconnected
+																																																var hardwareWalletDisconnected = false;
+																																															
+																																																// Message replace API event
+																																																$(self.message).on(Message.REPLACE_EVENT + ".api", function(event, messageType, messageData) {
+																																																
+																																																	// Check if message type is hardware wallet disconnect message
+																																																	if(messageType === Application.HARDWARE_WALLET_DISCONNECT_MESSAGE) {
+																																																	
+																																																		// Turn off message replace API event
+																																																		$(self.message).off(Message.REPLACE_EVENT + ".api");
 																																																		
-																																																			// Check if cancel didn't occur
-																																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																		// Set hardware wallet disconnected
+																																																		hardwareWalletDisconnected = true;
 																																																		
-																																																				// Resolve
-																																																				resolve();
+																																																		// Get if message was canceled
+																																																		var messageCanceled = canceled() === true;
+																																																		
+																																																		// Check if message wasn't canceled
+																																																		if(messageCanceled === false) {
+																																																		
+																																																			// Disable message
+																																																			self.message.disable();
+																																																		}
+																																																		
+																																																		// Set hide message
+																																																		var hideMessage = function() {
+																																																		
+																																																			// Return promise
+																																																			return new Promise(function(resolve, reject) {
+																																																			
+																																																				// Check if message was canceled
+																																																				if(messageCanceled === true) {
+																																																				
+																																																					// Resolve
+																																																					resolve();
+																																																				}
+																																																				
+																																																				// Otherwise
+																																																				else {
+																																																				
+																																																					// Return setting that hardware wallet is done approving
+																																																					return self.wallets.hardwareWalletDoneApproving(preventMessages).then(function() {
+																																																					
+																																																						// Resolve
+																																																						resolve();
+																																																					});
+																																																				}
+																																																			});
+																																																		};
+																																																		
+																																																		// Return hiding message
+																																																		return hideMessage().then(function() {
+																																																		
+																																																			// Check if cancel didn't occur and message wasn't canceled
+																																																			if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																		
+																																																				// Return adding a slate participant
+																																																				return addSlateParticipant().then(function() {
+																																																				
+																																																					// Check if cancel didn't occur and message wasn't canceled
+																																																					if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																				
+																																																						// Resolve
+																																																						resolve();
+																																																					}
+																																																					
+																																																					// Otherwise
+																																																					else {
+																																																					
+																																																						// Check if cancel didn't occur
+																																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																						
+																																																							// Reject canceled error
+																																																							reject(Common.CANCELED_ERROR);
+																																																						}
+																																																						
+																																																						// Otherwise
+																																																						else {
+																																																					
+																																																							// Reject JSON-RPC internal error error response
+																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																						}
+																																																					}
+																																																				
+																																																				// Catch errors
+																																																				}).catch(function(error) {
+																																																				
+																																																					// Check if cancel didn't occur and message wasn't canceled
+																																																					if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																				
+																																																						// Reject error
+																																																						reject(error);
+																																																					}
+																																																					
+																																																					// Otherwise
+																																																					else {
+																																																					
+																																																						// Check if cancel didn't occur
+																																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																						
+																																																							// Reject canceled error
+																																																							reject(Common.CANCELED_ERROR);
+																																																						}
+																																																						
+																																																						// Otherwise
+																																																						else {
+																																																					
+																																																							// Reject JSON-RPC internal error error response
+																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																						}
+																																																					}
+																																																				});
 																																																			}
 																																																			
 																																																			// Otherwise
 																																																			else {
 																																																			
-																																																				// Reject JSON-RPC internal error error response
-																																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																			}
+																																																				// Check if cancel didn't occur
+																																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																				
+																																																					// Reject canceled error
+																																																					reject(Common.CANCELED_ERROR);
+																																																				}
+																																																				
+																																																				// Otherwise
+																																																				else {
 																																																			
-																																																		// Catch errors
-																																																		}).catch(function(error) {
-																																																		
-																																																			// Reject JSON-RPC internal error error response
-																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																					// Reject JSON-RPC internal error error response
+																																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																				}
+																																																			}
 																																																		});
 																																																	}
+																																																});
+																																												
+																																																// Check if wallet's hardware wallet is connected
+																																																if(wallet.isHardwareConnected() === true) {
+																																																
+																																																	// Save slate's offset
+																																																	var oldOffset = new Uint8Array(slate.getOffset());
+																																																
+																																																	// Check if slate is compact
+																																																	if(slate.isCompact() === true) {
 																																																	
-																																																	// Otherwise
-																																																	else {
-																																																	
-																																																		// Remove participant from slate
-																																																		slate.getParticipants().pop();
+																																																		// Check if combining the slate's offset with the offset failed
+																																																		if(slate.combineOffsets(offset) === false) {
 																																																		
-																																																		// Restore slate's old receiver signature
-																																																		slate.setReceiverSignature(oldReceiverSignature);
-																																																	
-																																																		// Return adding a slate participant
-																																																		return addSlateParticipant().then(function() {
-																																																		
-																																																			// Check if cancel didn't occur
-																																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																		
-																																																				// Resolve
-																																																				resolve();
-																																																			}
+																																																			// Return canceling transaction with the wallet's hardware wallet and catch errors
+																																																			return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
 																																																			
-																																																			// Otherwise
-																																																			else {
-																																																			
+																																																			// Finally
+																																																			}).finally(function() {
+																																																		
 																																																				// Reject JSON-RPC internal error error response
 																																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																			}
-																																																		
-																																																		// Catch errors
-																																																		}).catch(function(error) {
-																																																		
-																																																			// Check if cancel didn't occur
-																																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																		
-																																																				// Reject error
-																																																				reject(error);
-																																																			}
-																																																			
-																																																			// Otherwise
-																																																			else {
-																																																			
-																																																				// Reject JSON-RPC internal error error response
-																																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																			}
-																																																		});
+																																																			});
+																																																		}
 																																																	}
+																																																
+																																																	// Save slate's receiver signature
+																																																	var oldReceiverSignature = slate.getReceiverSignature();
+																																														
+																																																	// Return adding participant to slate
+																																																	return slate.addParticipant(wallet.getHardwareWallet(), Slate.NO_SECRET_NONCE, SlateParticipant.NO_MESSAGE, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, true, function() {
+																										
+																																																		// Return if message was canceled
+																																																		return canceled() === true;
+																																																		
+																																																	}).then(function() {
+																																																	
+																																																		// Check if hardware wallet isn't disconnected
+																																																		if(hardwareWalletDisconnected === false) {
+																																																	
+																																																			// Turn off message replace API event
+																																																			$(self.message).off(Message.REPLACE_EVENT + ".api");
+																																																		
+																																																			// Get if message was canceled
+																																																			var messageCanceled = canceled() === true;
+																																																			
+																																																			// Check if message wasn't canceled
+																																																			if(messageCanceled === false) {
+																																																			
+																																																				// Disable message
+																																																				self.message.disable();
+																																																			}
+																																																			
+																																																			// Set hide message
+																																																			var hideMessage = function() {
+																																																			
+																																																				// Return promise
+																																																				return new Promise(function(resolve, reject) {
+																																																				
+																																																					// Check if message was canceled
+																																																					if(messageCanceled === true) {
+																																																					
+																																																						// Resolve
+																																																						resolve();
+																																																					}
+																																																					
+																																																					// Otherwise
+																																																					else {
+																																																					
+																																																						// Return setting that hardware wallet is done approving
+																																																						return self.wallets.hardwareWalletDoneApproving(preventMessages).then(function() {
+																																																						
+																																																							// Resolve
+																																																							resolve();
+																																																						});
+																																																					}
+																																																				});
+																																																			};
+																																																			
+																																																			// Return hiding message
+																																																			return hideMessage().then(function() {
+																																																		
+																																																				// Check if cancel didn't occur and message wasn't canceled
+																																																				if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																			
+																																																					// Check if wallet's hardware wallet is connected
+																																																					if(wallet.isHardwareConnected() === true) {
+																																																					
+																																																						// Return completing transaction with the wallet's hardware wallet
+																																																						return wallet.getHardwareWallet().completeTransaction().then(function() {
+																																																						
+																																																							// Check if cancel didn't occur and message wasn't canceled
+																																																							if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																						
+																																																								// Resolve
+																																																								resolve();
+																																																							}
+																																																							
+																																																							// Otherwise
+																																																							else {
+																																																							
+																																																								// Check if cancel didn't occur
+																																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																								
+																																																									// Reject canceled error
+																																																									reject(Common.CANCELED_ERROR);
+																																																								}
+																																																								
+																																																								// Otherwise
+																																																								else {
+																																																							
+																																																									// Reject JSON-RPC internal error error response
+																																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																								}
+																																																							}
+																																																							
+																																																						// Catch errors
+																																																						}).catch(function(error) {
+																																																						
+																																																							// Check if cancel didn't occur and message wasn't canceled
+																																																							if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																							
+																																																								// Reject JSON-RPC internal error error response
+																																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																							}
+																																																							
+																																																							// Otherwise
+																																																							else {
+																																																							
+																																																								// Check if cancel didn't occur
+																																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																								
+																																																									// Reject canceled error
+																																																									reject(Common.CANCELED_ERROR);
+																																																								}
+																																																								
+																																																								// Otherwise
+																																																								else {
+																																																							
+																																																									// Reject JSON-RPC internal error error response
+																																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																								}
+																																																							}
+																																																						});
+																																																					}
+																																																					
+																																																					// Otherwise
+																																																					else {
+																																																					
+																																																						// Restore slate's old offset
+																																																						slate.offset = oldOffset;
+																																																						
+																																																						// Remove participant from slate
+																																																						slate.getParticipants().pop();
+																																																						
+																																																						// Restore slate's old receiver signature
+																																																						slate.setReceiverSignature(oldReceiverSignature);
+																																																					
+																																																						// Return adding a slate participant
+																																																						return addSlateParticipant().then(function() {
+																																																						
+																																																							// Check if cancel didn't occur and message wasn't canceled
+																																																							if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																						
+																																																								// Resolve
+																																																								resolve();
+																																																							}
+																																																							
+																																																							// Otherwise
+																																																							else {
+																																																							
+																																																								// Check if cancel didn't occur
+																																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																								
+																																																									// Reject canceled error
+																																																									reject(Common.CANCELED_ERROR);
+																																																								}
+																																																								
+																																																								// Otherwise
+																																																								else {
+																																																							
+																																																									// Reject JSON-RPC internal error error response
+																																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																								}
+																																																							}
+																																																						
+																																																						// Catch errors
+																																																						}).catch(function(error) {
+																																																						
+																																																							// Check if cancel didn't occur and message wasn't canceled
+																																																							if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																						
+																																																								// Reject error
+																																																								reject(error);
+																																																							}
+																																																							
+																																																							// Otherwise
+																																																							else {
+																																																							
+																																																								// Check if cancel didn't occur
+																																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																								
+																																																									// Reject canceled error
+																																																									reject(Common.CANCELED_ERROR);
+																																																								}
+																																																								
+																																																								// Otherwise
+																																																								else {
+																																																							
+																																																									// Reject JSON-RPC internal error error response
+																																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																								}
+																																																							}
+																																																						});
+																																																					}
+																																																				}
+																																																				
+																																																				// Otherwise
+																																																				else {
+																																																				
+																																																					// Check if wallet's hardware wallet is connected
+																																																					if(wallet.isHardwareConnected() === true) {
+																																																				
+																																																						// Return canceling transaction with the wallet's hardware wallet and catch errors
+																																																						return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
+																																																						
+																																																						// Finally
+																																																						}).finally(function() {
+																																																					
+																																																							// Check if cancel didn't occur
+																																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																							
+																																																								// Reject canceled error
+																																																								reject(Common.CANCELED_ERROR);
+																																																							}
+																																																							
+																																																							// Otherwise
+																																																							else {
+																																																						
+																																																								// Reject JSON-RPC internal error error response
+																																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																							}
+																																																						});
+																																																					}
+																																																					
+																																																					// Otherwise
+																																																					else {
+																																																					
+																																																						// Check if cancel didn't occur
+																																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																						
+																																																							// Reject canceled error
+																																																							reject(Common.CANCELED_ERROR);
+																																																						}
+																																																						
+																																																						// Otherwise
+																																																						else {
+																																																					
+																																																							// Reject JSON-RPC internal error error response
+																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																						}
+																																																					}
+																																																				}
+																																																			});
+																																																		}
+																																																		
+																																																		// Otherwise
+																																																		else {
+																																																		
+																																																			// Check if wallet's hardware wallet is connected
+																																																			if(wallet.isHardwareConnected() === true) {
+																																																		
+																																																				// Cancel transaction with the wallet's hardware wallet and catch errors
+																																																				wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
+																																																				
+																																																				});
+																																																			}
+																																																		}
+																																																	
+																																																	// Catch errors
+																																																	}).catch(function(error) {
+																																																	
+																																																		// Check if hardware wallet isn't disconnected
+																																																		if(hardwareWalletDisconnected === false) {
+																																																		
+																																																			// Turn off message replace API event
+																																																			$(self.message).off(Message.REPLACE_EVENT + ".api");
+																																																	
+																																																			// Get if message was canceled
+																																																			var messageCanceled = canceled() === true;
+																																																			
+																																																			// Check if message wasn't canceled
+																																																			if(messageCanceled === false) {
+																																																			
+																																																				// Disable message
+																																																				self.message.disable();
+																																																			}
+																																																			
+																																																			// Set hide message
+																																																			var hideMessage = function() {
+																																																			
+																																																				// Return promise
+																																																				return new Promise(function(resolve, reject) {
+																																																				
+																																																					// Check if message was canceled
+																																																					if(messageCanceled === true) {
+																																																					
+																																																						// Resolve
+																																																						resolve();
+																																																					}
+																																																					
+																																																					// Otherwise
+																																																					else {
+																																																					
+																																																						// Return setting that hardware wallet is done approving
+																																																						return self.wallets.hardwareWalletDoneApproving(preventMessages).then(function() {
+																																																						
+																																																							// Resolve
+																																																							resolve();
+																																																						});
+																																																					}
+																																																				});
+																																																			};
+																																																			
+																																																			// Return hiding message
+																																																			return hideMessage().then(function() {
+																																																	
+																																																				// Check if wallet's hardware wallet is connected
+																																																				if(wallet.isHardwareConnected() === true) {
+																																																			
+																																																					// Return canceling transaction with the wallet's hardware wallet and catch errors
+																																																					return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
+																																																					
+																																																					// Finally
+																																																					}).finally(function() {
+																																																					
+																																																						// Check if cancel didn't occur and message wasn't canceled
+																																																						if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																					
+																																																							// Check if hardware wallet was disconnected
+																																																							if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																																							
+																																																								// Check if wallet's hardware wallet is connected
+																																																								if(wallet.isHardwareConnected() === true) {
+																																																							
+																																																									// Wallet's hardware wallet disconnect event
+																																																									$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																																									
+																																																										// Restore slate's old offset
+																																																										slate.offset = oldOffset;
+																																																										
+																																																										// Return adding a slate participant
+																																																										return addSlateParticipant().then(function() {
+																																																										
+																																																											// Check if cancel didn't occur and message wasn't canceled
+																																																											if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																										
+																																																												// Resolve
+																																																												resolve();
+																																																											}
+																																																											
+																																																											// Otherwise
+																																																											else {
+																																																											
+																																																												// Check if cancel didn't occur
+																																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																												
+																																																													// Reject canceled error
+																																																													reject(Common.CANCELED_ERROR);
+																																																												}
+																																																												
+																																																												// Otherwise
+																																																												else {
+																																																											
+																																																													// Reject JSON-RPC internal error error response
+																																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																												}
+																																																											}
+																																																										
+																																																										// Catch errors
+																																																										}).catch(function(error) {
+																																																										
+																																																											// Check if cancel didn't occur and message wasn't canceled
+																																																											if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																										
+																																																												// Reject error
+																																																												reject(error);
+																																																											}
+																																																											
+																																																											// Otherwise
+																																																											else {
+																																																											
+																																																												// Check if cancel didn't occur
+																																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																												
+																																																													// Reject canceled error
+																																																													reject(Common.CANCELED_ERROR);
+																																																												}
+																																																												
+																																																												// Otherwise
+																																																												else {
+																																																											
+																																																													// Reject JSON-RPC internal error error response
+																																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																												}
+																																																											}
+																																																										});
+																																																									});
+																																																								}
+																																																								
+																																																								// Otherwise
+																																																								else {
+																																																								
+																																																									// Restore slate's old offset
+																																																									slate.offset = oldOffset;
+																																																								
+																																																									// Return adding a slate participant
+																																																									return addSlateParticipant().then(function() {
+																																																									
+																																																										// Check if cancel didn't occur and message wasn't canceled
+																																																										if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																									
+																																																											// Resolve
+																																																											resolve();
+																																																										}
+																																																										
+																																																										// Otherwise
+																																																										else {
+																																																										
+																																																											// Check if cancel didn't occur
+																																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																											
+																																																												// Reject canceled error
+																																																												reject(Common.CANCELED_ERROR);
+																																																											}
+																																																											
+																																																											// Otherwise
+																																																											else {
+																																																										
+																																																												// Reject JSON-RPC internal error error response
+																																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																											}
+																																																										}
+																																																									
+																																																									// Catch errors
+																																																									}).catch(function(error) {
+																																																									
+																																																										// Check if cancel didn't occur and message wasn't canceled
+																																																										if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																									
+																																																											// Reject error
+																																																											reject(error);
+																																																										}
+																																																										
+																																																										// Otherwise
+																																																										else {
+																																																										
+																																																											// Check if cancel didn't occur
+																																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																											
+																																																												// Reject canceled error
+																																																												reject(Common.CANCELED_ERROR);
+																																																											}
+																																																											
+																																																											// Otherwise
+																																																											else {
+																																																										
+																																																												// Reject JSON-RPC internal error error response
+																																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																											}
+																																																										}
+																																																									});
+																																																								}
+																																																							}
+																																																							
+																																																							// Otherwise check if canceled or user rejected on hardware wallet
+																																																							else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																																					
+																																																								// Reject error
+																																																								reject(error);
+																																																							}
+																																																							
+																																																							// Otherwise
+																																																							else {
+																																																						
+																																																								// Reject JSON-RPC internal error error response
+																																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																							}
+																																																						}
+																																																						
+																																																						// Otherwise
+																																																						else {
+																																																						
+																																																							// Check if cancel didn't occur
+																																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																							
+																																																								// Reject canceled error
+																																																								reject(Common.CANCELED_ERROR);
+																																																							}
+																																																							
+																																																							// Otherwise
+																																																							else {
+																																																						
+																																																								// Reject JSON-RPC internal error error response
+																																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																							}
+																																																						}
+																																																					});
+																																																				}
+																																																				
+																																																				// Otherwise
+																																																				else {
+																																																				
+																																																					// Check if cancel didn't occur and message wasn't canceled
+																																																					if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																				
+																																																						// Check if hardware wallet was disconnected
+																																																						if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																																							
+																																																							// Restore slate's old offset
+																																																							slate.offset = oldOffset;
+																																																							
+																																																							// Return adding a slate participant
+																																																							return addSlateParticipant().then(function() {
+																																																							
+																																																								// Check if cancel didn't occur and message wasn't canceled
+																																																								if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																							
+																																																									// Resolve
+																																																									resolve();
+																																																								}
+																																																								
+																																																								// Otherwise
+																																																								else {
+																																																								
+																																																									// Check if cancel didn't occur
+																																																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																									
+																																																										// Reject canceled error
+																																																										reject(Common.CANCELED_ERROR);
+																																																									}
+																																																									
+																																																									// Otherwise
+																																																									else {
+																																																								
+																																																										// Reject JSON-RPC internal error error response
+																																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																									}
+																																																								}
+																																																							
+																																																							// Catch errors
+																																																							}).catch(function(error) {
+																																																							
+																																																								// Check if cancel didn't occur and message wasn't canceled
+																																																								if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																							
+																																																									// Reject error
+																																																									reject(error);
+																																																								}
+																																																								
+																																																								// Otherwise
+																																																								else {
+																																																								
+																																																									// Check if cancel didn't occur
+																																																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																									
+																																																										// Reject canceled error
+																																																										reject(Common.CANCELED_ERROR);
+																																																									}
+																																																									
+																																																									// Otherwise
+																																																									else {
+																																																								
+																																																										// Reject JSON-RPC internal error error response
+																																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																									}
+																																																								}
+																																																							});
+																																																						}
+																																																						
+																																																						// Otherwise check if canceled or user rejected on hardware wallet
+																																																						else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																																				
+																																																							// Reject error
+																																																							reject(error);
+																																																						}
+																																																						
+																																																						// Otherwise
+																																																						else {
+																																																					
+																																																							// Reject JSON-RPC internal error error response
+																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																						}
+																																																					}
+																																																					
+																																																					// Otherwise
+																																																					else {
+																																																					
+																																																						// Check if cancel didn't occur
+																																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																						
+																																																							// Reject canceled error
+																																																							reject(Common.CANCELED_ERROR);
+																																																						}
+																																																						
+																																																						// Otherwise
+																																																						else {
+																																																					
+																																																							// Reject JSON-RPC internal error error response
+																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																						}
+																																																					}
+																																																				}
+																																																			});
+																																																		}
+																																																		
+																																																		// Otherwise
+																																																		else {
+																																																		
+																																																			// Check if wallet's hardware wallet is connected
+																																																			if(wallet.isHardwareConnected() === true) {
+																																																		
+																																																				// Cancel transaction with the wallet's hardware wallet and catch errors
+																																																				wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
+																																																				
+																																																				});
+																																																			}
+																																																		}
+																																																	});
 																																																}
 																																																
 																																																// Otherwise
 																																																else {
 																																																
-																																																	// Check if wallet's hardware wallet is connected
-																																																	if(wallet.isHardwareConnected() === true) {
+																																																	// Check if hardware wallet isn't disconnected
+																																																	if(hardwareWalletDisconnected === false) {
 																																																
-																																																		// Return canceling transaction with the wallet's hardware wallet and catch errors
-																																																		return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
+																																																		// Turn off message replace API event
+																																																		$(self.message).off(Message.REPLACE_EVENT + ".api");
+																																																
+																																																		// Get if message was canceled
+																																																		var messageCanceled = canceled() === true;
 																																																		
-																																																		// Finally
-																																																		}).finally(function() {
+																																																		// Check if message wasn't canceled
+																																																		if(messageCanceled === false) {
+																																																		
+																																																			// Disable message
+																																																			self.message.disable();
+																																																		}
+																																																		
+																																																		// Set hide message
+																																																		var hideMessage = function() {
+																																																		
+																																																			// Return promise
+																																																			return new Promise(function(resolve, reject) {
+																																																			
+																																																				// Check if message was canceled
+																																																				if(messageCanceled === true) {
+																																																				
+																																																					// Resolve
+																																																					resolve();
+																																																				}
+																																																				
+																																																				// Otherwise
+																																																				else {
+																																																				
+																																																					// Return setting that hardware wallet is done approving
+																																																					return self.wallets.hardwareWalletDoneApproving(preventMessages).then(function() {
+																																																					
+																																																						// Resolve
+																																																						resolve();
+																																																					});
+																																																				}
+																																																			});
+																																																		};
+																																																		
+																																																		// Return hiding message
+																																																		return hideMessage().then(function() {
 																																																	
-																																																			// Reject JSON-RPC internal error error response
-																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																			// Check if cancel didn't occur and message wasn't canceled
+																																																			if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																		
+																																																				// Return adding a slate participant
+																																																				return addSlateParticipant().then(function() {
+																																																				
+																																																					// Check if cancel didn't occur and message wasn't canceled
+																																																					if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																				
+																																																						// Resolve
+																																																						resolve();
+																																																					}
+																																																					
+																																																					// Otherwise
+																																																					else {
+																																																					
+																																																						// Check if cancel didn't occur
+																																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																						
+																																																							// Reject canceled error
+																																																							reject(Common.CANCELED_ERROR);
+																																																						}
+																																																						
+																																																						// Otherwise
+																																																						else {
+																																																					
+																																																							// Reject JSON-RPC internal error error response
+																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																						}
+																																																					}
+																																																				
+																																																				// Catch errors
+																																																				}).catch(function(error) {
+																																																				
+																																																					// Check if cancel didn't occur and message wasn't canceled
+																																																					if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																				
+																																																						// Reject error
+																																																						reject(error);
+																																																					}
+																																																					
+																																																					// Otherwise
+																																																					else {
+																																																					
+																																																						// Check if cancel didn't occur
+																																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																						
+																																																							// Reject canceled error
+																																																							reject(Common.CANCELED_ERROR);
+																																																						}
+																																																						
+																																																						// Otherwise
+																																																						else {
+																																																					
+																																																							// Reject JSON-RPC internal error error response
+																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																						}
+																																																					}
+																																																				});
+																																																			}
+																																																			
+																																																			// Otherwise
+																																																			else {
+																																																			
+																																																				// Check if cancel didn't occur
+																																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																				
+																																																					// Reject canceled error
+																																																					reject(Common.CANCELED_ERROR);
+																																																				}
+																																																				
+																																																				// Otherwise
+																																																				else {
+																																																			
+																																																					// Reject JSON-RPC internal error error response
+																																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																				}
+																																																			}
 																																																		});
-																																																	}
-																																																	
-																																																	// Otherwise
-																																																	else {
-																																																	
-																																																		// Reject JSON-RPC internal error error response
-																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																																	}
 																																																}
 																																															
@@ -4496,867 +5707,62 @@ class Api {
 																																																}
 																																															});
 																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Return adding a slate participant
-																																															return addSlateParticipant().then(function() {
-																																															
-																																																// Check if cancel didn't occur
-																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																															
-																																																	// Resolve
-																																																	resolve();
-																																																}
-																																																
-																																																// Otherwise
-																																																else {
-																																																
-																																																	// Reject JSON-RPC internal error error response
-																																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																}
-																																															
-																																															// Catch errors
-																																															}).catch(function(error) {
-																																															
-																																																// Check if cancel didn't occur
-																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																															
-																																																	// Reject error
-																																																	reject(error);
-																																																}
-																																																
-																																																// Otherwise
-																																																else {
-																																																
-																																																	// Reject JSON-RPC internal error error response
-																																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																}
-																																															});
-																																														}
 																																													}
 																																													
 																																													// Otherwise
 																																													else {
-																																												
-																																														// Return waiting for wallet's hardware wallet to approve
-																																														return self.wallets.waitForHardwareWalletToApprove(wallet.getKeyPath(), Message.createPendingResult() + Message.createLineBreak() + Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Approve receiving a transaction on the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText((slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? Language.getDefaultTranslation('Verify that the account index displayed on the hardware wallet is %1$s, the amount displayed is %2$c, the fee displayed is %3$c, the kernel features displayed is %4$x, and the sender payment proof address displayed matches the following payment proof address.') : Language.getDefaultTranslation('Verify that the account index displayed on the hardware wallet is %1$s, the amount displayed is %2$c, the fee displayed is %3$c, the kernel features displayed is %4$x, and that there\'s no sender payment proof address displayed.'), [
-																																																					
-																																															// Account index
-																																															HardwareWallet.ACCOUNT.toFixed(),
-																																															
-																																															[
-																																			
-																																																// Number
-																																																slate.getAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
-																																																
-																																																// Currency
-																																																Consensus.CURRENCY_NAME
-																																															],
-																																															
-																																															[
-																																															
-																																																// Number
-																																																slate.getFee().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
-																																																
-																																																// Currency
-																																																Consensus.CURRENCY_NAME
-																																															],
-																																															
-																																															// Kernel features
-																																															slate.getDisplayKernelFeatures()
-																																															
-																																														]) + ((slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? (Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(slate.getSenderAddress()) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak()) : ""), allowUnlock, preventMessages, cancelOccurred).then(function(canceled) {
-																																														
-																																															// Initialize hardware wallet disconnected
-																																															var hardwareWalletDisconnected = false;
-																																														
-																																															// Message replace API event
-																																															$(self.message).on(Message.REPLACE_EVENT + ".api", function(event, messageType, messageData) {
-																																															
-																																																// Check if message type is hardware wallet disconnect message
-																																																if(messageType === Application.HARDWARE_WALLET_DISCONNECT_MESSAGE) {
-																																																
-																																																	// Turn off message replace API event
-																																																	$(self.message).off(Message.REPLACE_EVENT + ".api");
-																																																	
-																																																	// Set hardware wallet disconnected
-																																																	hardwareWalletDisconnected = true;
-																																																	
-																																																	// Get if message was canceled
-																																																	var messageCanceled = canceled() === true;
-																																																	
-																																																	// Check if message wasn't canceled
-																																																	if(messageCanceled === false) {
-																																																	
-																																																		// Disable message
-																																																		self.message.disable();
-																																																	}
-																																																	
-																																																	// Set hide message
-																																																	var hideMessage = function() {
-																																																	
-																																																		// Return promise
-																																																		return new Promise(function(resolve, reject) {
-																																																		
-																																																			// Check if message was canceled
-																																																			if(messageCanceled === true) {
-																																																			
-																																																				// Resolve
-																																																				resolve();
-																																																			}
-																																																			
-																																																			// Otherwise
-																																																			else {
-																																																			
-																																																				// Return setting that hardware wallet is done approving
-																																																				return self.wallets.hardwareWalletDoneApproving(preventMessages).then(function() {
-																																																				
-																																																					// Resolve
-																																																					resolve();
-																																																				});
-																																																			}
-																																																		});
-																																																	};
-																																																	
-																																																	// Return hiding message
-																																																	return hideMessage().then(function() {
-																																																	
-																																																		// Check if cancel didn't occur and message wasn't canceled
-																																																		if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																	
-																																																			// Return adding a slate participant
-																																																			return addSlateParticipant().then(function() {
-																																																			
-																																																				// Check if cancel didn't occur and message wasn't canceled
-																																																				if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																			
-																																																					// Resolve
-																																																					resolve();
-																																																				}
-																																																				
-																																																				// Otherwise
-																																																				else {
-																																																				
-																																																					// Check if cancel didn't occur
-																																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																					
-																																																						// Reject canceled error
-																																																						reject(Common.CANCELED_ERROR);
-																																																					}
-																																																					
-																																																					// Otherwise
-																																																					else {
-																																																				
-																																																						// Reject JSON-RPC internal error error response
-																																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																					}
-																																																				}
-																																																			
-																																																			// Catch errors
-																																																			}).catch(function(error) {
-																																																			
-																																																				// Check if cancel didn't occur and message wasn't canceled
-																																																				if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																			
-																																																					// Reject error
-																																																					reject(error);
-																																																				}
-																																																				
-																																																				// Otherwise
-																																																				else {
-																																																				
-																																																					// Check if cancel didn't occur
-																																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																					
-																																																						// Reject canceled error
-																																																						reject(Common.CANCELED_ERROR);
-																																																					}
-																																																					
-																																																					// Otherwise
-																																																					else {
-																																																				
-																																																						// Reject JSON-RPC internal error error response
-																																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																					}
-																																																				}
-																																																			});
-																																																		}
-																																																		
-																																																		// Otherwise
-																																																		else {
-																																																		
-																																																			// Check if cancel didn't occur
-																																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																			
-																																																				// Reject canceled error
-																																																				reject(Common.CANCELED_ERROR);
-																																																			}
-																																																			
-																																																			// Otherwise
-																																																			else {
-																																																		
-																																																				// Reject JSON-RPC internal error error response
-																																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																			}
-																																																		}
-																																																	});
-																																																}
-																																															});
-																																											
-																																															// Check if wallet's hardware wallet is connected
-																																															if(wallet.isHardwareConnected() === true) {
-																																															
-																																																// Save slate's receiver signature
-																																																var oldReceiverSignature = slate.getReceiverSignature();
 																																													
-																																																// Return adding participant to slate
-																																																return slate.addParticipant(wallet.getHardwareWallet(), Slate.NO_SECRET_NONCE, SlateParticipant.NO_MESSAGE, wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], true, true, function() {
-																									
-																																																	// Return if message was canceled
-																																																	return canceled() === true;
-																																																	
-																																																}).then(function() {
-																																																
-																																																	// Check if hardware wallet isn't disconnected
-																																																	if(hardwareWalletDisconnected === false) {
-																																																
-																																																		// Turn off message replace API event
-																																																		$(self.message).off(Message.REPLACE_EVENT + ".api");
-																																																	
-																																																		// Get if message was canceled
-																																																		var messageCanceled = canceled() === true;
-																																																		
-																																																		// Check if message wasn't canceled
-																																																		if(messageCanceled === false) {
-																																																		
-																																																			// Disable message
-																																																			self.message.disable();
-																																																		}
-																																																		
-																																																		// Set hide message
-																																																		var hideMessage = function() {
-																																																		
-																																																			// Return promise
-																																																			return new Promise(function(resolve, reject) {
-																																																			
-																																																				// Check if message was canceled
-																																																				if(messageCanceled === true) {
-																																																				
-																																																					// Resolve
-																																																					resolve();
-																																																				}
-																																																				
-																																																				// Otherwise
-																																																				else {
-																																																				
-																																																					// Return setting that hardware wallet is done approving
-																																																					return self.wallets.hardwareWalletDoneApproving(preventMessages).then(function() {
-																																																					
-																																																						// Resolve
-																																																						resolve();
-																																																					});
-																																																				}
-																																																			});
-																																																		};
-																																																		
-																																																		// Return hiding message
-																																																		return hideMessage().then(function() {
-																																																	
-																																																			// Check if cancel didn't occur and message wasn't canceled
-																																																			if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																		
-																																																				// Check if wallet's hardware wallet is connected
-																																																				if(wallet.isHardwareConnected() === true) {
-																																																				
-																																																					// Return completing transaction with the wallet's hardware wallet
-																																																					return wallet.getHardwareWallet().completeTransaction().then(function() {
-																																																					
-																																																						// Check if cancel didn't occur and message wasn't canceled
-																																																						if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																					
-																																																							// Resolve
-																																																							resolve();
-																																																						}
-																																																						
-																																																						// Otherwise
-																																																						else {
-																																																						
-																																																							// Check if cancel didn't occur
-																																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																							
-																																																								// Reject canceled error
-																																																								reject(Common.CANCELED_ERROR);
-																																																							}
-																																																							
-																																																							// Otherwise
-																																																							else {
-																																																						
-																																																								// Reject JSON-RPC internal error error response
-																																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																							}
-																																																						}
-																																																						
-																																																					// Catch errors
-																																																					}).catch(function(error) {
-																																																					
-																																																						// Check if cancel didn't occur and message wasn't canceled
-																																																						if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																						
-																																																							// Reject JSON-RPC internal error error response
-																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																						}
-																																																						
-																																																						// Otherwise
-																																																						else {
-																																																						
-																																																							// Check if cancel didn't occur
-																																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																							
-																																																								// Reject canceled error
-																																																								reject(Common.CANCELED_ERROR);
-																																																							}
-																																																							
-																																																							// Otherwise
-																																																							else {
-																																																						
-																																																								// Reject JSON-RPC internal error error response
-																																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																							}
-																																																						}
-																																																					});
-																																																				}
-																																																				
-																																																				// Otherwise
-																																																				else {
-																																																				
-																																																					// Remove participant from slate
-																																																					slate.getParticipants().pop();
-																																																					
-																																																					// Restore slate's old receiver signature
-																																																					slate.setReceiverSignature(oldReceiverSignature);
-																																																				
-																																																					// Return adding a slate participant
-																																																					return addSlateParticipant().then(function() {
-																																																					
-																																																						// Check if cancel didn't occur and message wasn't canceled
-																																																						if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																					
-																																																							// Resolve
-																																																							resolve();
-																																																						}
-																																																						
-																																																						// Otherwise
-																																																						else {
-																																																						
-																																																							// Check if cancel didn't occur
-																																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																							
-																																																								// Reject canceled error
-																																																								reject(Common.CANCELED_ERROR);
-																																																							}
-																																																							
-																																																							// Otherwise
-																																																							else {
-																																																						
-																																																								// Reject JSON-RPC internal error error response
-																																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																							}
-																																																						}
-																																																					
-																																																					// Catch errors
-																																																					}).catch(function(error) {
-																																																					
-																																																						// Check if cancel didn't occur and message wasn't canceled
-																																																						if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																					
-																																																							// Reject error
-																																																							reject(error);
-																																																						}
-																																																						
-																																																						// Otherwise
-																																																						else {
-																																																						
-																																																							// Check if cancel didn't occur
-																																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																							
-																																																								// Reject canceled error
-																																																								reject(Common.CANCELED_ERROR);
-																																																							}
-																																																							
-																																																							// Otherwise
-																																																							else {
-																																																						
-																																																								// Reject JSON-RPC internal error error response
-																																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																							}
-																																																						}
-																																																					});
-																																																				}
-																																																			}
-																																																			
-																																																			// Otherwise
-																																																			else {
-																																																			
-																																																				// Check if wallet's hardware wallet is connected
-																																																				if(wallet.isHardwareConnected() === true) {
-																																																			
-																																																					// Return canceling transaction with the wallet's hardware wallet and catch errors
-																																																					return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
-																																																					
-																																																					// Finally
-																																																					}).finally(function() {
-																																																				
-																																																						// Check if cancel didn't occur
-																																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																						
-																																																							// Reject canceled error
-																																																							reject(Common.CANCELED_ERROR);
-																																																						}
-																																																						
-																																																						// Otherwise
-																																																						else {
-																																																					
-																																																							// Reject JSON-RPC internal error error response
-																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																						}
-																																																					});
-																																																				}
-																																																				
-																																																				// Otherwise
-																																																				else {
-																																																				
-																																																					// Check if cancel didn't occur
-																																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																					
-																																																						// Reject canceled error
-																																																						reject(Common.CANCELED_ERROR);
-																																																					}
-																																																					
-																																																					// Otherwise
-																																																					else {
-																																																				
-																																																						// Reject JSON-RPC internal error error response
-																																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																					}
-																																																				}
-																																																			}
-																																																		});
-																																																	}
-																																																	
-																																																	// Otherwise
-																																																	else {
-																																																	
-																																																		// Check if wallet's hardware wallet is connected
-																																																		if(wallet.isHardwareConnected() === true) {
-																																																	
-																																																			// Cancel transaction with the wallet's hardware wallet and catch errors
-																																																			wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
-																																																			
-																																																			});
-																																																		}
-																																																	}
-																																																
-																																																// Catch errors
-																																																}).catch(function(error) {
-																																																
-																																																	// Check if hardware wallet isn't disconnected
-																																																	if(hardwareWalletDisconnected === false) {
-																																																	
-																																																		// Turn off message replace API event
-																																																		$(self.message).off(Message.REPLACE_EVENT + ".api");
-																																																
-																																																		// Get if message was canceled
-																																																		var messageCanceled = canceled() === true;
-																																																		
-																																																		// Check if message wasn't canceled
-																																																		if(messageCanceled === false) {
-																																																		
-																																																			// Disable message
-																																																			self.message.disable();
-																																																		}
-																																																		
-																																																		// Set hide message
-																																																		var hideMessage = function() {
-																																																		
-																																																			// Return promise
-																																																			return new Promise(function(resolve, reject) {
-																																																			
-																																																				// Check if message was canceled
-																																																				if(messageCanceled === true) {
-																																																				
-																																																					// Resolve
-																																																					resolve();
-																																																				}
-																																																				
-																																																				// Otherwise
-																																																				else {
-																																																				
-																																																					// Return setting that hardware wallet is done approving
-																																																					return self.wallets.hardwareWalletDoneApproving(preventMessages).then(function() {
-																																																					
-																																																						// Resolve
-																																																						resolve();
-																																																					});
-																																																				}
-																																																			});
-																																																		};
-																																																		
-																																																		// Return hiding message
-																																																		return hideMessage().then(function() {
-																																																
-																																																			// Check if wallet's hardware wallet is connected
-																																																			if(wallet.isHardwareConnected() === true) {
-																																																		
-																																																				// Return canceling transaction with the wallet's hardware wallet and catch errors
-																																																				return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
-																																																				
-																																																				// Finally
-																																																				}).finally(function() {
-																																																				
-																																																					// Check if cancel didn't occur and message wasn't canceled
-																																																					if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																				
-																																																						// Check if hardware wallet was disconnected
-																																																						if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																																						
-																																																							// Check if wallet's hardware wallet is connected
-																																																							if(wallet.isHardwareConnected() === true) {
-																																																						
-																																																								// Wallet's hardware wallet disconnect event
-																																																								$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																																																							
-																																																									// Return adding a slate participant
-																																																									return addSlateParticipant().then(function() {
-																																																									
-																																																										// Check if cancel didn't occur and message wasn't canceled
-																																																										if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																									
-																																																											// Resolve
-																																																											resolve();
-																																																										}
-																																																										
-																																																										// Otherwise
-																																																										else {
-																																																										
-																																																											// Check if cancel didn't occur
-																																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																											
-																																																												// Reject canceled error
-																																																												reject(Common.CANCELED_ERROR);
-																																																											}
-																																																											
-																																																											// Otherwise
-																																																											else {
-																																																										
-																																																												// Reject JSON-RPC internal error error response
-																																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																											}
-																																																										}
-																																																									
-																																																									// Catch errors
-																																																									}).catch(function(error) {
-																																																									
-																																																										// Check if cancel didn't occur and message wasn't canceled
-																																																										if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																									
-																																																											// Reject error
-																																																											reject(error);
-																																																										}
-																																																										
-																																																										// Otherwise
-																																																										else {
-																																																										
-																																																											// Check if cancel didn't occur
-																																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																											
-																																																												// Reject canceled error
-																																																												reject(Common.CANCELED_ERROR);
-																																																											}
-																																																											
-																																																											// Otherwise
-																																																											else {
-																																																										
-																																																												// Reject JSON-RPC internal error error response
-																																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																											}
-																																																										}
-																																																									});
-																																																								});
-																																																							}
-																																																							
-																																																							// Otherwise
-																																																							else {
-																																																							
-																																																								// Return adding a slate participant
-																																																								return addSlateParticipant().then(function() {
-																																																								
-																																																									// Check if cancel didn't occur and message wasn't canceled
-																																																									if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																								
-																																																										// Resolve
-																																																										resolve();
-																																																									}
-																																																									
-																																																									// Otherwise
-																																																									else {
-																																																									
-																																																										// Check if cancel didn't occur
-																																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																										
-																																																											// Reject canceled error
-																																																											reject(Common.CANCELED_ERROR);
-																																																										}
-																																																										
-																																																										// Otherwise
-																																																										else {
-																																																									
-																																																											// Reject JSON-RPC internal error error response
-																																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																										}
-																																																									}
-																																																								
-																																																								// Catch errors
-																																																								}).catch(function(error) {
-																																																								
-																																																									// Check if cancel didn't occur and message wasn't canceled
-																																																									if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																								
-																																																										// Reject error
-																																																										reject(error);
-																																																									}
-																																																									
-																																																									// Otherwise
-																																																									else {
-																																																									
-																																																										// Check if cancel didn't occur
-																																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																										
-																																																											// Reject canceled error
-																																																											reject(Common.CANCELED_ERROR);
-																																																										}
-																																																										
-																																																										// Otherwise
-																																																										else {
-																																																									
-																																																											// Reject JSON-RPC internal error error response
-																																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																										}
-																																																									}
-																																																								});
-																																																							}
-																																																						}
-																																																						
-																																																						// Otherwise check if canceled or user rejected on hardware wallet
-																																																						else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																																				
-																																																							// Reject error
-																																																							reject(error);
-																																																						}
-																																																						
-																																																						// Otherwise
-																																																						else {
-																																																					
-																																																							// Reject JSON-RPC internal error error response
-																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																						}
-																																																					}
-																																																					
-																																																					// Otherwise
-																																																					else {
-																																																					
-																																																						// Check if cancel didn't occur
-																																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																						
-																																																							// Reject canceled error
-																																																							reject(Common.CANCELED_ERROR);
-																																																						}
-																																																						
-																																																						// Otherwise
-																																																						else {
-																																																					
-																																																							// Reject JSON-RPC internal error error response
-																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																						}
-																																																					}
-																																																				});
-																																																			}
-																																																			
-																																																			// Otherwise
-																																																			else {
-																																																			
-																																																				// Check if cancel didn't occur and message wasn't canceled
-																																																				if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																			
-																																																					// Check if hardware wallet was disconnected
-																																																					if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																																						
-																																																						// Return adding a slate participant
-																																																						return addSlateParticipant().then(function() {
-																																																						
-																																																							// Check if cancel didn't occur and message wasn't canceled
-																																																							if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																						
-																																																								// Resolve
-																																																								resolve();
-																																																							}
-																																																							
-																																																							// Otherwise
-																																																							else {
-																																																							
-																																																								// Check if cancel didn't occur
-																																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																								
-																																																									// Reject canceled error
-																																																									reject(Common.CANCELED_ERROR);
-																																																								}
-																																																								
-																																																								// Otherwise
-																																																								else {
-																																																							
-																																																									// Reject JSON-RPC internal error error response
-																																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																								}
-																																																							}
-																																																						
-																																																						// Catch errors
-																																																						}).catch(function(error) {
-																																																						
-																																																							// Check if cancel didn't occur and message wasn't canceled
-																																																							if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
-																																																						
-																																																								// Reject error
-																																																								reject(error);
-																																																							}
-																																																							
-																																																							// Otherwise
-																																																							else {
-																																																							
-																																																								// Check if cancel didn't occur
-																																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																								
-																																																									// Reject canceled error
-																																																									reject(Common.CANCELED_ERROR);
-																																																								}
-																																																								
-																																																								// Otherwise
-																																																								else {
-																																																							
-																																																									// Reject JSON-RPC internal error error response
-																																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																								}
-																																																							}
-																																																						});
-																																																					}
-																																																					
-																																																					// Otherwise check if canceled or user rejected on hardware wallet
-																																																					else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																																			
-																																																						// Reject error
-																																																						reject(error);
-																																																					}
-																																																					
-																																																					// Otherwise
-																																																					else {
-																																																				
-																																																						// Reject JSON-RPC internal error error response
-																																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																					}
-																																																				}
-																																																				
-																																																				// Otherwise
-																																																				else {
-																																																				
-																																																					// Check if cancel didn't occur
-																																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																					
-																																																						// Reject canceled error
-																																																						reject(Common.CANCELED_ERROR);
-																																																					}
-																																																					
-																																																					// Otherwise
-																																																					else {
-																																																				
-																																																						// Reject JSON-RPC internal error error response
-																																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																					}
-																																																				}
-																																																			}
-																																																		});
-																																																	}
-																																																	
-																																																	// Otherwise
-																																																	else {
-																																																	
-																																																		// Check if wallet's hardware wallet is connected
-																																																		if(wallet.isHardwareConnected() === true) {
-																																																	
-																																																			// Cancel transaction with the wallet's hardware wallet and catch errors
-																																																			wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
-																																																			
-																																																			});
-																																																		}
-																																																	}
-																																																});
-																																															}
+																																														// Check if wallet's hardware wallet is connected
+																																														if(wallet.isHardwareConnected() === true) {
+																																													
+																																															// Return canceling transaction with the wallet's hardware wallet and catch errors
+																																															return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
 																																															
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Check if hardware wallet isn't disconnected
-																																																if(hardwareWalletDisconnected === false) {
-																																															
-																																																	// Turn off message replace API event
-																																																	$(self.message).off(Message.REPLACE_EVENT + ".api");
-																																															
-																																																	// Get if message was canceled
-																																																	var messageCanceled = canceled() === true;
-																																																	
-																																																	// Check if message wasn't canceled
-																																																	if(messageCanceled === false) {
-																																																	
-																																																		// Disable message
-																																																		self.message.disable();
-																																																	}
-																																																	
-																																																	// Set hide message
-																																																	var hideMessage = function() {
-																																																	
-																																																		// Return promise
-																																																		return new Promise(function(resolve, reject) {
-																																																		
-																																																			// Check if message was canceled
-																																																			if(messageCanceled === true) {
-																																																			
-																																																				// Resolve
-																																																				resolve();
-																																																			}
-																																																			
-																																																			// Otherwise
-																																																			else {
-																																																			
-																																																				// Return setting that hardware wallet is done approving
-																																																				return self.wallets.hardwareWalletDoneApproving(preventMessages).then(function() {
-																																																				
-																																																					// Resolve
-																																																					resolve();
-																																																				});
-																																																			}
-																																																		});
-																																																	};
-																																																	
-																																																	// Return hiding message
-																																																	return hideMessage().then(function() {
+																																															// Finally
+																																															}).finally(function() {
+																																														
+																																																// Reject JSON-RPC internal error error response
+																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																															});
+																																														}
+																																														
+																																														// Otherwise
+																																														else {
+																																														
+																																															// Reject JSON-RPC internal error error response
+																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																														}
+																																													}
+																																												
+																																												// Catch errors
+																																												}).catch(function(error) {
+																																												
+																																													// Check if wallet's hardware wallet is connected
+																																													if(wallet.isHardwareConnected() === true) {
+																																												
+																																														// Return canceling transaction with the wallet's hardware wallet and catch errors
+																																														return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
+																																														
+																																														// Finally
+																																														}).finally(function() {
+																																														
+																																															// Check if cancel didn't occur
+																																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																														
+																																																// Check if hardware wallet was disconnected
+																																																if(error === HardwareWallet.DISCONNECTED_ERROR) {
 																																																
-																																																		// Check if cancel didn't occur and message wasn't canceled
-																																																		if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																	// Check if wallet's hardware wallet is connected
+																																																	if(wallet.isHardwareConnected() === true) {
+																																																
+																																																		// Wallet's hardware wallet disconnect event
+																																																		$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
 																																																	
 																																																			// Return adding a slate participant
 																																																			return addSlateParticipant().then(function() {
 																																																			
-																																																				// Check if cancel didn't occur and message wasn't canceled
-																																																				if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																				// Check if cancel didn't occur
+																																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																																			
 																																																					// Resolve
 																																																					resolve();
@@ -5365,26 +5771,15 @@ class Api {
 																																																				// Otherwise
 																																																				else {
 																																																				
-																																																					// Check if cancel didn't occur
-																																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																					
-																																																						// Reject canceled error
-																																																						reject(Common.CANCELED_ERROR);
-																																																					}
-																																																					
-																																																					// Otherwise
-																																																					else {
-																																																				
-																																																						// Reject JSON-RPC internal error error response
-																																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																					}
+																																																					// Reject JSON-RPC internal error error response
+																																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																																				}
 																																																			
 																																																			// Catch errors
 																																																			}).catch(function(error) {
 																																																			
-																																																				// Check if cancel didn't occur and message wasn't canceled
-																																																				if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && messageCanceled === false) {
+																																																				// Check if cancel didn't occur
+																																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																																			
 																																																					// Reject error
 																																																					reject(error);
@@ -5393,178 +5788,16 @@ class Api {
 																																																				// Otherwise
 																																																				else {
 																																																				
-																																																					// Check if cancel didn't occur
-																																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																					
-																																																						// Reject canceled error
-																																																						reject(Common.CANCELED_ERROR);
-																																																					}
-																																																					
-																																																					// Otherwise
-																																																					else {
-																																																				
-																																																						// Reject JSON-RPC internal error error response
-																																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																					}
+																																																					// Reject JSON-RPC internal error error response
+																																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																																				}
 																																																			});
-																																																		}
-																																																		
-																																																		// Otherwise
-																																																		else {
-																																																		
-																																																			// Check if cancel didn't occur
-																																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																			
-																																																				// Reject canceled error
-																																																				reject(Common.CANCELED_ERROR);
-																																																			}
-																																																			
-																																																			// Otherwise
-																																																			else {
-																																																		
-																																																				// Reject JSON-RPC internal error error response
-																																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																			}
-																																																		}
-																																																	});
-																																																}
-																																															}
-																																														
-																																														// Catch errors
-																																														}).catch(function(error) {
-																																														
-																																															// Check if wallet's hardware wallet is connected
-																																															if(wallet.isHardwareConnected() === true) {
-																																														
-																																																// Return canceling transaction with the wallet's hardware wallet and catch errors
-																																																return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
-																																																
-																																																// Finally
-																																																}).finally(function() {
-																																																
-																																																	// Check if cancel didn't occur
-																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																
-																																																		// Check if hardware wallet was disconnected
-																																																		if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																																		
-																																																			// Check if wallet's hardware wallet is connected
-																																																			if(wallet.isHardwareConnected() === true) {
-																																																		
-																																																				// Wallet's hardware wallet disconnect event
-																																																				$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																																																			
-																																																					// Return adding a slate participant
-																																																					return addSlateParticipant().then(function() {
-																																																					
-																																																						// Check if cancel didn't occur
-																																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																					
-																																																							// Resolve
-																																																							resolve();
-																																																						}
-																																																						
-																																																						// Otherwise
-																																																						else {
-																																																						
-																																																							// Reject JSON-RPC internal error error response
-																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																						}
-																																																					
-																																																					// Catch errors
-																																																					}).catch(function(error) {
-																																																					
-																																																						// Check if cancel didn't occur
-																																																						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																					
-																																																							// Reject error
-																																																							reject(error);
-																																																						}
-																																																						
-																																																						// Otherwise
-																																																						else {
-																																																						
-																																																							// Reject JSON-RPC internal error error response
-																																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																						}
-																																																					});
-																																																				});
-																																																			}
-																																																			
-																																																			// Otherwise
-																																																			else {
-																																																			
-																																																				// Return adding a slate participant
-																																																				return addSlateParticipant().then(function() {
-																																																				
-																																																					// Check if cancel didn't occur
-																																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																				
-																																																						// Resolve
-																																																						resolve();
-																																																					}
-																																																					
-																																																					// Otherwise
-																																																					else {
-																																																					
-																																																						// Reject JSON-RPC internal error error response
-																																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																					}
-																																																				
-																																																				// Catch errors
-																																																				}).catch(function(error) {
-																																																				
-																																																					// Check if cancel didn't occur
-																																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																				
-																																																						// Reject error
-																																																						reject(error);
-																																																					}
-																																																					
-																																																					// Otherwise
-																																																					else {
-																																																					
-																																																						// Reject JSON-RPC internal error error response
-																																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																					}
-																																																				});
-																																																			}
-																																																		}
-																																																		
-																																																		// Otherwise check if canceled or user rejected on hardware wallet
-																																																		else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																																
-																																																			// Reject error
-																																																			reject(error);
-																																																		}
-																																																		
-																																																		// Otherwise
-																																																		else {
-																																																	
-																																																			// Reject JSON-RPC internal error error response
-																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																		}
+																																																		});
 																																																	}
 																																																	
 																																																	// Otherwise
 																																																	else {
 																																																	
-																																																		// Reject JSON-RPC internal error error response
-																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																	}
-																																																});
-																																															}
-																																															
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Check if cancel didn't occur
-																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																															
-																																																	// Check if hardware wallet was disconnected
-																																																	if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																																		
 																																																		// Return adding a slate participant
 																																																		return addSlateParticipant().then(function() {
 																																																		
@@ -5600,60 +5833,104 @@ class Api {
 																																																			}
 																																																		});
 																																																	}
-																																																	
-																																																	// Otherwise check if canceled or user rejected on hardware wallet
-																																																	else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																															
-																																																		// Reject error
-																																																		reject(error);
-																																																	}
-																																																	
-																																																	// Otherwise
-																																																	else {
+																																																}
 																																																
-																																																		// Reject JSON-RPC internal error error response
-																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																	}
+																																																// Otherwise check if canceled or user rejected on hardware wallet
+																																																else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																														
+																																																	// Reject error
+																																																	reject(error);
 																																																}
 																																																
 																																																// Otherwise
 																																																else {
-																																																
+																																															
 																																																	// Reject JSON-RPC internal error error response
 																																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																																}
 																																															}
-																																														});
-																																													}
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Check if wallet's hardware wallet is connected
-																																													if(wallet.isHardwareConnected() === true) {
-																																												
-																																														// Return canceling transaction with the wallet's hardware wallet and catch errors
-																																														return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
-																																														
-																																														// Finally
-																																														}).finally(function() {
-																																													
-																																															// Reject JSON-RPC internal error error response
-																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																															
+																																															// Otherwise
+																																															else {
+																																															
+																																																// Reject JSON-RPC internal error error response
+																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																															}
 																																														});
 																																													}
 																																													
 																																													// Otherwise
 																																													else {
 																																													
-																																														// Reject JSON-RPC internal error error response
-																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																														// Check if cancel didn't occur
+																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																													
+																																															// Check if hardware wallet was disconnected
+																																															if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																																
+																																																// Return adding a slate participant
+																																																return addSlateParticipant().then(function() {
+																																																
+																																																	// Check if cancel didn't occur
+																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																
+																																																		// Resolve
+																																																		resolve();
+																																																	}
+																																																	
+																																																	// Otherwise
+																																																	else {
+																																																	
+																																																		// Reject JSON-RPC internal error error response
+																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																	}
+																																																
+																																																// Catch errors
+																																																}).catch(function(error) {
+																																																
+																																																	// Check if cancel didn't occur
+																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																
+																																																		// Reject error
+																																																		reject(error);
+																																																	}
+																																																	
+																																																	// Otherwise
+																																																	else {
+																																																	
+																																																		// Reject JSON-RPC internal error error response
+																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																	}
+																																																});
+																																															}
+																																															
+																																															// Otherwise check if canceled or user rejected on hardware wallet
+																																															else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																													
+																																																// Reject error
+																																																reject(error);
+																																															}
+																																															
+																																															// Otherwise
+																																															else {
+																																														
+																																																// Reject JSON-RPC internal error error response
+																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																															}
+																																														}
+																																														
+																																														// Otherwise
+																																														else {
+																																														
+																																															// Reject JSON-RPC internal error error response
+																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																														}
 																																													}
-																																												}
+																																												});
+																																											}
 																																											
-																																											// Catch errors
-																																											}).catch(function(error) {
+																																											// Otherwise
+																																											else {
 																																											
 																																												// Check if wallet's hardware wallet is connected
 																																												if(wallet.isHardwareConnected() === true) {
@@ -5663,6 +5940,600 @@ class Api {
 																																													
 																																													// Finally
 																																													}).finally(function() {
+																																												
+																																														// Reject JSON-RPC internal error error response
+																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																													});
+																																												}
+																																												
+																																												// Otherwise
+																																												else {
+																																												
+																																													// Reject JSON-RPC internal error error response
+																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																												}
+																																											}
+																																											
+																																										// Catch errors
+																																										}).catch(function(error) {
+																																										
+																																											// Check if wallet's hardware wallet is connected
+																																											if(wallet.isHardwareConnected() === true) {
+																																										
+																																												// Return canceling transaction with the wallet's hardware wallet and catch errors
+																																												return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
+																																												
+																																												// Finally
+																																												}).finally(function() {
+																																												
+																																													// Check if cancel didn't occur
+																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																												
+																																														// Check if hardware wallet was disconnected
+																																														if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																														
+																																															// Check if wallet's hardware wallet is connected
+																																															if(wallet.isHardwareConnected() === true) {
+																																														
+																																																// Wallet's hardware wallet disconnect event
+																																																$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																															
+																																																	// Return adding a slate participant
+																																																	return addSlateParticipant().then(function() {
+																																																	
+																																																		// Check if cancel didn't occur
+																																																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																	
+																																																			// Resolve
+																																																			resolve();
+																																																		}
+																																																		
+																																																		// Otherwise
+																																																		else {
+																																																		
+																																																			// Reject JSON-RPC internal error error response
+																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																		}
+																																																	
+																																																	// Catch errors
+																																																	}).catch(function(error) {
+																																																	
+																																																		// Check if cancel didn't occur
+																																																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																	
+																																																			// Reject error
+																																																			reject(error);
+																																																		}
+																																																		
+																																																		// Otherwise
+																																																		else {
+																																																		
+																																																			// Reject JSON-RPC internal error error response
+																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																		}
+																																																	});
+																																																});
+																																															}
+																																															
+																																															// Otherwise
+																																															else {
+																																															
+																																																// Return adding a slate participant
+																																																return addSlateParticipant().then(function() {
+																																																
+																																																	// Check if cancel didn't occur
+																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																
+																																																		// Resolve
+																																																		resolve();
+																																																	}
+																																																	
+																																																	// Otherwise
+																																																	else {
+																																																	
+																																																		// Reject JSON-RPC internal error error response
+																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																	}
+																																																
+																																																// Catch errors
+																																																}).catch(function(error) {
+																																																
+																																																	// Check if cancel didn't occur
+																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																																
+																																																		// Reject error
+																																																		reject(error);
+																																																	}
+																																																	
+																																																	// Otherwise
+																																																	else {
+																																																	
+																																																		// Reject JSON-RPC internal error error response
+																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																																	}
+																																																});
+																																															}
+																																														}
+																																														
+																																														// Otherwise check if canceled or user rejected on hardware wallet
+																																														else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																												
+																																															// Reject error
+																																															reject(error);
+																																														}
+																																														
+																																														// Otherwise
+																																														else {
+																																													
+																																															// Reject JSON-RPC internal error error response
+																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																														}
+																																													}
+																																													
+																																													// Otherwise
+																																													else {
+																																													
+																																														// Reject JSON-RPC internal error error response
+																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																													}
+																																												});
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Check if cancel didn't occur
+																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																											
+																																													// Check if hardware wallet was disconnected
+																																													if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																														
+																																														// Return adding a slate participant
+																																														return addSlateParticipant().then(function() {
+																																														
+																																															// Check if cancel didn't occur
+																																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																														
+																																																// Resolve
+																																																resolve();
+																																															}
+																																															
+																																															// Otherwise
+																																															else {
+																																															
+																																																// Reject JSON-RPC internal error error response
+																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																															}
+																																														
+																																														// Catch errors
+																																														}).catch(function(error) {
+																																														
+																																															// Check if cancel didn't occur
+																																															if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																														
+																																																// Reject error
+																																																reject(error);
+																																															}
+																																															
+																																															// Otherwise
+																																															else {
+																																															
+																																																// Reject JSON-RPC internal error error response
+																																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																															}
+																																														});
+																																													}
+																																													
+																																													// Otherwise check if canceled or user rejected on hardware wallet
+																																													else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																											
+																																														// Reject error
+																																														reject(error);
+																																													}
+																																													
+																																													// Otherwise
+																																													else {
+																																												
+																																														// Reject JSON-RPC internal error error response
+																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																													}
+																																												}
+																																												
+																																												// Otherwise
+																																												else {
+																																												
+																																													// Reject JSON-RPC internal error error response
+																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																												}
+																																											}
+																																										});
+																																									}
+																																									
+																																									// Otherwise
+																																									else {
+																																									
+																																										// Return adding a slate participant
+																																										return addSlateParticipant().then(function() {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																										
+																																												// Resolve
+																																												resolve();
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																										
+																																										// Catch errors
+																																										}).catch(function(error) {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																										
+																																												// Reject error
+																																												reject(error);
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																										});
+																																									}
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Check if wallet's hardware wallet is connected
+																																									if(wallet.isHardwareConnected() === true) {
+																																								
+																																										// Return canceling transaction with the wallet's hardware wallet and catch errors
+																																										return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
+																																										
+																																										// Finally
+																																										}).finally(function() {
+																																									
+																																											// Reject JSON-RPC internal error error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																										});
+																																									}
+																																									
+																																									// Otherwise
+																																									else {
+																																									
+																																										// Reject JSON-RPC internal error error response
+																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																									}
+																																								}
+																																								
+																																							// Catch errors
+																																							}).catch(function(error) {
+																																							
+																																								// Check if cancel didn't occur
+																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																							
+																																									// Check if hardware wallet was disconnected
+																																									if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																																									
+																																										// Check if wallet's hardware wallet is connected
+																																										if(wallet.isHardwareConnected() === true) {
+																																									
+																																											// Wallet's hardware wallet disconnect event
+																																											$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
+																																										
+																																												// Return adding a slate participant
+																																												return addSlateParticipant().then(function() {
+																																												
+																																													// Check if cancel didn't occur
+																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																												
+																																														// Resolve
+																																														resolve();
+																																													}
+																																													
+																																													// Otherwise
+																																													else {
+																																													
+																																														// Reject JSON-RPC internal error error response
+																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																													}
+																																												
+																																												// Catch errors
+																																												}).catch(function(error) {
+																																												
+																																													// Check if cancel didn't occur
+																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																												
+																																														// Reject error
+																																														reject(error);
+																																													}
+																																													
+																																													// Otherwise
+																																													else {
+																																													
+																																														// Reject JSON-RPC internal error error response
+																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																													}
+																																												});
+																																											});
+																																										}
+																																										
+																																										// Otherwise
+																																										else {
+																																										
+																																											// Return adding a slate participant
+																																											return addSlateParticipant().then(function() {
+																																											
+																																												// Check if cancel didn't occur
+																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																											
+																																													// Resolve
+																																													resolve();
+																																												}
+																																												
+																																												// Otherwise
+																																												else {
+																																												
+																																													// Reject JSON-RPC internal error error response
+																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																												}
+																																											
+																																											// Catch errors
+																																											}).catch(function(error) {
+																																											
+																																												// Check if cancel didn't occur
+																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																											
+																																													// Reject error
+																																													reject(error);
+																																												}
+																																												
+																																												// Otherwise
+																																												else {
+																																												
+																																													// Reject JSON-RPC internal error error response
+																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																												}
+																																											});
+																																										}
+																																									}
+																																									
+																																									// Otherwise check if canceled or user rejected on hardware wallet
+																																									else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																							
+																																										// Reject error
+																																										reject(error);
+																																									}
+																																									
+																																									// Otherwise
+																																									else {
+																																								
+																																										// Reject JSON-RPC internal error error response
+																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																									}
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Reject JSON-RPC internal error error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																								}
+																																							});
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Return adding a slate participant
+																																							return addSlateParticipant().then(function() {
+																																							
+																																								// Check if cancel didn't occur
+																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																							
+																																									// Resolve
+																																									resolve();
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Reject JSON-RPC internal error error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																								}
+																																							
+																																							// Catch errors
+																																							}).catch(function(error) {
+																																							
+																																								// Check if cancel didn't occur
+																																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																							
+																																									// Reject error
+																																									reject(error);
+																																								}
+																																								
+																																								// Otherwise
+																																								else {
+																																								
+																																									// Reject JSON-RPC internal error error response
+																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																								}
+																																							});
+																																						}
+																																					}
+																																					
+																																					// Otherwise
+																																					else {
+																																					
+																																						// Reject JSON-RPC internal error error response
+																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																					}
+																																				
+																																				// Catch errors
+																																				}).catch(function(error) {
+																																				
+																																					// Check if cancel didn't occur
+																																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																					
+																																						// Check if canceled, user rejected on hardware wallet, or hardware wallet is disconnected
+																																						if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR || error === HardwareWallet.DISCONNECTED_ERROR) {
+																																				
+																																							// Reject error
+																																							reject(error);
+																																						}
+																																						
+																																						// Otherwise
+																																						else {
+																																						
+																																							// Reject JSON-RPC internal error error response
+																																							reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																						}
+																																					}
+																													
+																																					// Otherwise
+																																					else {
+																																					
+																																						// Reject JSON-RPC internal error error response
+																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																					}
+																																				});
+																																			}
+																																		}
+																																		
+																																		// Otherwise
+																																		else {
+																																		
+																																			// Reject JSON-RPC internal error error response
+																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																		}
+																																	});
+																																};
+																																
+																																// Return adding a slate participant
+																																return addSlateParticipant().then(function() {
+																																
+																																	// Check if cancel didn't occur
+																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																	
+																																		// Encode slate
+																																		var encodeSlate = function(serializedSlate) {
+																																		
+																																			// Return promise
+																																			return new Promise(function(resolve, reject) {
+																																			
+																																				// Check if cancel didn't occur
+																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																				
+																																					// Check wallet type
+																																					switch(Consensus.getWalletType()) {
+																																					
+																																						// MWC or GRIN wallet
+																																						case Consensus.MWC_WALLET_TYPE:
+																																						case Consensus.GRIN_WALLET_TYPE:
+																																				
+																																							// Check if serialized slate is binary
+																																							if(serializedSlate instanceof Uint8Array === true) {
+																																							
+																																								// Check if a Slatepack is provided and it's encrypted
+																																								if(typeof data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX] === "string" && Slatepack.isEncryptedSlatepack(data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX]) === true) {
+																																							
+																																									// Check if wallet isn't a hardware wallet
+																																									if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
+																																								
+																																										// Return getting wallet's Tor secret key
+																																										return wallet.getAddressKey(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX).then(function(secretKey) {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																											
+																																												// Return encoding the serialized slate
+																																												return Slatepack.encodeSlatepack(serializedSlate, secretKey, Slatepack.getSlatepackSenderPublicKey(data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX])).then(function(slatepack) {
+																																												
+																																													// Securely clear secret key
+																																													secretKey.fill(0);
+																																													
+																																													// Check if cancel didn't occur
+																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																													
+																																														// Resolve the Slatepack
+																																														resolve(slatepack);
+																																													}
+																																													
+																																													// Otherwise
+																																													else {
+																																													
+																																														// Reject JSON-RPC internal error error response
+																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																													}
+																																												
+																																												// Catch errors
+																																												}).catch(function(error) {
+																																												
+																																													// Securely clear secret key
+																																													secretKey.fill(0);
+																																													
+																																													// Reject JSON-RPC internal error error response
+																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																												});
+																																											}
+																																											
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Securely clear secret key
+																																												secretKey.fill(0);
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																										
+																																										// Catch errors
+																																										}).catch(function(error) {
+																																										
+																																											// Reject JSON-RPC internal error error response
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																										});
+																																									}
+																																									
+																																									// Otherwise
+																																									else {
+																																									
+																																										// Return waiting for wallet's hardware wallet to connect
+																																										return self.wallets.waitForHardwareWalletToConnect(wallet.getKeyPath(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Connect the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Connect the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																									
+																																												// Check if hardware wallet is connected
+																																												if(wallet.isHardwareConnected() === true) {
+																																												
+																																													// Return encoding the serialized slate
+																																													return Slatepack.encodeSlatepack(serializedSlate, wallet.getHardwareWallet(), Slatepack.getSlatepackSenderPublicKey(data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX]), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(slatepack) {
+																																													
+																																														// Check if cancel didn't occur
+																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																													
+																																															// Resolve the Slatepack
+																																															resolve(slatepack);
+																																														}
+																																														
+																																														// Otherwise
+																																														else {
+																																														
+																																															// Reject JSON-RPC internal error error response
+																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																														}
+																																														
+																																													// Catch errors
+																																													}).catch(function(error) {
 																																													
 																																														// Check if cancel didn't occur
 																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
@@ -5676,14 +6547,14 @@ class Api {
 																																																	// Wallet's hardware wallet disconnect event
 																																																	$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
 																																																
-																																																		// Return adding a slate participant
-																																																		return addSlateParticipant().then(function() {
+																																																		// Return encoding the serialized slate
+																																																		return encodeSlate(serializedSlate).then(function(slatepack) {
 																																																		
 																																																			// Check if cancel didn't occur
 																																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																																		
-																																																				// Resolve
-																																																				resolve();
+																																																				// Resolve the Slatepack
+																																																				resolve(slatepack);
 																																																			}
 																																																			
 																																																			// Otherwise
@@ -5716,14 +6587,14 @@ class Api {
 																																																// Otherwise
 																																																else {
 																																																
-																																																	// Return adding a slate participant
-																																																	return addSlateParticipant().then(function() {
+																																																	// Return encoding the serialized slate
+																																																	return encodeSlate(serializedSlate).then(function(slatepack) {
 																																																	
 																																																		// Check if cancel didn't occur
 																																																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																																	
-																																																			// Resolve
-																																																			resolve();
+																																																			// Resolve the Slatepack
+																																																			resolve(slatepack);
 																																																		}
 																																																		
 																																																		// Otherwise
@@ -5780,240 +6651,14 @@ class Api {
 																																												// Otherwise
 																																												else {
 																																												
-																																													// Check if cancel didn't occur
-																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																												
-																																														// Check if hardware wallet was disconnected
-																																														if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																															
-																																															// Return adding a slate participant
-																																															return addSlateParticipant().then(function() {
-																																															
-																																																// Check if cancel didn't occur
-																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																															
-																																																	// Resolve
-																																																	resolve();
-																																																}
-																																																
-																																																// Otherwise
-																																																else {
-																																																
-																																																	// Reject JSON-RPC internal error error response
-																																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																}
-																																															
-																																															// Catch errors
-																																															}).catch(function(error) {
-																																															
-																																																// Check if cancel didn't occur
-																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																															
-																																																	// Reject error
-																																																	reject(error);
-																																																}
-																																																
-																																																// Otherwise
-																																																else {
-																																																
-																																																	// Reject JSON-RPC internal error error response
-																																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																}
-																																															});
-																																														}
-																																														
-																																														// Otherwise check if canceled or user rejected on hardware wallet
-																																														else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																												
-																																															// Reject error
-																																															reject(error);
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																													
-																																															// Reject JSON-RPC internal error error response
-																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																														}
-																																													}
-																																													
-																																													// Otherwise
-																																													else {
-																																													
-																																														// Reject JSON-RPC internal error error response
-																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																													}
-																																												}
-																																											});
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Check if wallet's hardware wallet is connected
-																																											if(wallet.isHardwareConnected() === true) {
-																																										
-																																												// Return canceling transaction with the wallet's hardware wallet and catch errors
-																																												return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
-																																												
-																																												// Finally
-																																												}).finally(function() {
-																																											
-																																													// Reject JSON-RPC internal error error response
-																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																												});
-																																											}
-																																											
-																																											// Otherwise
-																																											else {
-																																											
-																																												// Reject JSON-RPC internal error error response
-																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																											}
-																																										}
-																																										
-																																									// Catch errors
-																																									}).catch(function(error) {
-																																									
-																																										// Check if wallet's hardware wallet is connected
-																																										if(wallet.isHardwareConnected() === true) {
-																																									
-																																											// Return canceling transaction with the wallet's hardware wallet and catch errors
-																																											return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
-																																											
-																																											// Finally
-																																											}).finally(function() {
-																																											
-																																												// Check if cancel didn't occur
-																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																											
-																																													// Check if hardware wallet was disconnected
-																																													if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																													
-																																														// Check if wallet's hardware wallet is connected
-																																														if(wallet.isHardwareConnected() === true) {
-																																													
-																																															// Wallet's hardware wallet disconnect event
-																																															$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																																														
-																																																// Return adding a slate participant
-																																																return addSlateParticipant().then(function() {
-																																																
-																																																	// Check if cancel didn't occur
-																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																
-																																																		// Resolve
-																																																		resolve();
-																																																	}
-																																																	
-																																																	// Otherwise
-																																																	else {
-																																																	
-																																																		// Reject JSON-RPC internal error error response
-																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																	}
-																																																
-																																																// Catch errors
-																																																}).catch(function(error) {
-																																																
-																																																	// Check if cancel didn't occur
-																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																
-																																																		// Reject error
-																																																		reject(error);
-																																																	}
-																																																	
-																																																	// Otherwise
-																																																	else {
-																																																	
-																																																		// Reject JSON-RPC internal error error response
-																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																	}
-																																																});
-																																															});
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																														
-																																															// Return adding a slate participant
-																																															return addSlateParticipant().then(function() {
-																																															
-																																																// Check if cancel didn't occur
-																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																															
-																																																	// Resolve
-																																																	resolve();
-																																																}
-																																																
-																																																// Otherwise
-																																																else {
-																																																
-																																																	// Reject JSON-RPC internal error error response
-																																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																}
-																																															
-																																															// Catch errors
-																																															}).catch(function(error) {
-																																															
-																																																// Check if cancel didn't occur
-																																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																															
-																																																	// Reject error
-																																																	reject(error);
-																																																}
-																																																
-																																																// Otherwise
-																																																else {
-																																																
-																																																	// Reject JSON-RPC internal error error response
-																																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																}
-																																															});
-																																														}
-																																													}
-																																													
-																																													// Otherwise check if canceled or user rejected on hardware wallet
-																																													else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																											
-																																														// Reject error
-																																														reject(error);
-																																													}
-																																													
-																																													// Otherwise
-																																													else {
-																																												
-																																														// Reject JSON-RPC internal error error response
-																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																													}
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Reject JSON-RPC internal error error response
-																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																												}
-																																											});
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Check if cancel didn't occur
-																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																										
-																																												// Check if hardware wallet was disconnected
-																																												if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																													
-																																													// Return adding a slate participant
-																																													return addSlateParticipant().then(function() {
+																																													// Return encoding the serialized slate
+																																													return encodeSlate(serializedSlate).then(function(slatepack) {
 																																													
 																																														// Check if cancel didn't occur
 																																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																													
-																																															// Resolve
-																																															resolve();
+																																															// Resolve the Slatepack
+																																															resolve(slatepack);
 																																														}
 																																														
 																																														// Otherwise
@@ -6041,9 +6686,23 @@ class Api {
 																																														}
 																																													});
 																																												}
-																																												
-																																												// Otherwise check if canceled or user rejected on hardware wallet
-																																												else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
+																																											}
+																																																		
+																																											// Otherwise
+																																											else {
+																																											
+																																												// Reject JSON-RPC internal error error response
+																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																											}
+																																											
+																																										// Catch errors
+																																										}).catch(function(error) {
+																																										
+																																											// Check if cancel didn't occur
+																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																											
+																																												// Check if canceled, user rejected on hardware wallet, or hardware wallet is disconnected
+																																												if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR || error === HardwareWallet.DISCONNECTED_ERROR) {
 																																										
 																																													// Reject error
 																																													reject(error);
@@ -6051,33 +6710,33 @@ class Api {
 																																												
 																																												// Otherwise
 																																												else {
-																																											
+																																												
 																																													// Reject JSON-RPC internal error error response
 																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																												}
 																																											}
-																																											
+																																			
 																																											// Otherwise
 																																											else {
 																																											
 																																												// Reject JSON-RPC internal error error response
 																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																											}
-																																										}
-																																									});
+																																										});
+																																									}
 																																								}
 																																								
 																																								// Otherwise
 																																								else {
 																																								
-																																									// Return adding a slate participant
-																																									return addSlateParticipant().then(function() {
+																																									// Return encoding the serialized slate
+																																									return Slatepack.encodeSlatepack(serializedSlate).then(function(slatepack) {
 																																									
 																																										// Check if cancel didn't occur
 																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																									
-																																											// Resolve
-																																											resolve();
+																																										
+																																											// Resolve the Slatepack
+																																											resolve(slatepack);
 																																										}
 																																										
 																																										// Otherwise
@@ -6090,232 +6749,47 @@ class Api {
 																																									// Catch errors
 																																									}).catch(function(error) {
 																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																									
-																																											// Reject error
-																																											reject(error);
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																									});
-																																								}
-																																							}
-																																							
-																																							// Otherwise
-																																							else {
-																																							
-																																								// Check if wallet's hardware wallet is connected
-																																								if(wallet.isHardwareConnected() === true) {
-																																							
-																																									// Return canceling transaction with the wallet's hardware wallet and catch errors
-																																									return wallet.getHardwareWallet().cancelTransaction().catch(function(error) {
-																																									
-																																									// Finally
-																																									}).finally(function() {
-																																								
 																																										// Reject JSON-RPC internal error error response
 																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																									});
 																																								}
-																																								
-																																								// Otherwise
-																																								else {
-																																								
-																																									// Reject JSON-RPC internal error error response
-																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																								}
-																																							}
-																																							
-																																						// Catch errors
-																																						}).catch(function(error) {
-																																						
-																																							// Check if cancel didn't occur
-																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																						
-																																								// Check if hardware wallet was disconnected
-																																								if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																								
-																																									// Check if wallet's hardware wallet is connected
-																																									if(wallet.isHardwareConnected() === true) {
-																																								
-																																										// Wallet's hardware wallet disconnect event
-																																										$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																																									
-																																											// Return adding a slate participant
-																																											return addSlateParticipant().then(function() {
-																																											
-																																												// Check if cancel didn't occur
-																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																											
-																																													// Resolve
-																																													resolve();
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Reject JSON-RPC internal error error response
-																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																												}
-																																											
-																																											// Catch errors
-																																											}).catch(function(error) {
-																																											
-																																												// Check if cancel didn't occur
-																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																											
-																																													// Reject error
-																																													reject(error);
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Reject JSON-RPC internal error error response
-																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																												}
-																																											});
-																																										});
-																																									}
-																																									
-																																									// Otherwise
-																																									else {
-																																									
-																																										// Return adding a slate participant
-																																										return addSlateParticipant().then(function() {
-																																										
-																																											// Check if cancel didn't occur
-																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																										
-																																												// Resolve
-																																												resolve();
-																																											}
-																																											
-																																											// Otherwise
-																																											else {
-																																											
-																																												// Reject JSON-RPC internal error error response
-																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																											}
-																																										
-																																										// Catch errors
-																																										}).catch(function(error) {
-																																										
-																																											// Check if cancel didn't occur
-																																											if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																										
-																																												// Reject error
-																																												reject(error);
-																																											}
-																																											
-																																											// Otherwise
-																																											else {
-																																											
-																																												// Reject JSON-RPC internal error error response
-																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																											}
-																																										});
-																																									}
-																																								}
-																																								
-																																								// Otherwise check if canceled or user rejected on hardware wallet
-																																								else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																						
-																																									// Reject error
-																																									reject(error);
-																																								}
-																																								
-																																								// Otherwise
-																																								else {
-																																							
-																																									// Reject JSON-RPC internal error error response
-																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																								}
 																																							}
 																																							
 																																							// Otherwise
 																																							else {
 																																							
-																																								// Reject JSON-RPC internal error error response
-																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																								// Resolve the serialized slate
+																																								resolve(serializedSlate);
 																																							}
-																																						});
-																																					}
-																																					
-																																					// Otherwise
-																																					else {
-																																					
-																																						// Return adding a slate participant
-																																						return addSlateParticipant().then(function() {
+																																							
+																																							// Break
+																																							break;
 																																						
-																																							// Check if cancel didn't occur
-																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																						// EPIC wallet
+																																						case Consensus.EPIC_WALLET_TYPE:
 																																						
-																																								// Resolve
-																																								resolve();
+																																							// Check if a emoji text is provided
+																																							if(typeof data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX] === "string") {
+																																							
+																																								// Get emoji text from serialized slate
+																																								var emojiText = Emoji.encode(JSONBigNumber.stringify(serializedSlate));
+																																								
+																																								// Resolve emoji text
+																																								resolve(emojiText);
 																																							}
 																																							
 																																							// Otherwise
 																																							else {
-																																							
-																																								// Reject JSON-RPC internal error error response
-																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																							}
 																																						
-																																						// Catch errors
-																																						}).catch(function(error) {
-																																						
-																																							// Check if cancel didn't occur
-																																							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																						
-																																								// Reject error
-																																								reject(error);
+																																								// Resolve the serialized slate
+																																								resolve(serializedSlate);
 																																							}
 																																							
-																																							// Otherwise
-																																							else {
-																																							
-																																								// Reject JSON-RPC internal error error response
-																																								reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																							}
-																																						});
+																																							// Break
+																																							break;
 																																					}
 																																				}
 																																				
-																																				// Otherwise
-																																				else {
-																																				
-																																					// Reject JSON-RPC internal error error response
-																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																				}
-																																			
-																																			// Catch errors
-																																			}).catch(function(error) {
-																																			
-																																				// Check if cancel didn't occur
-																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																				
-																																					// Check if canceled, user rejected on hardware wallet, or hardware wallet is disconnected
-																																					if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR || error === HardwareWallet.DISCONNECTED_ERROR) {
-																																			
-																																						// Reject error
-																																						reject(error);
-																																					}
-																																					
-																																					// Otherwise
-																																					else {
-																																					
-																																						// Reject JSON-RPC internal error error response
-																																						reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																					}
-																																				}
-																												
 																																				// Otherwise
 																																				else {
 																																				
@@ -6323,413 +6797,10 @@ class Api {
 																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																				}
 																																			});
-																																		}
-																																	}
-																																	
-																																	// Otherwise
-																																	else {
-																																	
-																																		// Reject JSON-RPC internal error error response
-																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																	}
-																																});
-																															};
-																															
-																															// Return adding a slate participant
-																															return addSlateParticipant().then(function() {
-																															
-																																// Check if cancel didn't occur
-																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																
-																																	// Encode slate
-																																	var encodeSlate = function(serializedSlate) {
-																																	
-																																		// Return promise
-																																		return new Promise(function(resolve, reject) {
+																																		};
 																																		
-																																			// Check if cancel didn't occur
-																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																			
-																																				// Check wallet type
-																																				switch(Consensus.getWalletType()) {
-																																				
-																																					// MWC wallet
-																																					case Consensus.MWC_WALLET_TYPE:
-																																			
-																																						// Check if serialized slate is compact
-																																						if(serializedSlate instanceof Uint8Array === true) {
-																																						
-																																							// Check if a Slatepack is provided and it's encrypted
-																																							if(typeof data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX] === "string" && Slatepack.isEncryptedSlatepack(data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX]) === true) {
-																																						
-																																								// Check if wallet isn't a hardware wallet
-																																								if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
-																																							
-																																									// Return getting wallet's Tor secret key
-																																									return wallet.getAddressKey(Wallet.PAYMENT_PROOF_TOR_ADDRESS_KEY_INDEX).then(function(secretKey) {
-																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																										
-																																											// Return encoding the serialized slate
-																																											return Slatepack.encodeSlatepack(serializedSlate, secretKey, Slatepack.getSlatepackSenderPublicKey(data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX])).then(function(slatepack) {
-																																											
-																																												// Securely clear secret key
-																																												secretKey.fill(0);
-																																												
-																																												// Check if cancel didn't occur
-																																												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																												
-																																													// Resolve the Slatepack
-																																													resolve(slatepack);
-																																												}
-																																												
-																																												// Otherwise
-																																												else {
-																																												
-																																													// Reject JSON-RPC internal error error response
-																																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																												}
-																																											
-																																											// Catch errors
-																																											}).catch(function(error) {
-																																											
-																																												// Securely clear secret key
-																																												secretKey.fill(0);
-																																												
-																																												// Reject JSON-RPC internal error error response
-																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																											});
-																																										}
-																																										
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Securely clear secret key
-																																											secretKey.fill(0);
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																									
-																																									// Catch errors
-																																									}).catch(function(error) {
-																																									
-																																										// Reject JSON-RPC internal error error response
-																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																									});
-																																								}
-																																								
-																																								// Otherwise
-																																								else {
-																																								
-																																									// Return waiting for wallet's hardware wallet to connect
-																																									return self.wallets.waitForHardwareWalletToConnect(wallet.getKeyPath(), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Connect the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Connect the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function() {
-																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																								
-																																											// Check if hardware wallet is connected
-																																											if(wallet.isHardwareConnected() === true) {
-																																											
-																																												// Return encoding the serialized slate
-																																												return Slatepack.encodeSlatepack(serializedSlate, wallet.getHardwareWallet(), Slatepack.getSlatepackSenderPublicKey(data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX]), (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(slatepack) {
-																																												
-																																													// Check if cancel didn't occur
-																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																												
-																																														// Resolve the Slatepack
-																																														resolve(slatepack);
-																																													}
-																																													
-																																													// Otherwise
-																																													else {
-																																													
-																																														// Reject JSON-RPC internal error error response
-																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																													}
-																																													
-																																												// Catch errors
-																																												}).catch(function(error) {
-																																												
-																																													// Check if cancel didn't occur
-																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																												
-																																														// Check if hardware wallet was disconnected
-																																														if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																																														
-																																															// Check if wallet's hardware wallet is connected
-																																															if(wallet.isHardwareConnected() === true) {
-																																														
-																																																// Wallet's hardware wallet disconnect event
-																																																$(wallet.getHardwareWallet()).one(HardwareWallet.DISCONNECT_EVENT, function() {
-																																															
-																																																	// Return encoding the serialized slate
-																																																	return encodeSlate(serializedSlate).then(function(slatepack) {
-																																																	
-																																																		// Check if cancel didn't occur
-																																																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																	
-																																																			// Resolve the Slatepack
-																																																			resolve(slatepack);
-																																																		}
-																																																		
-																																																		// Otherwise
-																																																		else {
-																																																		
-																																																			// Reject JSON-RPC internal error error response
-																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																		}
-																																																	
-																																																	// Catch errors
-																																																	}).catch(function(error) {
-																																																	
-																																																		// Check if cancel didn't occur
-																																																		if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																	
-																																																			// Reject error
-																																																			reject(error);
-																																																		}
-																																																		
-																																																		// Otherwise
-																																																		else {
-																																																		
-																																																			// Reject JSON-RPC internal error error response
-																																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																		}
-																																																	});
-																																																});
-																																															}
-																																															
-																																															// Otherwise
-																																															else {
-																																															
-																																																// Return encoding the serialized slate
-																																																return encodeSlate(serializedSlate).then(function(slatepack) {
-																																																
-																																																	// Check if cancel didn't occur
-																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																
-																																																		// Resolve the Slatepack
-																																																		resolve(slatepack);
-																																																	}
-																																																	
-																																																	// Otherwise
-																																																	else {
-																																																	
-																																																		// Reject JSON-RPC internal error error response
-																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																	}
-																																																
-																																																// Catch errors
-																																																}).catch(function(error) {
-																																																
-																																																	// Check if cancel didn't occur
-																																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																																
-																																																		// Reject error
-																																																		reject(error);
-																																																	}
-																																																	
-																																																	// Otherwise
-																																																	else {
-																																																	
-																																																		// Reject JSON-RPC internal error error response
-																																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																																	}
-																																																});
-																																															}
-																																														}
-																																														
-																																														// Otherwise check if canceled or user rejected on hardware wallet
-																																														else if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR) {
-																																												
-																																															// Reject error
-																																															reject(error);
-																																														}
-																																														
-																																														// Otherwise
-																																														else {
-																																													
-																																															// Reject JSON-RPC internal error error response
-																																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																														}
-																																													}
-																																													
-																																													// Otherwise
-																																													else {
-																																													
-																																														// Reject JSON-RPC internal error error response
-																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																													}
-																																												});
-																																											}
-																																											
-																																											// Otherwise
-																																											else {
-																																											
-																																												// Return encoding the serialized slate
-																																												return encodeSlate(serializedSlate).then(function(slatepack) {
-																																												
-																																													// Check if cancel didn't occur
-																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																												
-																																														// Resolve the Slatepack
-																																														resolve(slatepack);
-																																													}
-																																													
-																																													// Otherwise
-																																													else {
-																																													
-																																														// Reject JSON-RPC internal error error response
-																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																													}
-																																												
-																																												// Catch errors
-																																												}).catch(function(error) {
-																																												
-																																													// Check if cancel didn't occur
-																																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																												
-																																														// Reject error
-																																														reject(error);
-																																													}
-																																													
-																																													// Otherwise
-																																													else {
-																																													
-																																														// Reject JSON-RPC internal error error response
-																																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																													}
-																																												});
-																																											}
-																																										}
-																																																	
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																										
-																																									// Catch errors
-																																									}).catch(function(error) {
-																																									
-																																										// Check if cancel didn't occur
-																																										if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																										
-																																											// Check if canceled, user rejected on hardware wallet, or hardware wallet is disconnected
-																																											if(error === Common.CANCELED_ERROR || error === HardwareWallet.USER_REJECTED_ERROR || error === HardwareWallet.DISCONNECTED_ERROR) {
-																																									
-																																												// Reject error
-																																												reject(error);
-																																											}
-																																											
-																																											// Otherwise
-																																											else {
-																																											
-																																												// Reject JSON-RPC internal error error response
-																																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																											}
-																																										}
-																																		
-																																										// Otherwise
-																																										else {
-																																										
-																																											// Reject JSON-RPC internal error error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																										}
-																																									});
-																																								}
-																																							}
-																																							
-																																							// Otherwise
-																																							else {
-																																							
-																																								// Return encoding the serialized slate
-																																								return Slatepack.encodeSlatepack(serializedSlate).then(function(slatepack) {
-																																								
-																																									// Check if cancel didn't occur
-																																									if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																									
-																																										// Resolve the Slatepack
-																																										resolve(slatepack);
-																																									}
-																																									
-																																									// Otherwise
-																																									else {
-																																									
-																																										// Reject JSON-RPC internal error error response
-																																										reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																									}
-																																								
-																																								// Catch errors
-																																								}).catch(function(error) {
-																																								
-																																									// Reject JSON-RPC internal error error response
-																																									reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																								});
-																																							}
-																																						}
-																																						
-																																						// Otherwise
-																																						else {
-																																						
-																																							// Resolve the serialized slate
-																																							resolve(serializedSlate);
-																																						}
-																																						
-																																						// Break
-																																						break;
-																																					
-																																					// GRIN wallet
-																																					case Consensus.GRIN_WALLET_TYPE:
-																																					
-																																						// Resolve the serialized slate
-																																						resolve(serializedSlate);
-																																						
-																																						// Break
-																																						break;
-																																					
-																																					// EPIC wallet
-																																					case Consensus.EPIC_WALLET_TYPE:
-																																					
-																																						// Check if a emoji text is provided
-																																						if(typeof data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX] === "string") {
-																																						
-																																							// Get emoji text from serialized slate
-																																							var emojiText = Emoji.encode(JSONBigNumber.stringify(serializedSlate));
-																																							
-																																							// Resolve emoji text
-																																							resolve(emojiText);
-																																						}
-																																						
-																																						// Otherwise
-																																						else {
-																																					
-																																							// Resolve the serialized slate
-																																							resolve(serializedSlate);
-																																						}
-																																						
-																																						// Break
-																																						break;
-																																				}
-																																			}
-																																			
-																																			// Otherwise
-																																			else {
-																																			
-																																				// Reject JSON-RPC internal error error response
-																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																			}
-																																		});
-																																	};
-																																	
-																																	// Check if slate has payment proof
-																																	if(slate.hasPaymentProof() === true) {
-																																	
-																																		// Check if slate's receiver address is the same as the proof address
-																																		if(proofAddress === slate.getReceiverAddress()) {
+																																		// Check if slate has payment proof
+																																		if(slate.hasPaymentProof() === true) {
 																																		
 																																			// Try
 																																			try {
@@ -6960,7 +7031,7 @@ class Api {
 																																						try {
 																																						
 																																							// Serialize the slate
-																																							var serializedSlate = slate.serialize(wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, Slate.COMPACT_SLATE_PURPOSE_SEND_RESPONSE);
+																																							var serializedSlate = slate.serialize(wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, Slate.COMPACT_SLATE_PURPOSE_SEND_RESPONSE, typeof data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX] === "string");
 																																						}
 																																						
 																																						// Catch errors
@@ -7063,152 +7134,152 @@ class Api {
 																																		// Otherwise
 																																		else {
 																																		
-																																			// Reject JSON-RPC invalid parameters error response
-																																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																			// Try
+																																			try {
+																																			
+																																				// Serialize the slate
+																																				var serializedSlate = slate.serialize(wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, Slate.COMPACT_SLATE_PURPOSE_SEND_RESPONSE, typeof data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX] === "string");
+																																			}
+																																			
+																																			// Catch errors
+																																			catch(error) {
+																																			
+																																				// Reject JSON-RPC internal error error response
+																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																				
+																																				// Return
+																																				return;
+																																			}
+																																			
+																																			// Return encoding slate
+																																			return encodeSlate(serializedSlate).then(function(encodedSlate) {
+																																			
+																																				// Resolve
+																																				resolve([
+																																				
+																																					// JSON-RPC response
+																																					JsonRpc.createResponse({
+																														
+																																						// Ok
+																																						"Ok": encodedSlate
+																																					
+																																					}, data),
+																																					
+																																					// Method
+																																					data["method"],
+																																					
+																																					// Additional data
+																																					[
+																																					
+																																						// Slate
+																																						slate,
+																																						
+																																						// Commit
+																																						output[Wallet.OUTPUT_COMMIT_INDEX],
+																																						
+																																						// Identifier
+																																						output[Wallet.OUTPUT_IDENTIFIER_INDEX],
+																																						
+																																						// Switch type
+																																						output[Wallet.OUTPUT_SWITCH_TYPE_INDEX]
+																																					]
+																																				]);
+																																			
+																																			// Catch errors
+																																			}).catch(function(error) {
+																																			
+																																				// Check if cancel didn't occur
+																																				if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																			
+																																					// Reject error
+																																					reject(error);
+																																				}
+																																				
+																																				// Otherwise
+																																				else {
+																																				
+																																					// Reject JSON-RPC internal error error response
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																				}
+																																			});
 																																		}
 																																	}
 																																	
 																																	// Otherwise
 																																	else {
 																																	
-																																		// Try
-																																		try {
-																																		
-																																			// Serialize the slate
-																																			var serializedSlate = slate.serialize(wallet.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE, Slate.COMPACT_SLATE_PURPOSE_SEND_RESPONSE);
-																																		}
-																																		
-																																		// Catch errors
-																																		catch(error) {
-																																		
-																																			// Reject JSON-RPC internal error error response
-																																			reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																			
-																																			// Return
-																																			return;
-																																		}
-																																		
-																																		// Return encoding slate
-																																		return encodeSlate(serializedSlate).then(function(encodedSlate) {
-																																		
-																																			// Resolve
-																																			resolve([
-																																			
-																																				// JSON-RPC response
-																																				JsonRpc.createResponse({
-																													
-																																					// Ok
-																																					"Ok": encodedSlate
-																																				
-																																				}, data),
-																																				
-																																				// Method
-																																				data["method"],
-																																				
-																																				// Additional data
-																																				[
-																																				
-																																					// Slate
-																																					slate,
-																																					
-																																					// Commit
-																																					output[Wallet.OUTPUT_COMMIT_INDEX],
-																																					
-																																					// Identifier
-																																					output[Wallet.OUTPUT_IDENTIFIER_INDEX],
-																																					
-																																					// Switch type
-																																					output[Wallet.OUTPUT_SWITCH_TYPE_INDEX]
-																																				]
-																																			]);
-																																		
-																																		// Catch errors
-																																		}).catch(function(error) {
-																																		
-																																			// Check if cancel didn't occur
-																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																																		
-																																				// Reject error
-																																				reject(error);
-																																			}
-																																			
-																																			// Otherwise
-																																			else {
-																																			
-																																				// Reject JSON-RPC internal error error response
-																																				reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																			}
-																																		});
+																																		// Reject JSON-RPC internal error error response
+																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
 																																	}
-																																}
 																																
-																																// Otherwise
-																																else {
+																																// Catch errors
+																																}).catch(function(error) {
 																																
-																																	// Reject JSON-RPC internal error error response
-																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																}
+																																	// Check if cancel didn't occur
+																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																
+																																		// Reject error
+																																		reject(error);
+																																	}
+																																	
+																																	// Otherwise
+																																	else {
+																																	
+																																		// Reject JSON-RPC internal error error response
+																																		reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																																	}
+																																});
+																															}
 																															
-																															// Catch errors
-																															}).catch(function(error) {
+																															// Otherwise
+																															else {
 																															
-																																// Check if cancel didn't occur
-																																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																																// Reject JSON-RPC internal error error response
+																																reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																															}
 																															
-																																	// Reject error
-																																	reject(error);
-																																}
-																																
-																																// Otherwise
-																																else {
-																																
-																																	// Reject JSON-RPC internal error error response
-																																	reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																																}
-																															});
-																														}
-																																
-																														// Otherwise
-																														else {
+																														// Catch errors
+																														}).catch(function(error) {
 																														
 																															// Reject JSON-RPC internal error error response
 																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																														}
-																													
-																													// Catch errors
-																													}).catch(function(error) {
-																													
-																														// Check if cancel didn't occur
-																														if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
-																													
-																															// Reject error
-																															reject(error);
-																														}
+																														});
+																													}
 																														
-																														// Otherwise
-																														else {
+																													// Otherwise
+																													else {
+																													
+																														// Reject JSON-RPC internal error error response
+																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																													}
+																												
+																												// Catch errors
+																												}).catch(function(error) {
+																												
+																													// Check if cancel didn't occur
+																													if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+																												
+																														// Reject error
+																														reject(error);
+																													}
 																														
-																															// Reject JSON-RPC internal error error response
-																															reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																														}
-																													});
-																												}
-																												
-																												// Otherwise
-																												else {
-																												
-																													// Reject JSON-RPC internal error error response
-																													reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																												}
-																												
-																											// Catch errors
-																											}).catch(function(error) {
+																													// Otherwise
+																													else {
+																													
+																														// Reject JSON-RPC internal error error response
+																														reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
+																													}
+																												});
+																											}
+																																					
+																											// Otherwise
+																											else {
 																											
-																												// Reject JSON-RPC internal error error response
-																												reject(JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data));
-																											});
+																												// Reject JSON-RPC invalid parameters error response
+																												reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																											}
 																										}
-																											
+																												
 																										// Otherwise
 																										else {
 																										
@@ -7225,7 +7296,7 @@ class Api {
 																											// Reject error
 																											reject(error);
 																										}
-																											
+																										
 																										// Otherwise
 																										else {
 																										
@@ -11999,8 +12070,8 @@ class Api {
 																														// Check if slate is compact
 																														if(slate.isCompact() === true) {
 																														
-																															// Check if combinding the slate response's offset with the slate's offset failed
-																															if(slateResponse.combineOffsets(slate) === false) {
+																															// Check if combining the slate response's offset with the slate's offset failed
+																															if(slateResponse.combineOffsets(slate.getOffset()) === false) {
 																															
 																																// Reject error
 																																reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')));
@@ -15011,7 +15082,7 @@ class Api {
 					try {
 					
 						// Serialzie the slate
-						var serializedSlate = slate.serialize(isMainnet, Slate.COMPACT_SLATE_PURPOSE_SEND_INITIAL);
+						var serializedSlate = slate.serialize(isMainnet, Slate.COMPACT_SLATE_PURPOSE_SEND_INITIAL, sendAsFile === true);
 					}
 					
 					// Catch errors
@@ -15033,7 +15104,7 @@ class Api {
 							// Check if cancel didn't occur
 							if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 							
-								// Check if serialized slate is compact
+								// Check if serialized slate is binary
 								if(serializedSlate instanceof Uint8Array === true) {
 								
 									// Check if a slate has a Tor receiver address
@@ -16006,8 +16077,16 @@ class Api {
 													// break
 													break;
 												
-												// GRIN or EPIC wallet
+												// GRIN wallet
 												case Consensus.GRIN_WALLET_TYPE:
+												
+													// Set expecting Slatepack
+													var expectingSlatepack = sendAsFile === true;
+													
+													// break
+													break;
+												
+												// EPIC wallet
 												case Consensus.EPIC_WALLET_TYPE:
 												
 													// Set expecting Slatepack
