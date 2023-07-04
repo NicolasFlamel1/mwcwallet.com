@@ -3,18 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.3.0";
+	const VERSION_NUMBER = "2.3.1";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "04 Jul 2023 00:00:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed payment files not opening on slower devices.",
-		"Added support for Trezor Model One hardware wallets.",
-		"Added links to this wallet's source code and donation addresses in the about section.",
-		"Fixed QR codes not displaying correctly on the newest version of Chrome.",
-		"Added support for sending and receiving unencrypted Grin Slatepacks."
+		"Fixed QR codes appearing blurry in Tor Browser."
 	];
 	
 	// Maintenance start time

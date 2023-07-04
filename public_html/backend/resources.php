@@ -1365,10 +1365,10 @@
 			"Checksum" => "+iLOox399ALnS2ocTTcoR8TeLA911Bq1xoTAcINCUU40rxukwsiTQUbPLWxukc4VqPRhUlbTiTLie5fVPL64+Q=="
 		],
 		"./styles/wallet_section.css" => [
-			"Version" => 20,
+			"Version" => 21,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "1Gbml/LCXGCnimFUKJ0QBATrCrXuYPTc0US6S/wxWdKjlLs/g69884D0fT/5fzo2x62vY6yPI65Gh242Lh0juA=="
+			"Checksum" => "cpEAWAh9uHU5eV74nG4JNwJEJi79Z0C6Iq/DxTG+m/ulisUZq+9qAAK1k3T6YjJUZEVz5tLRzPWa6Lgq+lk3WQ=="
 		],
 		"./styles/send_payment_section.css" => [
 			"Version" => 6,

@@ -22,6 +22,7 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.ad
 	max-width: 22em;
 	flex-grow: 1;
 	width: 100%;
+	image-rendering: crisp-edges;
 	image-rendering: pixelated;
 	height: 100%;
 	-webkit-user-drag: none;
