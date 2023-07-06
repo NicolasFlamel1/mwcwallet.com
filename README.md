@@ -3,6 +3,12 @@
 ### Description
 Source code of the MimbleWimble Coin web wallet, [mwcwallet.com](https://mwcwallet.com).
 
+Mwcwallet.com is a self-custodial web wallet that allows you to manage your MimbleWimble Coin in your web browser. It can be accessed as a website at [https://mwcwallet.com](https://mwcwallet.com), as an Onion Service at [http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion), as a progressive web app, as a [browser extension](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension), or as a [standalone HTML file](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone).
+
+This wallet also allows for you to manage your MimbleWimble Coin with Ledger and Trezor hardware wallets by being compatible with the [Ledger MimbleWimble Coin app](https://github.com/NicolasFlamel1/Ledger-MimbleWimble-Coin) and [Trezor firmware with MimbleWimble Coin support](https://github.com/NicolasFlamel1/trezor-firmware).
+
+You can also use your own node, [listener](https://github.com/NicolasFlamel1/WebSocket-Listener), and [Tor proxy](https://github.com/NicolasFlamel1/Tor-Proxy) with this wallet thus allowing it to function without having to rely on any third parties.
+
 ### Develop
 This site can be ran from a local machine for development purposes. To do that, this repo's files are intended to reside at `/srv/mwcwallet.com`, but can be located anywhere as long as the `root` directive in the `nginx.conf` file correctly reflects the `public_html` folder's current location.
 
