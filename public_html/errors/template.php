@@ -70,6 +70,10 @@
 			touch-action: none;
 		}
 		
+		p, li, h2, h3 {
+			cursor: default;
+		}
+		
 		::selection {
 			background: #D4B7F2;
 		}
