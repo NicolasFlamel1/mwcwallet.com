@@ -12,3 +12,7 @@ Sitemap: https://<?= rawurlencode($_SERVER["SERVER_NAME"]); ?>/sitemap.xml
 User-agent: *
 Disallow: /errors/
 Disallow: /connection_test.html
+Disallow: /tor/
+Disallow: /listen
+Disallow: /wallet/
+Disallow: /donate/

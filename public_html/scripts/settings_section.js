@@ -794,7 +794,7 @@ class SettingsSection extends Section {
 					// Check if message was displayed
 					if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
 				
-						// Check if resetting settingss
+						// Check if resetting settings
 						if(messageResult === Message.SECOND_BUTTON_CLICKED_RESULT) {
 						
 							// Prevent showing messages
@@ -1130,7 +1130,7 @@ class SettingsSection extends Section {
 						// Check if message was displayed
 						if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
 					
-							// Check if resetting settingss
+							// Check if reloading
 							if(messageResult === Message.SECOND_BUTTON_CLICKED_RESULT) {
 							
 								// Prevent showing messages
@@ -1225,7 +1225,7 @@ class SettingsSection extends Section {
 						// Check if message was displayed
 						if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
 					
-							// Check if resetting settingss
+							// Check if reloading
 							if(messageResult === Message.SECOND_BUTTON_CLICKED_RESULT) {
 							
 								// Prevent showing messages

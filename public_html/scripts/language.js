@@ -1261,6 +1261,13 @@ class Language {
 						break;
 				}
 				
+				// Check if tab is disabled for the element
+				if(element.attr("tabindex") === Common.NO_TAB_INDEX) {
+				
+					// Disable tabbing to element's children
+					element.find("*").disableTab();
+				}
+				
 				// Check if element is a title tag
 				if(element.prop("tagName") === "TITLE") {
 				
