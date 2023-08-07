@@ -1902,7 +1902,7 @@
 													--></span><!--
 												--></button><!--
 											--></div><!--
-											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Delete All Wallets')); ?>"><?= encodeString(getTranslation('Delete All Wallets')); ?></h3><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Utilities')); ?>"><?= encodeString(getTranslation('Utilities')); ?></h3><!--
 											--><div><!--
 												--><button class="deleteAllWallets" data-private><!--
 													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Delete All Wallets')); ?>"><?= encodeString(getTranslation('Delete All Wallets')); ?></span><!--
@@ -1916,6 +1916,44 @@
 												--><button class="back hide translatable" data-text="<?= encodeString(getDefaultTranslation('Back')); ?>" title="<?= encodeString(getTranslation('Back')); ?>" data-private></button><!--
 												--><h2 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Settings')); ?>"><?= encodeString(getTranslation('Settings')); ?></h2><!--
 												--><button class="forward hide translatable" data-text="<?= encodeString(getDefaultTranslation('Forward')); ?>" title="<?= encodeString(getTranslation('Forward')); ?>" data-private></button><!--
+											--></div><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Wallet Settings')); ?>"><?= encodeString(getTranslation('Wallet Settings')); ?></h3><!--
+											--><div class="translatable" data-text="<?= encodeString(getDefaultTranslation('Sets the wallet type to use')); ?>" title="<?= encodeString(getTranslation('Sets the wallet type to use')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Wallet type')); ?>"><?= encodeString(getTranslation('Wallet type')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="select"><!--
+													--><select data-private class="walletType"><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('MimbleWimble Coin')); ?>" value="0"><?= encodeString(getTranslation('MimbleWimble Coin')); ?></option><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Grin')); ?>" value="1"><?= encodeString(getTranslation('Grin')); ?></option><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Epic Cash')); ?>" value="2"><?= encodeString(getTranslation('Epic Cash')); ?></option><!--
+													--></select><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="translatable" data-text="<?= encodeString(getDefaultTranslation('Sets the network type to use')); ?>" title="<?= encodeString(getTranslation('Sets the network type to use')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Network type')); ?>"><?= encodeString(getTranslation('Network type')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="select"><!--
+													--><select data-private class="networkType"><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Mainnet')); ?>" value="0"><?= encodeString(getTranslation('Mainnet')); ?></option><!--
+														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Floonet/testnet')); ?>" value="1"><?= encodeString(getTranslation('Floonet/testnet')); ?></option><!--
+													--></select><!--
+													--><span></span><!--
+												--></div><!--
+											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Number Of Confirmations"); ?>" data-text="<?= encodeString(getDefaultTranslation('Sets the number of confirmations required for a new output to be spendable')); ?>" title="<?= encodeString(getTranslation('Sets the number of confirmations required for a new output to be spendable')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Number of confirmations required to spend an output')); ?>"><?= encodeString(getTranslation('Number of confirmations required to spend an output')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="number"><!--
+													--><input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric"><!--
+													--><span></span><!--
+												--></div><!--
 											--></div><!--
 											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Interface Settings')); ?>"><?= encodeString(getTranslation('Interface Settings')); ?></h3><!--
 											--><div class="setting translatable" data-setting="<?= encodeString("Enable Node Connection Error Messages"); ?>" data-text="<?= encodeString(getDefaultTranslation('Displays a message when not able to connect to a node, when a connected node is incompatible, or when disconnected from a node')); ?>" title="<?= encodeString(getTranslation('Displays a message when not able to connect to a node, when a connected node is incompatible, or when disconnected from a node')); ?>"><!--
@@ -2099,44 +2137,6 @@
 													--><span class="capsLock hide"></span><!--
 												--></div><!--
 											--></div><!--
-											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Wallet Settings')); ?>"><?= encodeString(getTranslation('Wallet Settings')); ?></h3><!--
-											--><div class="setting translatable" data-setting="<?= encodeString("Number Of Confirmations"); ?>" data-text="<?= encodeString(getDefaultTranslation('Sets the number of confirmations required for a new output to be spendable')); ?>" title="<?= encodeString(getTranslation('Sets the number of confirmations required for a new output to be spendable')); ?>"><!--
-												--><p><!--
-													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Number of confirmations required to spend an output')); ?>"><?= encodeString(getTranslation('Number of confirmations required to spend an output')); ?></span><!--
-												--></p><!--
-												--><span class="dots"></span><!--
-												--><div class="value" data-type="number"><!--
-													--><input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric"><!--
-													--><span></span><!--
-												--></div><!--
-											--></div><!--
-											--><div class="translatable" data-text="<?= encodeString(getDefaultTranslation('Sets the wallet type to use')); ?>" title="<?= encodeString(getTranslation('Sets the wallet type to use')); ?>"><!--
-												--><p><!--
-													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Wallet type')); ?>"><?= encodeString(getTranslation('Wallet type')); ?></span><!--
-												--></p><!--
-												--><span class="dots"></span><!--
-												--><div class="value" data-type="select"><!--
-													--><select data-private class="walletType"><!--
-														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('MimbleWimble Coin')); ?>" value="0"><?= encodeString(getTranslation('MimbleWimble Coin')); ?></option><!--
-														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Grin')); ?>" value="1"><?= encodeString(getTranslation('Grin')); ?></option><!--
-														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Epic Cash')); ?>" value="2"><?= encodeString(getTranslation('Epic Cash')); ?></option><!--
-													--></select><!--
-													--><span></span><!--
-												--></div><!--
-											--></div><!--
-											--><div class="translatable" data-text="<?= encodeString(getDefaultTranslation('Sets the network type to use')); ?>" title="<?= encodeString(getTranslation('Sets the network type to use')); ?>"><!--
-												--><p><!--
-													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Network type')); ?>"><?= encodeString(getTranslation('Network type')); ?></span><!--
-												--></p><!--
-												--><span class="dots"></span><!--
-												--><div class="value" data-type="select"><!--
-													--><select data-private class="networkType"><!--
-														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Mainnet')); ?>" value="0"><?= encodeString(getTranslation('Mainnet')); ?></option><!--
-														--><option class="translatable" data-text="<?= encodeString(getDefaultTranslation('Floonet/testnet')); ?>" value="1"><?= encodeString(getTranslation('Floonet/testnet')); ?></option><!--
-													--></select><!--
-													--><span></span><!--
-												--></div><!--
-											--></div><!--
 											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('API Settings')); ?>"><?= encodeString(getTranslation('API Settings')); ?></h3><!--
 											--><div class="setting translatable" data-setting="<?= encodeString("Enable Mining API"); ?>" data-text="<?= encodeString(getDefaultTranslation('Allows processing mining related API requests')); ?>" title="<?= encodeString(getTranslation('Allows processing mining related API requests')); ?>"><!--
 												--><p><!--
@@ -2206,7 +2206,7 @@
 													--><span class="capsLock hide"></span><!--
 												--></div><!--
 											--></div><!--
-											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Reset Settings')); ?>"><?= encodeString(getTranslation('Reset Settings')); ?></h3><!--
+											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Utilities')); ?>"><?= encodeString(getTranslation('Utilities')); ?></h3><!--
 											--><div><!--
 												--><button class="resetSettings" data-private><!--
 													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Reset Settings')); ?>"><?= encodeString(getTranslation('Reset Settings')); ?></span><!--
