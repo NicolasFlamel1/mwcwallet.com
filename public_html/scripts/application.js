@@ -36,6 +36,9 @@ class Application {
 			// Get status display
 			this.statusDisplay = this.unlockDisplay.find("div.status");
 			
+			// Get info display
+			this.infoDisplay = this.lockedDisplay.find("div.info");
+			
 			// Create settings
 			this.settings = new Settings();
 			
@@ -350,6 +353,9 @@ class Application {
 						// Uninitialize message
 						self.message.uninitialize();
 					}
+					
+					// Hide language display
+					$("div.language").addClass("hide normalTransitionSpeed");
 				
 					// Hide unlocked display children
 					self.unlockedDisplay.children().addClass("hide");
@@ -2145,6 +2151,9 @@ class Application {
 										// Hide logo
 										self.logo.hide();
 										
+										// Hide info display
+										self.infoDisplay.addClass("hide");
+										
 										// Create display form transition end or timeout event
 										self.createDisplay.children("form").transitionEndOrTimeout(function() {
 										
@@ -2421,6 +2430,9 @@ class Application {
 								
 								// Hide logo
 								self.logo.hide();
+								
+								// Hide info display
+								self.infoDisplay.addClass("hide");
 
 								// Unlock display form transition end or timeout event
 								self.unlockDisplay.children("form").transitionEndOrTimeout(function() {
@@ -2579,7 +2591,7 @@ class Application {
 				var button = $(this);
 			
 				// Show message
-				self.message.show(Language.getDefaultTranslation('Delete All Wallets'), Message.createText(Language.getDefaultTranslation('Are you sure you want to delete all your wallets?')) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Each wallet can only be recovered by using its passphrase once it\'s been deleted.')) + "</b>", false, function() {
+				self.message.show(Language.getDefaultTranslation('Delete All Wallets'), Message.createText(Language.getDefaultTranslation('Are you sure you want to delete all your wallets?')) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Each wallet can only be recovered by using its passphrase or hardware wallet once it\'s been deleted.')) + "</b>", false, function() {
 				
 					// Save focus and blur
 					self.focus.save(true);
@@ -6274,6 +6286,12 @@ class Application {
 					// Show language display
 					Language.showDisplay(true);
 					
+					// Set info display
+					self.infoDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('%1$x/%2$x/v%3$v'), [Consensus.walletTypeToText(Consensus.getWalletType()), Consensus.networkTypeToText(Consensus.getNetworkType()), VERSION_NUMBER]));
+					
+					// Show info display
+					self.infoDisplay.removeClass("hide");
+					
 					// Initialize focus on input
 					var focusOnInput = true;
 					
@@ -6490,6 +6508,9 @@ class Application {
 					
 					// Show logo
 					self.logo.show();
+					
+					// Show info display
+					self.infoDisplay.removeClass("hide");
 					
 					// Check if message is not shown
 					if(self.message.isShown() === false) {

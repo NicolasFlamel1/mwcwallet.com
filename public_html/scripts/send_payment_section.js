@@ -2269,6 +2269,9 @@ class SendPaymentSection extends Section {
 																					// Clear input values and have their displays not show errors
 																					self.getDisplay().find("input").val("").closest("div").parent().closest("div").removeClass("error");
 																					
+																					// Set send as file button to its default value
+																					self.getDisplay().find("button.sendAsFile").removeClass("enabled");
+																					
 																					// Set base fee to the default base fee
 																					self.getDisplay().find("input.baseFee").val(Api.DEFAULT_BASE_FEE.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed()).trigger("input", [
 																		
@@ -2304,6 +2307,9 @@ class SendPaymentSection extends Section {
 																			
 																				// Clear input values and have their displays not show errors
 																				self.getDisplay().find("input").val("").closest("div").parent().closest("div").removeClass("error");
+																				
+																				// Set send as file button to its default value
+																				self.getDisplay().find("button.sendAsFile").removeClass("enabled");
 																				
 																				// Set base fee to the default base fee and have it not show an error
 																				self.getDisplay().find("input.baseFee").val(Api.DEFAULT_BASE_FEE.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed()).closest("div").parent().closest("div").removeClass("error");

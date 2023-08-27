@@ -6,14 +6,15 @@
 	const VERSION_NUMBER = "2.4.0";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "04 Jul 2023 00:00:00 UTC";
+	const VERSION_RELEASE_DATE = "27 Aug 2023 11:34:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
 		"Fixed QR codes appearing blurry in Tor Browser.",
 		"Moved wallet type and network type settings to the top of the settings section.",
 		"Added support for Trezor Model T hardware wallets.",
-		"Fixed inconsistencies with receiving slatepacks on the newest version of Google Chrome."
+		"Fixed receiving Slatepacks on the newest version of Google Chrome.",
+		"Added wallet type, network type, and version information to login screen."
 	];
 	
 	// Maintenance start time

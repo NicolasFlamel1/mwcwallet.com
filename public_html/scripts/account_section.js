@@ -431,7 +431,7 @@ class AccountSection extends Section {
 				button.addClass("clicked");
 
 				// Show message
-				self.getMessage().show(Language.getDefaultTranslation('Delete All Wallets'), Message.createText(Language.getDefaultTranslation('Are you sure you want to delete all your wallets?')) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Each wallet can only be recovered by using its passphrase once it\'s been deleted.')) + "</b>", false, function() {
+				self.getMessage().show(Language.getDefaultTranslation('Delete All Wallets'), Message.createText(Language.getDefaultTranslation('Are you sure you want to delete all your wallets?')) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Each wallet can only be recovered by using its passphrase or hardware wallet once it\'s been deleted.')) + "</b>", false, function() {
 				
 					// Save focus and blur
 					self.getFocus().save(true);

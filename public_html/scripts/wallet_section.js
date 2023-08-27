@@ -3232,7 +3232,7 @@ class WalletSection extends Section {
 				}
 				
 				// Show message
-				self.getMessage().show(Language.getDefaultTranslation('Delete'), Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Are you sure you want to delete Wallet %1$s?') : Language.getDefaultTranslation('Are you sure you want to delete %1$y?'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This wallet can only be recovered by using its passphrase once it\'s been deleted.')) + "</b>", false, function() {
+				self.getMessage().show(Language.getDefaultTranslation('Delete'), Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Are you sure you want to delete Wallet %1$s?') : Language.getDefaultTranslation('Are you sure you want to delete %1$y?'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()]) + Message.createLineBreak() + "<b>" + Message.createText((wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) ? Language.getDefaultTranslation('This wallet can only be recovered by using its passphrase once it\'s been deleted.') : Language.getDefaultTranslation('This wallet can only be recovered by using its passphrase or hardware wallet once it\'s been deleted.')) + "</b>", false, function() {
 				
 					// Save focus and blur
 					self.getFocus().save(true);

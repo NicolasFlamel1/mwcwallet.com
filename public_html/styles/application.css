@@ -1,6 +1,43 @@
 @charset "UTF-8";
 
 
+main > div > div.info {
+	color: white;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	margin: 0;
+	max-width: none;
+	transition: opacity 0.2s ease-in-out 0.05s, visibility 0.2s ease-in-out 0.05s;
+	justify-content: end;
+	min-height: 250px;
+	min-width: 250px;
+}
+
+main > div > div.info.hide {
+	opacity: 0;
+	visibility: hidden;
+	display: flex;
+	transition-duration: 0.15s;
+	transition-delay: 0s;
+}
+
+main.normalTransitionSpeed > div > div.info {
+	transition-duration: 0.15s;
+	transition-delay: 0s;
+}
+
+main > div > div.info > p {
+	text-align: center;
+	margin: 0;
+	padding: 1px 2px;
+	font-size: 12pt;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	text-wrap: nowrap;
+}
+
 main > div > div > form {
 	display: none;
 	display: flex;
