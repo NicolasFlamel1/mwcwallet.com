@@ -150,6 +150,7 @@
 			min-height: 250px;
 			overflow: hidden;
 			font-size: 100%;
+			-webkit-font-smoothing: antialiased;
 		}
 		
 		body.loading, body.loading * {
