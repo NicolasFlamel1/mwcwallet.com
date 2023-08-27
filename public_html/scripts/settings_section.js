@@ -300,6 +300,13 @@ class SettingsSection extends Section {
 								// Get input's value as a number
 								var value = parseInt(input.val(), Common.DECIMAL_NUMBER_BASE);
 								
+								// Check if current value is a string
+								if(typeof currentValue === "string") {
+								
+									// Get current value as a number
+									currentValue = parseInt(currentValue, Common.DECIMAL_NUMBER_BASE);
+								}
+								
 								// Break
 								break;
 							
