@@ -53,10 +53,11 @@ class ProtocolBuffers {
 					// Check field's expected type
 					switch(messageSchema[fieldNumber.toFixed()]["Type"]) {
 					
-						// Uint, bool, or enum
+						// Uint, bool, enum, or sint
 						case ProtocolBuffers.UINT_SCHEMA_DATA_TYPE:
 						case ProtocolBuffers.BOOL_SCHEMA_DATA_TYPE:
 						case ProtocolBuffers.ENUM_SCHEMA_DATA_TYPE:
+						case ProtocolBuffers.SINT_SCHEMA_DATA_TYPE:
 						
 							// Check if field wire type isn't correct
 							if(fieldWireType !== ProtocolBuffers.VARINT_WIRE_TYPE) {
@@ -136,6 +137,26 @@ class ProtocolBuffers {
 						
 									// Append value as an enum to result
 									result[messageSchema[fieldNumber.toFixed()]["Name"]].push(value.toNumber());
+									
+									// Break
+									break;
+								
+								// Sint
+								case ProtocolBuffers.SINT_SCHEMA_DATA_TYPE:
+								
+									// Get if value is even
+									if(value.modulo(2).isZero() === true) {
+						
+										// Append value as a positive number to result
+										result[messageSchema[fieldNumber.toFixed()]["Name"]].push(value.dividedToIntegerBy(2));
+									}
+									
+									// Otherwise
+									else {
+									
+										// Append value as a negative number to result
+										result[messageSchema[fieldNumber.toFixed()]["Name"]].push(value.plus(1).dividedToIntegerBy(-2));
+									}
 									
 									// Break
 									break;
@@ -407,6 +428,36 @@ class ProtocolBuffers {
 									
 										// Break
 										break;
+									
+									// Sint
+									case ProtocolBuffers.SINT_SCHEMA_DATA_TYPE:
+									
+										// Check if value type isn't correct
+										if(data[name] instanceof BigNumber === false) {
+										
+											// Throw error
+											throw "Value's type isn't correct.";
+										}
+										
+										// Set field wire type
+										var fieldWireType = ProtocolBuffers.VARINT_WIRE_TYPE;
+										
+										// Check if value is positive
+										if(data[name].isPositive() === true) {
+										
+											// Set field payload
+											var fieldPayload = ProtocolBuffers.encodeVarint(data[name].multipliedBy(2));
+										}
+										
+										// Otherwise
+										else {
+										
+											// Set field payload
+											var fieldPayload = ProtocolBuffers.encodeVarint(data[name].multipliedBy(-2).minus(1));
+										}
+									
+										// Break
+										break;
 								}
 								
 								// Break
@@ -474,6 +525,13 @@ class ProtocolBuffers {
 		
 			// Return bytes data type
 			return ProtocolBuffers.STRING_SCHEMA_DATA_TYPE + 1;
+		}
+		
+		// Sint schema data type
+		static get SINT_SCHEMA_DATA_TYPE() {
+		
+			// Return sint data type
+			return ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE + 1;
 		}
 	
 	// Private

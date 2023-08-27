@@ -106,6 +106,20 @@ class HardwareWalletDefinitions {
 			// Return Trezor pin matrix acknowledge message type
 			return 0x0013;
 		}
+		
+		// Trezor lock device message type
+		static get TREZOR_LOCK_DEVICE_MESSAGE_TYPE() {
+		
+			// Return Trezor lock device message type
+			return 0x0018;
+		}
+		
+		// Trezor apply settings message type
+		static get TREZOR_APPLY_SETTINGS_MESSAGE_TYPE() {
+		
+			// Return Trezor apply settings message type
+			return 0x0019;
+		}
 
 		// Trezor button request message type
 		static get TREZOR_BUTTON_REQUEST_MESSAGE_TYPE() {
@@ -154,6 +168,20 @@ class HardwareWalletDefinitions {
 		
 			// Return Trezor pin invalid failure type
 			return 0x07;
+		}
+		
+		// Trezor passphrase entry button request type
+		static get TREZOR_PASSPHRASE_ENTRY_BUTTON_REQUEST_TYPE() {
+		
+			// Return Trezor passphrase entry button request type
+			return 0x13;
+		}
+		
+		// Trezor pin entry button request type
+		static get TREZOR_PIN_ENTRY_BUTTON_REQUEST_TYPE() {
+		
+			// Return Trezor pin entry button request type
+			return 0x14;
 		}
 		
 		// MimbleWimble Coin get root public key message type
@@ -456,6 +484,16 @@ class HardwareWalletDefinitions {
 						
 						// Type
 						"Type": ProtocolBuffers.STRING_SCHEMA_DATA_TYPE
+					},
+					
+					// Pin
+					"3": {
+					
+						// Name
+						"Name": "Pin",
+						
+						// Type
+						"Type": ProtocolBuffers.STRING_SCHEMA_DATA_TYPE
 					}
 				},
 				
@@ -511,6 +549,16 @@ class HardwareWalletDefinitions {
 						"Type": ProtocolBuffers.BOOL_SCHEMA_DATA_TYPE
 					},
 					
+					// Passphrase protection
+					"8": {
+					
+						// Name
+						"Name": "Passphrase Protection",
+						
+						// Type
+						"Type": ProtocolBuffers.BOOL_SCHEMA_DATA_TYPE
+					},
+					
 					// Initialized
 					"12": {
 					
@@ -531,6 +579,16 @@ class HardwareWalletDefinitions {
 						"Type": ProtocolBuffers.BOOL_SCHEMA_DATA_TYPE
 					},
 					
+					// Model
+					"21": {
+					
+						// Name
+						"Name": "Model",
+						
+						// Type
+						"Type": ProtocolBuffers.STRING_SCHEMA_DATA_TYPE
+					},
+					
 					// Capabilities
 					"30": {
 					
@@ -539,6 +597,16 @@ class HardwareWalletDefinitions {
 						
 						// Type
 						"Type": ProtocolBuffers.ENUM_SCHEMA_DATA_TYPE
+					},
+					
+					// Passphrase always on device
+					"36": {
+					
+						// Name
+						"Name": "Passphrase Always On Device",
+						
+						// Type
+						"Type": ProtocolBuffers.BOOL_SCHEMA_DATA_TYPE
 					}
 				},
 				
@@ -553,6 +621,44 @@ class HardwareWalletDefinitions {
 						
 						// Type
 						"Type": ProtocolBuffers.STRING_SCHEMA_DATA_TYPE
+					}
+				},
+				
+				// Trezor apply settings request
+				[HardwareWalletDefinitions.TREZOR_APPLY_SETTINGS_MESSAGE_TYPE.toFixed()]: {
+				
+					// Use passphrase
+					"3": {
+					
+						// Name
+						"Name": "Use Passphrase",
+						
+						// Type
+						"Type": ProtocolBuffers.BOOL_SCHEMA_DATA_TYPE
+					},
+					
+					// Passphrase always on device
+					"8": {
+					
+						// Name
+						"Name": "Passphrase Always On Device",
+						
+						// Type
+						"Type": ProtocolBuffers.BOOL_SCHEMA_DATA_TYPE
+					}
+				},
+				
+				// Trezor button request
+				[HardwareWalletDefinitions.TREZOR_BUTTON_REQUEST_MESSAGE_TYPE.toFixed()]: {
+				
+					// Button request type
+					"1": {
+					
+						// Name
+						"Name": "Button Request Type",
+						
+						// Type
+						"Type": ProtocolBuffers.ENUM_SCHEMA_DATA_TYPE
 					}
 				},
 				
@@ -1786,7 +1892,7 @@ class HardwareWalletDefinitions {
 						"Name": "Time Zone Offset",
 						
 						// Type
-						"Type": ProtocolBuffers.UINT_SCHEMA_DATA_TYPE,
+						"Type": ProtocolBuffers.SINT_SCHEMA_DATA_TYPE,
 						
 						// Size
 						"Size": Common.BYTES_IN_A_UINT16,

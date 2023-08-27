@@ -3821,12 +3821,35 @@ class Application {
 								// Trezor type
 								case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
 								
-									// Set message
-									var message = Message.createText(text, textArguments) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Enter your pin as the following alphabetic characters to unlock the hardware wallet.')) + "</b>" + Message.createLineBreak() + Message.createPinMatrix() + Message.createLineBreak() + Message.createLineBreak() + Message.createInput(Language.getDefaultTranslation('Pin'), [], false) + Message.createLineBreak();
+									// Check hardware wallet's transport product name
+									switch(hardwareWallet.transport["deviceModel"]["productName"]) {
 									
-									// Set second button
-									var secondButton = Language.getDefaultTranslation('Unlock');
-									
+										// Trezor Model One
+										case "Trezor Model One":
+						
+											// Set message
+											var message = Message.createText(text, textArguments) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('Enter your pin as the following alphabetic characters to unlock the hardware wallet.')) + "</b>" + Message.createLineBreak() + Message.createPinMatrix() + Message.createLineBreak() + Message.createLineBreak() + Message.createInput(Language.getDefaultTranslation('Pin'), [], false) + Message.createLineBreak();
+											
+											// Set second button
+											var secondButton = Language.getDefaultTranslation('Unlock');
+											
+											// Break
+											break;
+										
+										// Trezor Model T or default
+										case "Trezor Model T":
+										default:
+										
+											// Set message
+											var message = Message.createPendingResult() + Message.createLineBreak() + Message.createText(text, textArguments);
+											
+											// Set second button
+											var secondButton = Message.NO_BUTTON;
+											
+											// Break
+											break;
+									}
+								
 									// Break
 									break;
 							}
@@ -3874,6 +3897,9 @@ class Application {
 											
 											// Turn off hardware wallet before disconnect application event
 											$(hardwareWallet).off(HardwareWallet.BEFORE_DISCONNECT_EVENT + ".application");
+											
+											// Turn off hardware wallet device cancel application event
+											$(hardwareWallet).off(HardwareWallet.DEVICE_CANCEL_EVENT + ".application");
 											
 											// Clear external cancel check allowed
 											externalCancelCheckAllowed = false;
@@ -3949,6 +3975,9 @@ class Application {
 											// Turn off hardware wallet before disconnect application event
 											$(hardwareWallet).off(HardwareWallet.BEFORE_DISCONNECT_EVENT + ".application");
 											
+											// Turn off hardware wallet device cancel application event
+											$(hardwareWallet).off(HardwareWallet.DEVICE_CANCEL_EVENT + ".application");
+											
 											// Clear external cancel check allowed
 											externalCancelCheckAllowed = false;
 											
@@ -3996,7 +4025,7 @@ class Application {
 											
 												// Return replacing message
 												return self.message.replace(Application.HARDWARE_WALLET_DISCONNECT_MESSAGE).then(function() {
-											
+												
 													// Resolve
 													resolve();
 												});
@@ -4023,6 +4052,9 @@ class Application {
 											// Turn off hardware wallet disconnect application event
 											$(hardwareWallet).off(HardwareWallet.DISCONNECT_EVENT + ".application");
 											
+											// Turn off hardware wallet device cancel application event
+											$(hardwareWallet).off(HardwareWallet.DEVICE_CANCEL_EVENT + ".application");
+											
 											// Clear external cancel check allowed
 											externalCancelCheckAllowed = false;
 											
@@ -4088,6 +4120,76 @@ class Application {
 											}
 										});
 										
+										// Hardware wallet device cancel application event
+										$(hardwareWallet).one(HardwareWallet.DEVICE_CANCEL_EVENT + ".application", function(event) {
+										
+											// Turn off hardware wallet unlock application event
+											$(hardwareWallet).off(HardwareWallet.UNLOCK_EVENT + ".application");
+											
+											// Turn off hardware wallet disconnect application event
+											$(hardwareWallet).off(HardwareWallet.DISCONNECT_EVENT + ".application");
+											
+											// Turn off hardware wallet before disconnect application event
+											$(hardwareWallet).off(HardwareWallet.BEFORE_DISCONNECT_EVENT + ".application");
+											
+											// Clear external cancel check allowed
+											externalCancelCheckAllowed = false;
+											
+											// Disable message
+											self.message.disable();
+											
+											// Set prevent cancel on hide
+											preventCancelOnHide = true;
+											
+											// Check if preventing messages
+											if(preventMessages === true) {
+											
+												// Check if can't be canceled
+												if(cancelOccurred === Common.NO_CANCEL_OCCURRED) {
+											
+													// Prevent showing messages
+													self.message.prevent();
+												}
+											}
+											
+											// Otherwise
+											else {
+										
+												// Check if unlock display is shown
+												if(self.isUnlockDisplayShown() === true)
+												
+													// Enable tabbing to everything in unlock display and enable everything in unlock display
+													self.unlockDisplay.find("*").enableTab().enable();
+										
+												// Otherwise check if unlocked display is shown
+												else if(self.isUnlockedDisplayShown() === true)
+												
+													// Enable unlocked
+													self.unlocked.enable();
+												
+												// Restore focus and don't blur
+												self.focus.restore(false);
+											}
+											
+											// Check if preventing messages and it can be canceled
+											if(preventMessages === true && cancelOccurred !== Common.NO_CANCEL_OCCURRED) {
+											
+												// Reject canceled error
+												reject(Common.CANCELED_ERROR);
+											}
+											
+											// Otherwise
+											else {
+											
+												// Return hiding message
+												return self.message.hide().then(function() {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+												});
+											}
+										});
+										
 										// Cancel if external canceled
 										var cancelIfExternalCanceled = function() {
 										
@@ -4105,6 +4207,9 @@ class Application {
 													
 													// Turn off hardware wallet before disconnect application event
 													$(hardwareWallet).off(HardwareWallet.BEFORE_DISCONNECT_EVENT + ".application");
+													
+													// Turn off hardware wallet device cancel application event
+													$(hardwareWallet).off(HardwareWallet.DEVICE_CANCEL_EVENT + ".application");
 													
 													// Disable message
 													self.message.disable();
@@ -4210,6 +4315,9 @@ class Application {
 								
 								// Turn off hardware wallet before disconnect application event
 								$(hardwareWallet).off(HardwareWallet.BEFORE_DISCONNECT_EVENT + ".application");
+								
+								// Turn off hardware wallet device cancel application event
+								$(hardwareWallet).off(HardwareWallet.DEVICE_CANCEL_EVENT + ".application");
 								
 								// Clear external cancel check allowed
 								externalCancelCheckAllowed = false;

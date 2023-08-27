@@ -1053,39 +1053,7 @@ class HardwareWalletUsbTransport {
 					"Type": HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE,
 					
 					// Product name
-					"Product Name": "Trezor Model One",
-				
-					// Vendor ID
-					"Vendor ID": 0x534C,
-					
-					// Product ID
-					"Product ID": 0x0001
-				},
-				
-				// Trezor v2
-				// TODO Support Trezor Model T
-				/*{
-				
-					// Type
-					"Type": HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE,
-					
-					// Product name
-					"Product Name": "Trezor Model T",
-					
-					// Vendor ID
-					"Vendor ID": 0x1209,
-					
-					// Product ID
-					"Product ID": 0x53C0
-				},*/
-				
-				{
-				
-					// Type
-					"Type": HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE,
-					
-					// Product name
-					"Product Name": "Trezor Model One",
+					"Product Name": "Trezor",
 					
 					// Vendor ID
 					"Vendor ID": 0x1209,

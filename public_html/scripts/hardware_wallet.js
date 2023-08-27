@@ -381,7 +381,7 @@ class HardwareWallet {
 									}).catch(function(error) {
 									
 										// Reject error
-										reject(Message.createText(Language.getDefaultTranslation('Connecting to that %1$x hardware wallet failed.'), [hardwareWalletDescriptor["manufacturerName"] + " " + hardwareWalletDescriptor["productName"]]));
+										reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')));
 									});
 								}
 							});
@@ -820,8 +820,8 @@ class HardwareWallet {
 									// Return requesting initializing on the hardware wallet
 									return self.send(HardwareWalletDefinitions.TREZOR_INITIALIZE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_DATA, HardwareWalletDefinitions.TREZOR_FEATURES_MESSAGE_TYPE, text, textArguments, allowUnlock, failOnLock, preventMessages, cancelOccurred).then(function(response) {
 									
-										// Check if response contains a major version, minor version, patch version, pin protection, initialized, unlocked, and capabilities
-										if(response["length"] >= Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"]) {
+										// Check if response contains a major version, minor version, patch version, pin protection, passphrase protection, initialized, unlocked, and model
+										if(response["length"] >= Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"]) {
 									
 											// Get major version
 											var majorVersion = parseInt(Common.toHexString(response.subarray(0, Uint32Array["BYTES_PER_ELEMENT"])), Common.HEX_NUMBER_BASE);
@@ -835,55 +835,269 @@ class HardwareWallet {
 											// Get firmware version
 											var firmwareVersion = majorVersion.toFixed() + "." + minorVersion.toFixed() + "." + patchVersion.toFixed();
 											
-											// Check if firmware version is compatible
-											if(HardwareWallet.isCompatibleVersion(firmwareVersion, minimumCompatibleVersion) === true) {
+											// Get model length
+											var modelLength = response[Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"]];
 											
-												// Get capabilities
-												var capabilities = response.subarray(Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"]);
+											// Check if response contains a model and capabilities
+											if(response["length"] >= Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + modelLength + Uint8Array["BYTES_PER_ELEMENT"]) {
+											
+												// Set error occured to false
+												var errorOccurred = false;
 												
-												// Check if device is MimbleWimble Coin capable
-												if(capabilities.indexOf(HardwareWallet.MIMBLEWIMBLE_COIN_CAPABLE) !== Common.INDEX_NOT_FOUND) {
+												// Try
+												try {
 												
-													// Get initialized
-													var initialized = response[Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"]] !== 0;
+													// Get model
+													var model = (new TextDecoder("utf-8", {"fatal": true})).decode(response.subarray(Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"], Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + modelLength));
+												}
+												
+												// Catch error
+												catch(error) {
+												
+													// Set error occurred
+													errorOccurred = true;
+												}
+												
+												// Check if error didn't occur
+												if(errorOccurred === false) {
+												
+													// Check if model is Trezor Model One
+													if(model === "1") {
 													
-													// Check if device is initialized
-													if(initialized === true) {
+														// Set model to text version
+														model = "One";
+													}
 													
-														// Get pin enabled
-														var pinEnabled = response[Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"]] !== 0;
+													// Update transport's product name to include model
+													self.transport["deviceModel"]["productName"] += " Model " + model;
+												
+													// Update product name
+													productName = self.transport["deviceModel"]["productName"];
+													
+													// Update minimum compatible version
+													minimumCompatibleVersion = self.getMinimumCompatibleVersion();
+													
+													// Check if firmware version is compatible
+													if(HardwareWallet.isCompatibleVersion(firmwareVersion, minimumCompatibleVersion) === true) {
+													
+														// Get capabilities length
+														var capabilitiesLength = response[Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + modelLength];
 														
-														// Get unlocked
-														var unlocked = response[Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"]] !== 0;
+														// Check if response contains capabilities and passphrase always on device
+														if(response["length"] >= Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + modelLength + Uint8Array["BYTES_PER_ELEMENT"] + capabilitiesLength + Uint8Array["BYTES_PER_ELEMENT"]) {
 														
-														// Check if not set to fail on lock, pin isn't enabled, or device is unlocked
-														if(failOnLock === false || pinEnabled === false || unlocked === true) {
-													
-															// Return requesting getting the seed cookie from the hardware wallet
-															return self.send(HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_GET_SEED_COOKIE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, {
+															// Get capabilities
+															var capabilities = response.subarray(Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + modelLength + Uint8Array["BYTES_PER_ELEMENT"], Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + modelLength + Uint8Array["BYTES_PER_ELEMENT"] + capabilitiesLength);
 															
-																// Coin type
-																"Coin Type": Consensus.getWalletType(),
-																
-																// Network type
-																"Network Type": Consensus.getNetworkType(),
-																
-																// Account
-																"Account": new BigNumber(HardwareWallet.ACCOUNT)
-																
-															}, HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_SEED_COOKIE_MESSAGE_TYPE, text, textArguments, allowUnlock, failOnLock, preventMessages, cancelOccurred).then(function(response) {
+															// Check if device is MimbleWimble Coin capable
+															if(capabilities.indexOf(HardwareWallet.MIMBLEWIMBLE_COIN_CAPABLE) !== Common.INDEX_NOT_FOUND) {
 															
-																// Check if response is valid
-																if(response["length"] === HardwareWallet.SEED_COOKIE_LENGTH) {
+																// Get initialized
+																var initialized = response[Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"]] !== 0;
 																
-																	// Get seed cookie from response
-																	self.seedCookie = response;
+																// Check if device is initialized
+																if(initialized === true) {
+																
+																	// Get pin enabled
+																	var pinEnabled = response[Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"]] !== 0;
 																	
-																	// Release exclusive lock
-																	self.releaseExclusiveLock();
-															
-																	// Resolve
-																	resolve();
+																	// Get unlocked
+																	var unlocked = response[Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"]] !== 0;
+																	
+																	// Get passphrase enabled
+																	var passphraseEnabled = response[Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"]] !== 0;
+																	
+																	// Get passphrase always on device
+																	var passphraseAlwaysOnDevice = response[Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint32Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + Uint8Array["BYTES_PER_ELEMENT"] + modelLength + Uint8Array["BYTES_PER_ELEMENT"] + capabilitiesLength] !== 0;
+																	
+																	// Check if not set to fail on lock, pin isn't enabled, or device is unlocked
+																	if(failOnLock === false || pinEnabled === false || unlocked === true) {
+																	
+																		// Check if not set to fail on lock, passphrase isn't enabled, or passphrase always on device isn't enabled
+																		if(failOnLock === false || passphraseEnabled === false || passphraseAlwaysOnDevice === false) {
+																
+																			// Return requesting getting the seed cookie from the hardware wallet
+																			return self.send(HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_GET_SEED_COOKIE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, {
+																			
+																				// Coin type
+																				"Coin Type": Consensus.getWalletType(),
+																				
+																				// Network type
+																				"Network Type": Consensus.getNetworkType(),
+																				
+																				// Account
+																				"Account": new BigNumber(HardwareWallet.ACCOUNT)
+																				
+																			}, HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_SEED_COOKIE_MESSAGE_TYPE, text, textArguments, allowUnlock, failOnLock, preventMessages, cancelOccurred).then(function(response) {
+																			
+																				// Check if response is valid
+																				if(response["length"] === HardwareWallet.SEED_COOKIE_LENGTH) {
+																				
+																					// Get seed cookie from response
+																					self.seedCookie = response;
+																					
+																					// Release exclusive lock
+																					self.releaseExclusiveLock();
+																			
+																					// Resolve
+																					resolve();
+																				}
+																				
+																				// Otherwise
+																				else {
+																				
+																					// Return closing transport and catch errors
+																					return self.transport.close().catch(function(error) {
+																					
+																					// Finally
+																					}).finally(function() {
+																					
+																						// Clear connected
+																						self.connected = false;
+																					
+																						// Set transport to no transport
+																						self.transport = HardwareWallet.NO_TRANSPORT;
+																						
+																						// Trigger disconnect event
+																						$(self).trigger(HardwareWallet.DISCONNECT_EVENT);
+																					
+																						// Release exclusive lock
+																						self.releaseExclusiveLock();
+																					
+																						// Reject error
+																						reject(Message.createText(Language.getDefaultTranslation('Getting the seed cookie from that %1$x hardware wallet failed.'), [productName]));
+																					});
+																				}
+																			
+																			// Catch errors
+																			}).catch(function(error) {
+																			
+																				// Return closing transport and catch errors
+																				return self.transport.close().catch(function() {
+																				
+																				// Finally
+																				}).finally(function() {
+																				
+																					// Clear connected
+																					self.connected = false;
+																				
+																					// Set transport to no transport
+																					self.transport = HardwareWallet.NO_TRANSPORT;
+																					
+																					// Trigger disconnect event
+																					$(self).trigger(HardwareWallet.DISCONNECT_EVENT);
+																				
+																					// Release exclusive lock
+																					self.releaseExclusiveLock();
+																					
+																					// Check if error is canceled
+																					if(error === Common.CANCELED_ERROR) {
+																					
+																						// Reject error
+																						reject(error);
+																					}
+																					
+																					// Otherwise check if error is disconnected error
+																					else if(error === HardwareWallet.DISCONNECTED_ERROR) {
+																					
+																						// Reject error
+																						reject(Message.createText(Language.getDefaultTranslation('That hardware wallet was disconnected.')));
+																					}
+																					
+																					// Otherwise
+																					else {
+																					
+																						// Check if failure occurred
+																						if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+																					
+																							// Try
+																							try {
+																							
+																								// Decode error
+																								var decodedError = self.decode(error["Message Type"], error["Data"], HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE);
+																							}
+																							
+																							// Catch errors
+																							catch(decodeError) {
+																							
+																								// Set error occurred
+																								errorOccurred = true;
+																							}
+																							
+																							// Check if an error didn't occur
+																							if(errorOccurred === false) {
+																							
+																								// Check if user rejected the request
+																								if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+																								
+																									// Reject canceled error
+																									reject(Common.CANCELED_ERROR);
+																									
+																									// Return
+																									return;
+																								}
+																							}
+																						}
+																				
+																						// Reject error
+																						reject(Message.createText(Language.getDefaultTranslation('Getting the seed cookie from that %1$x hardware wallet failed.'), [productName]));
+																					}
+																				});
+																			});
+																		}
+																	
+																		// Otherwise
+																		else {
+																		
+																			// Return closing transport and catch errors
+																			return self.transport.close().catch(function(error) {
+																			
+																			// Finally
+																			}).finally(function() {
+																			
+																				// Clear connected
+																				self.connected = false;
+																			
+																				// Set transport to no transport
+																				self.transport = HardwareWallet.NO_TRANSPORT;
+																				
+																				// Trigger disconnect event
+																				$(self).trigger(HardwareWallet.DISCONNECT_EVENT);
+																			
+																				// Release exclusive lock
+																				self.releaseExclusiveLock();
+																			
+																				// Reject error
+																				reject(Message.createText(Language.getDefaultTranslation('That %1$x hardware wallet is locked. Unlock the hardware wallet to continue.'), [productName]));
+																			});
+																		}
+																	}
+																	
+																	// Otherwise
+																	else {
+																	
+																		// Return closing transport and catch errors
+																		return self.transport.close().catch(function(error) {
+																		
+																		// Finally
+																		}).finally(function() {
+																		
+																			// Clear connected
+																			self.connected = false;
+																		
+																			// Set transport to no transport
+																			self.transport = HardwareWallet.NO_TRANSPORT;
+																			
+																			// Trigger disconnect event
+																			$(self).trigger(HardwareWallet.DISCONNECT_EVENT);
+																		
+																			// Release exclusive lock
+																			self.releaseExclusiveLock();
+																		
+																			// Reject error
+																			reject(Message.createText(Language.getDefaultTranslation('That %1$x hardware wallet is locked. Unlock the hardware wallet to continue.'), [productName]));
+																		});
+																	}
 																}
 																
 																// Otherwise
@@ -908,12 +1122,13 @@ class HardwareWallet {
 																		self.releaseExclusiveLock();
 																	
 																		// Reject error
-																		reject(Message.createText(Language.getDefaultTranslation('Getting the seed cookie from that %1$x hardware wallet failed.'), [productName]));
+																		reject(Message.createText(Language.getDefaultTranslation('That %1$x hardware wallet isn\'t initialized. Initialize the hardware wallet to continue.'), [productName]));
 																	});
 																}
+															}
 															
-															// Catch errors
-															}).catch(function(error) {
+															// Otherwise
+															else {
 															
 																// Return closing transport and catch errors
 																return self.transport.close().catch(function(error) {
@@ -932,29 +1147,11 @@ class HardwareWallet {
 																
 																	// Release exclusive lock
 																	self.releaseExclusiveLock();
-																	
-																	// Check if error is canceled
-																	if(error === Common.CANCELED_ERROR) {
-																	
-																		// Reject error
-																		reject(error);
-																	}
-																	
-																	// Otherwise check if error is disconnected error
-																	else if(error === HardwareWallet.DISCONNECTED_ERROR) {
-																	
-																		// Reject error
-																		reject(Message.createText(Language.getDefaultTranslation('That hardware wallet was disconnected.')));
-																	}
-																	
-																	// Otherwise
-																	else {
 																
-																		// Reject error
-																		reject(Message.createText(Language.getDefaultTranslation('Getting the seed cookie from that %1$x hardware wallet failed.'), [productName]));
-																	}
+																	// Reject error
+																	reject(Message.createText(Language.getDefaultTranslation('The firmware on that %1$x hardware wallet isn\'t compatible. Install a compatible firmware on the hardware wallet to continue.'), [productName]));
 																});
-															});
+															}
 														}
 														
 														// Otherwise
@@ -979,7 +1176,7 @@ class HardwareWallet {
 																self.releaseExclusiveLock();
 															
 																// Reject error
-																reject(Message.createText(Language.getDefaultTranslation('That %1$x hardware wallet is locked. Unlock the hardware wallet to continue.'), [productName]));
+																reject(Message.createText(Language.getDefaultTranslation('Getting the features from that %1$x hardware wallet failed.'), [productName]));
 															});
 														}
 													}
@@ -1006,7 +1203,7 @@ class HardwareWallet {
 															self.releaseExclusiveLock();
 														
 															// Reject error
-															reject(Message.createText(Language.getDefaultTranslation('That %1$x hardware wallet isn\'t initialized. Initialize the hardware wallet to continue.'), [productName]));
+															reject(Message.createText(Language.getDefaultTranslation('The firmware on that %1$x hardware wallet isn\'t compatible. Update the firmware on the hardware wallet to version %2$v or newer to continue.'), [productName, minimumCompatibleVersion]));
 														});
 													}
 												}
@@ -1033,7 +1230,7 @@ class HardwareWallet {
 														self.releaseExclusiveLock();
 													
 														// Reject error
-														reject(Message.createText(Language.getDefaultTranslation('The firmware on that %1$x hardware wallet isn\'t compatible. Install a compatible firmware on the hardware wallet to continue.'), [productName]));
+														reject(Message.createText(Language.getDefaultTranslation('Getting the features from that %1$x hardware wallet failed.'), [productName]));
 													});
 												}
 											}
@@ -1060,7 +1257,7 @@ class HardwareWallet {
 													self.releaseExclusiveLock();
 												
 													// Reject error
-													reject(Message.createText(Language.getDefaultTranslation('The firmware on that %1$x hardware wallet isn\'t compatible. Update the firmware on the hardware wallet to version %2$v or newer to continue.'), [productName, minimumCompatibleVersion]));
+													reject(Message.createText(Language.getDefaultTranslation('Getting the features from that %1$x hardware wallet failed.'), [productName]));
 												});
 											}
 										}
@@ -1095,7 +1292,7 @@ class HardwareWallet {
 									}).catch(function(error) {
 									
 										// Return closing transport and catch errors
-										return self.transport.close().catch(function(error) {
+										return self.transport.close().catch(function() {
 										
 										// Finally
 										}).finally(function() {
@@ -1128,9 +1325,44 @@ class HardwareWallet {
 											
 											// Otherwise
 											else {
+											
+												// Check if failure occurred
+												if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+											
+													// Initialize error occurred
+													var errorOccurred = false;
+													
+													// Try
+													try {
+													
+														// Decode error
+														var decodedError = self.decode(error["Message Type"], error["Data"], HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE);
+													}
+													
+													// Catch errors
+													catch(decodeError) {
+													
+														// Set error occurred
+														errorOccurred = true;
+													}
+													
+													// Check if an error didn't occur
+													if(errorOccurred === false) {
+													
+														// Check if user rejected the request
+														if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+														
+															// Reject canceled error
+															reject(Common.CANCELED_ERROR);
+															
+															// Return
+															return;
+														}
+													}
+												}
 										
 												// Reject error
-												reject(Message.createText(Language.getDefaultTranslation('Getting the features from that %1$x hardware wallet failed.'), [productName]));
+												reject(Message.createText(Language.getDefaultTranslation('Getting the features from that %1$x hardware wallet failed.'), [productName]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to disconnect and reconnect the hardware wallet to connect to it.')));
 											}
 										});
 									});
@@ -1303,7 +1535,7 @@ class HardwareWallet {
 											if(errorOccurred === false) {
 											
 												// Check if user rejected the request
-												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE) {
+												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
 												
 													// Reject error
 													reject(Message.createText(Language.getDefaultTranslation('Exporting the root public key on that %1$x hardware wallet was denied.'), [productName]));
@@ -1403,6 +1635,51 @@ class HardwareWallet {
 							
 								// Release exclusive lock
 								self.releaseExclusiveLock();
+								
+								// Check transport's type
+								switch(self.transport.type) {
+								
+									// Trezor type
+									case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+									
+										// Check if failure occurred
+										if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+									
+											// Initialize error occurred
+											var errorOccurred = false;
+											
+											// Try
+											try {
+											
+												// Decode error
+												var decodedError = self.decode(error["Message Type"], error["Data"]);
+											}
+											
+											// Catch errors
+											catch(decodeError) {
+											
+												// Set error occurred
+												errorOccurred = true;
+											}
+											
+											// Check if an error didn't occur
+											if(errorOccurred === false) {
+											
+												// Check if user rejected the request
+												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+													
+													// Return
+													return;
+												}
+											}
+										}
+										
+										// Break
+										break;
+								}
 							
 								// Reject error
 								reject(error);
@@ -1588,6 +1865,51 @@ class HardwareWallet {
 											
 												// Release exclusive lock
 												self.releaseExclusiveLock();
+												
+												// Check transport's type
+												switch(self.transport.type) {
+												
+													// Trezor type
+													case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+													
+														// Check if failure occurred
+														if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+													
+															// Initialize error occurred
+															var errorOccurred = false;
+															
+															// Try
+															try {
+															
+																// Decode error
+																var decodedError = self.decode(error["Message Type"], error["Data"]);
+															}
+															
+															// Catch errors
+															catch(decodeError) {
+															
+																// Set error occurred
+																errorOccurred = true;
+															}
+															
+															// Check if an error didn't occur
+															if(errorOccurred === false) {
+															
+																// Check if user rejected the request
+																if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+																
+																	// Reject canceled error
+																	reject(Common.CANCELED_ERROR);
+																	
+																	// Return
+																	return;
+																}
+															}
+														}
+														
+														// Break
+														break;
+												}
 											
 												// Reject error
 												reject(error);
@@ -1633,6 +1955,51 @@ class HardwareWallet {
 							
 								// Release exclusive lock
 								self.releaseExclusiveLock();
+								
+								// Check transport's type
+								switch(self.transport.type) {
+								
+									// Trezor type
+									case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+									
+										// Check if failure occurred
+										if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+									
+											// Initialize error occurred
+											var errorOccurred = false;
+											
+											// Try
+											try {
+											
+												// Decode error
+												var decodedError = self.decode(error["Message Type"], error["Data"]);
+											}
+											
+											// Catch errors
+											catch(decodeError) {
+											
+												// Set error occurred
+												errorOccurred = true;
+											}
+											
+											// Check if an error didn't occur
+											if(errorOccurred === false) {
+											
+												// Check if user rejected the request
+												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+													
+													// Return
+													return;
+												}
+											}
+										}
+										
+										// Break
+										break;
+								}
 							
 								// Reject error
 								reject(error);
@@ -1705,13 +2072,13 @@ class HardwareWallet {
 								self.releaseExclusiveLock();
 							
 								// Check if response is valid
-								if(response["length"] === Tor.ADDRESS_LENGTH) {
+								if(response["length"] === ((self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE) ? Uint8Array["BYTES_PER_ELEMENT"] : 0) + Tor.ADDRESS_LENGTH) {
 								
 									// Try
 									try {
 									
 										// Get Tor address from response
-										var torAddress = (new TextDecoder("utf-8", {"fatal": true})).decode(response);
+										var torAddress = (new TextDecoder("utf-8", {"fatal": true})).decode((self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE) ? response.subarray(Uint8Array["BYTES_PER_ELEMENT"]) : response);
 									
 										// Get public key from Tor address
 										Tor.torAddressToPublicKey(torAddress);
@@ -1744,6 +2111,51 @@ class HardwareWallet {
 								// Release exclusive lock
 								self.releaseExclusiveLock();
 							
+								// Check transport's type
+								switch(self.transport.type) {
+								
+									// Trezor type
+									case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+									
+										// Check if failure occurred
+										if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+									
+											// Initialize error occurred
+											var errorOccurred = false;
+											
+											// Try
+											try {
+											
+												// Decode error
+												var decodedError = self.decode(error["Message Type"], error["Data"]);
+											}
+											
+											// Catch errors
+											catch(decodeError) {
+											
+												// Set error occurred
+												errorOccurred = true;
+											}
+											
+											// Check if an error didn't occur
+											if(errorOccurred === false) {
+											
+												// Check if user rejected the request
+												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+													
+													// Return
+													return;
+												}
+											}
+										}
+										
+										// Break
+										break;
+								}
+								
 								// Reject error
 								reject(error);
 							});
@@ -1884,7 +2296,7 @@ class HardwareWallet {
 											if(errorOccurred === false) {
 											
 												// Check if user rejected the request
-												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE) {
+												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
 												
 													// Reject user rejected error
 													reject(HardwareWallet.USER_REJECTED_ERROR);
@@ -1970,13 +2382,13 @@ class HardwareWallet {
 								self.releaseExclusiveLock();
 							
 								// Check if response is valid
-								if(response["length"] === Mqs.ADDRESS_LENGTH) {
+								if(response["length"] === ((self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE) ? Uint8Array["BYTES_PER_ELEMENT"] : 0) + Mqs.ADDRESS_LENGTH) {
 								
 									// Try
 									try {
 									
 										// Get MQS address from response
-										var mqsAddress = (new TextDecoder("utf-8", {"fatal": true})).decode(response);
+										var mqsAddress = (new TextDecoder("utf-8", {"fatal": true})).decode((self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE) ? response.subarray(Uint8Array["BYTES_PER_ELEMENT"]) : response);
 									
 										// Get public key from MQS address
 										Mqs.mqsAddressToPublicKey(mqsAddress, Consensus.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE);
@@ -2008,6 +2420,51 @@ class HardwareWallet {
 							
 								// Release exclusive lock
 								self.releaseExclusiveLock();
+								
+								// Check transport's type
+								switch(self.transport.type) {
+								
+									// Trezor type
+									case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+									
+										// Check if failure occurred
+										if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+									
+											// Initialize error occurred
+											var errorOccurred = false;
+											
+											// Try
+											try {
+											
+												// Decode error
+												var decodedError = self.decode(error["Message Type"], error["Data"]);
+											}
+											
+											// Catch errors
+											catch(decodeError) {
+											
+												// Set error occurred
+												errorOccurred = true;
+											}
+											
+											// Check if an error didn't occur
+											if(errorOccurred === false) {
+											
+												// Check if user rejected the request
+												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+													
+													// Return
+													return;
+												}
+											}
+										}
+										
+										// Break
+										break;
+								}
 							
 								// Reject error
 								reject(error);
@@ -2149,7 +2606,7 @@ class HardwareWallet {
 											if(errorOccurred === false) {
 											
 												// Check if user rejected the request
-												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE) {
+												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
 												
 													// Reject user rejected error
 													reject(HardwareWallet.USER_REJECTED_ERROR);
@@ -2235,13 +2692,13 @@ class HardwareWallet {
 								self.releaseExclusiveLock();
 							
 								// Check if response is valid
-								if(response["length"] === Slatepack.ADDRESS_LENGTH) {
+								if(response["length"] === ((self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE) ? Uint8Array["BYTES_PER_ELEMENT"] : 0) + Slatepack.ADDRESS_LENGTH) {
 								
 									// Try
 									try {
 									
 										// Get Slatepack address from response
-										var slatepackAddress = (new TextDecoder("utf-8", {"fatal": true})).decode(response);
+										var slatepackAddress = (new TextDecoder("utf-8", {"fatal": true})).decode((self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE) ? response.subarray(Uint8Array["BYTES_PER_ELEMENT"]) : response);
 									
 										// Get public key from Slatepack address
 										Slatepack.slatepackAddressToPublicKey(slatepackAddress);
@@ -2273,6 +2730,51 @@ class HardwareWallet {
 							
 								// Release exclusive lock
 								self.releaseExclusiveLock();
+								
+								// Check transport's type
+								switch(self.transport.type) {
+								
+									// Trezor type
+									case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+									
+										// Check if failure occurred
+										if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+									
+											// Initialize error occurred
+											var errorOccurred = false;
+											
+											// Try
+											try {
+											
+												// Decode error
+												var decodedError = self.decode(error["Message Type"], error["Data"]);
+											}
+											
+											// Catch errors
+											catch(decodeError) {
+											
+												// Set error occurred
+												errorOccurred = true;
+											}
+											
+											// Check if an error didn't occur
+											if(errorOccurred === false) {
+											
+												// Check if user rejected the request
+												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+													
+													// Return
+													return;
+												}
+											}
+										}
+										
+										// Break
+										break;
+								}
 							
 								// Reject error
 								reject(error);
@@ -2414,7 +2916,7 @@ class HardwareWallet {
 											if(errorOccurred === false) {
 											
 												// Check if user rejected the request
-												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE) {
+												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
 												
 													// Reject user rejected error
 													reject(HardwareWallet.USER_REJECTED_ERROR);
@@ -2561,6 +3063,51 @@ class HardwareWallet {
 													// Catch errors
 													}).catch(function(error) {
 													
+														// Check transport's type
+														switch(self.transport.type) {
+														
+															// Trezor type
+															case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+															
+																// Check if failure occurred
+																if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+															
+																	// Initialize error occurred
+																	var errorOccurred = false;
+																	
+																	// Try
+																	try {
+																	
+																		// Decode error
+																		var decodedError = self.decode(error["Message Type"], error["Data"]);
+																	}
+																	
+																	// Catch errors
+																	catch(decodeError) {
+																	
+																		// Set error occurred
+																		errorOccurred = true;
+																	}
+																	
+																	// Check if an error didn't occur
+																	if(errorOccurred === false) {
+																	
+																		// Check if user rejected the request
+																		if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+																		
+																			// Reject canceled error
+																			reject(Common.CANCELED_ERROR);
+																			
+																			// Return
+																			return;
+																		}
+																	}
+																}
+																
+																// Break
+																break;
+														}
+													
 														// Reject error
 														reject(error);
 													});
@@ -2663,6 +3210,51 @@ class HardwareWallet {
 											
 												// Release exclusive lock
 												self.releaseExclusiveLock();
+												
+												// Check transport's type
+												switch(self.transport.type) {
+												
+													// Trezor type
+													case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+													
+														// Check if failure occurred
+														if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+													
+															// Initialize error occurred
+															var errorOccurred = false;
+															
+															// Try
+															try {
+															
+																// Decode error
+																var decodedError = self.decode(error["Message Type"], error["Data"]);
+															}
+															
+															// Catch errors
+															catch(decodeError) {
+															
+																// Set error occurred
+																errorOccurred = true;
+															}
+															
+															// Check if an error didn't occur
+															if(errorOccurred === false) {
+															
+																// Check if user rejected the request
+																if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+																
+																	// Reject canceled error
+																	reject(Common.CANCELED_ERROR);
+																	
+																	// Return
+																	return;
+																}
+															}
+														}
+														
+														// Break
+														break;
+												}
 											
 												// Reject error
 												reject(error);
@@ -2694,6 +3286,51 @@ class HardwareWallet {
 								
 									// Release exclusive lock
 									self.releaseExclusiveLock();
+									
+									// Check transport's type
+									switch(self.transport.type) {
+									
+										// Trezor type
+										case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+										
+											// Check if failure occurred
+											if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+										
+												// Initialize error occurred
+												var errorOccurred = false;
+												
+												// Try
+												try {
+												
+													// Decode error
+													var decodedError = self.decode(error["Message Type"], error["Data"]);
+												}
+												
+												// Catch errors
+												catch(decodeError) {
+												
+													// Set error occurred
+													errorOccurred = true;
+												}
+												
+												// Check if an error didn't occur
+												if(errorOccurred === false) {
+												
+													// Check if user rejected the request
+													if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+													
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
+														
+														// Return
+														return;
+													}
+												}
+											}
+											
+											// Break
+											break;
+									}
 								
 									// Reject error
 									reject(error);
@@ -2832,6 +3469,51 @@ class HardwareWallet {
 													// Catch errors
 													}).catch(function(error) {
 													
+														// Check transport's type
+														switch(self.transport.type) {
+														
+															// Trezor type
+															case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+															
+																// Check if failure occurred
+																if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+															
+																	// Initialize error occurred
+																	var errorOccurred = false;
+																	
+																	// Try
+																	try {
+																	
+																		// Decode error
+																		var decodedError = self.decode(error["Message Type"], error["Data"]);
+																	}
+																	
+																	// Catch errors
+																	catch(decodeError) {
+																	
+																		// Set error occurred
+																		errorOccurred = true;
+																	}
+																	
+																	// Check if an error didn't occur
+																	if(errorOccurred === false) {
+																	
+																		// Check if user rejected the request
+																		if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+																		
+																			// Reject canceled error
+																			reject(Common.CANCELED_ERROR);
+																			
+																			// Return
+																			return;
+																		}
+																	}
+																}
+																
+																// Break
+																break;
+														}
+														
 														// Reject error
 														reject(error);
 													});
@@ -2900,6 +3582,51 @@ class HardwareWallet {
 											
 												// Release exclusive lock
 												self.releaseExclusiveLock();
+												
+												// Check transport's type
+												switch(self.transport.type) {
+												
+													// Trezor type
+													case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+													
+														// Check if failure occurred
+														if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+													
+															// Initialize error occurred
+															var errorOccurred = false;
+															
+															// Try
+															try {
+															
+																// Decode error
+																var decodedError = self.decode(error["Message Type"], error["Data"]);
+															}
+															
+															// Catch errors
+															catch(decodeError) {
+															
+																// Set error occurred
+																errorOccurred = true;
+															}
+															
+															// Check if an error didn't occur
+															if(errorOccurred === false) {
+															
+																// Check if user rejected the request
+																if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+																
+																	// Reject canceled error
+																	reject(Common.CANCELED_ERROR);
+																	
+																	// Return
+																	return;
+																}
+															}
+														}
+														
+														// Break
+														break;
+												}
 											
 												// Reject error
 												reject(error);
@@ -2931,6 +3658,51 @@ class HardwareWallet {
 								
 									// Release exclusive lock
 									self.releaseExclusiveLock();
+									
+									// Check transport's type
+									switch(self.transport.type) {
+									
+										// Trezor type
+										case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+										
+											// Check if failure occurred
+											if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+										
+												// Initialize error occurred
+												var errorOccurred = false;
+												
+												// Try
+												try {
+												
+													// Decode error
+													var decodedError = self.decode(error["Message Type"], error["Data"]);
+												}
+												
+												// Catch errors
+												catch(decodeError) {
+												
+													// Set error occurred
+													errorOccurred = true;
+												}
+												
+												// Check if an error didn't occur
+												if(errorOccurred === false) {
+												
+													// Check if user rejected the request
+													if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+													
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
+														
+														// Return
+														return;
+													}
+												}
+											}
+											
+											// Break
+											break;
+									}
 								
 									// Reject error
 									reject(error);
@@ -3044,6 +3816,51 @@ class HardwareWallet {
 							
 								// Release exclusive lock
 								self.releaseExclusiveLock();
+								
+								// Check transport's type
+								switch(self.transport.type) {
+								
+									// Trezor type
+									case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+									
+										// Check if failure occurred
+										if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+									
+											// Initialize error occurred
+											var errorOccurred = false;
+											
+											// Try
+											try {
+											
+												// Decode error
+												var decodedError = self.decode(error["Message Type"], error["Data"]);
+											}
+											
+											// Catch errors
+											catch(decodeError) {
+											
+												// Set error occurred
+												errorOccurred = true;
+											}
+											
+											// Check if an error didn't occur
+											if(errorOccurred === false) {
+											
+												// Check if user rejected the request
+												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+													
+													// Return
+													return;
+												}
+											}
+										}
+										
+										// Break
+										break;
+								}
 							
 								// Reject error
 								reject(error);
@@ -3122,6 +3939,51 @@ class HardwareWallet {
 							
 							// Catch errors
 							}).catch(function(error) {
+							
+								// Check transport's type
+								switch(self.transport.type) {
+								
+									// Trezor type
+									case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+									
+										// Check if failure occurred
+										if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+									
+											// Initialize error occurred
+											var errorOccurred = false;
+											
+											// Try
+											try {
+											
+												// Decode error
+												var decodedError = self.decode(error["Message Type"], error["Data"]);
+											}
+											
+											// Catch errors
+											catch(decodeError) {
+											
+												// Set error occurred
+												errorOccurred = true;
+											}
+											
+											// Check if an error didn't occur
+											if(errorOccurred === false) {
+											
+												// Check if user rejected the request
+												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+													
+													// Return
+													return;
+												}
+											}
+										}
+										
+										// Break
+										break;
+								}
 							
 								// Reject error
 								reject(error);
@@ -3202,6 +4064,51 @@ class HardwareWallet {
 							// Catch errors
 							}).catch(function(error) {
 							
+								// Check transport's type
+								switch(self.transport.type) {
+								
+									// Trezor type
+									case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+									
+										// Check if failure occurred
+										if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+									
+											// Initialize error occurred
+											var errorOccurred = false;
+											
+											// Try
+											try {
+											
+												// Decode error
+												var decodedError = self.decode(error["Message Type"], error["Data"]);
+											}
+											
+											// Catch errors
+											catch(decodeError) {
+											
+												// Set error occurred
+												errorOccurred = true;
+											}
+											
+											// Check if an error didn't occur
+											if(errorOccurred === false) {
+											
+												// Check if user rejected the request
+												if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+													
+													// Return
+													return;
+												}
+											}
+										}
+										
+										// Break
+										break;
+								}
+								
 								// Reject error
 								reject(error);
 							});
@@ -3275,6 +4182,51 @@ class HardwareWallet {
 						// Catch errors
 						}).catch(function(error) {
 						
+							// Check transport's type
+							switch(self.transport.type) {
+							
+								// Trezor type
+								case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+								
+									// Check if failure occurred
+									if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+								
+										// Initialize error occurred
+										var errorOccurred = false;
+										
+										// Try
+										try {
+										
+											// Decode error
+											var decodedError = self.decode(error["Message Type"], error["Data"]);
+										}
+										
+										// Catch errors
+										catch(decodeError) {
+										
+											// Set error occurred
+											errorOccurred = true;
+										}
+										
+										// Check if an error didn't occur
+										if(errorOccurred === false) {
+										
+											// Check if user rejected the request
+											if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+											
+												// Reject canceled error
+												reject(Common.CANCELED_ERROR);
+												
+												// Return
+												return;
+											}
+										}
+									}
+									
+									// Break
+									break;
+							}
+							
 							// Reject error
 							reject(error);
 						});
@@ -3335,6 +4287,51 @@ class HardwareWallet {
 						// Catch errors
 						}).catch(function(error) {
 						
+							// Check transport's type
+							switch(self.transport.type) {
+							
+								// Trezor type
+								case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+								
+									// Check if failure occurred
+									if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+								
+										// Initialize error occurred
+										var errorOccurred = false;
+										
+										// Try
+										try {
+										
+											// Decode error
+											var decodedError = self.decode(error["Message Type"], error["Data"]);
+										}
+										
+										// Catch errors
+										catch(decodeError) {
+										
+											// Set error occurred
+											errorOccurred = true;
+										}
+										
+										// Check if an error didn't occur
+										if(errorOccurred === false) {
+										
+											// Check if user rejected the request
+											if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+											
+												// Reject canceled error
+												reject(Common.CANCELED_ERROR);
+												
+												// Return
+												return;
+											}
+										}
+									}
+									
+									// Break
+									break;
+							}
+						
 							// Reject error
 							reject(error);
 						});
@@ -3394,6 +4391,51 @@ class HardwareWallet {
 						
 						// Catch errors
 						}).catch(function(error) {
+						
+							// Check transport's type
+							switch(self.transport.type) {
+							
+								// Trezor type
+								case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+								
+									// Check if failure occurred
+									if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+								
+										// Initialize error occurred
+										var errorOccurred = false;
+										
+										// Try
+										try {
+										
+											// Decode error
+											var decodedError = self.decode(error["Message Type"], error["Data"]);
+										}
+										
+										// Catch errors
+										catch(decodeError) {
+										
+											// Set error occurred
+											errorOccurred = true;
+										}
+										
+										// Check if an error didn't occur
+										if(errorOccurred === false) {
+										
+											// Check if user rejected the request
+											if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+											
+												// Reject canceled error
+												reject(Common.CANCELED_ERROR);
+												
+												// Return
+												return;
+											}
+										}
+									}
+									
+									// Break
+									break;
+							}
 						
 							// Reject error
 							reject(error);
@@ -3459,6 +4501,51 @@ class HardwareWallet {
 						
 						// Catch errors
 						}).catch(function(error) {
+						
+							// Check transport's type
+							switch(self.transport.type) {
+							
+								// Trezor type
+								case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+								
+									// Check if failure occurred
+									if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+								
+										// Initialize error occurred
+										var errorOccurred = false;
+										
+										// Try
+										try {
+										
+											// Decode error
+											var decodedError = self.decode(error["Message Type"], error["Data"]);
+										}
+										
+										// Catch errors
+										catch(decodeError) {
+										
+											// Set error occurred
+											errorOccurred = true;
+										}
+										
+										// Check if an error didn't occur
+										if(errorOccurred === false) {
+										
+											// Check if user rejected the request
+											if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+											
+												// Reject canceled error
+												reject(Common.CANCELED_ERROR);
+												
+												// Return
+												return;
+											}
+										}
+									}
+									
+									// Break
+									break;
+							}
 						
 							// Reject error
 							reject(error);
@@ -3732,7 +4819,7 @@ class HardwareWallet {
 										if(errorOccurred === false) {
 										
 											// Check if user rejected the request
-											if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE) {
+											if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
 											
 												// Reject user rejected error
 												reject(HardwareWallet.USER_REJECTED_ERROR);
@@ -3909,6 +4996,13 @@ class HardwareWallet {
 			return "HardwareWalletUnlockEvent";
 		}
 		
+		// Device cancel event
+		static get DEVICE_CANCEL_EVENT() {
+		
+			// Return device cancel event
+			return "HardwareWalletDeviceCancelEvent";
+		}
+		
 		// Transaction information signature index
 		static get TRANSACTION_INFORMATION_SIGNATURE_INDEX() {
 		
@@ -4077,9 +5171,6 @@ class HardwareWallet {
 		// Send
 		send(messageType, parameterOne, parameterTwo, data = HardwareWallet.NO_DATA, allowedResponseTypes = [], text = HardwareWallet.NO_TEXT, textArguments = [], allowUnlock = false, failOnLock = false, preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED, forceSend = false, preventUnlockMessageDone = false) {
 		
-			// Get product name
-			var productName = this.transport["deviceModel"]["productName"];
-			
 			// Set self
 			var self = this;
 			
@@ -4237,7 +5328,7 @@ class HardwareWallet {
 																// Trigger unlock event
 																$(self).trigger(HardwareWallet.UNLOCK_EVENT);
 																
-																// Check if showing message and the message is shown and not canceled
+																// Check if showing message and not canceled
 																if(text !== HardwareWallet.NO_TEXT && canceled === false) {
 																
 																	// Return waiting until showing message has finished
@@ -4291,7 +5382,7 @@ class HardwareWallet {
 																// Trigger before disconnect event
 																$(self).trigger(HardwareWallet.BEFORE_DISCONNECT_EVENT);
 																
-																// Check if showing message and the message is shown and not canceled
+																// Check if showing message and not canceled
 																if(text !== HardwareWallet.NO_TEXT && canceled === false) {
 																
 																	// Return waiting until showing message has finished
@@ -4391,6 +5482,182 @@ class HardwareWallet {
 							
 							// Otherwise check if hardware wallet requires button acknowledgment
 							else if(self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE && response["Message Type"] === HardwareWalletDefinitions.TREZOR_BUTTON_REQUEST_MESSAGE_TYPE) {
+							
+								// Initialize error occurred
+								var errorOccurred = false;
+								
+								// Try
+								try {
+								
+									// Decode response
+									var decodedResponse = self.decode(response["Message Type"], response["Data"]);
+								}
+								
+								// Catch errors
+								catch(error) {
+								
+									// Set error occurred
+									errorOccurred = true;
+								}
+								
+								// Check if an error didn't occur
+								if(errorOccurred === false) {
+								
+									// Check if device is locked or needs a passphrase and not set to fail on lock
+									if(decodedResponse["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedResponse[0] === HardwareWalletDefinitions.TREZOR_PIN_ENTRY_BUTTON_REQUEST_TYPE || decodedResponse[0] === HardwareWalletDefinitions.TREZOR_PASSPHRASE_ENTRY_BUTTON_REQUEST_TYPE) && failOnLock === false) {
+									
+										// Check if not preventing unlock message
+										if(preventUnlockMessageDone === false) {
+										
+											// Set locked
+											self.locked = true;
+										}
+										
+										// Initialize canceled
+										var canceled = false;
+									
+										// Check if showing message and not preventing unlock message
+										if(text !== HardwareWallet.NO_TEXT && preventUnlockMessageDone === false) {
+										
+											// Show hardware wallet unlock message
+											var showMessage = self.application.showHardwareWalletUnlockMessage(self, text, textArguments, allowUnlock, preventMessages, cancelOccurred);
+											
+											// Catch errors while showing the message
+											showMessage.catch(function(error) {
+											
+												// Set canceled
+												canceled = true;
+												
+												// Clear locked
+												self.locked = false;
+											
+												// Reject canceled error
+												reject(Common.CANCELED_ERROR);
+											});
+										}
+										
+										// Return sending button acknowledge response
+										return self.send(HardwareWalletDefinitions.TREZOR_BUTTON_ACKNOWLEDGE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_DATA, allowedResponseTypes, text, textArguments, allowUnlock, failOnLock, preventMessages, cancelOccurred, true, true).then(function(response) {
+										
+											// Check if not canceled
+											if(canceled === false) {
+											
+												// Check if not preventing unlock message
+												if(preventUnlockMessageDone === false) {
+											
+													// Clear locked
+													self.locked = false;
+												}
+												
+												// Check if cancel didn't occur
+												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+												
+													// Check if not preventing unlock message
+													if(preventUnlockMessageDone === false) {
+												
+														// Trigger unlock event
+														$(self).trigger(HardwareWallet.UNLOCK_EVENT);
+													}
+												
+													// Check if showing message and not preventing unlock message
+													if(text !== HardwareWallet.NO_TEXT && preventUnlockMessageDone === false) {
+													
+														// Return waiting until showing message has finished
+														return showMessage.then(function() {
+														
+															// Resolve response
+															resolve(response);
+														
+														// Catch errors
+														}).catch(function() {
+														
+															// Resolve response
+															resolve(response);
+														});
+													}
+													
+													// Otherwise
+													else {
+												
+														// Resolve response
+														resolve(response);
+													}
+												}
+												
+												// Otherwise
+												else {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+												}
+											}
+											
+										// Catch errors
+										}).catch(function(error) {
+										
+											// Check if not canceled
+											if(canceled === false) {
+											
+												// Check if not preventing unlock message
+												if(preventUnlockMessageDone === false) {
+										
+													// Clear locked
+													self.locked = false;
+												}
+											
+												// Check if cancel didn't occur
+												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+												
+													// Check if not preventing unlock message
+													if(preventUnlockMessageDone === false) {
+												
+														// Check if failure occurred
+														if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
+													
+															// Initialize error occurred
+															var errorOccurred = false;
+															
+															// Try
+															try {
+															
+																// Decode error
+																var decodedError = self.decode(error["Message Type"], error["Data"]);
+															}
+															
+															// Catch errors
+															catch(decodeError) {
+															
+																// Set error occurred
+																errorOccurred = true;
+															}
+															
+															// Check if an error didn't occur
+															if(errorOccurred === false) {
+															
+																// Check if user rejected the request
+																if(decodedError["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedError[0] === HardwareWalletDefinitions.TREZOR_ACTION_CANCELED_FAILURE_TYPE || decodedError[0] === HardwareWalletDefinitions.TREZOR_PIN_CANCELED_FAILURE_TYPE)) {
+																
+																	// Trigger device cancel event
+																	$(self).trigger(HardwareWallet.DEVICE_CANCEL_EVENT);
+																}
+															}
+														}
+													}
+												
+													// Reject error
+													reject(error);
+												}
+												
+												// Otherwise
+												else {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+												}
+											}
+										});
+									}
+								}
 							
 								// Return sending button acknowledge response
 								return self.send(HardwareWalletDefinitions.TREZOR_BUTTON_ACKNOWLEDGE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_DATA, allowedResponseTypes, text, textArguments, allowUnlock, failOnLock, preventMessages, cancelOccurred, true).then(function(response) {
@@ -5166,10 +6433,10 @@ class HardwareWallet {
 		}
 		
 		// Decode
-		decode(messageType, data) {
+		decode(messageType, data, transportType = HardwareWallet.NO_TRANSPORT_TYPE) {
 		
 			// Check transport's type
-			switch(this.transport.type) {
+			switch((transportType !== HardwareWallet.NO_TRANSPORT_TYPE) ? transportType : this.transport.type) {
 			
 				// Ledger type
 				case HardwareWalletDefinitions.LEDGER_TRANSPORT_TYPE:
@@ -5204,15 +6471,29 @@ class HardwareWallet {
 									continue;
 								}
 								
-								// Securely clear result
-								result.fill(0);
-							
-								// Throw error
-								throw "Field doesn't exist in the Protocol Buffers.";
+								// Check if field's type is bool
+								if(messageSchema[fieldNumber]["Type"] === ProtocolBuffers.BOOL_SCHEMA_DATA_TYPE) {
+								
+									// Set field payload to false
+									protocolBuffers[messageSchema[fieldNumber]["Name"]] = [false];
+								}
+								
+								// Otherwise
+								else {
+								
+									// Securely clear result
+									result.fill(0);
+								
+									// Throw error
+									throw "Field doesn't exist in the Protocol Buffers.";
+								}
 							}
 							
 							// Get field payload
 							var fieldPayload = protocolBuffers[messageSchema[fieldNumber]["Name"]];
+							
+							// Set include length
+							var includeLength = false;
 						
 							// Check field's expected type
 							switch(messageSchema[fieldNumber]["Type"]) {
@@ -5239,7 +6520,21 @@ class HardwareWallet {
 								case ProtocolBuffers.ENUM_SCHEMA_DATA_TYPE:
 								
 									// Set field data
-									var fieldData = new Uint8Array([fieldPayload[fieldPayload["length"] - 1]]);
+									var fieldData = new Uint8Array(fieldPayload);
+									
+									// Check if more than one value exists in the field payload
+									if(fieldPayload["length"] > 1) {
+									
+										// Check if field length is too big
+										if(fieldPayload["length"] > Common.BYTE_MAX_VALUE) {
+										
+											// Throw error
+											throw "Field length is too big.";
+										}
+										
+										// Set field data to include field length
+										fieldData = Common.mergeArrays([new Uint8Array([fieldPayload["length"]]), fieldData]);
+									}
 									
 									// Break
 									break;
@@ -5249,6 +6544,16 @@ class HardwareWallet {
 								
 									// Set field data
 									var fieldData = (new TextEncoder()).encode(fieldPayload[fieldPayload["length"] - 1]);
+									
+									// Set include length
+									includeLength = true;
+									
+									// Check if field length is too big
+									if(fieldData["length"] > Common.BYTE_MAX_VALUE) {
+									
+										// Throw error
+										throw "Field length is too big.";
+									}
 									
 									// Break
 									break;
@@ -5261,12 +6566,23 @@ class HardwareWallet {
 									
 									// Break
 									break;
+								
+								// Sint
+								case ProtocolBuffers.SINT_SCHEMA_DATA_TYPE:
+								
+									// Throw error
+									throw "Field type not supported.";
 							}
 							
 							// Append field data to the result
-							var currentResult = new Uint8Array(result["length"] + fieldData["length"]);
+							var currentResult = new Uint8Array(result["length"] + ((includeLength === true) ? Uint8Array["BYTES_PER_ELEMENT"] : 0) + fieldData["length"]);
 							currentResult.set(result);
-							currentResult.set(fieldData, result["length"]);
+							
+							if(includeLength === true) {
+								currentResult[result["length"]] = fieldData["length"];
+							}
+							
+							currentResult.set(fieldData, result["length"] + ((includeLength === true) ? Uint8Array["BYTES_PER_ELEMENT"] : 0));
 							result.fill(0);
 							result = currentResult;
 						}
@@ -5291,9 +6607,23 @@ class HardwareWallet {
 				
 				// Trezor type
 				case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
+				
+					// Check transport's product name
+					switch(this.transport["deviceModel"]["productName"]) {
+					
+						// Trezor Model One
+						case "Trezor Model One":
 		
-					// Return minimum compatible version
-					return "1.12.2";
+							// Return minimum compatible version
+							return "1.12.2";
+						
+						// Trezor Model T or default
+						case "Trezor Model T":
+						default:
+						
+							// Return minimum compatible version
+							return "2.6.1";
+					}
 			}
 		}
 		
@@ -5665,6 +6995,13 @@ class HardwareWallet {
 		
 			// Return encryption and decryption maximum chunk size
 			return 64;
+		}
+		
+		// No transport type
+		static get NO_TRANSPORT_TYPE() {
+		
+			// Return no transport type
+			return null;
 		}
 }
 
