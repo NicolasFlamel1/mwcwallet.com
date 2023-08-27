@@ -11,7 +11,7 @@ main > div.unlocked > div > div > div.sections > div > div.log > div > div.messa
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	justify-content: start;
+	justify-content: flex-start;
 }
 
 main > div.unlocked > div > div > div.sections > div > div.log > div > div.messages > p {
