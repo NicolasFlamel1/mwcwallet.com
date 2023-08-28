@@ -639,7 +639,7 @@
 			"Checksum" => "QkO9sBiE1vi+hFY7yO9Zo4rIrgUHBydF77a3SfX5Rj+VqoA+XYrv/77n17Pki3IXnQHN2ReqxvUykN1sChUQTw=="
 		],
 		"./scripts/js-sha256-0.9.0.js" => [
-			"Version" => 6,
+			"Version" => 7,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => "6bCn+Ef749zUoddDZ77IxPk1p0yebx0r2gliMdN4O/NNmP/hQB6u961EwG8GVmef4/LAsQ5BaVS4WO4ZcxvpEQ=="

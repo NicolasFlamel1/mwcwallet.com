@@ -298,7 +298,7 @@ self.addEventListener("fetch", function(event) {
 		}
 		
 		// Get request's cache name
-		var cacheName = RELATIVE_ROOT_PATH + parsedUrl["pathname"].substring("/"["length"]) + parsedUrl["search"];
+		var cacheName = RELATIVE_ROOT_PATH + parsedUrl["pathname"].substring("/"["length"]) + ((parsedUrl["hostname"] === HOST_NAME && parsedUrl["pathname"] === "/") ? "" : parsedUrl["search"]);
 		
 		// Check if request isn't a GET request, doesn't go to the server, or is for an HTML or manifest file
 		if(event["request"]["method"] !== "GET" || parsedUrl["hostname"] !== HOST_NAME || HTML_FILE_PATTERN.test(parsedUrl["pathname"]) === true || MANIFEST_FILE_PATTERN.test(parsedUrl["pathname"]) === true) {
@@ -379,7 +379,7 @@ self.addEventListener("fetch", function(event) {
 				else {
 			
 					// Return getting cached response for the request
-					return caches.match(event["request"]).then(function(cachedResponse) {
+					return caches.match((parsedUrl["pathname"] === "/") ? event["request"]["url"].split("?")[0] : event["request"]).then(function(cachedResponse) {
 					
 						// Check if cached response doesn't exist
 						if(cachedResponse === RESPONSE_NOT_IN_CACHE) {
@@ -409,7 +409,7 @@ self.addEventListener("fetch", function(event) {
 		else {
 		
 			// Return getting cached response for the request
-			return caches.match(event["request"]).then(function(cachedResponse) {
+			return caches.match((parsedUrl["hostname"] === HOST_NAME && parsedUrl["pathname"] === "/") ? event["request"]["url"].split("?")[0] : event["request"]).then(function(cachedResponse) {
 			
 				// Check if cached response doesn't exist
 				if(cachedResponse === RESPONSE_NOT_IN_CACHE) {
