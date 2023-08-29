@@ -344,7 +344,7 @@ self.addEventListener("fetch", function(event) {
 						return caches.open(cacheVersion).then(function(cache) {
 					
 							// Return setting network response in cache
-							return cache.put(event["request"], networkResponse.clone()).then(function() {
+							return cache.put((parsedUrl["hostname"] === HOST_NAME && parsedUrl["pathname"] === "/") ? event["request"]["url"].split("?")[0] : event["request"], networkResponse.clone()).then(function() {
 							
 								// Resolve network response
 								resolve(networkResponse);
@@ -379,7 +379,7 @@ self.addEventListener("fetch", function(event) {
 				else {
 			
 					// Return getting cached response for the request
-					return caches.match((parsedUrl["pathname"] === "/") ? event["request"]["url"].split("?")[0] : event["request"]).then(function(cachedResponse) {
+					return caches.match((parsedUrl["hostname"] === HOST_NAME && parsedUrl["pathname"] === "/") ? event["request"]["url"].split("?")[0] : event["request"]).then(function(cachedResponse) {
 					
 						// Check if cached response doesn't exist
 						if(cachedResponse === RESPONSE_NOT_IN_CACHE) {
@@ -455,7 +455,7 @@ self.addEventListener("fetch", function(event) {
 								return caches.open(cacheVersion).then(function(cache) {
 							
 									// Set network response in cache
-									return cache.put(event["request"], networkResponse.clone()).then(function() {
+									return cache.put((parsedUrl["hostname"] === HOST_NAME && parsedUrl["pathname"] === "/") ? event["request"]["url"].split("?")[0] : event["request"], networkResponse.clone()).then(function() {
 									
 										// Resolve network response
 										resolve(networkResponse);

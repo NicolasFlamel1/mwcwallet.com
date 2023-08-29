@@ -5169,7 +5169,7 @@ class HardwareWallet {
 		}
 		
 		// Send
-		send(messageType, parameterOne, parameterTwo, data = HardwareWallet.NO_DATA, allowedResponseTypes = [], text = HardwareWallet.NO_TEXT, textArguments = [], allowUnlock = false, failOnLock = false, preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED, forceSend = false, preventUnlockMessageDone = false) {
+		send(messageType, parameterOne, parameterTwo, data = HardwareWallet.NO_DATA, allowedResponseTypes = [], text = HardwareWallet.NO_TEXT, textArguments = [], allowUnlock = false, failOnLock = false, preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED, forceSend = false, preventUnlockMessageDone = false, unlockMessageShown = false) {
 		
 			// Set self
 			var self = this;
@@ -5183,8 +5183,8 @@ class HardwareWallet {
 					// Return performing the instruction on the hardware wallet
 					return self.transport.send(messageType, parameterOne, parameterTwo, self.encode(messageType, data)).then(function(response) {
 					
-						// Check if cancel didn't occur or force sending
-						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false || forceSend === true) {
+						// Check if cancel didn't occur or force sending and unlock message isn't shown
+						if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false || (forceSend === true && unlockMessageShown === false)) {
 						
 							// Check if the hardware wallet is locked and not set to fail on lock
 							if((self.transport.type === HardwareWalletDefinitions.LEDGER_TRANSPORT_TYPE && (response["Message Type"] === HardwareWalletDefinitions.LEDGER_APP_LOCKED_MESSAGE_TYPE || response["Message Type"] === HardwareWalletDefinitions.LEDGER_DEVICE_LOCKED_MESSAGE_TYPE)) && failOnLock === false) {
@@ -5506,8 +5506,8 @@ class HardwareWallet {
 									// Check if device is locked or needs a passphrase and not set to fail on lock
 									if(decodedResponse["length"] >= Uint8Array["BYTES_PER_ELEMENT"] && (decodedResponse[0] === HardwareWalletDefinitions.TREZOR_PIN_ENTRY_BUTTON_REQUEST_TYPE || decodedResponse[0] === HardwareWalletDefinitions.TREZOR_PASSPHRASE_ENTRY_BUTTON_REQUEST_TYPE) && failOnLock === false) {
 									
-										// Check if not preventing unlock message
-										if(preventUnlockMessageDone === false) {
+										// Check if unlock message isn't shown
+										if(unlockMessageShown === false) {
 										
 											// Set locked
 											self.locked = true;
@@ -5515,9 +5515,12 @@ class HardwareWallet {
 										
 										// Initialize canceled
 										var canceled = false;
-									
-										// Check if showing message and not preventing unlock message
-										if(text !== HardwareWallet.NO_TEXT && preventUnlockMessageDone === false) {
+										
+										// Initialize prevent cancel
+										var preventCancel = false;
+										
+										// Check if showing message and unlock message isn't shown
+										if(text !== HardwareWallet.NO_TEXT && unlockMessageShown === false) {
 										
 											// Show hardware wallet unlock message
 											var showMessage = self.application.showHardwareWalletUnlockMessage(self, text, textArguments, allowUnlock, preventMessages, cancelOccurred);
@@ -5525,25 +5528,44 @@ class HardwareWallet {
 											// Catch errors while showing the message
 											showMessage.catch(function(error) {
 											
-												// Set canceled
-												canceled = true;
+												// Check if not preventing cancel
+												if(preventCancel === false) {
 												
-												// Clear locked
-												self.locked = false;
-											
-												// Reject canceled error
-												reject(Common.CANCELED_ERROR);
+													// Set canceled
+													canceled = true;
+													
+													// Clear locked
+													self.locked = false;
+													
+													// Reset transport device and catch errors
+													self.transport.device.reset().catch(function(error) {
+													
+													// Finally
+													}).finally(function() {
+													
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
+													});
+												}
 											});
 										}
 										
 										// Return sending button acknowledge response
-										return self.send(HardwareWalletDefinitions.TREZOR_BUTTON_ACKNOWLEDGE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_DATA, allowedResponseTypes, text, textArguments, allowUnlock, failOnLock, preventMessages, cancelOccurred, true, true).then(function(response) {
+										return self.send(HardwareWalletDefinitions.TREZOR_BUTTON_ACKNOWLEDGE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_DATA, allowedResponseTypes, text, textArguments, allowUnlock, failOnLock, preventMessages, function() {
+										
+											// Return if cancel occurred or canceled
+											return (cancelOccurred !== Common.NO_CANCEL_OCCURRED && cancelOccurred() === true) || canceled === true;
+											
+										}, true, preventUnlockMessageDone, true).then(function(response) {
 										
 											// Check if not canceled
 											if(canceled === false) {
 											
-												// Check if not preventing unlock message
-												if(preventUnlockMessageDone === false) {
+												// Set prevent cancel
+												preventCancel = true;
+											
+												// Check if unlock message isn't shown
+												if(unlockMessageShown === false) {
 											
 													// Clear locked
 													self.locked = false;
@@ -5552,15 +5574,15 @@ class HardwareWallet {
 												// Check if cancel didn't occur
 												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 												
-													// Check if not preventing unlock message
-													if(preventUnlockMessageDone === false) {
+													// Check if unlock message isn't shown
+													if(unlockMessageShown === false) {
 												
 														// Trigger unlock event
 														$(self).trigger(HardwareWallet.UNLOCK_EVENT);
 													}
 												
-													// Check if showing message and not preventing unlock message
-													if(text !== HardwareWallet.NO_TEXT && preventUnlockMessageDone === false) {
+													// Check if showing message and unlock message isn't shown
+													if(text !== HardwareWallet.NO_TEXT && unlockMessageShown === false) {
 													
 														// Return waiting until showing message has finished
 														return showMessage.then(function() {
@@ -5598,8 +5620,11 @@ class HardwareWallet {
 											// Check if not canceled
 											if(canceled === false) {
 											
-												// Check if not preventing unlock message
-												if(preventUnlockMessageDone === false) {
+												// Set prevent cancel
+												preventCancel = true;
+											
+												// Check if unlock message isn't shown
+												if(unlockMessageShown === false) {
 										
 													// Clear locked
 													self.locked = false;
@@ -5608,8 +5633,8 @@ class HardwareWallet {
 												// Check if cancel didn't occur
 												if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 												
-													// Check if not preventing unlock message
-													if(preventUnlockMessageDone === false) {
+													// Check if unlock message isn't shown
+													if(unlockMessageShown === false) {
 												
 														// Check if failure occurred
 														if(Object.isObject(error) === true && "Message Type" in error === true && error["Message Type"] === HardwareWalletDefinitions.TREZOR_FAILURE_MESSAGE_TYPE) {
@@ -6237,64 +6262,64 @@ class HardwareWallet {
 							// Securely clear response data
 							response["Data"].fill(0);
 							
-							// Check if hardware wallet requires button acknowledgment
-							if(self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE && response["Message Type"] === HardwareWalletDefinitions.TREZOR_BUTTON_REQUEST_MESSAGE_TYPE) {
+							// Check if unlock message isn't shown
+							if(unlockMessageShown === false) {
 							
-								// Return sending button acknowledge response and catch errors
-								return self.send(HardwareWalletDefinitions.TREZOR_BUTTON_ACKNOWLEDGE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_DATA, [], HardwareWallet.NO_TEXT, [], false, true).catch(function(error) {
+								// Check if hardware wallet requires button acknowledgment
+								if(self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE && response["Message Type"] === HardwareWalletDefinitions.TREZOR_BUTTON_REQUEST_MESSAGE_TYPE) {
 								
-								// Finally
-								}).finally(function() {
-								
-									// Reject canceled error
-									reject(Common.CANCELED_ERROR);
-								});
-							}
-							
-							// Otherwise check if hardware wallet requires passphrase acknowledgment
-							else if(self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE && response["Message Type"] === HardwareWalletDefinitions.TREZOR_PASSPHRASE_REQUEST_MESSAGE_TYPE) {
-							
-								// Return sending passphrase acknowledge response
-								return self.send(HardwareWalletDefinitions.TREZOR_PASSPHRASE_ACKNOWLEDGE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, {
-																	
-									// Passphrase
-									"Passphrase": ""
+									// Return sending button acknowledge response and catch errors
+									return self.send(HardwareWalletDefinitions.TREZOR_BUTTON_ACKNOWLEDGE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_DATA, [], HardwareWallet.NO_TEXT, [], false, true).catch(function(error) {
 									
-								}, [], HardwareWallet.NO_TEXT, [], false, true).catch(function(error) {
-								
-								// Finally
-								}).finally(function() {
-								
-									// Reject canceled error
-									reject(Common.CANCELED_ERROR);
-								});
-							}
-							
-							// Otherwise check if hardware wallet requires pin matrix acknowledgment
-							else if(self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE && response["Message Type"] === HardwareWalletDefinitions.TREZOR_PIN_MATRIX_REQUEST_MESSAGE_TYPE) {
-							
-								// Return sending pin matrix acknowledge response
-								return self.send(HardwareWalletDefinitions.TREZOR_PIN_MATRIX_ACKNOWLEDGE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, {
-																	
-									// Pin
-									"Pin": HardwareWallet.INVALID_PIN
+									// Finally
+									}).finally(function() {
 									
-								}, [], HardwareWallet.NO_TEXT, [], false, true).catch(function(error) {
+										// Reject canceled error
+										reject(Common.CANCELED_ERROR);
+									});
+								}
 								
-								// Finally
-								}).finally(function() {
+								// Otherwise check if hardware wallet requires passphrase acknowledgment
+								else if(self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE && response["Message Type"] === HardwareWalletDefinitions.TREZOR_PASSPHRASE_REQUEST_MESSAGE_TYPE) {
 								
-									// Reject canceled error
-									reject(Common.CANCELED_ERROR);
-								});
+									// Return sending passphrase acknowledge response
+									return self.send(HardwareWalletDefinitions.TREZOR_PASSPHRASE_ACKNOWLEDGE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, {
+																		
+										// Passphrase
+										"Passphrase": ""
+										
+									}, [], HardwareWallet.NO_TEXT, [], false, true).catch(function(error) {
+									
+									// Finally
+									}).finally(function() {
+									
+										// Reject canceled error
+										reject(Common.CANCELED_ERROR);
+									});
+								}
+								
+								// Otherwise check if hardware wallet requires pin matrix acknowledgment
+								else if(self.transport.type === HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE && response["Message Type"] === HardwareWalletDefinitions.TREZOR_PIN_MATRIX_REQUEST_MESSAGE_TYPE) {
+								
+									// Return sending pin matrix acknowledge response
+									return self.send(HardwareWalletDefinitions.TREZOR_PIN_MATRIX_ACKNOWLEDGE_MESSAGE_TYPE, HardwareWallet.NO_PARAMETER, HardwareWallet.NO_PARAMETER, {
+																		
+										// Pin
+										"Pin": HardwareWallet.INVALID_PIN
+										
+									}, [], HardwareWallet.NO_TEXT, [], false, true).catch(function(error) {
+									
+									// Finally
+									}).finally(function() {
+									
+										// Reject canceled error
+										reject(Common.CANCELED_ERROR);
+									});
+								}
 							}
 							
-							// Otherwise
-							else {
-							
-								// Reject canceled error
-								reject(Common.CANCELED_ERROR);
-							}
+							// Reject canceled error
+							reject(Common.CANCELED_ERROR);
 						}
 						
 					// Catch errors

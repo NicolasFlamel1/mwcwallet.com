@@ -465,10 +465,10 @@
 			"Checksum" => "+A3TNsCFoC33aDVbZ0UF6Tw+GmSvEgo0QcitCCfFo/p4vP1kB5MSF6+bYonuHBS+tWQh2T1JUBHccouCK0K8Ig=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 69,
+			"Version" => 70,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "2NqFWuv7VbUIR9Ov2eptu2xk2vlBed7bToDPN3Z83/cEOHhz/6v9Xk8dvnPfch5j7A0CcJFnUWFspOUXPeWYUA=="
+			"Checksum" => "92zV5oY+ovSUFoIKv9MKHLNuOFXHnSiy9/aBatQiuI7ofH8GINb6GmVNsOZBbslmB+u0gUspRr7X1Gwu1WwxBQ=="
 		],
 		"./scripts/hardware_wallet_usb_transport.js" => [
 			"Version" => 8,
