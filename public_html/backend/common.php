@@ -12,7 +12,9 @@
 	const VERSION_CHANGES = [
 		"Fixed bold fonts displaying incorrectly on Safari.",
 		"Fixed caching main page when using URL parameters.",
-		"Fixed canceling connecting to a locked Trezor Model T hardware wallet."
+		"Fixed canceling connecting to a locked Trezor Model T hardware wallet.",
+		"Updated dependencies.",
+		"Removes wallet and network protocol from pasted recipient addresses."
 	];
 	
 	// Maintenance start time

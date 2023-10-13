@@ -524,6 +524,46 @@ class SendPaymentSection extends Section {
 				}
 			});
 			
+			// Recipient address input paste event
+			this.getDisplay().find("input.recipientAddress").on("paste", function(event) {
+			
+				// Get input
+				var input = $(this);
+				
+				// Check if input is empty or all of its contents are selected
+				if(input.val()["length"] === 0 || (typeof getSelection !== "undefined" && input.val() === getSelection().toString())) {
+				
+					// Prevent default
+					event.preventDefault();
+					
+					// Get clipboard data
+					var value = event["originalEvent"]["clipboardData"].getData("text/plain");
+					
+					// Remove handled protocols from value
+					value = ProtocolHandler.standardizeUrlProtocol(value);
+					
+					// Set recipient address to the value
+					input.val(value).trigger("input", [
+					
+						// Is focus event
+						false,
+						
+						// Force input
+						true
+					]);
+					
+					// Scroll to end of input
+					input.scrollLeft(input.get(0)["scrollWidth"]);
+					
+					// Check if get selection is supported
+					if(typeof getSelection !== "undefined") {
+					
+						// Collapse selection to end
+						getSelection().collapseToEnd();
+					}
+				}
+			});
+			
 			// Scan QR code button click event
 			this.getDisplay().find("button.scan").on("click", function() {
 			
@@ -2781,6 +2821,19 @@ class SendPaymentSection extends Section {
 						
 						// Allow boolean buttons to transition
 						self.getDisplay().find("div[data-type=\"boolean\"]").find("button").removeClass("noTransition");
+						
+						// Check wallet type
+						switch(Consensus.getWalletType()) {
+						
+							// GRIN wallet
+							case Consensus.GRIN_WALLET_TYPE:
+							
+								// Clear message input
+								self.getDisplay().find("input.message").val("");
+							
+								// Break
+								break;
+						}
 					});
 				
 					// Resolve

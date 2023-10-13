@@ -5547,12 +5547,19 @@ class Wallets {
 																										// Get default identifier
 																										var defaultIdentifier = new Identifier();
 																										
-																										// Set the highest identifier to the default identifier's child identifier
-																										highestIdentifier = defaultIdentifier.getChild();
+																										// Set the highest identifier candidate to the default identifier's child identifier
+																										var highestIdentifierCandidate = defaultIdentifier.getChild();
+																										
+																										// Check if output information's identifier included the highest identifier candidate
+																										if(outputInformation.getIdentifier().includesValue(highestIdentifierCandidate) === true) {
+																										
+																											// Set the highest identifier to the output information's identifier without the extras
+																											highestIdentifier = outputInformation.getIdentifier().removeExtras();
+																										}
 																									}
 																									
-																									// Check if output information's identifier included the highest identifier
-																									if(outputInformation.getIdentifier().includesValue(highestIdentifier) === true) {
+																									// Otherwise check if output information's identifier included the highest identifier
+																									else if(outputInformation.getIdentifier().includesValue(highestIdentifier) === true) {
 																									
 																										// Set the highest identifier to the output information's identifier without the extras
 																										highestIdentifier = outputInformation.getIdentifier().removeExtras();
@@ -9270,7 +9277,13 @@ class Wallets {
 									[Database.toKeyPath(Wallets.DATABASE_USE_BIP39_NAME)]: wallet.getUseBip39(),
 									
 									// Encrypted BIP39 salt
-									[Database.toKeyPath(Wallets.DATABASE_ENCRYPTED_BIP39_SALT_NAME)]: (Wallets.NEW_ENCRYPTED_BIP39_SALT_VALUE in newValues === true) ? newValues[Wallets.NEW_ENCRYPTED_BIP39_SALT_VALUE] : wallet.getEncryptedBip39Salt()
+									[Database.toKeyPath(Wallets.DATABASE_ENCRYPTED_BIP39_SALT_NAME)]: (Wallets.NEW_ENCRYPTED_BIP39_SALT_VALUE in newValues === true) ? newValues[Wallets.NEW_ENCRYPTED_BIP39_SALT_VALUE] : wallet.getEncryptedBip39Salt(),
+									
+									// Account number
+									[Database.toKeyPath(Wallets.DATABASE_ACCOUNT_NUMBER_NAME)]: wallet.getAccountNumber(),
+									
+									// Payment proof index
+									[Database.toKeyPath(Wallets.DATABASE_PAYMENT_PROOF_INDEX_NAME)]: wallet.getPaymentProofIndex()
 									
 								}, (creatingNewKeyPath === true) ? Database.CREATE_NEW_KEY_PATH : wallet.getKeyPath(), databaseTransaction, Database.STRICT_DURABILITY).then(function(keyPath) {
 								
@@ -9573,7 +9586,13 @@ class Wallets {
 								[Database.toKeyPath(Wallets.DATABASE_USE_BIP39_NAME)]: wallet.getUseBip39(),
 								
 								// Encrypted BIP39 salt
-								[Database.toKeyPath(Wallets.DATABASE_ENCRYPTED_BIP39_SALT_NAME)]: (Wallets.NEW_ENCRYPTED_BIP39_SALT_VALUE in newValues === true) ? newValues[Wallets.NEW_ENCRYPTED_BIP39_SALT_VALUE] : wallet.getEncryptedBip39Salt()
+								[Database.toKeyPath(Wallets.DATABASE_ENCRYPTED_BIP39_SALT_NAME)]: (Wallets.NEW_ENCRYPTED_BIP39_SALT_VALUE in newValues === true) ? newValues[Wallets.NEW_ENCRYPTED_BIP39_SALT_VALUE] : wallet.getEncryptedBip39Salt(),
+								
+								// Account number
+								[Database.toKeyPath(Wallets.DATABASE_ACCOUNT_NUMBER_NAME)]: wallet.getAccountNumber(),
+								
+								// Payment proof index
+								[Database.toKeyPath(Wallets.DATABASE_PAYMENT_PROOF_INDEX_NAME)]: wallet.getPaymentProofIndex()
 								
 							}, (creatingNewKeyPath === true) ? Database.CREATE_NEW_KEY_PATH : wallet.getKeyPath(), databaseTransaction, Database.STRICT_DURABILITY).then(function(keyPath) {
 							
@@ -10031,6 +10050,12 @@ class Wallets {
 				// Encrypted BIP39 salt
 				result[Database.toKeyPath(Wallets.DATABASE_ENCRYPTED_BIP39_SALT_NAME)],
 				
+				// Account number
+				(Database.toKeyPath(Wallets.DATABASE_ACCOUNT_NUMBER_NAME) in result === true) ? result[Database.toKeyPath(Wallets.DATABASE_ACCOUNT_NUMBER_NAME)] : 0,
+				
+				// Payment proof index
+				(Database.toKeyPath(Wallets.DATABASE_PAYMENT_PROOF_INDEX_NAME) in result === true) ? result[Database.toKeyPath(Wallets.DATABASE_PAYMENT_PROOF_INDEX_NAME)] : 0,
+				
 				// Key path
 				result[Database.KEY_PATH_NAME]
 			);
@@ -10202,6 +10227,20 @@ class Wallets {
 		
 			// Return database encrypted BIP39 salt name
 			return "Encrypted BIP39 Salt";
+		}
+		
+		// Database account number name
+		static get DATABASE_ACCOUNT_NUMBER_NAME() {
+		
+			// Return database account number name
+			return "Account Number";
+		}
+		
+		// Database payment proof index name
+		static get DATABASE_PAYMENT_PROOF_INDEX_NAME() {
+		
+			// Return database payment proof index name
+			return "Payment Proof Index";
 		}
 		
 		// Database wallet type, network type, and address suffix name

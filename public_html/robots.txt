@@ -16,3 +16,5 @@ Disallow: /tor/
 Disallow: /listen
 Disallow: /wallet/
 Disallow: /donate/
+Disallow: /browser_extension_api_example.html
+Disallow: /mwc_pay_example/

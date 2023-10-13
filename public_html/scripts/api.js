@@ -3490,22 +3490,8 @@ class Api {
 																																	// Check if cancel didn't occur
 																																	if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																																	
-																																		// Check if slate has a lock height and its height doesn't exist or is less than or equal to its lock height
-																																		if(slate.getLockHeight().isEqualTo(Slate.NO_LOCK_HEIGHT) === false && (slate.getHeight() === Slate.UNKNOWN_HEIGHT || slate.getLockHeight().isGreaterThan(slate.getHeight()) === true)) {
-																																		
-																																			// Set output height to the current height if it exists and is greater than the slate's lock height or set it to the slate's lock height otherwise
-																																			var outputHeight = (currentHeight !== Node.UNKNOWN_HEIGHT && currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false && currentHeight.plus(1).isGreaterThan(slate.getLockHeight()) === true) ? currentHeight.plus(1) : slate.getLockHeight();
-																																		}
-																																		
-																																		// Otherwise
-																																		else {
-																																		
-																																			// Set output height to the current height if it exists or the slate's height otherwise
-																																			var outputHeight = (currentHeight !== Node.UNKNOWN_HEIGHT && currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false) ? currentHeight.plus(1) : slate.getHeight();
-																																		}
-																																	
 																																		// Return wallet building output
-																																		return wallet.buildOutput(slate.getAmount(), outputHeight, HardwareWallet.RECEIVING_TRANSACTION_MESSAGE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(output) {
+																																		return wallet.buildOutput(slate.getAmount(), Identifier.NO_HEIGHT, HardwareWallet.RECEIVING_TRANSACTION_MESSAGE, (wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Unlock the hardware wallet for Wallet %1$s to continue receiving a payment.') : Language.getDefaultTranslation('Unlock the hardware wallet for %1$y to continue receiving a payment.'), [(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()], allowUnlock, preventMessages, cancelOccurred).then(function(output) {
 																																		
 																																			// Check if cancel didn't occur
 																																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {

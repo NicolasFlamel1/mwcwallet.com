@@ -1354,15 +1354,8 @@ class TransactionSection extends Section {
 				transactionInformationDisplay.append(destinationDisplay);
 			}
 			
-			// Check if transaction is a coinbase transaction
-			if(this.transaction.getIsCoinbase() === true) {
-			
-				// Add kernel excess to transaction information display
-				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Kernel excess:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
-			}
-			
-			// Otherwise check if transaction's kernel excess is unknown
-			else if(this.transaction.getKernelExcess() === Transaction.UNKNOWN_KERNEL_EXCESS) {
+			// Check if transaction's kernel excess is unknown
+			if(this.transaction.getKernelExcess() === Transaction.UNKNOWN_KERNEL_EXCESS) {
 			
 				// Add kernel excess to transaction information display
 				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Kernel excess:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
@@ -1543,21 +1536,21 @@ class TransactionSection extends Section {
 			if(this.transaction.getReceiverAddress() === Transaction.UNKNOWN_RECEIVER_ADDRESS && this.transaction.getIsCoinbase() === false) {
 			
 				// Add receiver proof address to payment proof display
-				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Recipient payment proof address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 			}
 			
 			// Otherwise check if transaction's receiver address is doesn't exist or transaction is a coinbase transaction
 			else if(this.transaction.getReceiverAddress() === Transaction.NO_RECEIVER_ADDRESS || this.transaction.getIsCoinbase() === true) {
 			
 				// Add receiver proof address to payment proof display
-				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Recipient payment proof address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Create receiver proof address display
-				var receiverproofAddressDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
+				var receiverproofAddressDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Recipient payment proof address:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 				
 				// Append transaction's receiver proof address to receiver proof address display
 				receiverproofAddressDisplay.append("<span class=\"rawData contextMenu\">" + Common.htmlEncode(this.transaction.getReceiverAddress()) + "</span>");
@@ -1573,21 +1566,21 @@ class TransactionSection extends Section {
 			if(this.transaction.getReceiverSignature() === Transaction.UNKNOWN_RECEIVER_SIGNATURE && this.transaction.getIsCoinbase() === false) {
 			
 				// Add receiver proof signature to payment proof display
-				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof signature:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Recipient payment proof signature:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
 			}
 			
 			// Otherwise check if transaction's receiver signature is doesn't exist or transaction is a coinbase transaction
 			else if(this.transaction.getReceiverSignature() === Transaction.NO_RECEIVER_SIGNATURE || this.transaction.getIsCoinbase() === true) {
 			
 				// Add receiver proof signature to payment proof display
-				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof signature:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				paymentProofDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Recipient payment proof signature:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
 			}
 			
 			// Otherwise
 			else {
 			
 				// Create receiver proof signature display
-				var receiverproofSignatureDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Receiver payment proof signature:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
+				var receiverproofSignatureDisplay = $("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Recipient payment proof signature:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 				
 				// Append transaction's receiver proof signature to receiver proof signature display
 				receiverproofSignatureDisplay.append("<span class=\"rawData contextMenu\">" + Common.htmlEncode(Common.toHexString(this.transaction.getReceiverSignature())) + "</span>");

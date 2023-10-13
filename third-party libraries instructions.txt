@@ -108,12 +108,11 @@ tar -xf "./v0.8.0.tar.gz"
 mv "./js-sha3-0.8.0/src/sha3.js" "./js-sha3-0.8.0.js"
 rm -rf "./v0.8.0.tar.gz" "./js-sha3-0.8.0"
 
-# How to build /public_html/scripts/js-sha256-0.9.0.js
-wget "https://github.com/emn178/js-sha256/archive/refs/tags/v0.9.0.tar.gz"
-tar -xf "./v0.9.0.tar.gz"
-sed -i 's/a = t1 + t2 << 0;/a = t1 + t2 << 0;(function(){})(a);/g' "./js-sha256-0.9.0/src/sha256.js"
-mv "./js-sha256-0.9.0/src/sha256.js" "./js-sha256-0.9.0.js"
-rm -rf "./v0.9.0.tar.gz" "./js-sha256-0.9.0"
+# How to build /public_html/scripts/js-sha256-0.10.0.js
+wget "https://github.com/emn178/js-sha256/archive/refs/tags/v0.10.0.tar.gz"
+tar -xf "./v0.10.0.tar.gz"
+mv "./js-sha256-0.10.0/src/sha256.js" "./js-sha256-0.10.0.js"
+rm -rf "./v0.10.0.tar.gz" "./js-sha256-0.10.0"
 
 # How to build /public_html/scripts/qrcode-generator-1.4.4.js
 wget "https://github.com/kazuhikoarase/qrcode-generator/archive/refs/tags/js1.4.4.tar.gz"

@@ -297,6 +297,27 @@ self.addEventListener("fetch", function(event) {
 			return;
 		}
 		
+		// Check if request goes to the server at /index.html
+		if(parsedUrl["hostname"] === HOST_NAME && parsedUrl["pathname"] === "/index.html") {
+		
+			// Resolve redirect response
+			resolve(new Response(new Blob(), {
+			
+				// Status
+				"status": 301,
+				
+				// Headers
+				"headers": {
+				
+					// Location
+					"location": event["request"]["url"].replace("/index.html", "/")
+				}
+			}));
+			
+			// Return
+			return;
+		}
+		
 		// Get request's cache name
 		var cacheName = RELATIVE_ROOT_PATH + parsedUrl["pathname"].substring("/"["length"]) + ((parsedUrl["hostname"] === HOST_NAME && parsedUrl["pathname"] === "/") ? "" : parsedUrl["search"]);
 		
