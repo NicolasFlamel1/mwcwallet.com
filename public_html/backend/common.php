@@ -14,7 +14,8 @@
 		"Fixed caching main page when using URL parameters.",
 		"Fixed canceling connecting to a locked Trezor Model T hardware wallet.",
 		"Updated dependencies.",
-		"Removes wallet and network protocol from pasted recipient addresses."
+		"Removes wallet and network protocol from pasted recipient addresses.",
+		"Added support for Trezor Safe 3 hardware wallets."
 	];
 	
 	// Maintenance start time

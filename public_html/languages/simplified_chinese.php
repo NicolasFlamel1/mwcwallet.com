@@ -586,6 +586,7 @@
 			/*TODO*///'Trezor' => '',
 			/*TODO*///'Trezor Model One' => '',
 			/*TODO*///'Trezor Model T' => '',
+			/*TODO*///'Trezor Safe 3' => '',
 			'Trying to connect to the listener at %1$y.' => '正在尝试连接到 %1$y 上的监听器。',
 			'Trying to connect to the node at %1$y.' => '正在尝试连接到 %1$y 上的节点。',
 			'Trying to connect to the prices server at %1$y.' => '正在尝试连接到 %1$y 上的价格服务器。',

@@ -345,10 +345,10 @@
 			"Checksum" => "7ZHNh00eWDgTkN32OYfreAd1HeSiynSdLQBkuMwni27D2UtvU4M16jjtcFwUl3Vy4L70WWvzupn/LAWlwAQBSw=="
 		],
 		"./scripts/application.js" => [
-			"Version" => 68,
+			"Version" => 69,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "6UUWpTThlKhAw0coH1h9R6m1488EvPvmOB8ZXv/O0hgtcqVnoAilneMWH57ASXtIvW+E0R1TumeJShjSNdNWsA=="
+			"Checksum" => "BrHs9FhjbAJP4ozilpbP3qlD3kq+RGRY1l51liaLIOhVYgflvLXHeJMFu46HZq4Ma6p/vErndiWXuS9FZQYj8A=="
 		],
 		"./scripts/automatic_lock.js" => [
 			"Version" => 5,
@@ -465,10 +465,10 @@
 			"Checksum" => "BIfCMkk5ejyMfRCpaACquJgrdc6lZPPB3gS/A7Ou+Tsv9mjxd/EQhk/C41Cjrc/1UpbiVBedIos7fRqxXRTYwQ=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 70,
+			"Version" => 71,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "92zV5oY+ovSUFoIKv9MKHLNuOFXHnSiy9/aBatQiuI7ofH8GINb6GmVNsOZBbslmB+u0gUspRr7X1Gwu1WwxBQ=="
+			"Checksum" => "dpRIAeVylzcwbA3MHpO1kKOe7ffhvyOzKd6aVdidO6cfPvwUsx1SCxFMBQLO9CaPSFUoD5OZXyDIkiSHCjQyCQ=="
 		],
 		"./scripts/hardware_wallet_usb_transport.js" => [
 			"Version" => 8,

@@ -589,6 +589,7 @@
 			/*TODO*///'Trezor' => '',
 			/*TODO*///'Trezor Model One' => '',
 			/*TODO*///'Trezor Model T' => '',
+			/*TODO*///'Trezor Safe 3' => '',
 			'Trying to connect to the listener at %1$y.' => 'Es wird versucht, eine Verbindung zum Listener um %1$y herzustellen.',
 			'Trying to connect to the node at %1$y.' => 'Es wird versucht, eine Verbindung zum Knoten bei %1$y herzustellen.',
 			'Trying to connect to the prices server at %1$y.' => 'Es wird versucht, eine Verbindung zum Preisserver unter %1$y herzustellen.',

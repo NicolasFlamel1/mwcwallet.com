@@ -3848,8 +3848,9 @@ class Application {
 											// Break
 											break;
 										
-										// Trezor Model T or default
+										// Trezor Model T, Trezor Safe 3, or default
 										case "Trezor Model T":
+										case "Trezor Safe 3":
 										default:
 										
 											// Set message

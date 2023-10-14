@@ -861,15 +861,37 @@ class HardwareWallet {
 												// Check if error didn't occur
 												if(errorOccurred === false) {
 												
-													// Check if model is Trezor Model One
-													if(model === "1") {
+													// Check model
+													switch(model) {
 													
-														// Set model to text version
-														model = "One";
+														// One
+														case "1":
+														
+															// Update transport's product name to include model
+															self.transport["deviceModel"]["productName"] += " Model One";
+															
+															//Break
+															break;
+														
+														// T
+														case "T":
+														
+															// Update transport's product name to include model
+															self.transport["deviceModel"]["productName"] += " Model T";
+															
+															//Break
+															break;
+														
+														// Safe 3 or default
+														case "Safe 3":
+														default:
+														
+															// Update transport's product name to include model
+															self.transport["deviceModel"]["productName"] += " " + model;
+															
+															// Break
+															break;
 													}
-													
-													// Update transport's product name to include model
-													self.transport["deviceModel"]["productName"] += " Model " + model;
 												
 													// Update product name
 													productName = self.transport["deviceModel"]["productName"];
@@ -6642,8 +6664,9 @@ class HardwareWallet {
 							// Return minimum compatible version
 							return "1.12.2";
 						
-						// Trezor Model T or default
+						// Trezor Model T, Trezor Safe 3, or default
 						case "Trezor Model T":
+						case "Trezor Safe 3":
 						default:
 						
 							// Return minimum compatible version
