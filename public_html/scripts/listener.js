@@ -985,11 +985,18 @@ class Listener {
 			return Listener.PROMISE_RESOLVE_CURRENCY_INDEX + 1;
 		}
 		
+		// Promise resolve receiver address index
+		static get PROMISE_RESOLVE_RECEIVER_ADDRESS_INDEX() {
+		
+			// Return promise resolve receiver address index
+			return Listener.PROMISE_RESOLVE_MESSAGE_INDEX + 1;
+		}
+		
 		// Promise resolve file response index
 		static get PROMISE_RESOLVE_FILE_RESPONSE_INDEX() {
 		
 			// Return promise resolve file response index
-			return Listener.PROMISE_RESOLVE_MESSAGE_INDEX + 1;
+			return Listener.PROMISE_RESOLVE_RECEIVER_ADDRESS_INDEX + 1;
 		}
 		
 		// Promise resolve ID index
@@ -1023,8 +1030,13 @@ class Listener {
 				// Log message
 				Log.logMessage(Language.getDefaultTranslation('Trying to connect to the listener at %1$y.'), [
 				
-					// Address
-					this.getAddress()
+					[
+						// Text
+						this.getAddress(),
+						
+						// Is raw data
+						true
+					]
 				]);
 			}
 			

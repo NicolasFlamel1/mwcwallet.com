@@ -449,6 +449,20 @@ class HardwareWalletDefinitions {
 			// Return MimbleWimble Coin MQS challenge signature message type
 			return HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_GET_MQS_CHALLENGE_SIGNATURE_MESSAGE_TYPE | HardwareWalletDefinitions.MESSAGE_RESPONSE_MASK;
 		}
+		
+		// MimbleWimble Coin get login challenge signature message type
+		static get MIMBLEWIMBLE_COIN_GET_LOGIN_CHALLENGE_SIGNATURE_MESSAGE_TYPE() {
+		
+			// Return MimbleWimble Coin get login challenge signature message type
+			return 0xC716;
+		}
+		
+		// MimbleWimble Coin login challenge signature message type
+		static get MIMBLEWIMBLE_COIN_LOGIN_CHALLENGE_SIGNATURE_MESSAGE_TYPE() {
+		
+			// Return MimbleWimble Coin login challenge signature message type
+			return HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_GET_LOGIN_CHALLENGE_SIGNATURE_MESSAGE_TYPE | HardwareWalletDefinitions.MESSAGE_RESPONSE_MASK;
+		}
 	
 		// Schema
 		static get SCHEMA() {
@@ -1910,6 +1924,103 @@ class HardwareWalletDefinitions {
 					
 						// Name
 						"Name": "MQS Challenge Signature",
+						
+						// Type
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
+					}
+				},
+				
+				// MimbleWimble Coin get login challenge signature
+				[HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_GET_LOGIN_CHALLENGE_SIGNATURE_MESSAGE_TYPE.toFixed()]: {
+				
+					// Coin type
+					"1": {
+					
+						// Name
+						"Name": "Coin Type",
+						
+						// Type
+						"Type": ProtocolBuffers.ENUM_SCHEMA_DATA_TYPE
+					},
+					
+					// Network type
+					"2": {
+					
+						// Name
+						"Name": "Network Type",
+						
+						// Type
+						"Type": ProtocolBuffers.ENUM_SCHEMA_DATA_TYPE
+					},
+					
+					// Account
+					"3": {
+					
+						// Name
+						"Name": "Account",
+						
+						// Type
+						"Type": ProtocolBuffers.UINT_SCHEMA_DATA_TYPE,
+						
+						// Size
+						"Size": Common.BYTES_IN_A_UINT32
+					},
+					
+					// Timestamp
+					"4": {
+					
+						// Name
+						"Name": "Timestamp",
+						
+						// Type
+						"Type": ProtocolBuffers.UINT_SCHEMA_DATA_TYPE,
+						
+						// Size
+						"Size": Common.BYTES_IN_A_UINT64
+					},
+					
+					// Time zone offset
+					"5": {
+					
+						// Name
+						"Name": "Time Zone Offset",
+						
+						// Type
+						"Type": ProtocolBuffers.SINT_SCHEMA_DATA_TYPE,
+						
+						// Size
+						"Size": Common.BYTES_IN_A_UINT16
+					},
+					
+					// Identifier
+					"6": {
+					
+						// Name
+						"Name": "Identifier",
+						
+						// Type
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
+					}
+				},
+
+				// MimbleWimble Coin login challenge signature
+				[HardwareWalletDefinitions.MIMBLEWIMBLE_COIN_LOGIN_CHALLENGE_SIGNATURE_MESSAGE_TYPE.toFixed()]: {
+				
+					// Login public key
+					"1": {
+					
+						// Name
+						"Name": "Login Public Key",
+						
+						// Type
+						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE
+					},
+					
+					// Login challenge signature
+					"2": {
+					
+						// Name
+						"Name": "Login Challenge Signature",
 						
 						// Type
 						"Type": ProtocolBuffers.BYTES_SCHEMA_DATA_TYPE

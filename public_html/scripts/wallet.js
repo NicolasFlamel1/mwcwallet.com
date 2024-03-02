@@ -4131,7 +4131,7 @@ class Wallet {
 		static get DEFAULT_NUMBER_OF_ITERATIONS() {
 		
 			// Return default number of iterations
-			return 100000;
+			return 200000;
 		}
 		
 		// Import algorithm

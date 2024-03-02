@@ -1386,16 +1386,16 @@
 		if($year > COPYRIGHT_YEAR) {
 		
 			// Display copyright information with the current year
-			echo "<meta class=\"translatable\" name=\"dcterms.dateCopyrighted\" data-text=\"" . encodeString(getDefaultTranslation('%1$s–%2$s')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR), sprintf("%.0f", $year)]) . "' content=\"" . encodeString(getTranslation('%1$s–%2$s', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "\">";
-			echo "<meta class=\"translatable\" name=\"dcterms.rights\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s–%2$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR), sprintf("%.0f", $year)]) . "' content=\"" . encodeString(getTranslation('© %1$s–%2$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "\">";
+			echo "<meta class=\"translatable\" name=\"dcterms.dateCopyrighted\" data-text=\"" . encodeString(getDefaultTranslation('%1$s–%2$s')) . "\" data-arguments='" . escapeData([sprintf("%.0F", COPYRIGHT_YEAR), sprintf("%.0F", $year)]) . "' content=\"" . encodeString(getTranslation('%1$s–%2$s', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "\">";
+			echo "<meta class=\"translatable\" name=\"dcterms.rights\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s–%2$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0F", COPYRIGHT_YEAR), sprintf("%.0F", $year)]) . "' content=\"" . encodeString(getTranslation('© %1$s–%2$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "\">";
 		}
 		
 		// Otherwise
 		else {
 		
 			// Display copyright information with the copyright year
-			echo "<meta class=\"translatable\" name=\"dcterms.dateCopyrighted\" data-text=\"" . encodeString("%1\$s") . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR)]) . "' content=\"" . encodeString(getTranslation("%1\$s", [getNumberTranslation(COPYRIGHT_YEAR)])) . "\">";
-			echo "<meta class=\"translatable\" name=\"dcterms.rights\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR)]) . "' content=\"" . encodeString(getTranslation('© %1$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR)])) . "\">";
+			echo "<meta class=\"translatable\" name=\"dcterms.dateCopyrighted\" data-text=\"" . encodeString("%1\$s") . "\" data-arguments='" . escapeData([sprintf("%.0F", COPYRIGHT_YEAR)]) . "' content=\"" . encodeString(getTranslation("%1\$s", [getNumberTranslation(COPYRIGHT_YEAR)])) . "\">";
+			echo "<meta class=\"translatable\" name=\"dcterms.rights\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0F", COPYRIGHT_YEAR)]) . "' content=\"" . encodeString(getTranslation('© %1$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR)])) . "\">";
 		}
 		
 		// Display theme color
@@ -1683,7 +1683,7 @@
 													--></span><!--
 												--></button><!--
 											--></div><!--
-											--><div class="merge"><!--
+											--><div class="merge hide"><!--
 												--><button class="setPaymentProofAddressIndex" data-private><!--
 													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Set Payment Proof Address Index')); ?>"><?= encodeString(getTranslation('Set Payment Proof Address Index')); ?></span><!--
 												--></button><!--
@@ -1696,6 +1696,11 @@
 											--><div class="merge"><!--
 												--><button class="rename" data-private><!--
 													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Rename')); ?>"><?= encodeString(getTranslation('Rename')); ?></span><!--
+												--></button><!--
+											--></div><!--
+											--><div class="merge hide"><!--
+												--><button class="loginWithWallet" data-private><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Login With Wallet')); ?>"><?= encodeString(getTranslation('Login With Wallet')); ?></span><!--
 												--></button><!--
 											--></div><!--
 											--><div class="merge"><!--
@@ -2168,6 +2173,17 @@
 													--></button><!--
 												--></div><!--
 											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Automatically Approve Receiving Payments"); ?>" data-text="<?= encodeString(getDefaultTranslation('Automatically approves all received payments without requiring manual approval')); ?>" title="<?= encodeString(getTranslation('Automatically approves all received payments without requiring manual approval')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Automatically approve receiving payments')); ?>"><?= encodeString(getTranslation('Automatically approve receiving payments')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
 											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Tor Proxy Settings')); ?>"><?= encodeString(getTranslation('Tor Proxy Settings')); ?></h3><!--
 											--><div class="setting translatable" data-setting="<?= encodeString("Use Custom Tor Proxy"); ?>" data-text="<?= encodeString(getDefaultTranslation('Uses a custom Tor proxy instead of the default Tor proxy')); ?>" title="<?= encodeString(getTranslation('Uses a custom Tor proxy instead of the default Tor proxy')); ?>"><!--
 												--><p><!--
@@ -2277,14 +2293,14 @@
 													if($year > COPYRIGHT_YEAR) {
 													
 														// Display copyright information with the current year
-														echo "<p class=\"copyright translatable\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s–%2$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR), sprintf("%.0f", $year)]) . "'>" . encodeString(getTranslation('© %1$s–%2$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "</p>";
+														echo "<p class=\"copyright translatable\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s–%2$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0F", COPYRIGHT_YEAR), sprintf("%.0F", $year)]) . "'>" . encodeString(getTranslation('© %1$s–%2$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR), getNumberTranslation($year)])) . "</p>";
 													}
 													
 													// Otherwise
 													else {
 													
 														// Display copyright information with the copyright year
-														echo "<p class=\"copyright translatable\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0f", COPYRIGHT_YEAR)]) . "'>" . encodeString(getTranslation('© %1$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR)])) . "</p>";
+														echo "<p class=\"copyright translatable\" data-text=\"" . encodeString(getDefaultTranslation('© %1$s Nicolas Flamel.')) . "\" data-arguments='" . escapeData([sprintf("%.0F", COPYRIGHT_YEAR)]) . "'>" . encodeString(getTranslation('© %1$s Nicolas Flamel.', [getNumberTranslation(COPYRIGHT_YEAR)])) . "</p>";
 													}
 												?><!--
 												

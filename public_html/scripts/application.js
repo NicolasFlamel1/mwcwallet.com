@@ -65,9 +65,12 @@ class Application {
 			
 			// Create transactions
 			this.transactions = new Transactions();
+			
+			// Create prices
+			this.prices = new Prices(this.settings);
 		
 			// Create wallets
-			this.wallets = new Wallets(this.torProxy, this.node, this.listener, this.settings, this, this.message, this.transactions);
+			this.wallets = new Wallets(this.torProxy, this.node, this.listener, this.settings, this, this.message, this.transactions, this.prices);
 			
 			// Create version
 			this.version = new Version(this, this.message);
@@ -100,7 +103,7 @@ class Application {
 			this.scroll = new Scroll();
 			
 			// Create unlocked
-			this.unlocked = new Unlocked(this, this.bodyDisplay, this.unlockedDisplay, this.settings, this.message, this.focus, this.wallets, this.node, this.listener, this.automaticLock, this.transactions, this.sections, this.scroll, this.wakeLock, this.clipboard);
+			this.unlocked = new Unlocked(this, this.bodyDisplay, this.unlockedDisplay, this.settings, this.message, this.focus, this.wallets, this.node, this.listener, this.automaticLock, this.transactions, this.sections, this.scroll, this.wakeLock, this.clipboard, this.prices);
 			
 			// Set node incompatible message shown
 			this.nodeIncompatibleMessageShown = false;
@@ -416,7 +419,7 @@ class Application {
 			// Document key down application event
 			}).on("keydown.application", function(event) {
 			
-				// Check if database is initializing and shift was pressed
+				// Check if shift was pressed
 				if(event["which"] === Application.SHIFT_KEY_CODE) {
 				
 					// Turn off document key down application event
@@ -1638,7 +1641,7 @@ class Application {
 			});
 			
 			// Wallets currency receive event
-			$(this.wallets).on(Wallets.CURRENCY_RECEIVE_EVENT, function(event, wallet, amount, currency, message) {
+			$(this.wallets).on(Wallets.CURRENCY_RECEIVE_EVENT, function(event, wallet, amount, currency, message, receiverAddress) {
 			
 				// Get is raw data
 				var isRawData = Common.hasWhitespace(message) === false;
@@ -1652,13 +1655,16 @@ class Application {
 						amount.toFixed(),
 						
 						// Currency
-						currency
+						currency,
+						
+						// Display value
+						true
 					],
 					
 					// Wallet key path or name
 					(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()
 					
-				]) + ((message !== SlateParticipant.NO_MESSAGE && message["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Common.htmlEncode(message) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() : "") + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You shouldn\'t consider this payment to be legitimate until it\'s been confirmed on the blockchain.')) + "</b>", false, function() {
+				]) + ((message !== SlateParticipant.NO_MESSAGE && message["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Common.htmlEncode(message) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('(?<=.) '))) + ((receiverAddress !== Slate.NO_RECEIVER_ADDRESS) ? Message.createText(Language.getDefaultTranslation('The recipient payment proof address you used for the transaction is the following payment proof address.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(receiverAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('The transaction doesn\'t have a payment proof.'))) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You shouldn\'t consider this payment to be legitimate until it\'s been confirmed on the blockchain.')) + "</b>", false, function() {
 				
 					// Check if wallet exists
 					if(self.wallets.walletExists(wallet.getKeyPath()) === true) {
@@ -2602,7 +2608,7 @@ class Application {
 					// Disable tabbing to everything in unlock display and disable everything in unlock display
 					self.unlockDisplay.find("*").disableTab().disable();
 				
-				}, Language.getDefaultTranslation('No'), Language.getDefaultTranslation('Yes')).then(function(messageResult) {
+				}, Language.getDefaultTranslation('No'), Language.getDefaultTranslation('Yes'), false, Message.VISIBLE_STATE_ALL, true).then(function(messageResult) {
 				
 					// Check if message was displayed
 					if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
@@ -2905,6 +2911,584 @@ class Application {
 		
 			// Return if showing loading
 			return this.bodyDisplay.hasClass("loading") === true;
+		}
+		
+		// Show approve receiving payment message
+		showApproveReceivingPaymentMessage(wallet, slate, allowUnlock = false, preventMessages = false, cancelOccurred = Common.NO_CANCEL_OCCURRED) {
+		
+			// Set self
+			var self = this;
+			
+			// Return promise
+			return new Promise(function(resolve, reject) {
+			
+				// Prompt to approve
+				var promptToApprove = function() {
+				
+					// Check if cancel didn't occur
+					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
+					
+						// Check if preventing messages or messages are allowed and no message is shown
+						if(preventMessages === true || (self.message.getAllowed() === true && self.message.isShown() === false)) {
+			
+							// Initialize prevent cancel on hide
+							var preventCancelOnHide = false;
+							
+							// Initialize external cancel check allowed
+							var externalCancelCheckAllowed = true;
+							
+							// Initialize sleep disabled
+							var sleepDisabled = false;
+							
+							// Show message
+							self.message.show(Language.getDefaultTranslation('Approve Receiving Payment'), Message.createPendingResult() + Message.createLineBreak() + Message.createText((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('Do you approve receiving a payment for Wallet %1$s of %2$c with a fee of %3$c and %4$x kernel features?') : Language.getDefaultTranslation('Do you approve receiving a payment for %1$y of %2$c with a fee of %3$c and %4$x kernel features?'), [
+																																																									
+								// Wallet key path or name
+								(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName(),
+								
+								[
+
+									// Number
+									slate.getAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
+									
+									// Currency
+									Consensus.CURRENCY_NAME,
+						
+									// Display value
+									true
+								],
+								
+								[
+								
+									// Number
+									slate.getFee().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
+									
+									// Currency
+									Consensus.CURRENCY_NAME,
+						
+									// Display value
+									true
+								],
+								
+								// Kernel features
+								slate.getDisplayKernelFeatures()
+								
+							]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + ((slate.getSenderAddress() !== Slate.NO_SENDER_ADDRESS) ? Message.createText(Language.getDefaultTranslation('The transaction\'s sender payment proof address is the following payment proof address.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(slate.getSenderAddress()) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can guarantee that this payment is coming from the intended sender by having the sender confirm that this payment proof address is their payment proof address.')) + "</b>" : (Message.createText(Language.getDefaultTranslation('The transaction doesn\'t have a payment proof.')) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can\'t guarantee that this payment is coming from the intended sender since the transaction doesn\'t have a payment proof.')) + "</b>")), preventMessages === true, function() {
+							
+								// Check if cancel didn't occur and wallet exists
+								if((cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) && self.wallets.walletExists(wallet.getKeyPath()) === true) {
+							
+									// Check if preventing messages
+									if(preventMessages === true) {
+								
+										// Hide loading
+										self.hideLoading();
+									}
+									
+									// Otherwise
+									else {
+						
+										// Save focus and blur
+										self.focus.save(true);
+										
+										// Check if unlock display is shown
+										if(self.isUnlockDisplayShown() === true)
+										
+											// Disable tabbing to everything in unlock display and disable everything in unlock display
+											self.unlockDisplay.find("*").disableTab().disable();
+										
+										// Otherwise check if unlocked display is shown
+										else if(self.isUnlockedDisplayShown() === true)
+										
+											// Disable unlocked
+											self.unlocked.disable();
+											
+										// Keep device awake and catch errors
+										self.wakeLock.preventLock().catch(function(error) {
+										
+										});
+									
+										// Set sleep disabled
+										sleepDisabled = true;
+									}
+									
+									// Cancel if external canceled
+									var cancelIfExternalCanceled = function() {
+									
+										// Check if external cancel check if allowed
+										if(externalCancelCheckAllowed === true) {
+									
+											// Check if cancel occurred
+											if(cancelOccurred !== Common.NO_CANCEL_OCCURRED && cancelOccurred() === true) {
+											
+												// Disable message
+												self.message.disable();
+												
+												// Set prevent cancel on hide
+												preventCancelOnHide = true;
+												
+												// Check if preventing messages
+												if(preventMessages === true) {
+												
+													// Check if can't be canceled
+													if(cancelOccurred === Common.NO_CANCEL_OCCURRED) {
+												
+														// Prevent showing messages
+														self.message.prevent();
+													}
+													
+													// Check if preventing messages and it can be canceled
+													if(preventMessages === true && cancelOccurred !== Common.NO_CANCEL_OCCURRED) {
+													
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
+													}
+													
+													// Otherwise
+													else {
+													
+														// Hide message
+														self.message.hide().then(function() {
+														
+															// Reject canceled error
+															reject(Common.CANCELED_ERROR);
+														});
+													}
+												}
+												
+												// Otherwise
+												else {
+												
+													// Check if sleep is disabled
+													if(sleepDisabled === true) {
+													
+														// Allow device to sleep and catch errors
+														self.wakeLock.allowLock().catch(function(error) {
+															
+														// Finally
+														}).finally(function() {
+														
+															// Check if unlock display is shown
+															if(self.isUnlockDisplayShown() === true)
+															
+																// Enable tabbing to everything in unlock display and enable everything in unlock display
+																self.unlockDisplay.find("*").enableTab().enable();
+													
+															// Otherwise check if unlocked display is shown
+															else if(self.isUnlockedDisplayShown() === true)
+															
+																// Enable unlocked
+																self.unlocked.enable();
+															
+															// Restore focus and don't blur
+															self.focus.restore(false);
+															
+															// Check if preventing messages and it can be canceled
+															if(preventMessages === true && cancelOccurred !== Common.NO_CANCEL_OCCURRED) {
+															
+																// Reject canceled error
+																reject(Common.CANCELED_ERROR);
+															}
+															
+															// Otherwise
+															else {
+															
+																// Hide message
+																self.message.hide().then(function() {
+																
+																	// Reject canceled error
+																	reject(Common.CANCELED_ERROR);
+																});
+															}
+														});
+													}
+													
+													// Otherwise
+													else {
+											
+														// Check if unlock display is shown
+														if(self.isUnlockDisplayShown() === true)
+														
+															// Enable tabbing to everything in unlock display and enable everything in unlock display
+															self.unlockDisplay.find("*").enableTab().enable();
+												
+														// Otherwise check if unlocked display is shown
+														else if(self.isUnlockedDisplayShown() === true)
+														
+															// Enable unlocked
+															self.unlocked.enable();
+														
+														// Restore focus and don't blur
+														self.focus.restore(false);
+														
+														// Check if preventing messages and it can be canceled
+														if(preventMessages === true && cancelOccurred !== Common.NO_CANCEL_OCCURRED) {
+														
+															// Reject canceled error
+															reject(Common.CANCELED_ERROR);
+														}
+														
+														// Otherwise
+														else {
+														
+															// Hide message
+															self.message.hide().then(function() {
+															
+																// Reject canceled error
+																reject(Common.CANCELED_ERROR);
+															});
+														}
+													}
+												}
+											}
+											
+											// Otherwise
+											else {
+											
+												// Set timeout
+												setTimeout(function() {
+												
+													// Cancel if external canceled
+													cancelIfExternalCanceled();
+												
+												}, Application.CANCELED_CHECK_INTERVAL_MILLISECONDS);
+											}
+										}
+									};
+									
+									// Cancel if external canceled
+									cancelIfExternalCanceled();
+								}
+								
+								// Otherwise
+								else {
+								
+									// Return false
+									return false;
+								}
+							
+							}, Language.getDefaultTranslation('No'), Language.getDefaultTranslation('Yes'), preventMessages === true, (allowUnlock === true) ? Message.VISIBLE_STATE_UNLOCK | Message.VISIBLE_STATE_UNLOCKED : Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+							
+								// Clear external cancel check allowed
+								externalCancelCheckAllowed = false;
+								
+								// Check if message was displayed
+								if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
+								
+									// Check if receiving payment
+									if(messageResult === Message.SECOND_BUTTON_CLICKED_RESULT) {
+									
+										// Check if preventing messages
+										if(preventMessages === true) {
+										
+											// Check if can't be canceled
+											if(cancelOccurred === Common.NO_CANCEL_OCCURRED) {
+											
+												// Show loading
+												self.showLoading();
+												
+												// Prevent showing messages
+												self.message.prevent();
+											}
+											
+											// Check if preventing messages and it can be canceled
+											if(preventMessages === true && cancelOccurred !== Common.NO_CANCEL_OCCURRED) {
+											
+												// Replace message
+												self.message.replace().then(function() {
+											
+													// Resolve
+													resolve();
+												});
+											}
+											
+											// Otherwise
+											else {
+											
+												// Hide message
+												self.message.hide().then(function() {
+												
+													// Resolve
+													resolve();
+												});
+											}
+										}
+										
+										// Otherwise
+										else {
+								
+											// Check if sleep is disabled
+											if(sleepDisabled === true) {
+											
+												// Allow device to sleep and catch errors
+												self.wakeLock.allowLock().catch(function(error) {
+													
+												// Finally
+												}).finally(function() {
+												
+													// Check if unlock display is shown
+													if(self.isUnlockDisplayShown() === true)
+													
+														// Enable tabbing to everything in unlock display and enable everything in unlock display
+														self.unlockDisplay.find("*").enableTab().enable();
+											
+													// Otherwise check if unlocked display is shown
+													else if(self.isUnlockedDisplayShown() === true)
+													
+														// Enable unlocked
+														self.unlocked.enable();
+													
+													// Restore focus and don't blur
+													self.focus.restore(false);
+													
+													// Check if preventing messages and it can be canceled
+													if(preventMessages === true && cancelOccurred !== Common.NO_CANCEL_OCCURRED) {
+													
+														// Replace message
+														self.message.replace().then(function() {
+													
+															// Resolve
+															resolve();
+														});
+													}
+													
+													// Otherwise
+													else {
+													
+														// Hide message
+														self.message.hide().then(function() {
+														
+															// Resolve
+															resolve();
+														});
+													}
+												});
+											}
+											
+											// Otherwise
+											else {
+									
+												// Check if unlock display is shown
+												if(self.isUnlockDisplayShown() === true)
+												
+													// Enable tabbing to everything in unlock display and enable everything in unlock display
+													self.unlockDisplay.find("*").enableTab().enable();
+										
+												// Otherwise check if unlocked display is shown
+												else if(self.isUnlockedDisplayShown() === true)
+												
+													// Enable unlocked
+													self.unlocked.enable();
+												
+												// Restore focus and don't blur
+												self.focus.restore(false);
+												
+												// Check if preventing messages and it can be canceled
+												if(preventMessages === true && cancelOccurred !== Common.NO_CANCEL_OCCURRED) {
+												
+													// Replace message
+													self.message.replace().then(function() {
+												
+														// Resolve
+														resolve();
+													});
+												}
+												
+												// Otherwise
+												else {
+												
+													// Hide message
+													self.message.hide().then(function() {
+													
+														// Resolve
+														resolve();
+													});
+												}
+											}
+										}
+									}
+									
+									// Otherwise
+									else {
+									
+										// Check if preventing messages
+										if(preventMessages === true) {
+										
+											// Check if can't be canceled
+											if(cancelOccurred === Common.NO_CANCEL_OCCURRED) {
+										
+												// Prevent showing messages
+												self.message.prevent();
+											}
+											
+											// Check if preventing messages and it can be canceled
+											if(preventMessages === true && cancelOccurred !== Common.NO_CANCEL_OCCURRED) {
+											
+												// Reject canceled error
+												reject(Common.CANCELED_ERROR);
+											}
+											
+											// Otherwise
+											else {
+											
+												// Hide message
+												self.message.hide().then(function() {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+												});
+											}
+										}
+										
+										// Otherwise
+										else {
+									
+											// Check if sleep is disabled
+											if(sleepDisabled === true) {
+											
+												// Allow device to sleep and catch errors
+												self.wakeLock.allowLock().catch(function(error) {
+													
+												// Finally
+												}).finally(function() {
+												
+													// Check if unlock display is shown
+													if(self.isUnlockDisplayShown() === true)
+													
+														// Enable tabbing to everything in unlock display and enable everything in unlock display
+														self.unlockDisplay.find("*").enableTab().enable();
+											
+													// Otherwise check if unlocked display is shown
+													else if(self.isUnlockedDisplayShown() === true)
+													
+														// Enable unlocked
+														self.unlocked.enable();
+													
+													// Restore focus and don't blur
+													self.focus.restore(false);
+													
+													// Check if preventing messages and it can be canceled
+													if(preventMessages === true && cancelOccurred !== Common.NO_CANCEL_OCCURRED) {
+													
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
+													}
+													
+													// Otherwise
+													else {
+													
+														// Hide message
+														self.message.hide().then(function() {
+														
+															// Reject canceled error
+															reject(Common.CANCELED_ERROR);
+														});
+													}
+												});
+											}
+											
+											// Otherwise
+											else {
+									
+												// Check if unlock display is shown
+												if(self.isUnlockDisplayShown() === true)
+												
+													// Enable tabbing to everything in unlock display and enable everything in unlock display
+													self.unlockDisplay.find("*").enableTab().enable();
+										
+												// Otherwise check if unlocked display is shown
+												else if(self.isUnlockedDisplayShown() === true)
+												
+													// Enable unlocked
+													self.unlocked.enable();
+												
+												// Restore focus and don't blur
+												self.focus.restore(false);
+												
+												// Check if preventing messages and it can be canceled
+												if(preventMessages === true && cancelOccurred !== Common.NO_CANCEL_OCCURRED) {
+												
+													// Reject canceled error
+													reject(Common.CANCELED_ERROR);
+												}
+												
+												// Otherwise
+												else {
+												
+													// Hide message
+													self.message.hide().then(function() {
+													
+														// Reject canceled error
+														reject(Common.CANCELED_ERROR);
+													});
+												}
+											}
+										}
+									}
+								}
+								
+								// Otherwise check if not preventing cancel on hide
+								else if(preventCancelOnHide === false) {
+								
+									// Check if sleep is disabled
+									if(sleepDisabled === true) {
+									
+										// Allow device to sleep and catch errors
+										self.wakeLock.allowLock().catch(function(error) {
+											
+										// Finally
+										}).finally(function() {
+										
+											// Reject canceled error
+											reject(Common.CANCELED_ERROR);
+										});
+									}
+									
+									// Otherwise
+									else {
+									
+										// Reject canceled error
+										reject(Common.CANCELED_ERROR);
+									}
+								}
+							});
+						}
+						
+						// Otherwise
+						else {
+						
+							// Check if a high priority wallets exclusive transactions lock is waiting
+							if(self.transactions.isHighPriorityWalletsExclusiveTransactionsLockWaiting(wallet.getKeyPath()) === true) {
+							
+								// Reject canceled error
+								reject(Common.CANCELED_ERROR);
+							}
+							
+							// Otherwise
+							else {
+						
+								// Set timeout
+								setTimeout(function() {
+								
+									// Prompt to approve
+									promptToApprove();
+									
+								}, Application.CHECK_HARDWARE_WALLET_PRIORITY_INTERVAL_MILLISECONDS);
+							}
+						}
+					}
+					
+					// Otherwise
+					else {
+					
+						// Reject canceled error
+						reject(Common.CANCELED_ERROR);
+					}
+				};
+				
+				// Prompt to approve
+				promptToApprove();
+			});
 		}
 		
 		// Show hardware wallet connect message
@@ -4760,7 +5344,7 @@ class Application {
 										canceled["Value"] = true;
 									}
 									
-									// Otherwise check if sleep is disabled
+									// Check if sleep is disabled
 									if(sleepDisabled === true) {
 									
 										// Allow device to sleep and catch errors

@@ -439,7 +439,7 @@ class AccountSection extends Section {
 					// Disable unlocked
 					self.getUnlocked().disable();
 				
-				}, Language.getDefaultTranslation('No'), Language.getDefaultTranslation('Yes'), false, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+				}, Language.getDefaultTranslation('No'), Language.getDefaultTranslation('Yes'), false, Message.VISIBLE_STATE_UNLOCKED, true).then(function(messageResult) {
 				
 					// Check if message was displayed
 					if(messageResult !== Message.NOT_DISPLAYED_RESULT) {

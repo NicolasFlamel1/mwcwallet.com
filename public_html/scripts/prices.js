@@ -257,9 +257,34 @@ class Prices {
 			});
 		}
 		
-		// Get price
-		getPrice(currency = Prices.CURRENT_LANGUAGE_CURRENCY) {
+		// Get prices
+		getPrices() {
 		
+			// Check if price is enabled and prices exist
+			if(this.enablePrice === true && Object.keys(this.prices)["length"] !== 0) {
+			
+				// Return copy of prices
+				return JSONBigNumber.parse(JSONBigNumber.stringify(this.prices));
+			}
+			
+			// Otherwise
+			else {
+			
+				// Return no prices found
+				return Prices.NO_PRICES_FOUND;
+			}
+		}
+		
+		// Get price
+		getPrice(currency = Prices.CURRENT_LANGUAGE_CURRENCY, prices = Prices.CURRENT_PRICES) {
+		
+			// Check if using current prices
+			if(prices === Prices.CURRENT_PRICES) {
+			
+				// Set prices to the current prices
+				prices = this.prices;
+			}
+			
 			// Check if price is enabled
 			if(this.enablePrice === true) {
 			
@@ -273,7 +298,7 @@ class Prices {
 						currency = Prices.getCurrentLanguageCurrency();
 					
 					// Return price for currency if found or no price found otherwise
-					return (currency.toUpperCase() in this.prices === true) ? this.prices[currency.toUpperCase()] : Prices.NO_PRICE_FOUND;
+					return (currency.toUpperCase() in prices === true) ? prices[currency.toUpperCase()] : Prices.NO_PRICE_FOUND;
 				}
 				
 				// Otherwise
@@ -348,6 +373,13 @@ class Prices {
 			return null;
 		}
 		
+		// No prices found
+		static get NO_PRICES_FOUND() {
+		
+			// Return no prices found
+			return null;
+		}
+		
 		// Change event
 		static get CHANGE_EVENT() {
 		
@@ -355,10 +387,17 @@ class Prices {
 			return "PricesChangeEvent";
 		}
 		
-		// Currenct language currency
+		// Currency language currency
 		static get CURRENT_LANGUAGE_CURRENCY() {
 		
 			// Return currency language currency
+			return null;
+		}
+		
+		// Current prices
+		static get CURRENT_PRICES() {
+		
+			// Return current prices
 			return null;
 		}
 	
@@ -373,8 +412,13 @@ class Prices {
 				// Log message
 				Log.logMessage(Language.getDefaultTranslation('Trying to connect to the prices server at %1$y.'), [
 				
-					// Address
-					Prices.API_URL
+					[
+						// Text
+						Prices.API_URL,
+						
+						// Is raw data
+						true
+					]
 				]);
 			
 				// Initialize unique currencies to include default currencies

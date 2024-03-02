@@ -593,6 +593,24 @@ aside.message > div > div > div > button:disabled.loading {
 	color: #3600C9;
 }
 
+aside.message > div > div > div > button.dangerous::before {
+	content: "";
+	width: calc(100% + 0.3em);
+	height: calc(100% + 0.3em);
+	display: block;
+	position: absolute;
+	top: -0.15em;
+	left: -0.15em;
+	background: #F00000;
+	opacity: 0.8;
+	border-radius: 0.4em
+}
+
+aside.message > div > div > div > button.dangerous > span {
+	z-index: 1;
+	color: white;
+}
+
 aside.message > div > div > p > span.text *::selection {
 	background: #CC9AFB;
 	color: white;

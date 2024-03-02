@@ -870,7 +870,7 @@ class HardwareWallet {
 															// Update transport's product name to include model
 															self.transport["deviceModel"]["productName"] += " Model One";
 															
-															//Break
+															// Break
 															break;
 														
 														// T
@@ -879,7 +879,7 @@ class HardwareWallet {
 															// Update transport's product name to include model
 															self.transport["deviceModel"]["productName"] += " Model T";
 															
-															//Break
+															// Break
 															break;
 														
 														// Safe 3 or default
@@ -6650,7 +6650,7 @@ class HardwareWallet {
 				case HardwareWalletDefinitions.LEDGER_TRANSPORT_TYPE:
 		
 					// Return minimum compatible version
-					return "7.2.0";
+					return "7.4.1";
 				
 				// Trezor type
 				case HardwareWalletDefinitions.TREZOR_TRANSPORT_TYPE:
@@ -6670,7 +6670,7 @@ class HardwareWallet {
 						default:
 						
 							// Return minimum compatible version
-							return "2.6.1";
+							return "2.6.4";
 					}
 			}
 		}

@@ -159,19 +159,31 @@ class TransactionSection extends Section {
 				}
 			});
 			
-			// Value display on language change event
-			$(document).on(Language.CHANGE_EVENT, "main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p > span.value", function() {
+			// When recorded value display on language change event
+			$(document).on(Language.CHANGE_EVENT, "main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p > span.whenRecordedValue", function() {
 			
 				// Check if shown
 				if(self.isShown() === true) {
 				
-					// Update value
-					self.updateValue();
+					// Update when recorded values
+					self.updateWhenRecordedValues();
 				}
 			
 			// Copy click and touch end event
 			}).on("click touchend", "main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p > span.copy", function(event) {
 			
+				// Check if event is touch end
+				if("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") {
+				
+					// Check if address copy isn't under the touch area
+					var changedTouch = event["originalEvent"]["changedTouches"][0];
+					if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"])) {
+					
+						// Return
+						return;
+					}
+				}
+				
 				// Stop propagation
 				event.stopPropagation();
 				
@@ -261,17 +273,6 @@ class TransactionSection extends Section {
 					});
 				
 				}, ("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") ? 0 : TransactionSection.COPY_VALUE_TO_CLIPBOARD_DELAY_MILLISECONDS);
-			});
-			
-			// Prices change event
-			$(this.getPrices()).on(Prices.CHANGE_EVENT, function(event, prices) {
-			
-				// Check if shown
-				if(self.isShown() === true) {
-				
-					// Update value
-					self.updateValue();
-				}
 			});
 			
 			// Check if get selection is supported
@@ -888,8 +889,8 @@ class TransactionSection extends Section {
 								// Transaction section shown event
 								$(self).one(Section.SHOWN_EVENT + ".transactionSection", function() {
 								
-									// Update value
-									self.updateValue();
+									// Update when recorded values
+									self.updateWhenRecordedValues();
 									
 									// Trigger resize event
 									$(window).trigger("resize");
@@ -1067,46 +1068,71 @@ class TransactionSection extends Section {
 					this.transaction.getAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 					
 					// Currency
-					Consensus.CURRENCY_NAME
+					Consensus.CURRENCY_NAME,
+					
+					// Display value
+					true
 				]
 			], "contextMenu"));
 		
 			// Add amount display to transaction information display
 			transactionInformationDisplay.append(amountDisplay);
 			
-			// Get currency
-			var currency = this.getUnlocked().getDisplayedCurrency();
+			// Check if prices are enabled
+			if(this.getPrices().enablePrice === true) {
 			
-			// Get price in the currency
-			var price = this.getPrices().getPrice(currency);
-			
-			// Check if price doesn't exist
-			if(price === Prices.NO_PRICE_FOUND) {
-			
-				// Add value to transaction information display
-				transactionInformationDisplay.append("<p class=\"currency hide\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')], "value") + "</p>");
-			}
-			
-			// Otherwise
-			else {
-			
-				// Create value display
-				var valueDisplay = $("<p class=\"currency\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Value:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
+				// Check if transaction's prices when recorded is unknown
+				if(this.transaction.getPricesWhenRecorded() === Transaction.UNKNOWN_PRICES_WHEN_RECORDED) {
 				
-				// Append transaction's value to value display
-				valueDisplay.append(Language.createTranslatableContainer("<span>", "%1$c", [
-					[
+					// Add amount's value when recorded to transaction information display
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Amount\'s value when recorded:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				}
 				
-						// Value
-						this.transaction.getAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).multipliedBy(price).toFixed(),
+				// Otherwise check if transaction's prices when recorded isn't used
+				else if(this.transaction.getPricesWhenRecorded() === Transaction.UNUSED_PRICES_WHEN_RECORDED) {
+				
+					// Add amount's value when recorded to transaction information display
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Amount\'s value when recorded:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				}
+				
+				// Otherwise
+				else {
+				
+					// Get currency
+					var currency = this.getUnlocked().getDisplayedCurrency();
+					
+					// Get price in the currency when the transaction was recorded
+					var price = this.getPrices().getPrice(currency, this.transaction.getPricesWhenRecorded());
+					
+					// Check if price doesn't exist
+					if(price === Prices.NO_PRICE_FOUND) {
+					
+						// Add amount's value when recorded to transaction information display
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Amount\'s value when recorded:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')], "whenRecordedValue amount") + "</p>");
+					}
+					
+					// Otherwise
+					else {
+					
+						// Create amount's value when recorded display
+						var amountsValueWhenRecordedDisplay = $("<p class=\"currency\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Amount\'s value when recorded:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
 						
-						// Currency
-						currency
-					]
-				], "value contextMenu"));
-				
-				// Add value display to transaction information display
-				transactionInformationDisplay.append(valueDisplay);
+						// Append transaction's amount's value to amount's value when recorded display
+						amountsValueWhenRecordedDisplay.append(Language.createTranslatableContainer("<span>", "%1$c", [
+							[
+						
+								// Value
+								this.transaction.getAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).multipliedBy(price).toFixed(),
+								
+								// Currency
+								currency
+							]
+						], "whenRecordedValue amount contextMenu"));
+						
+						// Add amount's value when recorded display to transaction information display
+						transactionInformationDisplay.append(amountsValueWhenRecordedDisplay);
+					}
+				}
 			}
 			
 			// Check if transaction's fee is unknown and transaction isn't a coinbase transaction
@@ -1114,6 +1140,13 @@ class TransactionSection extends Section {
 			
 				// Add fee to transaction information display
 				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				
+				// Check if prices are enabled
+				if(this.getPrices().enablePrice === true) {
+				
+					// Add fee's value when recorded to transaction information display
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee\'s value when recorded:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+				}
 			}
 			
 			// Otherwise check if transaction's fee doesn't exist or transaction is a coinbase transaction
@@ -1121,6 +1154,13 @@ class TransactionSection extends Section {
 			
 				// Add fee to transaction information display
 				transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				
+				// Check if prices are enabled
+				if(this.getPrices().enablePrice === true) {
+				
+					// Add fee's value when recorded to transaction information display
+					transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee\'s value when recorded:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+				}
 			}
 			
 			// Otherwise
@@ -1137,12 +1177,66 @@ class TransactionSection extends Section {
 						this.transaction.getFee().dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 						
 						// Currency
-						Consensus.CURRENCY_NAME
+						Consensus.CURRENCY_NAME,
+					
+						// Display value
+						true
 					]
 				], "contextMenu"));
 			
 				// Add fee display to transaction information display
 				transactionInformationDisplay.append(feeDisplay);
+				
+				// Check if prices are enabled
+				if(this.getPrices().enablePrice === true) {
+				
+					// Check if transaction's prices when recorded is unknown
+					if(this.transaction.getPricesWhenRecorded() === Transaction.UNKNOWN_PRICES_WHEN_RECORDED) {
+					
+						// Add fee's value when recorded to transaction information display
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee\'s value when recorded:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')]) + "</p>");
+					}
+					
+					// Otherwise check if transaction's prices when recorded isn't used
+					else if(this.transaction.getPricesWhenRecorded() === Transaction.UNUSED_PRICES_WHEN_RECORDED) {
+					
+						// Add fee's value when recorded to transaction information display
+						transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee\'s value when recorded:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('N/A')]) + "</p>");
+					}
+					
+					// Otherwise
+					else {
+					
+						// Check if price doesn't exist
+						if(price === Prices.NO_PRICE_FOUND) {
+						
+							// Add fee's value when recorded to transaction information display
+							transactionInformationDisplay.append("<p>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee\'s value when recorded:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')], "whenRecordedValue fee") + "</p>");
+						}
+						
+						// Otherwise
+						else {
+						
+							// Create fee's value when recorded display
+							var feesValueWhenRecordedDisplay = $("<p class=\"currency\">" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Fee\'s value when recorded:')) + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('(?<=:) ')) + "</p>");
+							
+							// Append transaction's fee's value to fee's value when recorded display
+							feesValueWhenRecordedDisplay.append(Language.createTranslatableContainer("<span>", "%1$c", [
+								[
+							
+									// Value
+									this.transaction.getFee().dividedBy(Consensus.VALUE_NUMBER_BASE).multipliedBy(price).toFixed(),
+									
+									// Currency
+									currency
+								]
+							], "whenRecordedValue fee contextMenu"));
+							
+							// Add fee's value when recorded display to transaction information display
+							transactionInformationDisplay.append(feesValueWhenRecordedDisplay);
+						}
+					}
+				}
 			}
 			
 			// Check if transaction was sent
@@ -1651,55 +1745,82 @@ class TransactionSection extends Section {
 			}
 		}
 		
-		// Update value
-		updateValue() {
+		// Update when recorded values
+		updateWhenRecordedValues() {
 		
-			// Get value display
-			var valueDisplay = this.getDisplay().find("div.transactionInformation").find("span.value");
+			// Check if prices are enabled
+			if(this.getPrices().enablePrice === true) {
 			
-			// Get value display's parent
-			var parent = valueDisplay.parent();
-		
-			// Get currency
-			var currency = this.getUnlocked().getDisplayedCurrency();
-			
-			// Get price in the currency
-			var price = this.getPrices().getPrice(currency);
-			
-			// Check if price doesn't exist
-			if(price === Prices.NO_PRICE_FOUND) {
-			
-				// Replace value display
-				valueDisplay.replaceWith(Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')], "value"));
+				// Get currency
+				var currency = this.getUnlocked().getDisplayedCurrency();
 				
-				// Hide value display
-				parent.addClass("hide");
-			}
-			
-			// Otherwise
-			else {
-			
-				// Replace value display
-				valueDisplay.replaceWith(Language.createTranslatableContainer("<span>", "%1$c", [
-					[
+				// Get price in the currency when the transaction was recorded
+				var price = this.getPrices().getPrice(currency, this.transaction.getPricesWhenRecorded());
 				
-						// Value
-						this.transaction.getAmount().dividedBy(Consensus.VALUE_NUMBER_BASE).multipliedBy(price).toFixed(),
-						
-						// Currency
-						currency
-					]
-				], "value contextMenu"));
+				// Set self
+				var self = this;
 				
-				// Check if value display is hidden
-				if(parent.hasClass("hide") === true) {
+				// Go through all when recorded value displays
+				this.getDisplay().find("div.transactionInformation").find("span.whenRecordedValue").each(function() {
 				
-					// Show value display
-					parent.removeClass("hide");
+					// Get when recorded value display
+					var whenRecordedValueDisplay = $(this);
 					
-					// Trigger resize event
-					$(window).trigger("resize");
-				}
+					// Get when recorded value display's parent
+					var parent = whenRecordedValueDisplay.parent();
+					
+					// Check if when recorded value display is for the transaction's amount
+					if(whenRecordedValueDisplay.hasClass("amount") === true) {
+					
+						// Set extra class and amount
+						var extraClass = "amount";
+						var amount = self.transaction.getAmount();
+					}
+					
+					// Otherwise heck if when recorded value display is for the transaction's fee
+					else if(whenRecordedValueDisplay.hasClass("fee") === true) {
+					
+						// Set extra class and amount
+						var extraClass = "fee";
+						var amount = self.transaction.getFee();
+					}
+					
+					// Otherwise
+					else {
+					
+						// Go to next when recorded value displays
+						return;
+					}
+					
+					// Check if price doesn't exist
+					if(price === Prices.NO_PRICE_FOUND) {
+					
+						// Replace when recorded value display
+						whenRecordedValueDisplay.replaceWith(Language.createTranslatableContainer("<span>", "%1$x", [Language.getDefaultTranslation('Unknown')], "whenRecordedValue " + extraClass));
+						
+						// Set that parent isn't displaying a currency
+						parent.removeClass("currency");
+					}
+					
+					// Otherwise
+					else {
+					
+						// Replace when recorded value display
+						whenRecordedValueDisplay.replaceWith(Language.createTranslatableContainer("<span>", "%1$c", [
+							[
+						
+								// Value
+								amount.dividedBy(Consensus.VALUE_NUMBER_BASE).multipliedBy(price).toFixed(),
+								
+								// Currency
+								currency
+							]
+						], "whenRecordedValue " + extraClass + " contextMenu"));
+						
+						// Set that parent is displaying a currency
+						parent.addClass("currency");
+					}
+				});
 			}
 		}
 		

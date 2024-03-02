@@ -285,6 +285,10 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.ba
 	text-align: center;
 }
 
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.hide {
+	display: none;
+}
+
 main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions {
 	flex-direction: column;
 	margin-bottom: 0.5em;
@@ -641,6 +645,7 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.tr
 	font-family: monospace;
 	font-size: 13pt;
 	text-overflow: ellipsis;
+	pointer-events: none;
 }
 
 main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.id > p:empty {

@@ -9,6 +9,55 @@ This wallet also allows for you to manage your MimbleWimble Coin with Ledger and
 
 You can also use your own node, [listener](https://github.com/NicolasFlamel1/WebSocket-Listener), and [Tor proxy](https://github.com/NicolasFlamel1/Tor-Proxy) with this wallet thus allowing it to function without having to rely on any third parties.
 
+### Sending MWC To Exchanges Compatibility
+
+Compatibility for sending MWC from the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile to exchanges:
+
+|| [TradeOgre](https://tradeogre.com/exchange/BTC-MWC) |
+|-|-|-|
+| [MWC web wallet website](https://mwcwallet.com) | ✅ Requires version 2.2.0 or newer of the web wallet. |
+| [MWC web wallet Onion Service](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion) | ✅ Requires version 2.2.0 or newer of the web wallet. |
+| MWC web wallet progressive web app version | ✅ Requires version 2.2.0 or newer of the web wallet. |
+| [MWC web wallet browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) | ✅ Requires version 2.2.0 or newer of the web wallet. |
+| [MWC web wallet standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone) | ✅ Requires version 2.2.0 or newer of the web wallet. |
+| [Ledger Live Desktop/Mobile](https://github.com/NicolasFlamel1/ledger-live) | ✅ |
+
+\* This table assumes that the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile are using their default settings.
+
+\* [WhiteBIT](https://whitebit.com/trade/MWC-BTC) had temporarily suspended depositing and withdrawing MWC when this table was created which is why they aren't included.
+
+\* CORS issues can by bypassed by disabling CORS checks in your web browser, however this shouldn't be done without understanding the security implications of doing so.
+
+# Receiving MWC From Exchanges Compatibility
+
+Compatibility for receiving MWC from exchanges to the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile:
+
+|| [TradeOgre](https://tradeogre.com/exchange/BTC-MWC) |
+|-|-|-|
+| [MWC web wallet website](https://mwcwallet.com) | ✅ Requires version 2.2.0 or newer of the web wallet. |
+| [MWC web wallet Onion Service](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion) | ✅ Requires version 2.2.0 or newer of the web wallet. |
+| MWC web wallet progressive web app version | ✅ Requires version 2.2.0 or newer of the web wallet. |
+| [MWC web wallet browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) | ✅ Requires version 2.2.0 or newer of the web wallet. |
+| [MWC web wallet standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone) | ✅ Requires version 2.2.0 or newer of the web wallet. |
+| [Ledger Live Desktop/Mobile](https://github.com/NicolasFlamel1/ledger-live) | ✅ |
+
+\* This table assumes that the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile are using their default settings.
+
+\* [WhiteBIT](https://whitebit.com/trade/MWC-BTC) had temporarily suspended depositing and withdrawing MWC when this table was created which is why they aren't included.
+
+\* It's unlikely that any exchanges currently supports sending MWC to the MimbleWimble Coin web wallet when using a hardware wallet due to that [needing a longer network read timeout](https://github.com/mwcproject/mwc-wallet/pull/17).
+
+### Trust And Privacy Concerns
+By default, the MimbleWimble Coin web wallet is not trustless and sacrifices some of its users' privacy in order to achieve a greater ease of use. This is true for any of the methods that can be used to access this web wallet including accessing it from its website at [https://mwcwallet.com](https://mwcwallet.com), accessing it from its Onion Service at [http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion), accessing it from its progressive web app version, accessing it from [its browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension), and accessing it from [its standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone).
+
+However, this web wallet does provide a way to use it in a completely trustless and private way. This can be accomplished by performing the following steps.
+
+1. Use the [Tor Browser](https://www.torproject.org/download/) to access this web wallet from [its standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone).
+2. Run your own [MWC node](https://github.com/mwcproject/mwc-node) and set the web wallet to use it in its settings.
+3. Run your own [listener](https://github.com/NicolasFlamel1/WebSocket-Listener) and set the web wallet to use it in its settings.
+
+Accessing this web wallet in this way will remove the need to trust the servers hosting the site, listener, Tor proxy, and node. This will also preserve your privacy by not leaking your IP address to anyone that you send MWC to and your ISP won't be aware that you're using this web wallet.
+
 ### Develop
 This site can be ran from a local machine for development purposes. To do that, this repo's files are intended to reside at `/srv/mwcwallet.com`, but can be located anywhere as long as the `root` directive in the `nginx.conf` file correctly reflects the `public_html` folder's current location.
 
@@ -49,10 +98,10 @@ For example, here's what a file for a French translation, `public_html/languages
 ```
 <?php
 
-	$availableLanguages["fr"] = [
+	$availableLanguages["fr-FR"] = [
 	
 		"Contributors" => [
-			"Your name here"
+			"Your name here" => "http://yourLinkHere"
 		],
 		
 		"Constants" => [
@@ -63,7 +112,11 @@ For example, here's what a file for a French translation, `public_html/languages
 			
 			"Image" => "./images/countries/france.svg",
 			
-			"Currency" => "EUR"
+			"Currency" => "EUR",
+			
+			"Extension Locale Code" => "fr",
+			
+			"Fallback" => "fr"
 		],
 		
 		"Text" => [

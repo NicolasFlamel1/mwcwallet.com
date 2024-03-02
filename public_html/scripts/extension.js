@@ -335,14 +335,14 @@ $(window).on("beforeunload", function(event) {
 			if(Extension.getRequests()["length"] === 1) {
 			
 				// Return message
-				return event["returnValue"] = Language.getTranslation('Are you sure you want to exit? There\'s a remaining transaction.');
+				return event["originalEvent"]["returnValue"] = Language.getTranslation('Are you sure you want to exit? There\'s a remaining transaction.');
 			}
 			
 			// Otherwise
 			else {
 			
 				// Return message
-				return event["returnValue"] = Language.getTranslation('Are you sure you want to exit? There\'s remaining transactions.');
+				return event["originalEvent"]["returnValue"] = Language.getTranslation('Are you sure you want to exit? There\'s remaining transactions.');
 			}
 		}
 		

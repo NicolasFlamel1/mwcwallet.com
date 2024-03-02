@@ -540,7 +540,7 @@ class Node {
 							return [
 							
 								// Addresses
-								"https://fastepic.eu:3413"
+								"https://node.epiccash.com:3413"
 							];
 						}
 						
@@ -1748,8 +1748,13 @@ class Node {
 					// Log message
 					Log.logMessage(Language.getDefaultTranslation('Trying to connect to the node at %1$y.'), [
 					
-						// Address
-						this.getAddresses(Consensus.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE)[0]
+						[
+							// Text
+							this.getAddresses(Consensus.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE)[0],
+							
+							// Is raw data
+							true
+						]
 					]);
 				}
 		

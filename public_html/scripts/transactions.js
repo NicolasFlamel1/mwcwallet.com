@@ -1537,6 +1537,9 @@ class Transactions {
 									// File response
 									[Database.toKeyPath(Transactions.DATABASE_FILE_RESPONSE_NAME)]: currentTransaction.getFileResponse(),
 									
+									// Prices when recorded
+									[Database.toKeyPath(Transactions.DATABASE_PRICES_WHEN_RECORDED_NAME)]: (currentTransaction.getPricesWhenRecorded() !== Transaction.UNKNOWN_PRICES_WHEN_RECORDED && currentTransaction.getPricesWhenRecorded() !== Transaction.UNUSED_PRICES_WHEN_RECORDED) ? JSONBigNumber.stringify(currentTransaction.getPricesWhenRecorded()) : currentTransaction.getPricesWhenRecorded(),
+									
 									// TODO Store checked in the database as a boolean
 									
 									// Checked
@@ -1694,6 +1697,9 @@ class Transactions {
 										
 										// File response
 										[Database.toKeyPath(Transactions.DATABASE_FILE_RESPONSE_NAME)]: spentTransaction.getFileResponse(),
+										
+										// Prices when recorded
+										[Database.toKeyPath(Transactions.DATABASE_PRICES_WHEN_RECORDED_NAME)]: (spentTransaction.getPricesWhenRecorded() !== Transaction.UNKNOWN_PRICES_WHEN_RECORDED && spentTransaction.getPricesWhenRecorded() !== Transaction.UNUSED_PRICES_WHEN_RECORDED) ? JSONBigNumber.stringify(spentTransaction.getPricesWhenRecorded()) : spentTransaction.getPricesWhenRecorded(),
 										
 										// TODO Store checked in the database as a boolean
 									
@@ -2112,6 +2118,9 @@ class Transactions {
 				// File response
 				result[Database.toKeyPath(Transactions.DATABASE_FILE_RESPONSE_NAME)],
 				
+				// Prices when recorded
+				(Database.toKeyPath(Transactions.DATABASE_PRICES_WHEN_RECORDED_NAME) in result === true) ? ((result[Database.toKeyPath(Transactions.DATABASE_PRICES_WHEN_RECORDED_NAME)] !== Transaction.UNKNOWN_PRICES_WHEN_RECORDED && result[Database.toKeyPath(Transactions.DATABASE_PRICES_WHEN_RECORDED_NAME)] !== Transaction.UNUSED_PRICES_WHEN_RECORDED) ? JSONBigNumber.parse(result[Database.toKeyPath(Transactions.DATABASE_PRICES_WHEN_RECORDED_NAME)]) : result[Database.toKeyPath(Transactions.DATABASE_PRICES_WHEN_RECORDED_NAME)]) : Transaction.UNKNOWN_PRICES_WHEN_RECORDED,
+				
 				// Checked
 				(Database.toKeyPath(Transactions.DATABASE_CHECKED_NAME) in result === false || result[Database.toKeyPath(Transactions.DATABASE_CHECKED_NAME)] === 1) ? true : false,
 				
@@ -2373,6 +2382,13 @@ class Transactions {
 		
 			// Return database file response name
 			return "File Response";
+		}
+		
+		// Database prices when recorded name
+		static get DATABASE_PRICES_WHEN_RECORDED_NAME() {
+		
+			// Return database prices when recorded name
+			return "Prices When Recorded";
 		}
 		
 		// Database checked name

@@ -257,6 +257,18 @@ class Language {
 				// Language display list button click and touch end event
 				languageDisplayList.children("button").on("click touchend", function(event) {
 				
+					// Check if event is touch end
+					if("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") {
+					
+						// Check if address copy isn't under the touch area
+						var changedTouch = event["originalEvent"]["changedTouches"][0];
+						if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"])) {
+						
+							// Return
+							return;
+						}
+					}
+					
 					// Get button
 					var button = $(this);
 					
@@ -454,6 +466,43 @@ class Language {
 			}
 		}
 		
+		// Set get displayed currency
+		static setGetDisplayedCurrency(getDisplayedCurrency) {
+		
+			// Set language get displayed currency
+			Language.getDisplayedCurrency = getDisplayedCurrency;
+		}
+		
+		// Set get price
+		static setGetPrice(prices) {
+		
+			// Set language get price
+			Language.getPrice = function(currency) {
+			
+				// Return currency's price
+				return prices.getPrice(currency);
+			};
+			
+			// Prices change event
+			$(prices).on(Prices.CHANGE_EVENT, function(event, prices) {
+			
+				// Check if translated currency display values exist
+				var translatedCurrencyDisplayValues = $(".translatedCurrencyDisplayValue");
+				if(translatedCurrencyDisplayValues["length"] !== 0) {
+				
+					// Go through all translated currency display values
+					translatedCurrencyDisplayValues.each(function() {
+					
+						// Translate the translatable container that the translated currency display value is in
+						Language.translateElement($(this).closest(".translatable"));
+					});
+					
+					// Trigger resize event
+					$(window).trigger("resize");
+				}
+			});
+		}
+		
 		// Get translation
 		static getTranslation(text, textArguments = [], encodeHtml = false) {
 		
@@ -617,17 +666,19 @@ class Language {
 									// Check if text argument is an array
 									if(Array.isArray(textArguments[argumentIndex]) === true) {
 									
-										// Get text argument number and currency
+										// Get text argument number, currency, and display value
 										var textArgumentNumber = textArguments[argumentIndex][Language.CURRENCY_NUMBER_ARGUMENT_INDEX];
 										var textArgumentCurrency = textArguments[argumentIndex][Language.CURRENCY_CURRENCY_ARGUMENT_INDEX];
+										var textArgumentDisplayValue = (textArguments[argumentIndex]["length"] > Language.CURRENCY_DISPLAY_VALUE_ARGUMENT_INDEX) ? textArguments[argumentIndex][Language.CURRENCY_DISPLAY_VALUE_ARGUMENT_INDEX] : false;
 									}
 									
 									// Otherwise
 									else {
 									
-										// Get text argument number and use default currency
+										// Get text argument number, use default currency, and don't display value
 										var textArgumentNumber = textArguments[argumentIndex];
 										var textArgumentCurrency = Language.DEFAULT_CURRENCY;
+										var textArgumentDisplayValue = false;
 									}
 								
 									// Get text argument number as integer and fraction parts
@@ -783,6 +834,47 @@ class Language {
 									
 									// Append argument formatted as a currency to result
 									result += formattedArgumentCurrency;
+									
+									// Check if displaying text argument value and text argument currency is the currency
+									if(textArgumentDisplayValue === true && textArgumentCurrency === Consensus.CURRENCY_NAME) {
+									
+										// Check if language get displayed currency and get price exist
+										if(typeof Language.getDisplayedCurrency !== "undefined" && typeof Language.getPrice !== "undefined") {
+									
+											// Get currency
+											var currency = Language.getDisplayedCurrency();
+											
+											// Get price in the currency
+											var price = Language.getPrice(currency);
+											
+											// Check if price exists
+											if(price !== Prices.NO_PRICE_FOUND) {
+											
+												// Get formatted argument display value
+												var formattedArgumentDisplayValue = Language.getTranslation(Language.getDefaultTranslation(' (%1$c)'), [
+							
+													[
+													
+														// Amount
+														(new BigNumber(textArgumentNumber)).multipliedBy(price).toFixed(),
+														
+														// Currency
+														currency
+													]
+												], encodeHtml);
+												
+												// Append formatted argument display value to result and encode it if specified
+												result += (encodeHtml === false) ? formattedArgumentDisplayValue : ("<span class=\"translatedCurrencyDisplayValue\">" + formattedArgumentDisplayValue + "</span>");
+											}
+											
+											// Otherwise
+											else {
+											
+												// Append hidden formatted argument display value to result and encode it if specified
+												result += (encodeHtml === false) ? "" : ("<span class=\"translatedCurrencyDisplayValue hide\"></span>");
+											}
+										}
+									}
 								
 									// Break
 									break;
@@ -802,11 +894,24 @@ class Language {
 								// Not translated text
 								case Language.NOT_TRANSLATED_TEXT_PLACEHOLDER_TYPE:
 								
-									// Get not translated text argument
-									var notTranslatedTextArgumentText = textArguments[argumentIndex];
+									// Check if not translated text argument is an array
+									if(Array.isArray(textArguments[argumentIndex]) === true) {
+									
+										// Get not translated text argument text and is raw data
+										var notTranslatedTextArgumentText = textArguments[argumentIndex][Language.NOT_TRANSLATED_TEXT_TEXT_ARGUMENT_INDEX];
+										var notTranslatedTextArgumentIsRawData = textArguments[argumentIndex][Language.NOT_TRANSLATED_TEXT_IS_RAW_DATA_ARGUMENT_INDEX];
+									}
+									
+									// Otherwise
+									else {
+									
+										// Get not translated text argument text and use default is raw data
+										var notTranslatedTextArgumentText = textArguments[argumentIndex];
+										var notTranslatedTextArgumentIsRawData = false;
+									}
 								
 									// Append argument to result and encode it if specified
-									result += (encodeHtml === false) ? notTranslatedTextArgumentText : Common.htmlEncode(notTranslatedTextArgumentText);
+									result += (encodeHtml === false) ? notTranslatedTextArgumentText : ((notTranslatedTextArgumentIsRawData === true) ? "<span style=\"word-break: break-all;\">" + Common.htmlEncode(notTranslatedTextArgumentText) + "</span>" : Common.htmlEncode(notTranslatedTextArgumentText));
 								
 									// Break
 									break;
@@ -1092,6 +1197,13 @@ class Language {
 			}
 		}
 		
+		// Translate element
+		static translateElement(element) {
+		
+			// Change language for element
+			Language.changeLanguage(Language.currentLanguage, false, element);
+		}
+		
 		// Change event
 		static get CHANGE_EVENT() {
 		
@@ -1126,33 +1238,58 @@ class Language {
 			// Return currency currency argument index
 			return Language.CURRENCY_NUMBER_ARGUMENT_INDEX + 1;
 		}
+		
+		// Currency display value argument index
+		static get CURRENCY_DISPLAY_VALUE_ARGUMENT_INDEX() {
+		
+			// Return currency display value argument index
+			return Language.CURRENCY_CURRENCY_ARGUMENT_INDEX + 1;
+		}
+		
+		// Not translated text argument text index
+		static get NOT_TRANSLATED_TEXT_TEXT_ARGUMENT_INDEX() {
+		
+			// Return not translated text argument text index
+			return 0;
+		}
+		
+		// Not translated text argument is raw data index
+		static get NOT_TRANSLATED_TEXT_IS_RAW_DATA_ARGUMENT_INDEX() {
+		
+			// Return not translated text argument is raw data index
+			return Language.NOT_TRANSLATED_TEXT_TEXT_ARGUMENT_INDEX + 1;
+		}
 	
 	// Private
 	
 		// Change language
-		static changeLanguage(newLanguage, languageIsDifferent = true) {
+		static changeLanguage(newLanguage, languageIsDifferent = true, root = $("body")) {
 		
-			// Trigger language before change event
-			$(document).trigger(Language.BEFORE_CHANGE_EVENT);
-		
-			// Set current language
-			Language.currentLanguage = newLanguage;
+			// Check if translating everything
+			if(root.is("body") === true) {
 			
-			// Set cookie
-			Language.setCookie();
+				// Trigger language before change event
+				$(document).trigger(Language.BEFORE_CHANGE_EVENT);
 			
-			// Set local storage
-			Language.setLocalStorage();
-			
-			// Check if language is different
-			if(languageIsDifferent === true) {
-			
-				// Log message
-				console.log("%c%s", "color: red; font-size: 30px; text-transform: uppercase;", Language.getTranslation('If someone asked you to copy/paste something here you are being scammed!!!'));
+				// Set current language
+				Language.currentLanguage = newLanguage;
+				
+				// Set cookie
+				Language.setCookie();
+				
+				// Set local storage
+				Language.setLocalStorage();
+				
+				// Check if language is different
+				if(languageIsDifferent === true) {
+				
+					// Log message
+					console.log("%c%s", "color: red; font-size: 30px; text-transform: uppercase;", Language.getTranslation('If someone asked you to copy/paste something here you are being scammed!!!'));
+				}
 			}
 			
 			// Go through all translatable elements
-			$(".translatable").each(function() {
+			root.find(".translatable").addBack(".translatable").each(function() {
 			
 				// Get element
 				var element = $(this);

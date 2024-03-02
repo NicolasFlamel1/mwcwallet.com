@@ -201,6 +201,18 @@ class Message {
 			// Message copy button click and touch end event
 			}).on("click touchend", "aside.message > div > div > p > span.text span.copy", function(event) {
 			
+				// Check if event is touch end
+				if("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") {
+				
+					// Check if address copy isn't under the touch area
+					var changedTouch = event["originalEvent"]["changedTouches"][0];
+					if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"])) {
+					
+						// Return
+						return;
+					}
+				}
+				
 				// Stop propagation
 				event.stopPropagation();
 				
@@ -290,7 +302,7 @@ class Message {
 		}
 		
 		// Show
-		show(header, text, showImmediately = false, beforeShow = Message.NO_BEFORE_SHOW_FUNCTION, firstButton = Message.NO_BUTTON, secondButton = Message.NO_BUTTON, allowIfShown = false, visibleState = Message.VISIBLE_STATE_ALL) {
+		show(header, text, showImmediately = false, beforeShow = Message.NO_BEFORE_SHOW_FUNCTION, firstButton = Message.NO_BUTTON, secondButton = Message.NO_BUTTON, allowIfShown = false, visibleState = Message.VISIBLE_STATE_ALL, secondButtonIsDangerous = false) {
 		
 			// Check if shutting down
 			if(this.shuttingDown === true) {
@@ -524,16 +536,32 @@ class Message {
 									}
 									
 									// Check if a second button is provided
-									if(secondButton !== Message.NO_BUTTON)
+									if(secondButton !== Message.NO_BUTTON) {
 									
 										// Show and set message display second button and make it translatable
 										self.messageDisplay.removeClass("oneButton").find("button").eq(1).children("span").first().text(Language.getTranslation(secondButton)).attr(Common.DATA_ATTRIBUTE_PREFIX + "text", secondButton);
+										
+										// Check if second button is dangerous
+										if(secondButtonIsDangerous === true) {
+										
+											// Indicate that second button is dangerous
+											self.messageDisplay.find("button").eq(1).addClass("dangerous");
+										}
+										
+										// Otherwise
+										else {
+										
+											// Indicate that second button isn't dangerous
+											self.messageDisplay.find("button").eq(1).removeClass("dangerous");
+										}
+									}
 									
 									// Otherwise
-									else
+									else {
 									
 										// Remove message display second button text
-										self.messageDisplay.find("button").eq(1).children("span").first().text("").removeAttr(Common.DATA_ATTRIBUTE_PREFIX + "text");
+										self.messageDisplay.find("button").eq(1).removeClass("dangerous").children("span").first().text("").removeAttr(Common.DATA_ATTRIBUTE_PREFIX + "text");
+									}
 								}
 								
 								// Otherwise
@@ -555,6 +583,9 @@ class Message {
 							
 								// Turn off message display buttons click event and set that they aren't loading
 								self.messageDisplay.find("button").off("click").removeClass("loading");
+								
+								// Translate message display
+								Language.translateElement(self.messageDisplay);
 								
 								// Trigger before show not cabcelable event
 								$(self).trigger(Message.BEFORE_SHOW_NOT_CANCELABLE_EVENT);
@@ -817,7 +848,7 @@ class Message {
 							self.messageQueue.push(function() {
 							
 								// Return showing message
-								return self.show(header, text, true, beforeShow, firstButton, secondButton, allowIfShown, visibleState).then(function(result) {
+								return self.show(header, text, true, beforeShow, firstButton, secondButton, allowIfShown, visibleState, secondButtonIsDangerous).then(function(result) {
 								
 									// Resolve result
 									resolve(result);
@@ -840,7 +871,7 @@ class Message {
 						self.messageQueue.push(function() {
 						
 							// Return showing message
-							return self.show(header, text, true, beforeShow, firstButton, secondButton, allowIfShown, visibleState).then(function(result) {
+							return self.show(header, text, true, beforeShow, firstButton, secondButton, allowIfShown, visibleState, secondButtonIsDangerous).then(function(result) {
 							
 								// Resolve result
 								resolve(result);

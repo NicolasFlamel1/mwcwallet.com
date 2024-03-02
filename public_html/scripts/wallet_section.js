@@ -387,6 +387,18 @@ class WalletSection extends Section {
 			// Address copy click and touch end event
 			}).on("click touchend", "main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.address > p > span.copy", function(event) {
 			
+				// Check if event is touch end
+				if("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") {
+				
+					// Check if address copy isn't under the touch area
+					var changedTouch = event["originalEvent"]["changedTouches"][0];
+					if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"])) {
+					
+						// Return
+						return;
+					}
+				}
+				
 				// Stop propagation
 				event.stopPropagation();
 				
@@ -534,6 +546,18 @@ class WalletSection extends Section {
 			// Transaction button ID copy click and touch end event
 			}).on("click touchend", "main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.transactions > button > span.id > span.copy", function(event) {
 			
+				// Check if event is touch end
+				if("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") {
+				
+					// Check if address copy isn't under the touch area
+					var changedTouch = event["originalEvent"]["changedTouches"][0];
+					if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"])) {
+					
+						// Return
+						return;
+					}
+				}
+				
 				// Stop propagation
 				event.stopPropagation();
 				
@@ -788,7 +812,7 @@ class WalletSection extends Section {
 								var percentChanged = WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET !== parseFloat(self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset"));
 								
 								// Set shown syncing percent and allow it to transition
-								self.balanceDisplay.find("circle.foreground").removeClass("noTransition").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toFixed());
+								self.balanceDisplay.find("circle.foreground").removeClass("noTransition").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toString());
 								
 								// Remove percent display from balance display
 								self.balanceDisplay.find("div.syncStatus").find("span").remove();
@@ -824,7 +848,7 @@ class WalletSection extends Section {
 														self.balanceDisplay.find("div.syncStatus").transitionEndOrTimeout(function() {
 														
 															// Reset shown syncing percent
-															self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toFixed());
+															self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toString());
 															
 															// Remove percent display from balance display
 															self.balanceDisplay.find("div.syncStatus").find("span").remove();
@@ -839,7 +863,7 @@ class WalletSection extends Section {
 													else {
 													
 														// Reset shown syncing percent
-														self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toFixed());
+														self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toString());
 														
 														// Remove percent display from balance display
 														self.balanceDisplay.find("div.syncStatus").find("span").remove();
@@ -867,7 +891,7 @@ class WalletSection extends Section {
 											self.balanceDisplay.find("div.syncStatus").transitionEndOrTimeout(function() {
 											
 												// Reset shown syncing percent
-												self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toFixed());
+												self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toString());
 												
 												// Remove percent display from balance display
 												self.balanceDisplay.find("div.syncStatus").find("span").remove();
@@ -882,7 +906,7 @@ class WalletSection extends Section {
 										else {
 										
 											// Reset shown syncing percent
-											self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toFixed());
+											self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toString());
 											
 											// Remove percent display from balance display
 											self.balanceDisplay.find("div.syncStatus").find("span").remove();
@@ -912,7 +936,7 @@ class WalletSection extends Section {
 												self.balanceDisplay.find("div.syncStatus").transitionEndOrTimeout(function() {
 												
 													// Reset shown syncing percent
-													self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toFixed());
+													self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toString());
 													
 													// Remove percent display from balance display
 													self.balanceDisplay.find("div.syncStatus").find("span").remove();
@@ -927,7 +951,7 @@ class WalletSection extends Section {
 											else {
 											
 												// Reset shown syncing percent
-												self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toFixed());
+												self.balanceDisplay.find("circle.foreground").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toString());
 												
 												// Remove percent display from balance display
 												self.balanceDisplay.find("div.syncStatus").find("span").remove();
@@ -2703,107 +2727,247 @@ class WalletSection extends Section {
 				// Block input
 				$("body").addClass("blockInput");
 				
-				// Create file input
-				var fileInput = $("<input type=\"file\">");
+				// Open file
+				var openFile = function(file) {
 				
-				// Set file selected to false
-				var fileSelected = false;
-				
-				// File input change event
-				fileInput.one("change", function(event) {
-				
-					// Set file selected
-					fileSelected = true;
-				
-					// Turn off window focus wallet section event
-					$(window).off("focus.walletSection");
+					// Create file reader
+					var fileReader = new FileReader();
 					
-					// Allow scrolling keys
-					self.getScroll().allowKeys();
+					// File reader load event
+					$(fileReader).one("load", function(event) {
 					
-					// Unblock input
-					$("body").removeClass("blockInput");
+						// Turn off file reader error event
+						$(fileReader).off("error");
 					
-					// Get files
-					var files = event["target"]["files"];
-					
-					// Check if no file was selected
-					if(files["length"] <= 0) {
-					
-						// Allow device to sleep and catch errors
-						self.getWakeLock().allowLock().catch(function(error) {
+						// Get file's contents trimmed
+						var filesContents = event["originalEvent"]["target"]["result"].trim();
 						
-						// Finally
-						}).finally(function() {
+						// Try
+						try {
 						
-							// Allow automatic lock
-							self.getAutomaticLock().allow();
+							// Get slate from file's contents parsed as JSON
+							var slate = JSONBigNumber.parse(filesContents);
+						}
+						
+						// Catch errors
+						catch(error) {
+						
+							// Set slate to file's contents
+							var slate = filesContents;
+						}
+						
+						// Try
+						try {
+						
+							// Get wallet
+							var wallet = self.getWallets().getWallet(self.walletKeyPath);
+						}
+						
+						// Catch errors
+						catch(error) {
+						
+							// Allow device to sleep and catch errors
+							self.getWakeLock().allowLock().catch(function(error) {
 							
-							// Check if automatic lock isn't locking
-							if(self.getAutomaticLock().isLocking() === false) {
-					
-								// Set that button isn't loading
-								button.removeClass("loading");
+							// Finally
+							}).finally(function() {
+							
+								// Allow automatic lock
+								self.getAutomaticLock().allow();
 								
-								// Hide loading
-								self.getApplication().hideLoading();
+								// Check if automatic lock isn't locking
+								if(self.getAutomaticLock().isLocking() === false) {
+						
+									// Show receive payment as file error
+									showReceivePaymentAsFileError(Message.createText(error));
+								}
+							});
+						
+							// Return
+							return;
+						}
+						
+						// Create interaction
+						var interaction = new Interaction(Interaction.NO_INDEX, wallet.getKeyPath(), Api.FOREIGN_API_URL, "application/json", {
+						
+							// Version
+							"jsonrpc": JsonRpc.VERSION,
+							
+							// ID
+							"id": new BigNumber(JsonRpc.DEFAULT_ID),
+							
+							// Method
+							"method": Api.RECEIVE_TRANSACTION_METHOD,
+							
+							// Parameters
+							"params": [
+							
+								// Slate
+								slate,
 								
-								// Enable unlocked
-								self.getUnlocked().enable();
+								// Destination account name
+								null,
 								
-								// Set that button isn't clicked
-								button.removeClass("clicked");
-								
-								// Restore focus and don't blur
-								self.getFocus().restore(false);
-								
-								// Allow showing messages
-								self.getMessage().allow();
-							}
+								// Message
+								null,
+							]
 						});
-					}
-					
-					// Otherwise
-					else {
-					
-						// Get file
-						var file = files[0];
 						
-						// Create file reader
-						var fileReader = new FileReader();
+						// Set timeout
+						setTimeout(function() {
 						
-						// File reader load event
-						$(fileReader).one("load", function(event) {
+							// Create promise
+							(new Promise(function(resolve, reject) {
 						
-							// Turn off file reader error event
-							$(fileReader).off("error");
+								// Trigger listener request receive event for the interaction
+								$(self.getWallets().listener).trigger(Listener.REQUEST_RECEIVE_EVENT, [
+								
+									// Interaction
+									interaction,
+									
+									// Resolve
+									resolve,
+									
+									// Reject
+									reject
+								]);
+							
+							// Interaction on success
+							})).then(function(response) {
+							
+								// Get amount from response
+								var amount = response[Listener.PROMISE_RESOLVE_AMOUNT_INDEX];
+								
+								// Get currency from response
+								var currency = response[Listener.PROMISE_RESOLVE_CURRENCY_INDEX];
+								
+								// Get message from response
+								var message = response[Listener.PROMISE_RESOLVE_MESSAGE_INDEX];
+								
+								// Get receiver address from response
+								var receiverAddress = response[Listener.PROMISE_RESOLVE_RECEIVER_ADDRESS_INDEX];
+								
+								// Get file response from response
+								var fileResponse = response[Listener.PROMISE_RESOLVE_FILE_RESPONSE_INDEX];
+								
+								// Get ID from response
+								var id = response[Listener.PROMISE_RESOLVE_ID_INDEX];
+								
+								// Set file name
+								var fileName = id.serialize() + ".response";
+								
+								// Create URL from contents
+								var url = URL.createObjectURL(new Blob([
+								
+									// Contents
+									fileResponse
+								], {
+								
+									// Type
+									"type": "application/octet-stream"
+								}));
+								
+								// Get is raw data
+								var isRawData = Common.hasWhitespace(message) === false;
+								
+								// Show message and allow showing messages
+								self.getMessage().show(Language.getDefaultTranslation('Payment Received'), Message.createSuccessResult() + Message.createLineBreak() + Message.createText((message === SlateParticipant.NO_MESSAGE || message["length"] === 0) ? ((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('You were sent %1$c to Wallet %2$s.') : Language.getDefaultTranslation('You were sent %1$c to %2$y.')) : ((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('You were sent %1$c to Wallet %2$s with a message.') : Language.getDefaultTranslation('You were sent %1$c to %2$y with a message.')), [
+								
+									[
+									
+										// Number
+										amount.toFixed(),
+										
+										// Currency
+										currency,
 						
-							// Get file's contents trimmed
-							var filesContents = event["originalEvent"]["target"]["result"].trim();
+										// Display value
+										true
+									],
+									
+									// Wallet key path or name
+									(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()
+									
+								]) + ((message !== SlateParticipant.NO_MESSAGE && message["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Common.htmlEncode(message) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('(?<=.) '))) + Message.createText(Language.getDefaultTranslation('Give the %1$m file to the payment\'s sender for them to finalize the transaction.'), [
+				
+									[
+										// Text
+										fileName,
+										
+										// URL
+										url,
+										
+										// Is external
+										true,
+										
+										// Is blob
+										true
+									]
+								]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + ((receiverAddress !== Slate.NO_RECEIVER_ADDRESS) ? Message.createText(Language.getDefaultTranslation('The recipient payment proof address you used for the transaction is the following payment proof address.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(receiverAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('The transaction doesn\'t have a payment proof.'))) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You shouldn\'t consider this payment to be legitimate until it\'s been confirmed on the blockchain.')) + "</b>", false, function() {
+								
+									// Hide loading
+									self.getApplication().hideLoading();
+									
+									// Message show wallet section event
+									$(self.getMessage()).one(Message.SHOW_EVENT + ".walletSection", function() {
+									
+										// Save file response
+										Common.saveFile(fileName, fileResponse);
+									});
+								
+								}, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+								
+									// Turn off message show wallet section event
+									$(self.getMessage()).off(Message.SHOW_EVENT + ".walletSection");
+									
+									// Revoke URL
+									URL.revokeObjectURL(url);
+								
+									// Check if message was displayed
+									if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
+									
+										// Allow device to sleep and catch errors
+										self.getWakeLock().allowLock().catch(function(error) {
+										
+										// Finally
+										}).finally(function() {
+									
+											// Allow automatic lock
+											self.getAutomaticLock().allow();
+											
+											// Check if automatic lock isn't locking
+											if(self.getAutomaticLock().isLocking() === false) {
+									
+												// Set that button isn't loading
+												button.removeClass("loading");
+												
+												// Enable unlocked
+												self.getUnlocked().enable();
+												
+												// Set that button isn't clicked
+												button.removeClass("clicked");
+												
+												// Delete focus
+												self.getFocus().delete();
+												
+												// Hide message
+												self.getMessage().hide();
+											}
+										});
+									}
+									
+									// Otherwise
+									else {
+									
+										// Allow device to sleep and catch errors
+										self.getWakeLock().allowLock().catch(function(error) {
+										
+										});
+									}
+								});
 							
-							// Try
-							try {
-							
-								// Get slate from file's contents parsed as JSON
-								var slate = JSONBigNumber.parse(filesContents);
-							}
-							
-							// Catch errors
-							catch(error) {
-							
-								// Set slate to file's contents
-								var slate = filesContents;
-							}
-							
-							// Try
-							try {
-							
-								// Get wallet
-								var wallet = self.getWallets().getWallet(self.walletKeyPath);
-							}
-							
-							// Catch errors
-							catch(error) {
+							// Interaction on failure
+							}).catch(function(error) {
 							
 								// Allow device to sleep and catch errors
 								self.getWakeLock().allowLock().catch(function(error) {
@@ -2816,327 +2980,166 @@ class WalletSection extends Section {
 									
 									// Check if automatic lock isn't locking
 									if(self.getAutomaticLock().isLocking() === false) {
-							
-										// Show receive payment as file error
-										showReceivePaymentAsFileError(Message.createText(error));
-									}
-								});
-							
-								// Return
-								return;
-							}
-							
-							// Create interaction
-							var interaction = new Interaction(Interaction.NO_INDEX, wallet.getKeyPath(), Api.FOREIGN_API_URL, "application/json", {
-							
-								// Version
-								"jsonrpc": JsonRpc.VERSION,
-								
-								// ID
-								"id": new BigNumber(JsonRpc.DEFAULT_ID),
-								
-								// Method
-								"method": Api.RECEIVE_TRANSACTION_METHOD,
-								
-								// Parameters
-								"params": [
-								
-									// Slate
-									slate,
 									
-									// Destination account name
-									null,
-									
-									// Message
-									null,
-								]
-							});
-							
-							// Set timeout
-							setTimeout(function() {
-							
-								// Create promise
-								(new Promise(function(resolve, reject) {
-							
-									// Trigger listener request receive event for the interaction
-									$(self.getWallets().listener).trigger(Listener.REQUEST_RECEIVE_EVENT, [
-									
-										// Interaction
-										interaction,
+										// Check if canceled
+										if(error === Common.CANCELED_ERROR) {
 										
-										// Resolve
-										resolve,
-										
-										// Reject
-										reject
-									]);
-								
-								// Interaction on success
-								})).then(function(response) {
-								
-									// Get amount from response
-									var amount = response[Listener.PROMISE_RESOLVE_AMOUNT_INDEX];
-									
-									// Get currency from response
-									var currency = response[Listener.PROMISE_RESOLVE_CURRENCY_INDEX];
-									
-									// Get message from response
-									var message = response[Listener.PROMISE_RESOLVE_MESSAGE_INDEX];
-									
-									// Get file response from response
-									var fileResponse = response[Listener.PROMISE_RESOLVE_FILE_RESPONSE_INDEX];
-									
-									// Get ID from response
-									var id = response[Listener.PROMISE_RESOLVE_ID_INDEX];
-									
-									// Set file name
-									var fileName = id.serialize() + ".response";
-									
-									// Create URL from contents
-									var url = URL.createObjectURL(new Blob([
-									
-										// Contents
-										fileResponse
-									], {
-									
-										// Type
-										"type": "application/octet-stream"
-									}));
-									
-									// Get is raw data
-									var isRawData = Common.hasWhitespace(message) === false;
-									
-									// Show message and allow showing messages
-									self.getMessage().show(Language.getDefaultTranslation('Payment Received'), Message.createSuccessResult() + Message.createLineBreak() + Message.createText((message === SlateParticipant.NO_MESSAGE || message["length"] === 0) ? ((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('You were sent %1$c to Wallet %2$s.') : Language.getDefaultTranslation('You were sent %1$c to %2$y.')) : ((wallet.getName() === Wallet.NO_NAME) ? Language.getDefaultTranslation('You were sent %1$c to Wallet %2$s with a message.') : Language.getDefaultTranslation('You were sent %1$c to %2$y with a message.')), [
-									
-										[
-										
-											// Number
-											amount.toFixed(),
+											// Set that button isn't loading
+											button.removeClass("loading");
 											
-											// Currency
-											currency
-										],
-										
-										// Wallet key path or name
-										(wallet.getName() === Wallet.NO_NAME) ? wallet.getKeyPath().toFixed() : wallet.getName()
-										
-									]) + ((message !== SlateParticipant.NO_MESSAGE && message["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Common.htmlEncode(message) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('(?<=.) '))) + Message.createText(Language.getDefaultTranslation('Give the %1$m file to the payment\'s sender for them to finalize the transaction.'), [
-					
-										[
-											// Text
-											fileName,
+											// Hide loading
+											self.getApplication().hideLoading();
 											
-											// URL
-											url,
+											// Enable unlocked
+											self.getUnlocked().enable();
 											
-											// Is external
-											true,
+											// Set that button isn't clicked
+											button.removeClass("clicked");
 											
-											// Is blob
-											true
-										]
-									]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You shouldn\'t consider this payment to be legitimate until it\'s been confirmed on the blockchain.')) + "</b>", false, function() {
-									
-										// Hide loading
-										self.getApplication().hideLoading();
-										
-										// Message show wallet section event
-										$(self.getMessage()).one(Message.SHOW_EVENT + ".walletSection", function() {
-										
-											// Save file response
-											Common.saveFile(fileName, fileResponse);
-										});
-									
-									}, Language.getDefaultTranslation('OK'), Message.NO_BUTTON, true, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
-									
-										// Turn off message show wallet section event
-										$(self.getMessage()).off(Message.SHOW_EVENT + ".walletSection");
-										
-										// Revoke URL
-										URL.revokeObjectURL(url);
-									
-										// Check if message was displayed
-										if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
-										
-											// Allow device to sleep and catch errors
-											self.getWakeLock().allowLock().catch(function(error) {
+											// Restore focus and don't blur
+											self.getFocus().restore(false);
 											
-											// Finally
-											}).finally(function() {
-										
-												// Allow automatic lock
-												self.getAutomaticLock().allow();
-												
-												// Check if automatic lock isn't locking
-												if(self.getAutomaticLock().isLocking() === false) {
-										
-													// Set that button isn't loading
-													button.removeClass("loading");
-													
-													// Enable unlocked
-													self.getUnlocked().enable();
-													
-													// Set that button isn't clicked
-													button.removeClass("clicked");
-													
-													// Delete focus
-													self.getFocus().delete();
-													
-													// Hide message
-													self.getMessage().hide();
-												}
-											});
+											// Allow showing messages
+											self.getMessage().allow();
 										}
 										
 										// Otherwise
 										else {
-										
-											// Allow device to sleep and catch errors
-											self.getWakeLock().allowLock().catch(function(error) {
-											
-											});
-										}
-									});
-								
-								// Interaction on failure
-								}).catch(function(error) {
-								
-									// Allow device to sleep and catch errors
-									self.getWakeLock().allowLock().catch(function(error) {
 									
-									// Finally
-									}).finally(function() {
-									
-										// Allow automatic lock
-										self.getAutomaticLock().allow();
+											// Check if error is a JSON-RPC error response
+											if(JsonRpc.isErrorResponse(error) === true) {
 										
-										// Check if automatic lock isn't locking
-										if(self.getAutomaticLock().isLocking() === false) {
-										
-											// Check if canceled
-											if(error === Common.CANCELED_ERROR) {
+												// Check error code
+												switch(error["error"]["code"]) {
+												
+													// Internal error error
+													case JsonRpc.INTERNAL_ERROR_ERROR:
+													
+														// Set text
+														var text = Language.getDefaultTranslation('An internal error occurred.');
+														
+														// Break
+														break;
+													
+													// Default
+													default:
+													
+														// Set text
+														var text = Language.getDefaultTranslation('That file is invalid, contains unsupported features, or was already used.');
+														
+														// Break
+														break;
+												}
+											}
 											
-												// Set that button isn't loading
-												button.removeClass("loading");
-												
-												// Hide loading
-												self.getApplication().hideLoading();
-												
-												// Enable unlocked
-												self.getUnlocked().enable();
-												
-												// Set that button isn't clicked
-												button.removeClass("clicked");
-												
-												// Restore focus and don't blur
-												self.getFocus().restore(false);
-												
-												// Allow showing messages
-												self.getMessage().allow();
+											// Otherwise check user rejected on hardware
+											else if(error === HardwareWallet.USER_REJECTED_ERROR) {
+											
+												// Set text
+												var text = Language.getDefaultTranslation('Approving the transaction on the hardware wallet was denied.');
 											}
 											
 											// Otherwise
 											else {
-										
-												// Check if error is a JSON-RPC error response
-												if(JsonRpc.isErrorResponse(error) === true) {
 											
-													// Check error code
-													switch(error["error"]["code"]) {
-													
-														// Internal error error
-														case JsonRpc.INTERNAL_ERROR_ERROR:
-														
-															// Set text
-															var text = Language.getDefaultTranslation('An internal error occurred.');
-															
-															// Break
-															break;
-														
-														// Default
-														default:
-														
-															// Set text
-															var text = Language.getDefaultTranslation('That file is invalid, contains unsupported features, or was already used.');
-															
-															// Break
-															break;
-													}
-												}
-												
-												// Otherwise check user rejected on hardware
-												else if(error === HardwareWallet.USER_REJECTED_ERROR) {
-												
-													// Set text
-													var text = Language.getDefaultTranslation('Approving the transaction on the hardware wallet was denied.');
-												}
-												
-												// Otherwise
-												else {
-												
-													// Set text
-													var text = Language.getDefaultTranslation('An internal error occurred.');
-												}
-									
-												// Show receive payment as file error
-												showReceivePaymentAsFileError(Message.createFailureResult() + Message.createLineBreak() + Message.createText(text));
+												// Set text
+												var text = Language.getDefaultTranslation('An internal error occurred.');
 											}
+								
+											// Show receive payment as file error
+											showReceivePaymentAsFileError(Message.createFailureResult() + Message.createLineBreak() + Message.createText(text));
 										}
-									});
+									}
 								});
-							
-							}, WalletSection.RECEIVE_PAYMENT_AS_FILE_DELAY_MILLISECONDS);
-							
-						// File reader error event
-						}).one("error", function() {
-						
-							// Turn off file reader load event
-							$(fileReader).off("load");
-							
-							// Allow device to sleep and catch errors
-							self.getWakeLock().allowLock().catch(function(error) {
-							
-							// Finally
-							}).finally(function() {
-							
-								// Allow automatic lock
-								self.getAutomaticLock().allow();
-								
-								// Check if automatic lock isn't locking
-								if(self.getAutomaticLock().isLocking() === false) {
-								
-									// Show receive payment as file error
-									showReceivePaymentAsFileError(Message.createText(Language.getDefaultTranslation('Opening that file failed.')));
-								}
 							});
-						});
 						
-						// Read file as text with file reader
-						fileReader.readAsText(file);
-					}
-				});
-				
-				// TODO Find better method for detecting when a file dialog is canceled
-				
-				// Window focus wallet section event
-				$(window).one("focus.walletSection", function() {
-				
-					// Set timeout
-					setTimeout(function() {
+						}, WalletSection.RECEIVE_PAYMENT_AS_FILE_DELAY_MILLISECONDS);
+						
+					// File reader error event
+					}).one("error", function() {
 					
-						// Check if a file isn't selected
-						if(fileSelected === false) {
+						// Turn off file reader load event
+						$(fileReader).off("load");
+						
+						// Allow device to sleep and catch errors
+						self.getWakeLock().allowLock().catch(function(error) {
+						
+						// Finally
+						}).finally(function() {
+						
+							// Allow automatic lock
+							self.getAutomaticLock().allow();
+							
+							// Check if automatic lock isn't locking
+							if(self.getAutomaticLock().isLocking() === false) {
+							
+								// Show receive payment as file error
+								showReceivePaymentAsFileError(Message.createText(Language.getDefaultTranslation('Opening that file failed.')));
+							}
+						});
+					});
+					
+					// Read file as text with file reader
+					fileReader.readAsText(file);
+				};
 				
-							// Turn off file input change event
-							fileInput.off("change");
+				// Open file canceled
+				var openFileCanceled = function() {
+				
+					// Allow scrolling keys
+					self.getScroll().allowKeys();
+					
+					// Unblock input
+					$("body").removeClass("blockInput");
+					
+					// Allow device to sleep and catch errors
+					self.getWakeLock().allowLock().catch(function(error) {
+					
+					// Finally
+					}).finally(function() {
+					
+						// Allow automatic lock
+						self.getAutomaticLock().allow();
+						
+						// Check if automatic lock isn't locking
+						if(self.getAutomaticLock().isLocking() === false) {
+					
+							// Set that button isn't loading
+							button.removeClass("loading");
 							
-							// Allow scrolling keys
-							self.getScroll().allowKeys();
+							// Hide loading
+							self.getApplication().hideLoading();
 							
-							// Unblock input
-							$("body").removeClass("blockInput");
+							// Enable unlocked
+							self.getUnlocked().enable();
 							
+							// Set that button isn't clicked
+							button.removeClass("clicked");
+							
+							// Restore focus and don't blur
+							self.getFocus().restore(false);
+							
+							// Allow showing messages
+							self.getMessage().allow();
+						}
+					});
+				};
+				
+				// Check if File System API is supported
+				if(typeof showOpenFilePicker === "function") {
+				
+					// Show open file picker
+					showOpenFilePicker().then(function(fileHandles) {
+					
+						// Allow scrolling keys
+						self.getScroll().allowKeys();
+						
+						// Unblock input
+						$("body").removeClass("blockInput");
+						
+						// Check if no file was selected
+						if(fileHandles["length"] <= 0) {
+						
 							// Allow device to sleep and catch errors
 							self.getWakeLock().allowLock().catch(function(error) {
 							
@@ -3148,7 +3151,7 @@ class WalletSection extends Section {
 								
 								// Check if automatic lock isn't locking
 								if(self.getAutomaticLock().isLocking() === false) {
-							
+						
 									// Set that button isn't loading
 									button.removeClass("loading");
 									
@@ -3169,11 +3172,141 @@ class WalletSection extends Section {
 								}
 							});
 						}
-					}, WalletSection.FILE_INPUT_CANCEL_CHECK_DELAY_MILLISECONDS);
-				});
+						
+						// Otherwise
+						else {
+						
+							// Get selected file
+							fileHandles[0].getFile().then(function(file) {
+							
+								// Open file
+								openFile(file);
+								
+							// Catch errors
+							}).catch(function(error) {
+							
+								// Allow device to sleep and catch errors
+								self.getWakeLock().allowLock().catch(function(error) {
+								
+								// Finally
+								}).finally(function() {
+								
+									// Allow automatic lock
+									self.getAutomaticLock().allow();
+									
+									// Check if automatic lock isn't locking
+									if(self.getAutomaticLock().isLocking() === false) {
+									
+										// Show receive payment as file error
+										showReceivePaymentAsFileError(Message.createText(Language.getDefaultTranslation('Opening that file failed.')));
+									}
+								});
+							});
+						}
+						
+					// Catch errors
+					}).catch(function(error) {
+					
+						// Open file canceled
+						openFileCanceled();
+					});
+				}
 				
-				// Trigger file input selection
-				fileInput.trigger("click");
+				// Otherwise
+				else {
+				
+					// Create file input
+					var fileInput = $("<input type=\"file\">");
+					
+					// Set file selected to false
+					var fileSelected = false;
+					
+					// File input change event
+					fileInput.one("change", function(event) {
+					
+						// Set file selected
+						fileSelected = true;
+					
+						// Turn off window focus wallet section event
+						$(window).off("focus.walletSection");
+						
+						// Allow scrolling keys
+						self.getScroll().allowKeys();
+						
+						// Unblock input
+						$("body").removeClass("blockInput");
+						
+						// Get files
+						var files = event["target"]["files"];
+						
+						// Check if no file was selected
+						if(files["length"] <= 0) {
+						
+							// Allow device to sleep and catch errors
+							self.getWakeLock().allowLock().catch(function(error) {
+							
+							// Finally
+							}).finally(function() {
+							
+								// Allow automatic lock
+								self.getAutomaticLock().allow();
+								
+								// Check if automatic lock isn't locking
+								if(self.getAutomaticLock().isLocking() === false) {
+						
+									// Set that button isn't loading
+									button.removeClass("loading");
+									
+									// Hide loading
+									self.getApplication().hideLoading();
+									
+									// Enable unlocked
+									self.getUnlocked().enable();
+									
+									// Set that button isn't clicked
+									button.removeClass("clicked");
+									
+									// Restore focus and don't blur
+									self.getFocus().restore(false);
+									
+									// Allow showing messages
+									self.getMessage().allow();
+								}
+							});
+						}
+						
+						// Otherwise
+						else {
+						
+							// Get file
+							var file = files[0];
+							
+							// Open file
+							openFile(file);
+						}
+					});
+					
+					// Window focus wallet section event
+					$(window).one("focus.walletSection", function() {
+					
+						// Set timeout
+						setTimeout(function() {
+						
+							// Check if a file isn't selected
+							if(fileSelected === false) {
+					
+								// Turn off file input change event
+								fileInput.off("change");
+								
+								// Open file canceled
+								openFileCanceled();
+							}
+						}, WalletSection.FILE_INPUT_CANCEL_CHECK_DELAY_MILLISECONDS);
+					});
+					
+					// Trigger file input selection
+					fileInput.trigger("click");
+				}
 			});
 			
 			// Delete button click event
@@ -3240,7 +3373,7 @@ class WalletSection extends Section {
 					// Disable unlocked
 					self.getUnlocked().disable();
 				
-				}, Language.getDefaultTranslation('No'), Language.getDefaultTranslation('Yes'), false, Message.VISIBLE_STATE_UNLOCKED).then(function(messageResult) {
+				}, Language.getDefaultTranslation('No'), Language.getDefaultTranslation('Yes'), false, Message.VISIBLE_STATE_UNLOCKED, true).then(function(messageResult) {
 				
 					// Check if message was displayed
 					if(messageResult !== Message.NOT_DISPLAYED_RESULT) {
@@ -3656,7 +3789,7 @@ class WalletSection extends Section {
 			this.balanceDisplay.removeClass("syncing failed instant");
 			
 			// Reset shown syncing percent and allow it to transition
-			this.balanceDisplay.find("circle.foreground").removeClass("noTransition").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toFixed());
+			this.balanceDisplay.find("circle.foreground").removeClass("noTransition").css("stroke-dashoffset", WalletSection.SYNCING_MAXIMUM_STROKE_DASH_OFFSET.toString());
 			
 			// Remove percent display from balance display
 			this.balanceDisplay.find("div.syncStatus").find("span").remove();
@@ -3808,6 +3941,16 @@ class WalletSection extends Section {
 							// Return
 							return;
 						}
+						
+						// Prevent address display loading from transitioning
+						self.addressDisplay.find("div.loading").addClass("noTransition");
+						
+						// Section shown event
+						$(self).one(Section.SHOWN_EVENT, function() {
+						
+							// Allow address display loading to transition
+							self.addressDisplay.find("div.loading").removeClass("noTransition");
+						});
 						
 						// Check wallet's syncing status
 						switch(wallet.getSyncingStatus()) {
@@ -4550,7 +4693,7 @@ class WalletSection extends Section {
 		static get SYNCING_MAXIMUM_STROKE_DASH_OFFSET() {
 		
 			// Return syncing maximum stroke dash offset
-			return 1;
+			return 0.75;
 		}
 		
 		// Transactions group size
@@ -4578,7 +4721,7 @@ class WalletSection extends Section {
 		static get FILE_INPUT_CANCEL_CHECK_DELAY_MILLISECONDS() {
 		
 			// Return file input cancel check delay milliseconds
-			return 250;
+			return 500;
 		}
 }
 

@@ -9,10 +9,6 @@ main > div.unlocked > div > div > div.sections > div > div.transaction > div > d
 	padding-bottom: 0.6em;
 }
 
-main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p.hide {
-	display: none;
-}
-
 main > div.unlocked > div > div > div.sections > div > div.transaction > div > div > p + p.currency {
 	margin-top: -1px;
 }

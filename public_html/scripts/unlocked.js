@@ -10,7 +10,7 @@ class Unlocked {
 	// Public
 	
 		// Constructor
-		constructor(application, bodyDisplay, unlockedDisplay, settings, message, focus, wallets, node, listener, automaticLock, transactions, sections, scroll, wakeLock, clipboard) {
+		constructor(application, bodyDisplay, unlockedDisplay, settings, message, focus, wallets, node, listener, automaticLock, transactions, sections, scroll, wakeLock, clipboard, prices) {
 		
 			// Set application
 			this.application = application;
@@ -67,7 +67,7 @@ class Unlocked {
 			this.clipboard = clipboard;
 			
 			// Create prices
-			this.prices = new Prices(settings);
+			this.prices = prices;
 			
 			// Set previous body display width
 			this.previousBodyDisplayWidth = this.bodyDisplay.width();
@@ -110,6 +110,16 @@ class Unlocked {
 			
 			// Set self
 			var self = this;
+			
+			// Set language get displayed currency
+			Language.setGetDisplayedCurrency(function() {
+			
+				// Return displayed currency
+				return self.getDisplayedCurrency();
+			});
+			
+			// Set language get price
+			Language.setGetPrice(this.prices);
 			
 			// Once database is initialized
 			Database.onceInitialized(function() {
@@ -855,6 +865,18 @@ class Unlocked {
 			// Wallets display wallet button address copy click and touch end event
 			}).on("click touchend", "main > div.unlocked > div > div > div.wallets > div > div.list > button > span.address > span.copy", function(event) {
 			
+				// Check if event is touch end
+				if("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") {
+				
+					// Check if address copy isn't under the touch area
+					var changedTouch = event["originalEvent"]["changedTouches"][0];
+					if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"])) {
+					
+						// Return
+						return;
+					}
+				}
+				
 				// Stop propagation
 				event.stopPropagation();
 				

@@ -39,6 +39,18 @@ class AboutSection extends Section {
 			// Donate address copy click and touch end event
 			this.getDisplay().find("div.donate span.copy").on("click touchend", function(event) {
 			
+				// Check if event is touch end
+				if("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") {
+				
+					// Check if address copy isn't under the touch area
+					var changedTouch = event["originalEvent"]["changedTouches"][0];
+					if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"])) {
+					
+						// Return
+						return;
+					}
+				}
+				
 				// Stop propagation
 				event.stopPropagation();
 				

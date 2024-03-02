@@ -168,6 +168,20 @@ class SendPaymentSection extends Section {
 					
 						// Set that display doesn't show an error
 						display.removeClass("error");
+						
+						// Check if amount was changed
+						if(input.hasClass("amount") === true) {
+						
+							// Clear value input and have it not show an error
+							self.getDisplay().find("input.value").val("").closest("div").parent().closest("div").removeClass("error");
+						}
+						
+						// Otherwise check if value was changed
+						else if(input.hasClass("value") === true) {
+						
+							// Clear amount input and have it not show an error
+							self.getDisplay().find("input.amount").val("").closest("div").parent().closest("div").removeClass("error");
+						}
 					}
 					
 					// Otherwise
@@ -706,6 +720,181 @@ class SendPaymentSection extends Section {
 												
 														// Check if value exists
 														if(value !== Camera.NO_VALUE && value["length"] !== 0) {
+														
+															// Check if value is JSON
+															if(value[0] === "{") {
+															
+																// Initialize error occurred
+																var errorOccurred = false;
+																
+																// Try
+																try {
+																
+																	// Parse value as json
+																	var parsedValue = JSON.parse(value);
+																}
+																
+																// Catch errors
+																catch(error) {
+																
+																	// Set error occurred
+																	errorOccurred = true;
+																}
+																
+																// Check if an error didn't occur
+																if(errorOccurred === false) {
+																
+																	// Check if parsed value's recipient address isn't valid
+																	if("Recipient Address" in parsedValue === false || typeof parsedValue["Recipient Address"] !== "string" || parsedValue["Recipient Address"]["length"] === 0) {
+																	
+																		// Allow device to sleep and catch errors
+																		self.getWakeLock().allowLock().catch(function(error) {
+																		
+																		// Finally
+																		}).finally(function() {
+																		
+																			// Allow automatic lock
+																			self.getAutomaticLock().allow();
+																		
+																			// Check if automatic lock isn't locking
+																			if(self.getAutomaticLock().isLocking() === false) {
+																	
+																				// Check if not canceled
+																				if(cancelOccurred === false) {
+																		
+																					// Show scan error
+																					showScanError(Message.createText(Language.getDefaultTranslation('That QR code is invalid.')));
+																				}
+																			}
+																		});
+																		
+																		// Return
+																		return;
+																	}
+																	
+																	// Otherwise check if parsed value's amount isn't valid
+																	else if("Amount" in parsedValue === true && (Common.isNumberString(parsedValue["Amount"]) === false || Common.getNumberStringPrecision(parsedValue["Amount"]) > Extension.MAXIMUM_AMOUNT_PRECISION || parseFloat(Common.removeTrailingZeros(parsedValue["Amount"])) < Extension.MINIMUM_AMOUNT)) {
+																	
+																		// Allow device to sleep and catch errors
+																		self.getWakeLock().allowLock().catch(function(error) {
+																		
+																		// Finally
+																		}).finally(function() {
+																		
+																			// Allow automatic lock
+																			self.getAutomaticLock().allow();
+																		
+																			// Check if automatic lock isn't locking
+																			if(self.getAutomaticLock().isLocking() === false) {
+																	
+																				// Check if not canceled
+																				if(cancelOccurred === false) {
+																		
+																					// Show scan error
+																					showScanError(Message.createText(Language.getDefaultTranslation('That QR code is invalid.')));
+																				}
+																			}
+																		});
+																		
+																		// Return
+																		return;
+																	}
+																	
+																	// Otherwise check if parsed value's message isn't valid
+																	else if("Message" in parsedValue === true && typeof parsedValue["Message"] !== "string") {
+																	
+																		// Allow device to sleep and catch errors
+																		self.getWakeLock().allowLock().catch(function(error) {
+																		
+																		// Finally
+																		}).finally(function() {
+																		
+																			// Allow automatic lock
+																			self.getAutomaticLock().allow();
+																		
+																			// Check if automatic lock isn't locking
+																			if(self.getAutomaticLock().isLocking() === false) {
+																	
+																				// Check if not canceled
+																				if(cancelOccurred === false) {
+																		
+																					// Show scan error
+																					showScanError(Message.createText(Language.getDefaultTranslation('That QR code is invalid.')));
+																				}
+																			}
+																		});
+																		
+																		// Return
+																		return;
+																	}
+																	
+																	// Otherwise
+																	else {
+																	
+																		// Set value to the recipient address
+																		value = parsedValue["Recipient Address"];
+																		
+																		// Check if parsed value contains an amount
+																		if("Amount" in parsedValue === true) {
+																		
+																			// Set amount input's value to the amount
+																			self.getDisplay().find("input.amount").val((new BigNumber(parsedValue["Amount"])).toFixed()).trigger("input", [
+																			
+																				// Is focus event
+																				false,
+																				
+																				// Force input
+																				true
+																			]);
+																		}
+																		
+																		// Otherwise
+																		else {
+																		
+																			// Set amount input's value to the nothing
+																			self.getDisplay().find("input.amount").val("").trigger("input", [
+																			
+																				// Is focus event
+																				false,
+																				
+																				// Force input
+																				true
+																			]);
+																		}
+																		
+																		// Check if parsed value contains a message
+																		if("Message" in parsedValue === true) {
+																		
+																			// Set message input's value to the message
+																			self.getDisplay().find("input.message").val(parsedValue["Message"]).trigger("input", [
+																			
+																				// Is focus event
+																				false,
+																				
+																				// Force input
+																				true
+																			]);
+																		}
+																		
+																		// Otherwise
+																		else {
+																		
+																			// Set message input's value to nothing
+																			self.getDisplay().find("input.message").val("").trigger("input", [
+																			
+																				// Is focus event
+																				false,
+																				
+																				// Force input
+																				true
+																			]);
+																		}
+																	
+																		// Set send as file button to off
+																		self.getDisplay().find("button.sendAsFile").removeClass("enabled");
+																	}
+																}
+															}
 														
 															// Check wallet type
 															switch(Consensus.getWalletType()) {
@@ -1584,7 +1773,10 @@ class SendPaymentSection extends Section {
 										amount.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 										
 										// Currency
-										Consensus.CURRENCY_NAME
+										Consensus.CURRENCY_NAME,
+						
+										// Display value
+										true
 									],
 									
 									// Wallet key path or name
@@ -1596,7 +1788,10 @@ class SendPaymentSection extends Section {
 										fee.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 										
 										// Currency
-										Consensus.CURRENCY_NAME
+										Consensus.CURRENCY_NAME,
+						
+										// Display value
+										true
 									]
 								]) + ((recipientAddress["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('(?<=.) '))) + Message.createText(Language.getDefaultTranslation('Enter your password to continue sending the payment.')) + Message.createLineBreak() + Message.createLineBreak() + Message.createInput(Language.getDefaultTranslation('Password'), [], true) + Message.createLineBreak(), false, function() {
 								
@@ -1663,7 +1858,10 @@ class SendPaymentSection extends Section {
 														amount.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 														
 														// Currency
-														Consensus.CURRENCY_NAME
+														Consensus.CURRENCY_NAME,
+						
+														// Display value
+														true
 													],
 													
 													// Wallet key path or name
@@ -1675,7 +1873,10 @@ class SendPaymentSection extends Section {
 														fee.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 														
 														// Currency
-														Consensus.CURRENCY_NAME
+														Consensus.CURRENCY_NAME,
+						
+														// Display value
+														true
 													]
 												]) + ((recipientAddress["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() : "") + ((sendAsFile === false) ? Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>" : "");
 												
@@ -1734,6 +1935,9 @@ class SendPaymentSection extends Section {
 																				// Initialize URL
 																				var url = SendPaymentSection.NO_URL;
 																				
+																				// Initialize sender address
+																				var senderAddress = SendPaymentSection.NO_SENDER_ADDRESS;
+																				
 																				// Message replace send section event
 																				$(self.getMessage()).on(Message.REPLACE_EVENT + ".sendPaymentSection", function(event, messageType, messageData) {
 																				
@@ -1777,7 +1981,10 @@ class SendPaymentSection extends Section {
 																											amount.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																											
 																											// Currency
-																											Consensus.CURRENCY_NAME
+																											Consensus.CURRENCY_NAME,
+						
+																											// Display value
+																											true
 																										],
 																										
 																										// Wallet key path or name
@@ -1789,9 +1996,12 @@ class SendPaymentSection extends Section {
 																											fee.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																											
 																											// Currency
-																											Consensus.CURRENCY_NAME
+																											Consensus.CURRENCY_NAME,
+						
+																											// Display value
+																											true
 																										]
-																									]) + ((recipientAddress["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() : "") + ((sendAsFile === false) ? Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>" : "");
+																									]) + ((recipientAddress["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() : "") + ((senderAddress !== SendPaymentSection.NO_SENDER_ADDRESS) ? ((recipientAddress["length"] !== 0) ? Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('(?<=.) '))) + ((senderAddress !== Slate.NO_SENDER_ADDRESS) ? Message.createText(Language.getDefaultTranslation('The sender payment proof address you\'re using for the transaction is the following payment proof address.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(senderAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('The transaction won\'t have a payment proof.'))) : "") + ((sendAsFile === false) ? Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>" : "");
 																									
 																									// Set second button
 																									secondButton = Message.NO_BUTTON;
@@ -1801,7 +2011,7 @@ class SendPaymentSection extends Section {
 																								
 																									// Return
 																									return;
-																							
+																									
 																								// API finalize transaction message
 																								case Api.FINALIZE_TRANSACTION_MESSAGE:
 																								
@@ -1816,7 +2026,7 @@ class SendPaymentSection extends Section {
 																										if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
 																										
 																											// Set text
-																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Finalize the transaction for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Finalize the transaction for %1$y to continue sending the payment.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You\'re sending %1$c for a fee of %2$c, and this transaction doesn\'t have a payment proof.'), [
+																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Finalize the transaction for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Finalize the transaction for %1$y to continue sending the payment.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You\'re sending %1$c for a fee of %2$c, and the transaction doesn\'t have a payment proof.'), [
 																											
 																												[
 																
@@ -1824,7 +2034,10 @@ class SendPaymentSection extends Section {
 																													amount.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																													
 																													// Currency
-																													Consensus.CURRENCY_NAME
+																													Consensus.CURRENCY_NAME,
+						
+																													// Display value
+																													true
 																												],
 																												
 																												[
@@ -1833,10 +2046,13 @@ class SendPaymentSection extends Section {
 																													fee.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																													
 																													// Currency
-																													Consensus.CURRENCY_NAME
+																													Consensus.CURRENCY_NAME,
+						
+																													// Display value
+																													true
 																												]
 																												
-																											]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can\'t guarantee that this payment is going to the intended recipient since this transaction doesn\'t have a payment proof.')) + "</b>";
+																											]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can\'t guarantee that this payment is going to the intended recipient since the transaction doesn\'t have a payment proof.')) + "</b>";
 																											
 																											// Set second button
 																											secondButton = Language.getDefaultTranslation('Finalize');
@@ -1857,7 +2073,10 @@ class SendPaymentSection extends Section {
 																													amount.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																													
 																													// Currency
-																													Consensus.CURRENCY_NAME
+																													Consensus.CURRENCY_NAME,
+						
+																													// Display value
+																													true
 																												],
 																												
 																												[
@@ -1866,13 +2085,16 @@ class SendPaymentSection extends Section {
 																													fee.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																													
 																													// Currency
-																													Consensus.CURRENCY_NAME
+																													Consensus.CURRENCY_NAME,
+						
+																													// Display value
+																													true
 																												],
 																												
 																												// Kernel features
 																												kernelFeatures
 																												
-																											]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can\'t guarantee that this payment is going to the intended recipient since this transaction doesn\'t have a payment proof.')) + "</b>";
+																											]) + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can\'t guarantee that this payment is going to the intended recipient since the transaction doesn\'t have a payment proof.')) + "</b>";
 																											
 																											// Set second button
 																											secondButton = Message.NO_BUTTON;
@@ -1886,7 +2108,7 @@ class SendPaymentSection extends Section {
 																										if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
 																										
 																											// Set text
-																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Finalize the transaction for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Finalize the transaction for %1$y to continue sending the payment.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You\'re sending %1$c for a fee of %2$c, and the recipient\'s payment proof address is the following payment proof address.'), [
+																											text = ((wallet.getName() === Wallet.NO_NAME) ? Message.createText(Language.getDefaultTranslation('Finalize the transaction for Wallet %1$s to continue sending the payment.'), [wallet.getKeyPath().toFixed()]) : Message.createText(Language.getDefaultTranslation('Finalize the transaction for %1$y to continue sending the payment.'), [wallet.getName()])) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You\'re sending %1$c for a fee of %2$c, and the transaction\'s recipient payment proof address is the following payment proof address.'), [
 																											
 																												[
 																
@@ -1894,7 +2116,10 @@ class SendPaymentSection extends Section {
 																													amount.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																													
 																													// Currency
-																													Consensus.CURRENCY_NAME
+																													Consensus.CURRENCY_NAME,
+						
+																													// Display value
+																													true
 																												],
 																												
 																												[
@@ -1903,7 +2128,10 @@ class SendPaymentSection extends Section {
 																													fee.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																													
 																													// Currency
-																													Consensus.CURRENCY_NAME
+																													Consensus.CURRENCY_NAME,
+						
+																													// Display value
+																													true
 																												]
 																												
 																											]) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(receiverAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() + Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('You can guarantee that this payment is going to the intended recipient by having the recipient confirm that this payment proof address is their payment proof address.')) + "</b>";
@@ -1927,7 +2155,10 @@ class SendPaymentSection extends Section {
 																													amount.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																													
 																													// Currency
-																													Consensus.CURRENCY_NAME
+																													Consensus.CURRENCY_NAME,
+						
+																													// Display value
+																													true
 																												],
 																												
 																												[
@@ -1936,7 +2167,10 @@ class SendPaymentSection extends Section {
 																													fee.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																													
 																													// Currency
-																													Consensus.CURRENCY_NAME
+																													Consensus.CURRENCY_NAME,
+						
+																													// Display value
+																													true
 																												],
 																												
 																												// Kernel features
@@ -1996,13 +2230,33 @@ class SendPaymentSection extends Section {
 																											// Is blob
 																											true
 																										]
-																									]);
+																									]) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + ((senderAddress !== SendPaymentSection.NO_SENDER_ADDRESS && senderAddress !== Slate.NO_SENDER_ADDRESS) ? Message.createText(Language.getDefaultTranslation('The sender payment proof address you\'re using for the transaction is the following payment proof address.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(senderAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('The transaction doesn\'t have a payment proof.')));
 																									
 																									// Set second button
 																									secondButton = Language.getDefaultTranslation('Open Response File');
 																									
 																									// Break
 																									break;
+																								
+																								// API sender address message
+																								case Api.SENDER_ADDRESS_MESSAGE:
+																								
+																									// Check if sender address changed
+																									if(messageData !== senderAddress) {
+																									
+																										// Set sender address
+																										senderAddress = messageData;
+																									}
+																									
+																									// Otherwise
+																									else {
+																									
+																										// Cancel message replace
+																										self.getMessage().cancelReplace();
+																										
+																										// Return
+																										return;
+																									}
 																								
 																								// Default
 																								default:
@@ -2016,7 +2270,10 @@ class SendPaymentSection extends Section {
 																											amount.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																											
 																											// Currency
-																											Consensus.CURRENCY_NAME
+																											Consensus.CURRENCY_NAME,
+						
+																											// Display value
+																											true
 																										],
 																										
 																										// Wallet key path or name
@@ -2028,9 +2285,12 @@ class SendPaymentSection extends Section {
 																											fee.dividedBy(Consensus.VALUE_NUMBER_BASE).toFixed(),
 																											
 																											// Currency
-																											Consensus.CURRENCY_NAME
+																											Consensus.CURRENCY_NAME,
+						
+																											// Display value
+																											true
 																										]
-																									]) + ((recipientAddress["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() : "") + ((sendAsFile === false) ? Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>" : "");
+																									]) + ((recipientAddress["length"] !== 0) ? Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(recipientAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() : "") + ((senderAddress !== SendPaymentSection.NO_SENDER_ADDRESS) ? ((recipientAddress["length"] !== 0) ? Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('(?<=.) '))) + ((senderAddress !== Slate.NO_SENDER_ADDRESS) ? Message.createText(Language.getDefaultTranslation('The sender payment proof address you\'re using for the transaction is the following payment proof address.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu rawData\">" + Common.htmlEncode(senderAddress) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak() : Message.createText(Language.getDefaultTranslation('The transaction won\'t have a payment proof.'))) : "") + ((sendAsFile === false) ? Message.createLineBreak() + "<b>" + Message.createText(Language.getDefaultTranslation('This may take several minutes to complete. The recipient must be online and listening at that address to receive this payment.')) + "</b>" : "");
 																									
 																									// Set second button
 																									secondButton = Message.NO_BUTTON;
@@ -3090,6 +3350,13 @@ class SendPaymentSection extends Section {
 		
 			// Return no URL
 			return null;
+		}
+		
+		// No sender addresss
+		static get NO_SENDER_ADDRESS() {
+		
+			// Return no sender address
+			return undefined;
 		}
 }
 

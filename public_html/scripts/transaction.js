@@ -10,7 +10,7 @@ class Transaction {
 	// Public
 	
 		// Constructor
-		constructor(walletType, networkType, commit, walletKeyPath, received, recordedTimestamp, createdTimestamp, height, lockHeight, isCoinbase, status, amount, amountReleased, kernelExcess, identifier, switchType, display, kernelOffset, id, message, timeToLiveCutOffHeight, expired, confirmedTimestamp, fee, senderAddress, receiverAddress, receiverSignature, destination, spendableHeight, requiredNumberOfConfirmations, spentOutputs, changeOutputs, broadcast, rebroadcastMessage, fileResponse, checked = false, canceled = false, keyPath = Transaction.NO_KEY_PATH) {
+		constructor(walletType, networkType, commit, walletKeyPath, received, recordedTimestamp, createdTimestamp, height, lockHeight, isCoinbase, status, amount, amountReleased, kernelExcess, identifier, switchType, display, kernelOffset, id, message, timeToLiveCutOffHeight, expired, confirmedTimestamp, fee, senderAddress, receiverAddress, receiverSignature, destination, spendableHeight, requiredNumberOfConfirmations, spentOutputs, changeOutputs, broadcast, rebroadcastMessage, fileResponse, pricesWhenRecorded, checked = false, canceled = false, keyPath = Transaction.NO_KEY_PATH) {
 		
 			// Set wallet type
 			this.setWalletType(walletType);
@@ -116,6 +116,9 @@ class Transaction {
 			
 			// Set file response
 			this.setFileResponse(fileResponse);
+			
+			// Set prices when recorded
+			this.setPricesWhenRecorded(pricesWhenRecorded);
 			
 			// Set checked
 			this.setChecked(checked);
@@ -617,6 +620,20 @@ class Transaction {
 			this.fileResponse = fileResponse;
 		}
 		
+		// Get prices when recorded
+		getPricesWhenRecorded() {
+		
+			// Return prices when recorded
+			return this.pricesWhenRecorded;
+		}
+		
+		// Set prices when recorded
+		setPricesWhenRecorded(pricesWhenRecorded) {
+		
+			// Set prices when recorded
+			this.pricesWhenRecorded = pricesWhenRecorded;
+		}
+		
 		// Get checked
 		getChecked() {
 		
@@ -922,6 +939,20 @@ class Transaction {
 		static get UNUSED_FILE_RESPONSE() {
 		
 			// Return unused file response
+			return undefined;
+		}
+		
+		// Unknown prices when recorded
+		static get UNKNOWN_PRICES_WHEN_RECORDED() {
+		
+			// Return unknown prices when recorded
+			return null;
+		}
+		
+		// Unused prices when recorded
+		static get UNUSED_PRICES_WHEN_RECORDED() {
+		
+			// Return unused prices when recorded
 			return undefined;
 		}
 		

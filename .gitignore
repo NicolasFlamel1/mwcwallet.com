@@ -1,4 +1,5 @@
 private
+sessions
 callback.php
 items.php
 public_html/browser_extension_api_example.html
