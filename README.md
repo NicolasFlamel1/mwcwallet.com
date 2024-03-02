@@ -14,7 +14,7 @@ You can also use your own node, [listener](https://github.com/NicolasFlamel1/Web
 Compatibility for sending MWC from the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile to exchanges:
 
 || [TradeOgre](https://tradeogre.com/exchange/BTC-MWC) |
-|-|-|-|
+|-|-|
 | [MWC web wallet website](https://mwcwallet.com) | ✅ Requires version 2.2.0 or newer of the web wallet. |
 | [MWC web wallet Onion Service](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion) | ✅ Requires version 2.2.0 or newer of the web wallet. |
 | MWC web wallet progressive web app version | ✅ Requires version 2.2.0 or newer of the web wallet. |
@@ -28,12 +28,12 @@ Compatibility for sending MWC from the MimbleWimble Coin web wallet and Ledger L
 
 \* CORS issues can by bypassed by disabling CORS checks in your web browser, however this shouldn't be done without understanding the security implications of doing so.
 
-# Receiving MWC From Exchanges Compatibility
+### Receiving MWC From Exchanges Compatibility
 
 Compatibility for receiving MWC from exchanges to the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile:
 
 || [TradeOgre](https://tradeogre.com/exchange/BTC-MWC) |
-|-|-|-|
+|-|-|
 | [MWC web wallet website](https://mwcwallet.com) | ✅ Requires version 2.2.0 or newer of the web wallet. |
 | [MWC web wallet Onion Service](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion) | ✅ Requires version 2.2.0 or newer of the web wallet. |
 | MWC web wallet progressive web app version | ✅ Requires version 2.2.0 or newer of the web wallet. |
