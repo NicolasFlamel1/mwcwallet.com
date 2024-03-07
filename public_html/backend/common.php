@@ -3,22 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.5.0";
+	const VERSION_NUMBER = "2.5.1";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "02 Mar 2024 12:49:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed bold fonts displaying incorrectly on Safari.",
-		"Fixed caching main page when using URL parameters.",
-		"Fixed canceling connecting to a locked Trezor Model T hardware wallet.",
-		"Added support for Trezor Safe 3 hardware wallets.",
-		"Added support for scanning invoice QR codes.",
-		"Displays the transaction's sender and recipient payment proof addresses when sending or receiving a payment.",
-		"Added setting to require manual approval when receiving payments.",
-		"Displays the amount and fee values in the current currency when sending or receiving a payment.",
-		"Transactions now display their value at the price when they was recorded."
+		"Fixed title and metadata not changing when language is changed."
 	];
 	
 	// Maintenance start time

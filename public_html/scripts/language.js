@@ -1263,10 +1263,10 @@ class Language {
 	// Private
 	
 		// Change language
-		static changeLanguage(newLanguage, languageIsDifferent = true, root = $("body")) {
+		static changeLanguage(newLanguage, languageIsDifferent = true, root = $("html")) {
 		
 			// Check if translating everything
-			if(root.is("body") === true) {
+			if(root.is("html") === true) {
 			
 				// Trigger language before change event
 				$(document).trigger(Language.BEFORE_CHANGE_EVENT);
@@ -1436,7 +1436,7 @@ class Language {
 		static setCookie() {
 		
 			// Set language cookie as current language
-			document["cookie"] = Language.COOKIE_NAME + "=" + Language.currentLanguage + "; max-age=" + Language.COOKIE_MAX_AGE.toFixed() + "; secure; samesite=strict; priority=high; path=/; partitioned";
+			document["cookie"] = Language.COOKIE_NAME + "=" + Language.currentLanguage + "; max-age=" + Language.COOKIE_MAX_AGE.toFixed() + "; secure; samesite=lax; priority=high; path=/; partitioned";
 		}
 		
 		// Set local storage
