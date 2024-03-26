@@ -11,7 +11,7 @@ You can also use your own node, [listener](https://github.com/NicolasFlamel1/Web
 
 ### Sending MWC To Exchanges Compatibility
 
-Compatibility for sending MWC from the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile to exchanges:
+Compatibility for sending MWC from the MimbleWimble Coin web wallet to exchanges:
 
 || [TradeOgre](https://tradeogre.com/exchange/BTC-MWC) |
 |-|-|
@@ -20,9 +20,8 @@ Compatibility for sending MWC from the MimbleWimble Coin web wallet and Ledger L
 | MWC web wallet progressive web app version | ✅ Requires version 2.2.0 or newer of the web wallet. |
 | [MWC web wallet browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) | ✅ Requires version 2.2.0 or newer of the web wallet. |
 | [MWC web wallet standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone) | ✅ Requires version 2.2.0 or newer of the web wallet. |
-| [Ledger Live Desktop/Mobile](https://github.com/NicolasFlamel1/ledger-live) | ✅ |
 
-\* This table assumes that the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile are using their default settings.
+\* This table assumes that the MimbleWimble Coin web wallet is using its default settings.
 
 \* [WhiteBIT](https://whitebit.com/trade/MWC-BTC) had temporarily suspended depositing and withdrawing MWC when this table was created which is why they aren't included.
 
@@ -30,7 +29,7 @@ Compatibility for sending MWC from the MimbleWimble Coin web wallet and Ledger L
 
 ### Receiving MWC From Exchanges Compatibility
 
-Compatibility for receiving MWC from exchanges to the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile:
+Compatibility for receiving MWC from exchanges to the MimbleWimble Coin web wallet:
 
 || [TradeOgre](https://tradeogre.com/exchange/BTC-MWC) |
 |-|-|
@@ -39,9 +38,8 @@ Compatibility for receiving MWC from exchanges to the MimbleWimble Coin web wall
 | MWC web wallet progressive web app version | ✅ Requires version 2.2.0 or newer of the web wallet. |
 | [MWC web wallet browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) | ✅ Requires version 2.2.0 or newer of the web wallet. |
 | [MWC web wallet standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone) | ✅ Requires version 2.2.0 or newer of the web wallet. |
-| [Ledger Live Desktop/Mobile](https://github.com/NicolasFlamel1/ledger-live) | ✅ |
 
-\* This table assumes that the MimbleWimble Coin web wallet and Ledger Live Desktop/Mobile are using their default settings.
+\* This table assumes that the MimbleWimble Coin web wallet is using its default settings.
 
 \* [WhiteBIT](https://whitebit.com/trade/MWC-BTC) had temporarily suspended depositing and withdrawing MWC when this table was created which is why they aren't included.
 
