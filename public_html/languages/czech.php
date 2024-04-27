@@ -314,6 +314,7 @@
 			'Language changed to %1$y.' => 'Jazyk změněn na %1$y.',
 			'Language\'s currency' => 'Měna jazyka',
 			'Last' => 'Poslední',
+			'Ledger Flex' => 'Ledger Flex',
 			'Ledger Nano S' => 'Ledger Nano S',
 			'Ledger Nano S Plus' => 'Ledger Nano S Plus',
 			'Ledger Nano X' => 'Ledger Nano X',

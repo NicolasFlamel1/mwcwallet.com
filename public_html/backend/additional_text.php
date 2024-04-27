@@ -7,6 +7,7 @@
 	getDefaultTranslation('Ledger Nano X');
 	getDefaultTranslation('Ledger Nano S Plus');
 	getDefaultTranslation('Ledger Stax');
+	getDefaultTranslation('Ledger Flex');
 	getDefaultTranslation('Trezor');
 	getDefaultTranslation('Trezor Model One');
 	getDefaultTranslation('Trezor Model T');

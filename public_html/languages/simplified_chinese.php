@@ -311,6 +311,7 @@
 			'Language changed to %1$y.' => '语言已更改为%1$y。',
 			'Language\'s currency' => '语言的货币',
 			'Last' => '最后',
+			'Ledger Flex' => 'Ledger Flex',
 			'Ledger Nano S' => 'Ledger Nano S',
 			'Ledger Nano S Plus' => 'Ledger Nano S Plus',
 			'Ledger Nano X' => 'Ledger Nano X',

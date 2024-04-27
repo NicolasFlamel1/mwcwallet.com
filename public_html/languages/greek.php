@@ -314,6 +314,7 @@
 			'Language changed to %1$y.' => 'Η γλώσσα άλλαξε σε %1$y.',
 			'Language\'s currency' => 'Το νόμισμα της γλώσσας',
 			'Last' => 'Τελευταίο',
+			'Ledger Flex' => 'Ledger Flex',
 			'Ledger Nano S' => 'Ledger Nano S',
 			'Ledger Nano S Plus' => 'Ledger Nano S Plus',
 			'Ledger Nano X' => 'Ledger Nano X',

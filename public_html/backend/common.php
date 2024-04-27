@@ -10,7 +10,8 @@
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed title and metadata not changing when language is changed."
+		"Fixed title and metadata not changing when language is changed.",
+		"Added support for Ledger Flex hardware wallets."
 	];
 	
 	// Maintenance start time

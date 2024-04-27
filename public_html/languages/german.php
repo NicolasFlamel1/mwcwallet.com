@@ -314,6 +314,7 @@
 			'Language changed to %1$y.' => 'Sprache geändert zu %1$y.',
 			'Language\'s currency' => 'Währung des Landes',
 			'Last' => 'Zuletzt',
+			'Ledger Flex' => 'Ledger Flex',
 			'Ledger Nano S' => 'Ledger Nano S',
 			'Ledger Nano S Plus' => 'Ledger Nano S Plus',
 			'Ledger Nano X' => 'Ledger Nano X',

@@ -1158,6 +1158,22 @@ class HardwareWalletBluetoothTransport {
 					
 					// Write characteristic UUID
 					"Write Characteristic UUID": "13d63400-2c97-6004-0002-4c6564676572"
+				},
+				
+				// Ledger Flex
+				{
+				
+					// Product name
+					"Product Name": "Ledger Flex",
+				
+					// Service UUID
+					"Service UUID": "13d63400-2c97-3004-0000-4c6564676572",
+					
+					// Notify characteristic UUID
+					"Notify Characteristic UUID": "13d63400-2c97-3004-0001-4c6564676572",
+					
+					// Write characteristic UUID
+					"Write Characteristic UUID": "13d63400-2c97-3004-0002-4c6564676572"
 				}
 			];
 		}
