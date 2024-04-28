@@ -721,6 +721,9 @@ class SendPaymentSection extends Section {
 														// Check if value exists
 														if(value !== Camera.NO_VALUE && value["length"] !== 0) {
 														
+															// Initialize value processed
+															var valueProcessed = false;
+															
 															// Check if value is JSON
 															if(value[0] === "{") {
 															
@@ -862,8 +865,8 @@ class SendPaymentSection extends Section {
 																			]);
 																		}
 																		
-																		// Check if parsed value contains a message
-																		if("Message" in parsedValue === true) {
+																		// Check if parsed value contains a message and message input isn't hidden
+																		if("Message" in parsedValue === true && self.getDisplay().find("input.message").closest("div").parent().closest("div").hasClass("hide") === false) {
 																		
 																			// Set message input's value to the message
 																			self.getDisplay().find("input.message").val(parsedValue["Message"]).trigger("input", [
@@ -892,7 +895,148 @@ class SendPaymentSection extends Section {
 																	
 																		// Set send as file button to off
 																		self.getDisplay().find("button.sendAsFile").removeClass("enabled");
+																		
+																		// Set value processed to true
+																		valueProcessed = true;
 																	}
+																}
+															}
+															
+															// Check if value wasn't processed
+															if(valueProcessed === false) {
+															
+																// Check wallet type
+																switch(Consensus.getWalletType()) {
+																
+																	// EPIC wallet
+																	case Consensus.EPIC_WALLET_TYPE:
+																	
+																		// Get value's components
+																		var valueComponents = value.split("*");
+																		
+																		// Check if value has the expected number of components
+																		if(valueComponents["length"] === 3) {
+																		
+																			// Check if value's recipient address component isn't valid
+																			if(valueComponents[0]["length"] === 0) {
+																			
+																				// Allow device to sleep and catch errors
+																				self.getWakeLock().allowLock().catch(function(error) {
+																				
+																				// Finally
+																				}).finally(function() {
+																				
+																					// Allow automatic lock
+																					self.getAutomaticLock().allow();
+																				
+																					// Check if automatic lock isn't locking
+																					if(self.getAutomaticLock().isLocking() === false) {
+																			
+																						// Check if not canceled
+																						if(cancelOccurred === false) {
+																				
+																							// Show scan error
+																							showScanError(Message.createText(Language.getDefaultTranslation('That QR code is invalid.')));
+																						}
+																					}
+																				});
+																				
+																				// Return
+																				return;
+																			}
+																			
+																			// Otherwise check if value's amount component isn't valid
+																			else if(Common.isNumberString(valueComponents[2]) === false || Common.getNumberStringPrecision(valueComponents[2]) > Extension.MAXIMUM_AMOUNT_PRECISION || parseFloat(Common.removeTrailingZeros(valueComponents[2])) < Extension.MINIMUM_AMOUNT) {
+																			
+																				// Allow device to sleep and catch errors
+																				self.getWakeLock().allowLock().catch(function(error) {
+																				
+																				// Finally
+																				}).finally(function() {
+																				
+																					// Allow automatic lock
+																					self.getAutomaticLock().allow();
+																				
+																					// Check if automatic lock isn't locking
+																					if(self.getAutomaticLock().isLocking() === false) {
+																			
+																						// Check if not canceled
+																						if(cancelOccurred === false) {
+																				
+																							// Show scan error
+																							showScanError(Message.createText(Language.getDefaultTranslation('That QR code is invalid.')));
+																						}
+																					}
+																				});
+																				
+																				// Return
+																				return;
+																			}
+																			
+																			// Otherwise check if value's message component isn't valid
+																			else if(/^ID: .* [^ ]+: .+$/u.test(valueComponents[1]) !== true) {
+																			
+																				// Allow device to sleep and catch errors
+																				self.getWakeLock().allowLock().catch(function(error) {
+																				
+																				// Finally
+																				}).finally(function() {
+																				
+																					// Allow automatic lock
+																					self.getAutomaticLock().allow();
+																				
+																					// Check if automatic lock isn't locking
+																					if(self.getAutomaticLock().isLocking() === false) {
+																			
+																						// Check if not canceled
+																						if(cancelOccurred === false) {
+																				
+																							// Show scan error
+																							showScanError(Message.createText(Language.getDefaultTranslation('That QR code is invalid.')));
+																						}
+																					}
+																				});
+																				
+																				// Return
+																				return;
+																			}
+																			
+																			// Otherwise
+																			else {
+																			
+																				// Set value to the recipient address
+																				value = valueComponents[0];
+																				
+																				// Set amount input's value to the amount
+																				self.getDisplay().find("input.amount").val((new BigNumber(valueComponents[2])).toFixed()).trigger("input", [
+																				
+																					// Is focus event
+																					false,
+																					
+																					// Force input
+																					true
+																				]);
+																				
+																				// Set message input's value to the message
+																				self.getDisplay().find("input.message").val(valueComponents[1].match(/^ID: (.*) [^ ]+: .+$/u)[1]).trigger("input", [
+																				
+																					// Is focus event
+																					false,
+																					
+																					// Force input
+																					true
+																				]);
+																				
+																				// Set send as file button to off
+																				self.getDisplay().find("button.sendAsFile").removeClass("enabled");
+																				
+																				// Set value processed to true
+																				valueProcessed = true;
+																			}
+																		}
+																		
+																		// Break
+																		break;
 																}
 															}
 														
