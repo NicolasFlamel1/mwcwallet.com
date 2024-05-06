@@ -147,7 +147,7 @@
 			background: #7A00D9;
 			background: linear-gradient(to right, #9E00E7, #3600C9);
 			min-width: 250px;
-			min-height: 250px;
+			min-height: 350px;
 			overflow: hidden;
 			font-size: 100%;
 			-webkit-font-smoothing: antialiased;

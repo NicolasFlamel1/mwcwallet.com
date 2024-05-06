@@ -724,7 +724,7 @@
 			background: #7A00D9;
 			background: linear-gradient(to right, #9E00E7, #3600C9);
 			min-width: 250px;
-			min-height: 250px;
+			min-height: 350px;
 			overflow: hidden;
 			font-size: 100%;
 			-webkit-font-smoothing: antialiased;
@@ -816,23 +816,39 @@
 				background-size: 59%;
 			}
 		}
-
-		@media only screen and (max-height: 500px) {
+		
+		@media only screen and (max-height: 800px) {
 
 			main > div > div > div.logo {
 				background-image: url("<?= encodeString(getResource("./images/logo_small.svg")); ?>");
-				background-size: 35%;
+				background-size: 47%;
+			}
+		}
+		
+		@media only screen and (max-width: 450px) {
+
+			main > div > div > div.logo {
+				background-image: url("<?= encodeString(getResource("./images/logo_small.svg")); ?>");
+				background-size: 47%;
+			}
+		}
+		
+		@media only screen and (max-height: 750px) {
+
+			main > div > div > div.logo {
+				background-image: url("<?= encodeString(getResource("./images/logo_small.svg")); ?>");
+				background-size: 38%;
 			}
 		}
 
-		@media only screen and (max-width: 300px) {
+		@media only screen and (max-width: 350px) {
 
 			main > div > div > div.logo {
 				background-size: 0%;
 			}
 		}
 
-		@media only screen and (max-height: 400px) {
+		@media only screen and (max-height: 600px) {
 
 			main > div > div > div.logo {
 				background-size: 0%;
@@ -856,15 +872,28 @@
 			opacity: 0;
 		}
 
-
-		@media only screen and (max-height: 500px) {
+		@media only screen and (max-height: 800px) {
 
 			div.loading > div.spinner {
 				height: 60%;
 			}
 		}
+		
+		@media only screen and (max-width: 450px) {
 
-		@media only screen and (max-width: 300px) {
+			div.loading > div.spinner {
+				height: 60%;
+			}
+		}
+		
+		@media only screen and (max-height: 750px) {
+
+			div.loading > div.spinner {
+				height: 75%;
+			}
+		}
+		
+		@media only screen and (max-width: 350px) {
 
 			div.loading > div.spinner {
 				height: 100%;
@@ -872,7 +901,7 @@
 			}
 		}
 
-		@media only screen and (max-height: 400px) {
+		@media only screen and (max-height: 600px) {
 
 			div.loading > div.spinner {
 				height: 100%;
@@ -901,17 +930,24 @@
 			width: 4em;
 			height: 4em;
 			animation: spin 1.3s linear infinite;
-			margin-top: 2.6em;
+			margin-top: 7em;
 		}
 		
-		@media only screen and (max-width: 300px) {
+		@media only screen and (max-height: 750px) {
+		
+			div.loading > div.spinner > div {
+				margin-top: 10em;
+			}
+		}
+		
+		@media only screen and (max-width: 350px) {
 
 			div.loading > div.spinner > div {
 				margin-top: 0;
 			}
 		}
 
-		@media only screen and (max-height: 400px) {
+		@media only screen and (max-height: 600px) {
 
 			div.loading > div.spinner > div {
 				margin-top: 0;
@@ -1525,6 +1561,7 @@
 					--><div class="create hide"><!--
 						--><div class="logo"></div><!--
 						--><form class="hide"><!--
+							--><p class="verifySource translatable" data-text="<?= encodeString(getDefaultTranslation('If you paid to access MWC Wallet then you\'ve been scammed')); ?>"><?= encodeString(getTranslation('If you paid to access MWC Wallet then you\'ve been scammed')); ?></p><!--
 							--><input class="hide translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" type="hidden" name="Username" value="<?= encodeString(getTranslation('MWC Wallet')); ?>" autocomplete="off" autocapitalize="off" spellcheck="false"><!--
 							--><div><!--
 								--><span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span><!--
@@ -1549,6 +1586,7 @@
 					--><div class="unlock hide"><!--
 						--><div class="logo"></div><!--
 						--><form class="hide"><!--
+							--><p class="verifySource translatable" data-text="<?= encodeString(getDefaultTranslation('If you paid to access MWC Wallet then you\'ve been scammed')); ?>"><?= encodeString(getTranslation('If you paid to access MWC Wallet then you\'ve been scammed')); ?></p><!--
 							--><input class="hide translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" type="hidden" name="Username" value="<?= encodeString(getTranslation('MWC Wallet')); ?>" autocomplete="off" autocapitalize="off" spellcheck="false"><!--
 							--><div><!--
 								--><span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span><!--

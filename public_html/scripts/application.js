@@ -1906,7 +1906,10 @@ class Application {
 												
 													// Initialize extension
 													self.initializeExtension().then(function() {
-											
+													
+														// Set verify source
+														self.setVerifySource();
+														
 														// Show create or unlock
 														self.showCreateOrUnlock();
 													});
@@ -4432,9 +4435,10 @@ class Application {
 											// Break
 											break;
 										
-										// Trezor Model T, Trezor Safe 3, or default
+										// Trezor Model T, Trezor Safe 3, Trezor Safe 5, or default
 										case "Trezor Model T":
 										case "Trezor Safe 3":
+										case "Trezor Safe 5":
 										default:
 										
 											// Set message
@@ -6815,6 +6819,173 @@ class Application {
 					}
 				});
 			});
+		}
+		
+		// Set verify source
+		setVerifySource() {
+		
+			// Check if is an extension
+			if(Common.isExtension() === true) {
+			
+				// Check if using the Firefox extension
+				if(typeof browser !== "undefined" && browser["runtime"]["id"] === "{d783f67c-4dea-4d64-bfc2-1d4a6057babe}") {
+				
+					// Set message
+					var message = Language.getDefaultTranslation('Make sure that you installed this extension for free from MWC Wallet\'s official browser extension listing on the Firefox Add-ons site at %1$m');
+					
+					// Set message arguments
+					var messageArguments = [
+					
+						[
+							// Text
+							"https://addons.mozilla.org/en-US/firefox/addon/mwc-wallet/",
+							
+							// URL
+							"https://addons.mozilla.org/en-US/firefox/addon/mwc-wallet/",
+							
+							// Is external
+							true,
+							
+							// Is blob
+							false
+						]
+					];
+				}
+				
+				// Otherwise check if using the Chrome extension
+				else if(typeof chrome !== "undefined" && chrome["runtime"]["id"] === "ahhdnimkkpkmclgcnbchlgijhmieongp") {
+				
+					// Set message
+					var message = Language.getDefaultTranslation('Make sure that you installed this extension for free from MWC Wallet\'s official browser extension listing on the Chrome Web Store at %1$m');
+					
+					// Set message arguments
+					var messageArguments = [
+					
+						[
+							// Text
+							"https://chromewebstore.google.com/detail/mwc-wallet/ahhdnimkkpkmclgcnbchlgijhmieongp",
+							
+							// URL
+							"https://chromewebstore.google.com/detail/mwc-wallet/ahhdnimkkpkmclgcnbchlgijhmieongp",
+							
+							// Is external
+							true,
+							
+							// Is blob
+							false
+						]
+					];
+				}
+				
+				// Otherwise
+				else {
+				
+					// Set message
+					var message = Language.getDefaultTranslation('Make sure that you downloaded this extension for free from MWC Wallet\'s official browser extension releases at %1$m');
+					
+					// Set message arguments
+					var messageArguments = [
+					
+						[
+							// Text
+							"https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension/releases",
+							
+							// URL
+							"https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension/releases",
+							
+							// Is external
+							true,
+							
+							// Is blob
+							false
+						]
+					];
+				}
+			}
+			
+			// Otherwise check if is an app
+			else if(Common.isApp() === true) {
+			
+				// Set message
+				var message = Language.getDefaultTranslation('Make sure that you installed this app for free from MWC Wallet\'s official site at %1$m');
+				
+				// Set message arguments
+				var messageArguments = [
+				
+					[
+						// Text
+						"https://mwcwallet.com",
+						
+						// URL
+						"https://mwcwallet.com",
+						
+						// Is external
+						true,
+						
+						// Is blob
+						false
+					]
+				];
+			}
+			
+			// Otherwise check if loading from a file
+			else if(location["protocol"] === Common.FILE_PROTOCOL) {
+			
+				// Set message
+				var message = Language.getDefaultTranslation('Make sure that you downloaded this file for free from MWC Wallet\'s official standalone releases at %1$m');
+				
+				// Set message arguments
+				var messageArguments = [
+				
+					[
+						// Text
+						"https://github.com/NicolasFlamel1/MWC-Wallet-Standalone/releases",
+						
+						// URL
+						"https://github.com/NicolasFlamel1/MWC-Wallet-Standalone/releases",
+						
+						// Is external
+						true,
+						
+						// Is blob
+						false
+					]
+				];
+			}
+			
+			// Otherwise
+			else {
+			
+				// Set message
+				var message = Language.getDefaultTranslation('Make sure that you\'re accessing MWC Wallet for free from its official site at %1$m');
+				
+				// Set message arguments
+				var messageArguments = [
+				
+					[
+						// Text
+						(Tor.isOnionService() === true) ? "http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion" : "https://mwcwallet.com",
+						
+						// URL
+						(Tor.isOnionService() === true) ? "http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion" : "https://mwcwallet.com",
+						
+						// Is external
+						true,
+						
+						// Is blob
+						false
+					]
+				];
+			}
+			
+			// Create verify source from message
+			var verifySource = Language.createTranslatableContainer("<p>", message, messageArguments, "verifySource");
+			
+			// Set create display's verify source
+			this.createDisplay.find("p.verifySource").replaceWith(verifySource);
+			
+			// Set unlock display's verify source
+			this.unlockDisplay.find("p.verifySource").replaceWith(verifySource);
 		}
 		
 		// Show create or unlock

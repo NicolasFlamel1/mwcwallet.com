@@ -23,21 +23,35 @@ main.logo > div > div.logo.normalTransitionSpeed {
 	transition-duration: 0.15s;
 }
 
-@media only screen and (max-height: 500px) {
+@media only screen and (max-height: 800px) {
 
 	main > div > div.logo {
 		height: 40%;
 	}
 }
 
-@media only screen and (max-width: 300px) {
+@media only screen and (max-width: 450px) {
+
+	main > div > div.logo {
+		height: 40%;
+	}
+}
+
+@media only screen and (max-height: 750px) {
+
+	main > div > div.logo {
+		height: 25%;
+	}
+}
+
+@media only screen and (max-width: 350px) {
 
 	main > div > div.logo {
 		display: none;
 	}
 }
 
-@media only screen and (max-height: 400px) {
+@media only screen and (max-height: 600px) {
 
 	main > div > div.logo {
 		display: none;

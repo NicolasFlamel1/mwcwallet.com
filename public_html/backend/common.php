@@ -11,7 +11,8 @@
 	// Version changes
 	const VERSION_CHANGES = [
 		"Fixed title and metadata not changing when language is changed.",
-		"Added support for Ledger Flex hardware wallets."
+		"Added support for Ledger Flex and Trezor Safe 5 hardware wallets.",
+		"Added warning to login screen to deter people from using potentially malicious clones of this service."
 	];
 	
 	// Maintenance start time

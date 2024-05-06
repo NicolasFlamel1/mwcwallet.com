@@ -11,7 +11,7 @@ main > div > div.info {
 	max-width: none;
 	transition: opacity 0.2s ease-in-out 0.05s, visibility 0.2s ease-in-out 0.05s;
 	justify-content: flex-end;
-	min-height: 250px;
+	min-height: 350px;
 	min-width: 250px;
 }
 
@@ -47,14 +47,28 @@ main > div > div > form {
 	max-width: 100%;
 }
 
-@media only screen and (max-height: 500px) {
+@media only screen and (max-height: 800px) {
 
 	main > div > div > form {
 		height: 60%;
 	}
 }
 
-@media only screen and (max-width: 300px) {
+@media only screen and (max-width: 450px) {
+
+	main > div > div > form {
+		height: 60%;
+	}
+}
+
+@media only screen and (max-height: 750px) {
+
+	main > div > div > form {
+		height: 75%;
+	}
+}
+
+@media only screen and (max-width: 350px) {
 
 	main > div > div > form {
 		height: 100%;
@@ -62,7 +76,7 @@ main > div > div > form {
 	}
 }
 
-@media only screen and (max-height: 400px) {
+@media only screen and (max-height: 600px) {
 
 	main > div > div > form {
 		height: 100%;
@@ -89,29 +103,68 @@ main.normalTransitionSpeed > div > div > form, main.normalTransitionSpeed > div 
 	transition-delay: 0s;
 }
 
+main > div > div > form > p.verifySource {
+	color: white;
+	margin: calc(0.4em * 17 / 12) 0;
+	padding: 1em 1em 1em 3.3em;
+	background-color: #DD961B;
+	border-radius: 0.4em;
+	text-align: center;
+	font-size: 12pt;
+	line-height: 1.5em;
+	position: relative;
+	min-height: 1em;
+	word-break: break-word;
+	flex-shrink: 0;
+}
+
+main > div > div.unlock > form > p.verifySource {
+	margin-top: 2.5em;
+}
+
+@media only screen and (max-width: 350px) {
+
+	main > div > div.unlock > form > p.verifySource {
+		margin-top: calc(0.4em * 17 / 12);
+	}
+}
+
+@media only screen and (max-height: 600px) {
+
+	main > div > div.unlock > form > p.verifySource {
+		margin-top: calc(0.4em * 17 / 12);
+	}
+}
+
+main > div > div > form > p.verifySource::before {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	font-size: 20pt;
+	content: "\F071";
+	width: 1.9em;
+	text-align: center;
+	display: inline-block;
+	line-height: normal;
+	position: absolute;
+	top: 50%;
+	left: 2px;
+	transform: translateY(-50%);
+}
+
+main > div > div > form > p.verifySource > a {
+	color: white;
+}
+
+main > div > div > form > p.verifySource > a:focus {
+	background: transparent;
+	opacity: 0.8;
+}
+
 main > div > div > form > div {
 	display: flex;
 	position: relative;
 	align-items: center;
 	font-size: 17pt;
-}
-
-main > div > div.unlock > form > div {
-	margin-top: 1.5em;
-}
-
-@media only screen and (max-width: 300px) {
-
-	main > div > div.unlock > form > div {
-		margin-top: 0;
-	}
-}
-
-@media only screen and (max-height: 400px) {
-
-	main > div > div.unlock > form > div {
-		margin-top: 0;
-	}
 }
 
 main > div > div.unlock > form > div.status {
@@ -323,7 +376,7 @@ main > div > div > div.deleteAllWallets {
 	justify-content: flex-end;
 	margin: 0.4em;
 	min-width: calc(250px - 0.8em);
-	min-height: calc(250px - 0.8em);
+	min-height: calc(350px - 0.8em);
 	align-items: flex-end;
 	pointer-events: none;
 }

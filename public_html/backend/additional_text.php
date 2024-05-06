@@ -12,6 +12,7 @@
 	getDefaultTranslation('Trezor Model One');
 	getDefaultTranslation('Trezor Model T');
 	getDefaultTranslation('Trezor Safe 3');
+	getDefaultTranslation('Trezor Safe 5');
 	
 	// Extension text
 	getDefaultTranslation('MWC Wallet');

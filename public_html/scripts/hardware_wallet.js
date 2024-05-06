@@ -882,8 +882,9 @@ class HardwareWallet {
 															// Break
 															break;
 														
-														// Safe 3 or default
+														// Safe 3, Safe 5, or default
 														case "Safe 3":
+														case "Safe 5":
 														default:
 														
 															// Update transport's product name to include model
@@ -6664,9 +6665,10 @@ class HardwareWallet {
 							// Return minimum compatible version
 							return "1.12.2";
 						
-						// Trezor Model T, Trezor Safe 3, or default
+						// Trezor Model T, Trezor Safe 3, Safe 5, or default
 						case "Trezor Model T":
 						case "Trezor Safe 3":
+						case "Trezor Safe 5":
 						default:
 						
 							// Return minimum compatible version

@@ -365,7 +365,7 @@ aside.message > div > div > p > span.text span.result {
 	width: 50vw;
 	height: 50vw;
 	min-width: calc(250px * 0.5);
-	min-height: calc(250px * 0.5);
+	min-height: calc(350px * 0.5);
 	margin: auto;
 	align-items: center;
 	justify-content: center;
@@ -395,7 +395,7 @@ aside.message > div > div > p > span.text span.result {
 		width: 30vw;
 		height: 30vw;
 		min-width: calc(250px * 0.3);
-		min-height: calc(250px * 0.3);
+		min-height: calc(350px * 0.3);
 	}
 }
 
