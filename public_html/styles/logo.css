@@ -58,6 +58,13 @@ main.logo > div > div.logo.normalTransitionSpeed {
 	}
 }
 
+@media only screen and (width: 400px) and (height: 640px) {
+
+	main > div > div.logo {
+		height: 32%;
+	}
+}
+
 main > div > div.logo.hide, main > div > div.logo.notLoaded {
 	display: flex;
 	visibility: hidden;

@@ -854,6 +854,14 @@
 				background-size: 0%;
 			}
 		}
+		
+		@media only screen and (width: 400px) and (height: 640px) {
+
+			main > div > div > div.logo {
+				background-image: url("<?= encodeString(getResource("./images/logo_small.svg")); ?>");
+				background-size: 49%;
+			}
+		}
 
 		div.loading > div.spinner {
 			display: none;
@@ -909,6 +917,13 @@
 			}
 		}
 		
+		@media only screen and (width: 400px) and (height: 640px) {
+
+			div.loading > div.spinner {
+				height: 68%;
+			}
+		}
+		
 		@keyframes spin {
 
 			0% {
@@ -951,6 +966,13 @@
 
 			div.loading > div.spinner > div {
 				margin-top: 0;
+			}
+		}
+		
+		@media only screen and (width: 400px) and (height: 640px) {
+		
+			div.loading > div.spinner > div {
+				margin-top: 9em;
 			}
 		}
 

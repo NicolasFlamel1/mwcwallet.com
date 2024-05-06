@@ -1413,10 +1413,10 @@
 			"Checksum" => "fV8QPcheziketlQHDWmDsP2g7qN4CGmm+UyokQmE8FrKqjCkpgk68Ed7XHBp/OY3RwPoWaAdIGi8yjE+Qmnu3A=="
 		],
 		"./styles/logo.css" => [
-			"Version" => 6,
+			"Version" => 7,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "hmEQ1YJjYNt+uOQKNEqtyR8rSG10dIQTFPqgjkGj/DGUKgmdMAkNVrYHAu0YI3wxXCPkwrFLrzJLf57f3IHnxg=="
+			"Checksum" => "d4/xu5eVxiVpj7XWSRTsz0+NAHnN9wzixheF5SefjgSuKQKC4d9cegl2dzCBBlSFaqbrV2e936gWzrzcTt4BGA=="
 		],
 		"./shaders/logo.frag" => [
 			"Version" => 3,
