@@ -107,7 +107,7 @@ main > div > div > form > p.verifySource {
 	color: white;
 	margin: calc(0.4em * 17 / 12) 0;
 	padding: 1em 1em 1em 3.3em;
-	background-color: #DD961B;
+	background-color: #179D2E;
 	border-radius: 0.4em;
 	text-align: center;
 	font-size: 12pt;
@@ -140,7 +140,7 @@ main > div > div > form > p.verifySource::before {
 	font-family: "Font Awesome";
 	font-weight: bold;
 	font-size: 20pt;
-	content: "\F071";
+	content: "\F05A";
 	width: 1.9em;
 	text-align: center;
 	display: inline-block;

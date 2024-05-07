@@ -1395,10 +1395,10 @@
 			"Checksum" => "FZSSSrCiHPbDC3QYv/7H/o4lGhZtX3P2CAx+2fdo5I6RRZ25o0iVcWixpAF31SR7AeyisQ5TALUanUftlhLzNQ=="
 		],
 		"./styles/application.css" => [
-			"Version" => 14,
+			"Version" => 16,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "68ivRWZO094L/gi0cEtdCzM81DLpYiqMnQPORFPodxMfGc8iPA7/EWVjVxsZZSwoE9WEP6QNGugrUA2a/+xuGQ=="
+			"Checksum" => "VvrR6ya9WDBdsAObUtWoKmfydp7/TnmV6KaH4/uAmrcT34mgNBwzPky+uOTTUr5ub4X9SgaYPno7R9xXVlq9HQ=="
 		],
 		"./styles/message.css" => [
 			"Version" => 30,
