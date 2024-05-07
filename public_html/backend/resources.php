@@ -1347,10 +1347,10 @@
 			"Checksum" => "xrlfUeqc9EIcXeWCUYozrJSCCpJbGSO+2XJgzH+RErsFp+7VfJFVPb9FriaQ4F3SXDp/7qkA1oxwgAdUEluVCg=="
 		],
 		"./styles/about_section.css" => [
-			"Version" => 47,
+			"Version" => 48,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "kle8KMb5SxViaESttcxJhtm3gdbbQmLCiMEzin09b6tfLYO4nu787LVxkBA0GuV+Ar5BLMRnUNny9T3untSuVQ=="
+			"Checksum" => "dvA+g9SQuOEXZ1+7F5IrhdFiSH3S7BXH3pC/s9gtfiC3WArvxjo0paJbPcIwdYjK47HVi3HGtN6Scxr8/SCAnw=="
 		],
 		"./styles/transaction_section.css" => [
 			"Version" => 12,

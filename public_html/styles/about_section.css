@@ -1,15 +1,15 @@
 @charset "UTF-8";
 
 
-main > div.unlocked > div > div > div.sections > div > div.about > div > div.versionInformation {
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.description, main > div.unlocked > div > div > div.sections > div > div.about > div > div.versionInformation {
 	flex-direction: column;
 }
 
-main > div.unlocked > div > div > div.sections > div > div.about > div > div.versionInformation > p {
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.description > p, main > div.unlocked > div > div > div.sections > div > div.about > div > div.versionInformation > p {
 	padding-bottom: 0.6em;
 }
 
-main > div.unlocked > div > div > div.sections > div > div.about > div > div.versionInformation > p:last-child {
+main > div.unlocked > div > div > div.sections > div > div.about > div > div.description > p:last-child, main > div.unlocked > div > div > div.sections > div > div.about > div > div.versionInformation > p:last-child {
 	padding-bottom: 0;
 }
 
