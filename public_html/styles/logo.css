@@ -40,7 +40,7 @@ main.logo > div > div.logo.normalTransitionSpeed {
 @media only screen and (max-height: 750px) {
 
 	main > div > div.logo {
-		height: 25%;
+		height: 32%;
 	}
 }
 
@@ -55,13 +55,6 @@ main.logo > div > div.logo.normalTransitionSpeed {
 
 	main > div > div.logo {
 		display: none;
-	}
-}
-
-@media only screen and (width: 400px) and (height: 640px) {
-
-	main > div > div.logo {
-		height: 32%;
 	}
 }
 

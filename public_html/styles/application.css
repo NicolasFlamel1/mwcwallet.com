@@ -157,7 +157,7 @@ main > div > div > form > p.verifySource > a {
 
 main > div > div > form > p.verifySource > a:focus {
 	background: transparent;
-	opacity: 0.8;
+	opacity: 0.7;
 }
 
 main > div > div > form > div {
