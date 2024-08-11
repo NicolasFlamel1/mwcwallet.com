@@ -879,10 +879,10 @@
 			"Checksum" => "lj2xuTgwaooaswcUFFdUL3AUqYNHIWBFrN7bf7EQ7/OYVd9rWslfSWcAhanGYSmXZKvWujxK/Egmbp1GQSrvlw=="
 		],
 		"./scripts/send_payment_section.js" => [
-			"Version" => 103,
+			"Version" => 105,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "Z5bTmBp5b2GFZdFX2ZfC0/yWtEmqTY6x+Y7dAxffqVIMmcj4BJiYR/z9tmmiEP+CJvnSYL3mWEAQo0ThBZZrzw=="
+			"Checksum" => "ayXgAj4o4AaZTHxA4xXBeg73JQRYyTBM8o/jlc1lrH0iLvtoN+j1ybDgJv1jTASP4rCSVdtxqeMRkTZ08X285Q=="
 		],
 		"./scripts/log_section.js" => [
 			"Version" => 7,

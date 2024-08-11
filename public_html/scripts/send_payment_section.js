@@ -572,8 +572,12 @@ class SendPaymentSection extends Section {
 					// Check if get selection is supported
 					if(typeof getSelection !== "undefined") {
 					
-						// Collapse selection to end
-						getSelection().collapseToEnd();
+						// Check if selection exists
+						if(getSelection()["rangeCount"] > 0) {
+						
+							// Collapse selection to end
+							getSelection().collapseToEnd();
+						}
 					}
 				}
 			});
