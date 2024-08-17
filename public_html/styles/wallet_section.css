@@ -204,6 +204,10 @@ main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.ba
 	cursor: wait;
 }
 
+main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance.syncing > div.syncStatus > p {
+	cursor: wait;
+}
+
 main > div.unlocked > div > div > div.sections > div > div.wallet > div > div.balance.syncing span.contextMenu {
 	-moz-user-select: none;
 	-webkit-user-select: none;
