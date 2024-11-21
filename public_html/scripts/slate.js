@@ -2440,6 +2440,7 @@ class Slate {
 				case Consensus.EPIC_WALLET_TYPE:
 				
 					// Get body weight from the number of inputs, outputs, and kernels
+					//TODO mwc-wallet changed this to use weight_by_iok when it should still be using old_weight_by_iok until hard fork
 					var bodyWeight = new BigNumber(numberOfOutputs).multipliedBy(Slate.BODY_WEIGHT_OUTPUT_FACTOR).plus(Math.max(numberOfKernels, 1)).minus(numberOfInputs);
 					
 					// Check if body weight is less than the minimum body weight

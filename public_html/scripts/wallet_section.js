@@ -3449,6 +3449,9 @@ class WalletSection extends Section {
 													// Set that next wallet button is clicked
 													nextWalletButton.addClass("clicked");
 													
+													// Update unlocked wallets order buttons
+													self.getUnlocked().updateWalletsOrderButtons();
+													
 													// Show wallet section and catch errors
 													self.getSections().showSection(WalletSection.NAME, false, {
 													

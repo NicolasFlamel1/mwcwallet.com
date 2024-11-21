@@ -978,7 +978,7 @@ class SendPaymentSection extends Section {
 																			}
 																			
 																			// Otherwise check if value's message component isn't valid
-																			else if(/^ID: .* [^ ]+: .+$/u.test(valueComponents[1]) !== true) {
+																			else if(/^ID: .* [^ ]+: .+$/u.test(valueComponents[1]) !== true && /^.*#[^ ]+: .+$/u.test(valueComponents[1]) !== true) {
 																			
 																				// Allow device to sleep and catch errors
 																				self.getWakeLock().allowLock().catch(function(error) {
@@ -1022,7 +1022,7 @@ class SendPaymentSection extends Section {
 																				]);
 																				
 																				// Set message input's value to the message
-																				self.getDisplay().find("input.message").val(valueComponents[1].match(/^ID: (.*) [^ ]+: .+$/u)[1]).trigger("input", [
+																				self.getDisplay().find("input.message").val(valueComponents[1].match((/^ID: .* [^ ]+: .+$/u.test(valueComponents[1]) === true) ? /^ID: (.*) [^ ]+: .+$/u : /^(.*)#[^ ]+: .+$/u)[1]).trigger("input", [
 																				
 																					// Is focus event
 																					false,

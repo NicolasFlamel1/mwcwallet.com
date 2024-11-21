@@ -492,10 +492,7 @@ class Node {
 							return [
 							
 								// Addresses
-								"https://mwc713.floonet.mwc.mw",
-								"https://mwc7132.floonet.mwc.mw",
-								"https://mwc7133.floonet.mwc.mw",
-								"https://mwc7134.floonet.mwc.mw"
+								"https://mwc713.floonet.mwc.mw"
 							];
 						}
 						
