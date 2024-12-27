@@ -868,7 +868,7 @@
 			if(count($favicon) !== count(FAVICON_PARTS))
 			
 				// Display favicon
-				echo "<link rel=\"icon\" type=\"image/x-icon\" href=\"." . encodeString(getResource($favicon[0])) . "\">";
+				echo "<link rel=\"shortcut icon\" href=\"" . encodeString(mb_substr(getResource($favicon[0]), 1)) . "\"><link rel=\"icon\" type=\"image/x-icon\" href=\"." . encodeString(getResource($favicon[0])) . "\">";
 			
 			// Otherwise
 			else

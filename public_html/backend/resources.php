@@ -46,6 +46,7 @@
 		[32, 32, TRUE, NULL, "./images/app_icons/app_icon-32x32.png"],
 		[48, 48, TRUE, NULL, "./images/app_icons/app_icon-48x48.png"],
 		[64, 64, TRUE, NULL, "./images/app_icons/app_icon-64x64.png"],
+		[96, 96, TRUE, NULL, "./images/app_icons/app_icon-96x96.png"],
 		[114, 114, TRUE, NULL, "./images/app_icons/app_icon-114x114.png"],
 		[120, 120, TRUE, NULL, "./images/app_icons/app_icon-120x120.png"],
 		[128, 128, TRUE, NULL, "./images/app_icons/app_icon-128x128.png"],
@@ -1105,6 +1106,12 @@
 			"Cache" => FALSE,
 			"Minified" => FALSE,
 			"Checksum" => "Gm8PRw90oQAoT7ziuw9aTpq5NXkAU9IRrHGsmwDnBuF6fU8SvZbVrtHVqZdKFBoOiiiTZPPJ57hY5IWa3I1qvg=="
+		],
+		"./images/app_icons/app_icon-96x96.png" => [
+			"Version" => 1,
+			"Cache" => FALSE,
+			"Minified" => FALSE,
+			"Checksum" => "JNrjJW37zVooA7ybEqGT15ysCQiYPLg+pu/quzYJyYDlqqmO7R3yEaXlcz6ojacMOqxmp/O9MykhQjvJhZdmWA=="
 		],
 		"./images/tile_images/tile_image-70x70.png" => [
 			"Version" => 4,

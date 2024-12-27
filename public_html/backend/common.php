@@ -3,17 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.6.0";
+	const VERSION_NUMBER = "2.6.1";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "20 Nov 2024 23:39:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed title and metadata not changing when language is changed.",
-		"Added support for Ledger Flex and Trezor Safe 5 hardware wallets.",
-		"Added notice to login screen to deter people from using potentially malicious clones of this service.",
-		"Fixed wallet ordering buttons not updating when a wallet is deleted."
+		"Fixed some search engines not displaying site's favicon."
 	];
 	
 	// Maintenance start time
