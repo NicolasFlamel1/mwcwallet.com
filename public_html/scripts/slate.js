@@ -6200,14 +6200,14 @@ class Slate {
 					else if(Object.isObject(serializedSlate) === true) {
 					
 						// Check if serialized slate contains an invalid coin type
-						if("coin_type" in serializedSlate === true && serializedSlate["coin_type"] !== Slate.COIN_TYPE) {
+						if("coin_type" in serializedSlate === true && serializedSlate["coin_type"] !== null && serializedSlate["coin_type"] !== Slate.COIN_TYPE) {
 						
 							// Return unknown version
 							return Slate.UNKNOWN_VERSION;
 						}
 						
 						// Otherwise check if serialized slate contains an invalid network type
-						else if("network_type" in serializedSlate === true && serializedSlate["network_type"] !== Slate.getNetworkType(isMainnet)) {
+						else if("network_type" in serializedSlate === true && serializedSlate["network_type"] !== null && serializedSlate["network_type"] !== Slate.getNetworkType(isMainnet)) {
 						
 							// Return unknown version
 							return Slate.UNKNOWN_VERSION;

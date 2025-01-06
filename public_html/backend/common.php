@@ -10,7 +10,8 @@
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed some search engines not displaying site's favicon."
+		"Fixed some search engines not displaying site's favicon.",
+		"Fixed sending MWC to WhiteBIT when using the browser extension version of this service."
 	];
 	
 	// Maintenance start time
