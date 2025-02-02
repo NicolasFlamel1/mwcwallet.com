@@ -6,12 +6,13 @@
 	const VERSION_NUMBER = "2.6.1";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "20 Nov 2024 23:39:00 UTC";
+	const VERSION_RELEASE_DATE = "02 Feb 2025 00:46:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
 		"Fixed some search engines not displaying site's favicon.",
-		"Fixed sending MWC to WhiteBIT when using the browser extension version of this service."
+		"Fixed sending MWC to WhiteBIT when using the browser extension version of this service.",
+		"Sending MWC as a file now defaults to using Slatepack format if it uses a payment proof."
 	];
 	
 	// Maintenance start time
