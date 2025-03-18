@@ -18,3 +18,4 @@ Disallow: /wallet/
 Disallow: /donate/
 Disallow: /browser_extension_api_example.html
 Disallow: /mwc_pay_example/
+Disallow: /links_example.html

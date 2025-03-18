@@ -7,19 +7,19 @@ Mwcwallet.com is a self-custodial web wallet that allows you to manage your Mimb
 
 This wallet also allows for you to manage your MimbleWimble Coin with Ledger and Trezor hardware wallets by being compatible with the [Ledger MimbleWimble Coin app](https://github.com/NicolasFlamel1/Ledger-MimbleWimble-Coin) and [Trezor firmware with MimbleWimble Coin support](https://github.com/NicolasFlamel1/trezor-firmware).
 
-You can also use your own node, [listener](https://github.com/NicolasFlamel1/WebSocket-Listener), and [Tor proxy](https://github.com/NicolasFlamel1/Tor-Proxy) with this wallet thus allowing it to function without having to rely on any third parties.
+You can also use your own [node](https://github.com/mwcproject/mwc-node), [listener](https://github.com/NicolasFlamel1/WebSocket-Listener), and [Tor proxy](https://github.com/NicolasFlamel1/Tor-Proxy) with this wallet thus allowing it to function without having to rely on any third parties.
 
 ### Sending MWC To Exchanges Compatibility
 
 Compatibility for sending MWC from the MimbleWimble Coin web wallet to exchanges:
 
-|| [WhiteBIT](https://whitebit.com/trade/MWC-BTC) | [XT](https://www.xt.com/en/trade/mwc_btc) |
-|-|-|-|
-| [MWC web wallet website](https://mwcwallet.com) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ Requires version 2.6.1 or newer of the web wallet. |
-| [MWC web wallet Onion Service](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ Requires version 2.6.1 or newer of the web wallet. |
-| MWC web wallet progressive web app version | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ Requires version 2.6.1 or newer of the web wallet. |
-| [MWC web wallet browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) | ✅ Requires version 2.6.1 or newer of the web wallet. | ✅ Requires version 2.6.1 or newer of the web wallet. |
-| [MWC web wallet standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ Requires version 2.6.1 or newer of the web wallet. |
+|| [WhiteBIT](https://whitebit.com/trade/MWC-BTC) | [XT](https://www.xt.com/en/trade/mwc_btc) | [AscendEX](https://ascendex.com/en/cashtrade-spottrading/usdt/mwc) |
+|-|-|-|-|
+| [MWC web wallet website](https://mwcwallet.com) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ Requires version 2.6.1 or newer of the web wallet. | ✅ Requires version 2.6.1 or newer of the web wallet. |
+| [MWC web wallet Onion Service](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ Requires version 2.6.1 or newer of the web wallet. | ✅ Requires version 2.6.1 or newer of the web wallet. |
+| MWC web wallet progressive web app version | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ Requires version 2.6.1 or newer of the web wallet. | ✅ Requires version 2.6.1 or newer of the web wallet. |
+| [MWC web wallet browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) | ✅ Requires version 2.6.1 or newer of the web wallet. | ✅ Requires version 2.6.1 or newer of the web wallet. | ✅ Requires version 2.6.1 or newer of the web wallet. |
+| [MWC web wallet standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ Requires version 2.6.1 or newer of the web wallet. | ✅ Requires version 2.6.1 or newer of the web wallet. |
 
 \* This table assumes that the MimbleWimble Coin web wallet is using its default settings.
 
@@ -29,17 +29,17 @@ Compatibility for sending MWC from the MimbleWimble Coin web wallet to exchanges
 
 Compatibility for receiving MWC from exchanges to the MimbleWimble Coin web wallet:
 
-|| [WhiteBIT](https://whitebit.com/trade/MWC-BTC) | [XT](https://www.xt.com/en/trade/mwc_btc) |
-|-|-|-|
-| [MWC web wallet website](https://mwcwallet.com) | ✅ | ✅ |
-| [MWC web wallet Onion Service](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion) | ✅ | ✅ |
-| MWC web wallet progressive web app version | ✅ | ✅ |
-| [MWC web wallet browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) | ✅ | ✅ |
-| [MWC web wallet standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone) | ✅ | ✅ |
+|| [WhiteBIT](https://whitebit.com/trade/MWC-BTC) | [XT](https://www.xt.com/en/trade/mwc_btc) | [AscendEX](https://ascendex.com/en/cashtrade-spottrading/usdt/mwc) |
+|-|-|-|-|
+| [MWC web wallet website](https://mwcwallet.com) | ✅ | ✅ | ✅ |
+| [MWC web wallet Onion Service](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion) | ✅ | ✅ | ✅ |
+| MWC web wallet progressive web app version | ✅ | ✅ | ✅ |
+| [MWC web wallet browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) | ✅ | ✅ | ✅ |
+| [MWC web wallet standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone) | ✅ | ✅ | ✅ |
 
 \* This table assumes that the MimbleWimble Coin web wallet is using its default settings.
 
-\* It's unlikely that any exchanges currently supports sending MWC to the MimbleWimble Coin web wallet when using a hardware wallet due to that [needing a longer network read timeout](https://github.com/mwcproject/mwc-wallet/pull/17).
+\* It's unlikely that any exchanges using non-file based withdrawal methods currently support sending MWC to the MimbleWimble Coin web wallet when using a hardware wallet due to that [needing a longer network read timeout](https://github.com/mwcproject/mwc-wallet/pull/17).
 
 ### Trust And Privacy Concerns
 By default, the MimbleWimble Coin web wallet is not trustless and sacrifices some of its users' privacy in order to achieve a greater ease of use. This is true for any of the methods that can be used to access this web wallet including accessing it from its website at [https://mwcwallet.com](https://mwcwallet.com), accessing it from its Onion Service at [http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion), accessing it from its progressive web app version, accessing it from [its browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension), and accessing it from [its standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone).
