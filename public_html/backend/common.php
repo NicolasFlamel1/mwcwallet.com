@@ -3,7 +3,7 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.6.1";
+	const VERSION_NUMBER = "2.6.2";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "02 Feb 2025 00:46:00 UTC";
