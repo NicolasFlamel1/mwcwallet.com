@@ -14,7 +14,7 @@
 	getDefaultTranslation('Trezor Safe 3');
 	getDefaultTranslation('Trezor Safe 5');
 	
-	// Extension text
+	// Browser extension text
 	getDefaultTranslation('MWC Wallet');
 	getDefaultTranslation('A MimbleWimble Coin wallet.');
 	getDefaultTranslation('Open in New Tab');
@@ -24,4 +24,13 @@
 	getDefaultTranslation('Manage your MimbleWimble Coin');
 	getDefaultTranslation('Website API integration');
 	getDefaultTranslation('Hardware wallet support');
+	
+	// Mobile app text
+	getDefaultTranslation('File Chooser');
+	getDefaultTranslation('File saved');
+	getDefaultTranslation('%%1$s was saved to your downloads.');
+	getDefaultTranslation('File not saved');
+	getDefaultTranslation('Saving the file failed.');
+	getDefaultTranslation('Select USB device');
+	getDefaultTranslation('Select Bluetooth device');
 ?>

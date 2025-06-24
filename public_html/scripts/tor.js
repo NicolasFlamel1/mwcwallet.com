@@ -117,8 +117,8 @@ class Tor {
 		// Is Onion Service
 		static isOnionService() {
 		
-			// Check if is extension or loading from file
-			if(Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL) {
+			// Check if is extension, loading from file, or is mobile app
+			if(Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL || Common.isMobileApp() === true) {
 			
 				// Return false
 				return false;

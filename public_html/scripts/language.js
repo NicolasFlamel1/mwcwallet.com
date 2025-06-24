@@ -82,11 +82,11 @@ class Language {
 					}
 				}
 				
-				// Otherwise check if is an extension
-				else if(Common.isExtension() === true && (typeof browser !== "undefined" || typeof chrome !== "undefined")) {
+				// Otherwise check if is an extension or a mobile app
+				else if((Common.isExtension() === true && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || Common.isMobileApp() === true) {
 				
-					// Get extension locale code
-					var extensionLocaleCode = (typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage();
+					// Get extension or device's locale code
+					var extensionOrDeviceLocaleCode = (Common.isMobileApp() === true) ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage());
 					
 					// Set language found to false
 					var languageFound = false;
@@ -96,11 +96,11 @@ class Language {
 					
 						if(AVAILABLE_LANGUAGES.hasOwnProperty(availableLanguage) === true) {
 						
-							// Check if available language's extension locale code matches the extension's
-							if("Constants" in AVAILABLE_LANGUAGES[availableLanguage] === true && "Extension Locale Code" in AVAILABLE_LANGUAGES[availableLanguage]["Constants"] === true && AVAILABLE_LANGUAGES[availableLanguage]["Constants"]["Extension Locale Code"] === extensionLocaleCode) {
+							// Check if available language matches the device's or available language's extension locale code matches the extension's
+							if((Common.isMobileApp() === true && availableLanguage === extensionOrDeviceLocaleCode) || (Common.isExtension() === true && "Constants" in AVAILABLE_LANGUAGES[availableLanguage] === true && "Extension Locale Code" in AVAILABLE_LANGUAGES[availableLanguage]["Constants"] === true && AVAILABLE_LANGUAGES[availableLanguage]["Constants"]["Extension Locale Code"] === extensionOrDeviceLocaleCode)) {
 							
-								// Set extension language
-								var extensionLanguage = availableLanguage;
+								// Set extension or device language
+								var extensionOrDeviceLanguage = availableLanguage;
 								
 								// Set language found to true
 								languageFound = true;
@@ -114,14 +114,14 @@ class Language {
 					// Check if language was found
 					if(languageFound === true) {
 					
-						// Set current language to extension language
-						Language.currentLanguage = extensionLanguage;
+						// Set current language to extension or device language
+						Language.currentLanguage = extensionOrDeviceLanguage;
 					
-						// Check if HTML language isn't the extension language
-						if(extensionLanguage !== $("html").attr("lang")) {
+						// Check if HTML language isn't the extension or device language
+						if(extensionOrDeviceLanguage !== $("html").attr("lang")) {
 						
-							// Change language to extension language
-							Language.changeLanguage(extensionLanguage);
+							// Change language to extension or device language
+							Language.changeLanguage(extensionOrDeviceLanguage);
 							
 							// Go through all language display list buttons
 							languageDisplayList.children("button").each(function() {
@@ -129,8 +129,8 @@ class Language {
 								// Get button
 								var button = $(this);
 								
-								// Check if button is the extension language
-								if(button.attr(Common.DATA_ATTRIBUTE_PREFIX + "language") === extensionLanguage)
+								// Check if button is the extension or device language
+								if(button.attr(Common.DATA_ATTRIBUTE_PREFIX + "language") === extensionOrDeviceLanguage)
 								
 									// Disable button
 									button.disable();
@@ -143,7 +143,7 @@ class Language {
 							});
 							
 							// Update language display select value
-							languageDisplaySelect.val(extensionLanguage);
+							languageDisplaySelect.val(extensionOrDeviceLanguage);
 							
 							// Update language display select options
 							languageDisplaySelect.children("option").enable().filter(":selected").disable();
@@ -260,9 +260,10 @@ class Language {
 					// Check if event is touch end
 					if("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") {
 					
-						// Check if address copy isn't under the touch area
+						// Check if button isn't under the touch area or touch event was cancelled
 						var changedTouch = event["originalEvent"]["changedTouches"][0];
-						if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"])) {
+						var touchedElement = document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"]);
+						if((this !== touchedElement && $(this).find(touchedElement)["length"] === 0) || ("cancelable" in event === true && event["cancelable"] === false)) {
 						
 							// Return
 							return;

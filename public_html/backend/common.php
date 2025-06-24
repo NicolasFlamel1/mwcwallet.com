@@ -10,9 +10,7 @@
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed some search engines not displaying site's favicon.",
-		"Fixed sending MWC to WhiteBIT when using the browser extension version of this service.",
-		"Sending MWC as a file now defaults to using Slatepack format if it uses a payment proof."
+		"Various changes to make this site function as an Android app."
 	];
 	
 	// Maintenance start time

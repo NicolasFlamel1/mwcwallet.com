@@ -214,7 +214,7 @@ class TorProxy {
 		static get DEFAULT_TOR_PROXY_ADDRESS() {
 		
 			// Set server
-			var server = (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL) ? new URL(HTTPS_SERVER_ADDRESS) : location;
+			var server = (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL || Common.isMobileApp() === true) ? new URL(HTTPS_SERVER_ADDRESS) : location;
 		
 			// Return default Tor proxy address
 			return ((server["protocol"] === Common.HTTPS_PROTOCOL) ? Common.HTTPS_PROTOCOL : Common.HTTP_PROTOCOL) + "//" + server["hostname"] + "/tor/";

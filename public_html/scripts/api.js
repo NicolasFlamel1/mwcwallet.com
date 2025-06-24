@@ -16109,6 +16109,9 @@ class Api {
 																					// Turn off window focus API event
 																					$(window).off("focus.api");
 																					
+																					// Turn off document visibility change api event
+																					$(document).off("visibilitychange.api");
+																					
 																					// Allow scrolling keys
 																					self.application.scroll.allowKeys();
 																					
@@ -16155,11 +16158,29 @@ class Api {
 																						// Hide loading
 																						self.application.hideLoading();
 																					}
+																					
+																				// File input cancel event
+																				}).one("cancel", function() {
+																				
+																					// Turn off window focus API event
+																					$(window).off("focus.api");
+																					
+																					// Turn off document visibility change api event
+																					$(document).off("visibilitychange.api");
+																					
+																					// Open file canceled
+																					openFileCanceled();
 																				});
 																				
 																				// Window focus API event
 																				$(window).one("focus.api", function() {
 																				
+																					// Turn off file input cancel event
+																					fileInput.off("cancel");
+																					
+																					// Turn off document visibility change api event
+																					$(document).off("visibilitychange.api");
+																					
 																					// Set timeout
 																					setTimeout(function() {
 																					
@@ -16173,6 +16194,37 @@ class Api {
 																							openFileCanceled();
 																						}
 																					}, Api.FILE_INPUT_CANCEL_CHECK_DELAY_MILLISECONDS);
+																				});
+																				
+																				// Document visibility change API event
+																				$(document).on("visibilitychange.api", function() {
+																				
+																					// Check if document is visible
+																					if(document["visibilityState"] === "visible") {
+																					
+																						// Turn off file input cancel event
+																						fileInput.off("cancel");
+																						
+																						// Turn off window focus API event
+																						$(window).off("focus.api");
+																						
+																						// Turn off document visibility change api event
+																						$(document).off("visibilitychange.api");
+																						
+																						// Set timeout
+																						setTimeout(function() {
+																						
+																							// Check if a file isn't selected
+																							if(fileSelected === false) {
+																							
+																								// Turn off file input change event
+																								fileInput.off("change");
+																								
+																								// Open file canceled
+																								openFileCanceled();
+																							}
+																						}, Api.FILE_INPUT_CANCEL_CHECK_DELAY_MILLISECONDS);
+																					}
 																				});
 																				
 																				// Trigger file input selection
@@ -17056,8 +17108,8 @@ class Api {
 				// HTTP no response status
 				case Common.HTTP_NO_RESPONSE_STATUS:
 				
-					// Check if not an extension and the page is connected to securely
-					if(Common.isExtension() === false && (location["protocol"] === Common.HTTPS_PROTOCOL || Tor.isOnionService() === true)) {
+					// Check if not an extension or mobile app and the page is connected to securely
+					if(Common.isExtension() === false && Common.isMobileApp() === false && (location["protocol"] === Common.HTTPS_PROTOCOL || Tor.isOnionService() === true)) {
 					
 						// Initialize error occurred
 						var errorOccurred = false;

@@ -204,9 +204,9 @@ class Message {
 				// Check if event is touch end
 				if("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") {
 				
-					// Check if address copy isn't under the touch area
+					// Check if copy button isn't under the touch area or touch event was cancelled
 					var changedTouch = event["originalEvent"]["changedTouches"][0];
-					if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"])) {
+					if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"]) || ("cancelable" in event === true && event["cancelable"] === false)) {
 					
 						// Return
 						return;
@@ -215,6 +215,9 @@ class Message {
 				
 				// Stop propagation
 				event.stopPropagation();
+				
+				// Prevent default
+				event.preventDefault();
 				
 				// Get copy button
 				var copyButton = $(this);
@@ -1334,6 +1337,7 @@ class Message {
 			
 			// Get input from container
 			var input = container.find("input");
+			input.attr("enterkeyhint", "done");
 			
 			// Check if password
 			if(isPassword) {

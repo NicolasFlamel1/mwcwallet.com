@@ -390,9 +390,9 @@ class WalletSection extends Section {
 				// Check if event is touch end
 				if("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") {
 				
-					// Check if address copy isn't under the touch area
+					// Check if address copy isn't under the touch area or touch event was cancelled
 					var changedTouch = event["originalEvent"]["changedTouches"][0];
-					if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"])) {
+					if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"]) || ("cancelable" in event === true && event["cancelable"] === false)) {
 					
 						// Return
 						return;
@@ -401,6 +401,9 @@ class WalletSection extends Section {
 				
 				// Stop propagation
 				event.stopPropagation();
+				
+				// Prevent default
+				event.preventDefault();
 				
 				// Prevent showing messages
 				self.getMessage().prevent();
@@ -549,9 +552,9 @@ class WalletSection extends Section {
 				// Check if event is touch end
 				if("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") {
 				
-					// Check if address copy isn't under the touch area
+					// Check if ID copy isn't under the touch area or touch event was cancelled
 					var changedTouch = event["originalEvent"]["changedTouches"][0];
-					if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"])) {
+					if(this !== document.elementFromPoint(changedTouch["clientX"], changedTouch["clientY"]) || ("cancelable" in event === true && event["cancelable"] === false)) {
 					
 						// Return
 						return;
@@ -560,6 +563,9 @@ class WalletSection extends Section {
 				
 				// Stop propagation
 				event.stopPropagation();
+				
+				// Prevent default
+				event.preventDefault();
 				
 				// Prevent showing messages
 				self.getMessage().prevent();
@@ -3230,6 +3236,9 @@ class WalletSection extends Section {
 						// Turn off window focus wallet section event
 						$(window).off("focus.walletSection");
 						
+						// Turn off document visibility change wallet section event
+						$(document).off("visibilitychange.walletSection");
+						
 						// Allow scrolling keys
 						self.getScroll().allowKeys();
 						
@@ -3284,11 +3293,29 @@ class WalletSection extends Section {
 							// Open file
 							openFile(file);
 						}
+						
+					// File input cancel event
+					}).one("cancel", function() {
+					
+						// Turn off window focus wallet section event
+						$(window).off("focus.walletSection");
+						
+						// Turn off document visibility change wallet section event
+						$(document).off("visibilitychange.walletSection");
+						
+						// Open file canceled
+						openFileCanceled();
 					});
 					
 					// Window focus wallet section event
 					$(window).one("focus.walletSection", function() {
 					
+						// Turn off file input cancel event
+						fileInput.off("cancel");
+						
+						// Turn off document visibility change wallet section event
+						$(document).off("visibilitychange.walletSection");
+						
 						// Set timeout
 						setTimeout(function() {
 						
@@ -3302,6 +3329,37 @@ class WalletSection extends Section {
 								openFileCanceled();
 							}
 						}, WalletSection.FILE_INPUT_CANCEL_CHECK_DELAY_MILLISECONDS);
+					});
+					
+					// Document visibility change wallet section event
+					$(document).on("visibilitychange.walletSection", function() {
+					
+						// Check if document is visible
+						if(document["visibilityState"] === "visible") {
+						
+							// Turn off file input cancel event
+							fileInput.off("cancel");
+							
+							// Turn off window focus wallet section event
+							$(window).off("focus.walletSection");
+							
+							// Turn off document visibility change wallet section event
+							$(document).off("visibilitychange.walletSection");
+							
+							// Set timeout
+							setTimeout(function() {
+							
+								// Check if a file isn't selected
+								if(fileSelected === false) {
+						
+									// Turn off file input change event
+									fileInput.off("change");
+									
+									// Open file canceled
+									openFileCanceled();
+								}
+							}, WalletSection.FILE_INPUT_CANCEL_CHECK_DELAY_MILLISECONDS);
+						}
 					});
 					
 					// Trigger file input selection

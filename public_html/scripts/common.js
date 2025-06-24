@@ -219,11 +219,18 @@ class Common {
 			return Common.isExtension() === true && "Is Popup" in urlParameters === true && urlParameters["Is Popup"] === "True";
 		}
 		
+		// Is mobile app
+		static isMobileApp() {
+		
+			// Return if mobile app
+			return typeof MobileApp !== "undefined";
+		}
+		
 		// Is app
 		static isApp() {
 		
 			// Return if app
-			return Common.isExtension() === false && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true));
+			return Common.isMobileApp() === true || (Common.isExtension() === false && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true)));
 		}
 		
 		// HTML encode
@@ -805,35 +812,46 @@ class Common {
 		// Save file
 		static saveFile(name, contents) {
 		
-			// Create anchor
-			var anchor = $("<a></a>");
+			// Check if mobile app
+			if(Common.isMobileApp() === true) {
 			
-			// Create URL from contents
-			var url = URL.createObjectURL(new Blob([
+				// Save file using mobile app
+				MobileApp.saveFile(name, (new TextEncoder()).encode(contents));
+			}
 			
-				// Contents
-				contents
-			], {
+			// Otherwise
+			else {
 			
-				// Type
-				"type": "application/octet-stream"
-			}));
+				// Create anchor
+				var anchor = $("<a></a>");
+				
+				// Create URL from contents
+				var url = URL.createObjectURL(new Blob([
+				
+					// Contents
+					contents
+				], {
+				
+					// Type
+					"type": "application/octet-stream"
+				}));
+				
+				// Set anchor's href to URL
+				anchor.attr("href", url);
+				
+				// Set anchor's download to name
+				anchor.attr("download", name);
 			
-			// Set anchor's href to URL
-			anchor.attr("href", url);
-			
-			// Set anchor's download to name
-			anchor.attr("download", name);
-			
-			// Click on anchor
-			anchor.get(0).click();
-			
-			// Set timeout
-			setTimeout(function() {
-			
-				// Revoke URL
-				URL.revokeObjectURL(url);
-			}, 0);
+				// Click on anchor
+				anchor.get(0).click();
+				
+				// Set timeout
+				setTimeout(function() {
+				
+					// Revoke URL
+					URL.revokeObjectURL(url);
+				}, 0);
+			}
 		}
 		
 		// Has whitespace

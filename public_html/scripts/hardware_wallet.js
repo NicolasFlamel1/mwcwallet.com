@@ -211,8 +211,8 @@ class HardwareWallet {
 										// Catch errors
 										}).catch(function(error) {
 										
-											// Check if error is that user canceled action
-											if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && error["name"] === "NotFoundError"))) {
+											// Check if error is that user canceled action or there was no USB devices to choose
+											if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && (error["name"] === "NotFoundError" || error["name"] === "NoChoiceError")))) {
 											
 												// Check if Bluetooth is supported
 												if("bluetooth" in navigator === true) {
@@ -229,11 +229,22 @@ class HardwareWallet {
 													// Catch errors
 													}).catch(function(error) {
 													
-														// Check if error is that user canceled action
-														if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && error["name"] === "NotFoundError"))) {
+														// Check if error is that user canceled action or there was no Bluetooth devices to choose
+														if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && (error["name"] === "NotFoundError" || error["name"] === "NoChoiceError")))) {
 														
-															// Reject error
-															reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
+															// Check if error is that user canceled action
+															if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && error["name"] === "NotFoundError"))) {
+															
+																// Reject error
+																reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
+															}
+															
+															// Otherwise
+															else {
+															
+																// Reject error
+																reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is connected.')));
+															}
 														}
 														
 														// Otherwise check if error was a connection error
@@ -280,8 +291,19 @@ class HardwareWallet {
 												// Otherwise
 												else {
 												
-													// Reject error
-													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
+													// Check if error is that user canceled action
+													if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && error["name"] === "NotFoundError"))) {
+													
+														// Reject error
+														reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
+													}
+													
+													// Otherwise
+													else {
+													
+														// Reject error
+														reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is connected.')));
+													}
 												}
 											}
 											
@@ -316,11 +338,22 @@ class HardwareWallet {
 										// Catch errors
 										}).catch(function(error) {
 										
-											// Check if error is that user canceled action
-											if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && error["name"] === "NotFoundError"))) {
+											// Check if error is that user canceled action or there was no Bluetooth device to choose
+											if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && (error["name"] === "NotFoundError" || error["name"] === "NoChoiceError")))) {
 											
-												// Reject error
-												reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
+												// Check if error is that user canceled action
+												if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in error === true && error["name"] === "NotFoundError"))) {
+												
+													// Reject error
+													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
+												}
+												
+												// Otherwise
+												else {
+												
+													// Reject error
+													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is connected.')));
+												}
 											}
 											
 											// Otherwise check if error was a connection error

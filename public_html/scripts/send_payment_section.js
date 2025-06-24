@@ -1245,8 +1245,26 @@ class SendPaymentSection extends Section {
 							// Check if automatic lock isn't locking
 							if(self.getAutomaticLock().isLocking() === false) {
 						
-								// Check if access to the camera was denied
-								if(error["name"] === "NotAllowedError") {
+								// Check if browser or device doesn't allow using a camera
+								if(error["name"] === "NotSupportedError" || (Common.isMobileApp() === true && MobileApp.deviceHasCameraCapabilities() === false)) {
+								
+									// Check if is a mobile app
+									if(Common.isMobileApp() === true) {
+									
+										// Show scan error
+										showScanError(Message.createText(Language.getDefaultTranslation('Your device doesn\'t allow using a camera.')));
+									}
+									
+									// Otherwise
+									else {
+									
+										// Show scan error
+										showScanError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using a camera.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.')));
+									}
+								}
+								
+								// Otherwise check if access to the camera was denied
+								else if(error["name"] === "NotAllowedError") {
 								
 									// Show scan error
 									showScanError(Message.createText(Language.getDefaultTranslation('Access to your camera was denied.')));
@@ -1257,13 +1275,6 @@ class SendPaymentSection extends Section {
 								
 									// Show scan error
 									showScanError(Message.createText(Language.getDefaultTranslation('No camera was found. Connect a camera to use this feature.')));
-								}
-								
-								// Otherwise check if browser doesn't allow using a camera
-								else if(error["name"] === "NotSupportedError") {
-								
-									// Show scan error
-									showScanError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using a camera.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.')));
 								}
 								
 								// Otherwise an error occurred while trying to access the camera
@@ -1285,9 +1296,20 @@ class SendPaymentSection extends Section {
 				
 					// Check if automatic lock isn't locking
 					if(self.getAutomaticLock().isLocking() === false) {
-				
-						// Show scan error
-						showScanError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using a camera.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.')));
+					
+						// Check if is a mobile app
+						if(Common.isMobileApp() === true) {
+						
+							// Show scan error
+							showScanError(Message.createText(Language.getDefaultTranslation('Your device doesn\'t allow using a camera.')));
+						}
+						
+						// Otherwise
+						else {
+						
+							// Show scan error
+							showScanError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using a camera.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.')));
+						}
 					}
 				}
 			});
@@ -3193,7 +3215,7 @@ class SendPaymentSection extends Section {
 						
 							// Clear and hide message input
 							self.getDisplay().find("input.message").val("").closest("div").parent().closest("div").addClass("hide");
-						
+							
 							// Break
 							break;
 					}

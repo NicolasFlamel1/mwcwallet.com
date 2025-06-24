@@ -408,3 +408,45 @@ else if(Common.isExtension() === true && typeof chrome !== "undefined") {
 		}
 	});
 }
+
+// Otherwise check if is a mobile app
+else if(Common.isMobileApp() === true) {
+
+	// Window message event
+	$(window).on("message", function(event) {
+	
+		// Try
+		try {
+		
+			// Parse message as JSON
+			var request = JSON.parse(event["originalEvent"]["data"]);
+		}
+		
+		// Catch errors
+		catch(error) {
+		
+			// Return
+			return;
+		}
+		
+		// Check if message is a request
+		if(Object.isObject(request) === true && "Wallet Type" in request === true && "Network Type" in request === true && "Request" in request === true) {
+		
+			// Check if request's wallet type is the current wallet type and network type is the current network type
+			if(request["Wallet Type"] === Consensus.walletTypeToText(Consensus.getWalletType()) && request["Network Type"] === Consensus.networkTypeToText(Consensus.getNetworkType())) {
+		
+				// Try
+				try {
+				
+					// Process extension request
+					Extension.processRequest(request);
+				}
+				
+				// Catch errors
+				catch(error) {
+				
+				}
+			}
+		}
+	});
+}

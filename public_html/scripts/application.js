@@ -227,8 +227,8 @@ class Application {
 				}
 			});
 			
-			// Check if is an extension
-			if(Common.isExtension() === true) {
+			// Check if is an extension or a mobile app
+			if(Common.isExtension() === true || Common.isMobileApp() === true) {
 			
 				// Document extension request receive event
 				$(document).on(Extension.REQUEST_RECEIVE_EVENT, function() {
@@ -862,8 +862,8 @@ class Application {
 										// Check if node's address exists
 										if(self.node.getAddresses(Consensus.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE)[0]["length"] !== 0) {
 								
-											// Check if not an extension and the page is connected to securely
-											if(Common.isExtension() === false && (location["protocol"] === Common.HTTPS_PROTOCOL || Tor.isOnionService() === true)) {
+											// Check if not an extension or mobile app and the page is connected to securely
+											if(Common.isExtension() === false && Common.isMobileApp() === false && (location["protocol"] === Common.HTTPS_PROTOCOL || Tor.isOnionService() === true)) {
 											
 												// Initialize error occurred
 												var errorOccurred = false;
@@ -1348,8 +1348,8 @@ class Application {
 										// Check if listener's address exists
 										if(self.listener.getAddress()["length"] !== 0) {
 								
-											// Check if not an extension and the page is connected to securely
-											if(Common.isExtension() === false && (location["protocol"] === Common.HTTPS_PROTOCOL || Tor.isOnionService() === true)) {
+											// Check if not an extension or mobile app and the page is connected to securely
+											if(Common.isExtension() === false && Common.isMobileApp() === false && (location["protocol"] === Common.HTTPS_PROTOCOL || Tor.isOnionService() === true)) {
 											
 												// Initialize error occurred
 												var errorOccurred = false;
@@ -4200,8 +4200,22 @@ class Application {
 												// Otherwise
 												else {
 												
+													// Check if is a mobile app
+													if(Common.isMobileApp() === true) {
+													
+														// Set message
+														var message = Message.createText(Language.getDefaultTranslation('Your device doesn\'t allow using USB or Bluetooth devices.'));
+													}
+													
+													// Otherwise
+													else {
+													
+														// Set message
+														var message = Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using USB or Bluetooth devices.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.'));
+													}
+													
 													// Return showing hardware wallet error
-													return showHardwareWalletError(Message.createText(Language.getDefaultTranslation('Your browser doesn\'t allow using USB or Bluetooth devices.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Update your browser to use this feature.'))).then(function() {
+													return showHardwareWalletError(message).then(function() {
 																			
 														// Resolve
 														resolve();
@@ -6012,8 +6026,22 @@ class Application {
 				// Catch errors
 				catch(error) {
 				
+					// Check if is a mobile app
+					if(Common.isMobileApp() === true) {
+					
+						// Set message
+						var message = Language.getDefaultTranslation('Your device isn\'t compatible.');
+					}
+					
+					// Otherwise
+					else {
+					
+						// Set message
+						var message = Language.getDefaultTranslation('Your browser isn\'t compatible. Update your browser to continue.');
+					}
+					
 					// Show message and allow showing messages
-					self.message.show(Language.getDefaultTranslation('Error'), Message.createText(Language.getDefaultTranslation('Your browser isn\'t compatible. Update your browser to continue.')), false, function() {
+					self.message.show(Language.getDefaultTranslation('Error'), Message.createText(message), false, function() {
 					
 						// Hide loading
 						self.hideLoading();
@@ -6901,6 +6929,31 @@ class Application {
 						]
 					];
 				}
+			}
+			
+			// Otherwise check if is a mobile app
+			else if(Common.isMobileApp() === true) {
+			
+				// Set message
+				var message = Language.getDefaultTranslation('Make sure that you downloaded this app for free from MWC Wallet\'s official mobile app releases at %1$m');
+				
+				// Set message arguments
+				var messageArguments = [
+				
+					[
+						// Text
+						"https://github.com/NicolasFlamel1/MWC-Wallet-Mobile-App/releases",
+						
+						// URL
+						"https://github.com/NicolasFlamel1/MWC-Wallet-Mobile-App/releases",
+						
+						// Is external
+						true,
+						
+						// Is blob
+						false
+					]
+				];
 			}
 			
 			// Otherwise check if is an app

@@ -57,8 +57,7 @@
 	
 		// Use strict
 		"use strict";
-
-
+		
 		// Constants
 
 		// Index not found
@@ -353,11 +352,18 @@
 			return typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:";
 		}
 		
+		// Is mobile app
+		function isMobileApp() {
+		
+			// Return if mobile app
+			return typeof MobileApp !== "undefined";
+		}
+		
 		// Is app
 		function isApp() {
 		
 			// Return if app
-			return isExtension() === false && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true));
+			return isMobileApp() === true || (isExtension() === false && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true)));
 		}
 
 		// Show error
@@ -459,12 +465,26 @@
 					
 					// Set header text
 					var headerText = "<?= escapeString(getDefaultTranslation('Compatibility Error')); ?>";
-				
-					// Set text message
-					var textMessage = "<?= escapeString(getTranslation('Your browser isn\'t compatible. Update your browser to continue.')); ?>";
 					
-					// Set text text
-					var textText = "<?= escapeString(getDefaultTranslation('Your browser isn\'t compatible. Update your browser to continue.')); ?>";
+					// Check if is a mobile app
+					if(isMobileApp() === true) {
+					
+						// Set text message
+						var textMessage = "<?= escapeString(getTranslation('Your device isn\'t compatible.')); ?>";
+						
+						// Set text text
+						var textText = "<?= escapeString(getDefaultTranslation('Your device isn\'t compatible.')); ?>";
+					}
+					
+					// Otherwise
+					else {
+				
+						// Set text message
+						var textMessage = "<?= escapeString(getTranslation('Your browser isn\'t compatible. Update your browser to continue.')); ?>";
+						
+						// Set text text
+						var textText = "<?= escapeString(getDefaultTranslation('Your browser isn\'t compatible. Update your browser to continue.')); ?>";
+					}
 				}
 				
 				// Get loading display
@@ -1563,7 +1583,7 @@
 							--></div><!--
 							--><div><!--
 								--><span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span><!--
-								--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirm Password')); ?>" type="password" name="Confirm Password" placeholder="<?= encodeString(getTranslation('Confirm Password')); ?>" autocomplete="new-password" autocapitalize="off" spellcheck="false"><!--
+								--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('Confirm Password')); ?>" type="password" name="Confirm Password" placeholder="<?= encodeString(getTranslation('Confirm Password')); ?>" autocomplete="new-password" autocapitalize="off" spellcheck="false" enterkeyhint="done"><!--
 								--><span class="capsLock hide"></span><!--
 							--></div><!--
 							--><button type="submit"><!--
@@ -1583,7 +1603,7 @@
 							--><input class="hide translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" type="hidden" name="Username" value="<?= encodeString(getTranslation('MWC Wallet')); ?>" autocomplete="off" autocapitalize="off" spellcheck="false"><!--
 							--><div><!--
 								--><span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span><!--
-								--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('Password')); ?>" type="password" name="Password" placeholder="<?= encodeString(getTranslation('Password')); ?>" autocomplete="current-password" autocapitalize="off" spellcheck="false"><!--
+								--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('Password')); ?>" type="password" name="Password" placeholder="<?= encodeString(getTranslation('Password')); ?>" autocomplete="current-password" autocapitalize="off" spellcheck="false" enterkeyhint="done"><!--
 								--><span class="capsLock hide"></span><!--
 							--></div><!--
 							--><button type="submit"><!--
@@ -1777,7 +1797,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="url"><!--
-													--><input class="recipientAddress translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" inputmode="url"><!--
+													--><input class="recipientAddress translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" inputmode="url" enterkeyhint="done"><!--
 													--><span></span><!--
 													--><span class="capsLock hide"></span><!--
 												--></div><!--
@@ -1809,7 +1829,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="number"><!--
-													--><input class="amount" type="number" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal"><!--
+													--><input class="amount" type="number" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal" enterkeyhint="done"><!--
 													--><span></span><!--
 												--></div><!--
 											--></div><!--
@@ -1829,7 +1849,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="number"><!--
-													--><input class="value" type="number" min="0" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal"><!--
+													--><input class="value" type="number" min="0" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal" enterkeyhint="done"><!--
 													--><span></span><!--
 												--></div><!--
 											--></div><!--
@@ -1839,7 +1859,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="number"><!--
-													--><input class="baseFee" type="number" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal"><!--
+													--><input class="baseFee" type="number" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="decimal" enterkeyhint="done"><!--
 													--><span></span><!--
 												--></div><!--
 											--></div><!--
@@ -1859,7 +1879,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="text"><!--
-													--><input class="message" type="text" autocomplete="on" autocapitalize="on" spellcheck="true"><!--
+													--><input class="message" type="text" autocomplete="on" autocapitalize="on" spellcheck="true" enterkeyhint="done"><!--
 													--><span></span><!--
 													--><span class="capsLock hide"></span><!--
 												--></div><!--
@@ -1931,7 +1951,7 @@
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="text"><!--
 													--><span class="show translatable" data-text="<?= encodeString(getDefaultTranslation('Show')); ?>" title="<?= encodeString(getTranslation('Show')); ?>"></span><!--
-													--><input class="confirmNewPassword" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false" data-private><!--
+													--><input class="confirmNewPassword" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false" data-private enterkeyhint="done"><!--
 													--><span></span><!--
 													--><span class="capsLock hide"></span><!--
 												--></div><!--
@@ -1995,7 +2015,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="number"><!--
-													--><input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric"><!--
+													--><input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric" enterkeyhint="done"><!--
 													--><span></span><!--
 												--></div><!--
 											--></div><!--
@@ -2039,7 +2059,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="number"><!--
-													--><input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric"><!--
+													--><input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric" enterkeyhint="done"><!--
 													--><span></span><!--
 												--></div><!--
 											--></div><!--
@@ -2094,7 +2114,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="number"><!--
-													--><input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric"><!--
+													--><input type="number" min="1" max="<?= MINUTES_IN_AN_HOUR * HOURS_IN_A_DAY; ?>" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric" enterkeyhint="done"><!--
 													--><span></span><!--
 												--></div><!--
 											--></div><!--
@@ -2143,7 +2163,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="number"><!--
-													--><input type="number" min="10" max="1000" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric"><!--
+													--><input type="number" min="10" max="1000" autocomplete="off" autocapitalize="off" spellcheck="false" data-private inputmode="numeric" enterkeyhint="done"><!--
 													--><span></span><!--
 												--></div><!--
 											--></div><!--
@@ -2165,7 +2185,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="url"><!--
-													--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url"><!--
+													--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url" enterkeyhint="done"><!--
 													--><span></span><!--
 													--><span class="capsLock hide"></span><!--
 												--></div><!--
@@ -2176,7 +2196,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="text"><!--
-													--><input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-private><!--
+													--><input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-private enterkeyhint="done"><!--
 													--><span></span><!--
 													--><span class="capsLock hide"></span><!--
 												--></div><!--
@@ -2233,7 +2253,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="url"><!--
-													--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url"><!--
+													--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url" enterkeyhint="done"><!--
 													--><span></span><!--
 													--><span class="capsLock hide"></span><!--
 												--></div><!--
@@ -2256,7 +2276,7 @@
 												--></p><!--
 												--><span class="dots"></span><!--
 												--><div class="value" data-type="url"><!--
-													--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url"><!--
+													--><input class="translatable" data-text="<?= encodeString(getDefaultTranslation('URL')); ?>" type="text" placeholder="<?= encodeString(getTranslation('URL')); ?>" autocomplete="url" autocapitalize="off" spellcheck="false" data-private inputmode="url" enterkeyhint="done"><!--
 													--><span></span><!--
 													--><span class="capsLock hide"></span><!--
 												--></div><!--

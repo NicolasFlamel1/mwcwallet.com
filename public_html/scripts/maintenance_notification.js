@@ -82,8 +82,8 @@ class MaintenanceNotification {
 			// Check if can show
 			if(this.canShow === true) {
 			
-				// Check if not an extension and not loading from file
-				if(Common.isExtension() === false && location["protocol"] !== Common.FILE_PROTOCOL) {
+				// Check if not an extension, not loading from file, and not a mobile app
+				if(Common.isExtension() === false && location["protocol"] !== Common.FILE_PROTOCOL && Common.isMobileApp() === false) {
 			
 					// Get the current timestamp
 					var currentTimestamp = Common.getCurrentTimestamp();

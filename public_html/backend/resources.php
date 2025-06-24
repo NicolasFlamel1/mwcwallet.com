@@ -346,10 +346,10 @@
 			"Checksum" => "dPusPRCnCmHd3HtU3too2Th76vqqKBE3ARrdf3SIhznOinyyBXyvn+xDw9PoMWITeGeD5XVkUTuvXzPSQN0oag=="
 		],
 		"./scripts/application.js" => [
-			"Version" => 104,
+			"Version" => 105,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "JxRayxeIgfzOSFJTzM/2N9XsKkgPH5otqTt6RqJw72b8V2/qfiSlacef4yqAV+p6tK/ZIrgKZ1IrTRHv0zoNnQ=="
+			"Checksum" => "SyjXLkFOTrmVUtzppqC5p2Obn/3yKizOItbiikb2x/Qwk/1ByqMVB/1ABIRSStk4Z1gTDHNiCjmA4A/kI+ssaA=="
 		],
 		"./scripts/automatic_lock.js" => [
 			"Version" => 5,
@@ -364,10 +364,10 @@
 			"Checksum" => "6IoZ640jM4IsPVC0QB7+wiuens2+mcxLasLwGkGoszew+RVumYtcUmdruWbpr2LVG0ntS06TvUrUt5DqIJwVXQ=="
 		],
 		"./scripts/language.js" => [
-			"Version" => 64,
+			"Version" => 65,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "VOxCDUjUJMIxmu56wmw6hqTKGRuq2QhyHmI/97+9xwN8Ax+xy3a4O6TTVyEdCsxEKHpUJSfDpnnvIv7+QcKzag=="
+			"Checksum" => "XAflttMVnovThY1mBHLtS02Ayl45VHvbptbOHeTfkvnSKfYTJ94RfjTz2l2nKU2v/ifsr3fvc/JX9W323Oncgg=="
 		],
 		"./scripts/protocol_handler.js" => [
 			"Version" => 8,
@@ -412,10 +412,10 @@
 			"Checksum" => "djV+b/HtH4v0vFscECm8/b8dj/sZ1Y4NrkHhb8FlUfZHAAKDpta2XMhC/QNrlBQoBJBIBjN/VOgnP9AoxmYd1Q=="
 		],
 		"./scripts/service_worker_installer.js" => [
-			"Version" => 10,
+			"Version" => 11,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "lpFVNVY1nK6ZM1winGWXDkVOz4bRxgpgKbyC6YeJELwiAXSy32/pvYZMlaySJfHyRbeyRMahuHqGaRZUUjMQdA=="
+			"Checksum" => "lz94d+N8RONoWONAsGTMsadFe1gEovqlwLuXBglHnviQc535txY8P5/Sj3FiN5QvInoOgOYL6eXEhQs8Dcb2aA=="
 		],
 		"./scripts/wallet.js" => [
 			"Version" => 25,
@@ -460,16 +460,16 @@
 			"Checksum" => "1Dos1rNWtUlUuVq4ElvN9Twhy9SaeXeN3kTAGT7ND8tAPn3eskDtegm+zVMrxqH5iyN+Zk3cL7IbTKs23OtHKA=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 131,
+			"Version" => 132,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "la+Ke0z4OcOjZc0uhAP6w7pZ3Y+0esV/Gx5+ielneckX9kggeOfThy/sDFBrDF4+9lAWsA6logB27dAf9/iZ5Q=="
+			"Checksum" => "pnl9/tMw9/HprsMMgX4QYh7TpxkHKabYQAVRLZl2LAeGGmZPXj+apwMc/BT9ojiK7/8ftgaHCK0aCTSydzXxpg=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 77,
+			"Version" => 78,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "jSkNynN4NGRO4TyTa7bz2ojp4oCCA64VeEGEqxqdi5U4CW9RySV3+6qJ/L7lVV/P3ODsvtpmcHR6MtMxBorOkg=="
+			"Checksum" => "FAj1u6impkBPMn6Ic0IDGMDaJgsuLEBmHQ+1DyzzqDWSE98MhVkKsUk++6ljqfY/LnZWcggnrqayKRHfo7GhSg=="
 		],
 		"./scripts/hardware_wallet_usb_transport.js" => [
 			"Version" => 8,
@@ -568,13 +568,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 77,
+			"Version" => 78,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 144,
+			"Version" => 145,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -592,13 +592,13 @@
 			"Checksum" => "RFXyJdMBrFe0rBAKTOwmTVcZzI6V3Pf7HHizK+RQVHguh/pCOTPV0Jj+EB7cvP1/wpuUAyh1SnWVZ01qLg4emg=="
 		],
 		"./scripts/languages.js" => [
-			"Version" => 16,
+			"Version" => 17,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 72,
+			"Version" => 73,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -610,10 +610,10 @@
 			"Checksum" => "UdiWWkqNvt3q0KH7I+E+eoFOWTt+hULNoXNxnwPaqevGInwqgpnjqJVG1S7lk9jo++XEPiJYK/xSWuwEwpEPRQ=="
 		],
 		"./scripts/listener.js" => [
-			"Version" => 21,
+			"Version" => 22,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "n9X9WDCumLjb9pic1KPaTnqRmaxecFNn8AbZwCjboXJl4i3Fw03YeG0rDoyM5j+0K2Mme3H105EJy7+wj+pMow=="
+			"Checksum" => "jDV3IKvacTUrIAacDI+CNUdUUJq5pYkhVZ0veRtIX14uo5pTWI6hyzX8q/EyLvQYD6S6AAph0FVBlQK+2M7diw=="
 		],
 		"./scripts/interaction.js" => [
 			"Version" => 6,
@@ -658,10 +658,10 @@
 			"Checksum" => "n/aCB9fqFv7lGcxhOGiowafXf2dy683JipYk5I+qFMZPdJbTsYxXUypLc1P/ELVSQHpvMX87dMy1C95AHBMsEQ=="
 		],
 		"./scripts/tor.js" => [
-			"Version" => 10,
+			"Version" => 11,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "ewMz7P/K/A/ej2daA/n6QeEr9h5A1aECP8eDr5B3L77R94uLQH4z07/W2WTsCZc1d7fRRk2oiGK50QNdSXrGpw=="
+			"Checksum" => "HOehMxdQaXdECedJSS4N4n5F2LHHuYjF8npXWiLXY7eqnwmbi2cttPpLfstl4R8AOKCK4kqTVMesj8BlQF0sXw=="
 		],
 		"./scripts/mqs.js" => [
 			"Version" => 18,
@@ -724,10 +724,10 @@
 			"Checksum" => "Ba4AMi1Gkx7QB5Xa8OiafsoSjdA5zxaqG3WfyB1I4p9RumPDxl0ZAR21mVN5fPRxsnImSbkIiuU+Lwif40LvqQ=="
 		],
 		"./scripts/tor_proxy.js" => [
-			"Version" => 8,
+			"Version" => 9,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "DKc9auFvln7lPN+3dXDaSpu/GASjOUb5TsUF/taDYvNDH9yftvtrRwtfISh5F3BOFqa3TIV8RqCljj5aF9ZORQ=="
+			"Checksum" => "H2gVi9lyz8aEw1hK0VslXSLLFwJghr21fg2C7iLdwjKygSlgzCZRTyJ48JXz7SfUSunOIQbugZdSU2yuaV/sZg=="
 		],
 		"./scripts/node.js" => [
 			"Version" => 32,
@@ -736,16 +736,16 @@
 			"Checksum" => "9cTe85/BnPewM6wINvwKGxieNFZ/X8FU8NKS9fLZpAymO3trEoRt2AflHDnDxYGanyMmA3FD4dOYctY2NvIyWg=="
 		],
 		"./scripts/message.js" => [
-			"Version" => 28,
+			"Version" => 29,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "fUT2aWct3axErt/wI8N/bxKNkP3YMH9FkEYnKH4PRHhMKd90XDW8MIytywk4/OK2GMDexmxZoTv5irrRxmusjg=="
+			"Checksum" => "i4bS/hG2MrUZDC+XDvvpL76KyZAY25BOBwIwPl0McaJf4lYWtyk6OSMpMMLR3Y8khMUtZJx8UH4mGIGYl4YBYA=="
 		],
 		"./scripts/common.js" => [
-			"Version" => 101,
+			"Version" => 102,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "Ci03nuBe0rpS/HKhQc9UnnP14r69uGawWkUHBD21+SNqKNwHe8WPTJDiHkSPc+PHMo76I8/SJJfjyLnfAl5Trw=="
+			"Checksum" => "S7do2AAdhztN9N0iRS8HNFWVco1n6+xrMJQwmWdrIR/8v77BLeBmqo+sP2jowapMsI8SdcUlkQt5Y+wT33qpJA=="
 		],
 		"./scripts/bit_reader.js" => [
 			"Version" => 6,
@@ -778,10 +778,10 @@
 			"Checksum" => "1qSnBxDGofAzuph+6Z6WjRJ5TxiQAsURE9vtylnLOsB1OJYTUSYbffI8GQXLQ6n0LPusp2HxTN8i+4BKc31iIg=="
 		],
 		"./scripts/fatal_error.js" => [
-			"Version" => 18,
+			"Version" => 19,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "aWPcZ8cSOyW0hKu7hOVlQrx4fwuZt5E6vftLCyOboHC1HTPUoizRoRtdLeGipTXLZ4dpGo6HmjanE4SFHPDDIQ=="
+			"Checksum" => "c7NDcQt+Vy8XsksxWXu7IxIGgL8ogZg+pWlz0WL9smRGfzoXx4XGM+a1h0Jg58iSZ+/XvWfMuxVY6iYTi6L98w=="
 		],
 		"./scripts/scroll.js" => [
 			"Version" => 7,
@@ -796,16 +796,16 @@
 			"Checksum" => "QNtKNG9TS2TfRgBAjPlLqCDIXv/UIcqDCTMi6tNwd3C7yxlKBkiErW/wtLpufToe46dfyTjUwbsBxkHAQilPBA=="
 		],
 		"./scripts/extension.js" => [
-			"Version" => 7,
+			"Version" => 8,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "W4VU2BdG0lMevLGhEK8sx7aXj3EHoQIqfRQBjQ/MuannygiCmjsaWjoH84qSGSZdrB8rMmzkxte4vyrIKqRt2w=="
+			"Checksum" => "+uqhws8j/bVsp1VOMrwYlfU7tDdWmtOpKPtum6g6tG0FvoEGLrt/KDH5fANBwLToLWRgpPg/QElrOUDOEdwcKg=="
 		],
 		"./scripts/version.js" => [
-			"Version" => 13,
+			"Version" => 14,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "1drVCyRwFERSpHGYqKn/IMCeMUFYz/YmgbCecM8XazxOaRWEn4wSUXNF4LJOEBELoUyGr1aD4RHCkb1A90M/IQ=="
+			"Checksum" => "CZu2Tx24WKJ6HQxGiBGwQKUpc1VRTKe6STXXpdL1LWOkhNRPSRJk0aKDrRYWWF2WC8wYZjeshG41tg8KdA70AQ=="
 		],
 		"./scripts/secp256k1-zkp-0.0.29.wasm" => [
 			"Version" => 1,
@@ -856,16 +856,16 @@
 			"Checksum" => "tbo37DKhDLWgAFFmdHYd7m4aqyqHIQev/OEROMgr0+2IK+Wp9ldX+dzkDsxJWV0zsF8F9aDCf9AAaOkXWkF4eg=="
 		],
 		"./scripts/about_section.js" => [
-			"Version" => 20,
+			"Version" => 21,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "liNasQI9AlFyJZvge45UmsJ8mzflhC3CIOkRQAEqlO/JTscDe3edhvzHGZPrznwpqfCk9+pcWQSFXN8BLruXzw=="
+			"Checksum" => "xah7JW1SsG82uB3JKozvuNHs4DKrkDyclNgqtFh7jD5JI7bzHnVAmILCUKNKS9YZnJYZYwsew4qp2p8j8F4g=="
 		],
 		"./scripts/transaction_section.js" => [
-			"Version" => 38,
+			"Version" => 39,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "UDay3ItgLltbFNgSTX5T5LHkJ9fGq37t40XKjjBghcYBPG+IEuKzVfEZuqC0TXympEEvRmxfjQ9pRvqoK5W1tw=="
+			"Checksum" => "OJC//LYiyqaAV2uRPQl+GhNqnRdCjfwglAqbK+a4Xwq8B/917uSRDk3WhufH3XLg4y8UBV60TYWDyJlnvSA/DA=="
 		],
 		"./scripts/account_section.js" => [
 			"Version" => 14,
@@ -874,16 +874,16 @@
 			"Checksum" => "NYI6dt8F95YbVXNa9QMby6C4L1ME8Ta+80FEZg5X4YQEn9N69du4R8yuCKDa+WWXFuxjcjokJHAYuW6hTnRguA=="
 		],
 		"./scripts/wallet_section.js" => [
-			"Version" => 95,
+			"Version" => 96,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "jRN7pGzbJeD8lvmQ5ALAowBt9QUrQfXY4e0GNR+cS0evYDOsOOiNttLvZhsPZTnhzzGRpkpJ4JhSHla3uQh7lQ=="
+			"Checksum" => "BDkBXMCKEF+8BauGOSVJwhKaefh+IwGwX6X3BaepIxEuyPcs+49ngTFTuiLuTCxbs6PuRaAXAI8HIobxMMk0zw=="
 		],
 		"./scripts/send_payment_section.js" => [
-			"Version" => 106,
+			"Version" => 107,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "6M0CZzIKGZEVngGgTyYxn+4FKCWpZwTKNvwhh3e18xlh1uTzBiVgszeL8U3KejwmMXIW+hSofztUH80cE87mjQ=="
+			"Checksum" => "GCuK6w9xMaEIJ2YxqgLLgYCXz2LUQEYYn9+zOmoeo+XjsLlE7miHFSxlnADFbZnUZ0eoXiMfT6Nx/1vlTHxjhA=="
 		],
 		"./scripts/log_section.js" => [
 			"Version" => 7,
@@ -904,10 +904,10 @@
 			"Checksum" => "T5uHBo/NYcxx0o9wdsFoyFqmNa7evSYVkAOoSCXr6d+4BZ/N3CeXGxsMRCsrODROagZnW0gBQj87suvwKEBUMQ=="
 		],
 		"./scripts/maintenance_notification.js" => [
-			"Version" => 11,
+			"Version" => 12,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "HX4BGD6ZkumCAIOraOfAoJUCnA7ne6vYJbMBnnaFtfbYQqnMUXMPfF1fXmpbfEc/NYI3hAX9q5NttgVidHp0OA=="
+			"Checksum" => "zmbof+jAPeZ5j1O7I7YIpDFfY5nBUMbHAfPW+JTEc6ismabKxfax5+1R4qPg5uDGsQd7bB4d8ZpcpOUzya3jaA=="
 		],
 		"./scripts/install_app.js" => [
 			"Version" => 14,
@@ -916,10 +916,10 @@
 			"Checksum" => "tL8JRuLipT2XAjuSFouO83j4CGsTPvdWE8Co6cKcuhskCdPKA3XquDvo3DgpU4cRhbjc4DrDwTZq27YChQ5IIA=="
 		],
 		"./scripts/unlocked.js" => [
-			"Version" => 92,
+			"Version" => 93,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "82dzsYR3p2pahc9CDklC2bFTmPDINx/GDiQKiIelG1YFE2f2kSOi1Ga7gPTIk29oWImtHQAYcIRkPNIZE2KOAw=="
+			"Checksum" => "9kiGFwVsP5UtTv2gF8XTDsi8fRJ/77t7mRriyOvEKH/fU6CJpSwMhx43GqE042TzYuxAu6e48rVFYhHBirTe2g=="
 		],
 		"./scripts/uuid.js" => [
 			"Version" => 5,
@@ -934,10 +934,10 @@
 			"Checksum" => "OA4SbseOEmVcPnIky32I8ZUCfD16z7CnRpym1AVwXWvHwF/EG2E8E4LnsM32YpMCiTM2due3JCbxDtJITdFcwg=="
 		],
 		"./scripts/slate.js" => [
-			"Version" => 104,
+			"Version" => 105,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "B/+rtVg+11h7ILIRWpDSlay4ZnvrgJGQnq7DLVmF4gAEOtNV7T+Ft5H903eTeNsHKkDz89ZzKEswzE79mAEQ0w=="
+			"Checksum" => "AOJ9sCUllwULVfkWphc4gFll4nj9wddhl9A0n9yPTIgrAiF9WjzwQ/AURoAMhVRsBaRkL5b5Dxqfm3Okiao1pQ=="
 		],
 		"./scripts/slate_participant.js" => [
 			"Version" => 11,
@@ -1408,10 +1408,10 @@
 			"Checksum" => "VvrR6ya9WDBdsAObUtWoKmfydp7/TnmV6KaH4/uAmrcT34mgNBwzPky+uOTTUr5ub4X9SgaYPno7R9xXVlq9HQ=="
 		],
 		"./styles/message.css" => [
-			"Version" => 30,
+			"Version" => 31,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "iIM9l24e0L5gNTVxTRdpUpTqwvP9Zu7KPbpwSmGAN/NqTE6RVrWqP+UD4aL/gjUpfGa0jhCFKOuNJu+1VlB1LQ=="
+			"Checksum" => "GkBzHjQLqU4X7ExmRSqspH7MIwYW2LK6Jsuy5PAE4uxZhpHO3nhHJlF2Vwl6PrkZpA/siRvnBXlqodoyeCkgHQ=="
 		],
 		"./styles/tetris.css" => [
 			"Version" => 3,
