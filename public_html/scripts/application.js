@@ -6730,90 +6730,42 @@ class Application {
 			// Return promise
 			return new Promise(function(resolve, reject) {
 			
-				// Try
-				try {
-						
-					// Create instance
-					var instance = new Instance();
-				}
+				// Check if not a mobile app
+				if(Common.isMobileApp() === false) {
 				
-				// Catch errors
-				catch(error) {
-				
-					// Check if is an extesnion
-					if(Common.isExtension() === true) {
-					
-						// Set message
-						var message = Message.createText(Language.getDefaultTranslation('Failed to determine the primary instance.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Restart this extension to try again.'));
+					// Try
+					try {
+							
+						// Create instance
+						var instance = new Instance();
 					}
 					
-					// Otherwise check if is an app
-					else if(Common.isApp() === true) {
+					// Catch errors
+					catch(error) {
 					
-						// Set message
-						var message = Message.createText(Language.getDefaultTranslation('Failed to determine the primary instance.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Restart this app to try again.'));
-					}
-					
-					// Otherwise
-					else {
-					
-						// Set message
-						var message = Message.createText(Language.getDefaultTranslation('Failed to determine the primary instance.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Refresh this site to try again.'));
-					}
-				
-					// Show message and allow showing messages
-					self.message.show(Language.getDefaultTranslation('Error'), message, false, function() {
-					
-						// Hide loading
-						self.hideLoading();
-					
-						// Show language display
-						Language.showDisplay();
-					
-						// Hide loading display spinner
-						self.loadingDisplay.children("div.spinner").addClass("hide");
-					
-					}, Message.NO_BUTTON, Message.NO_BUTTON, true);
-					
-					// Return
-					return;
-				}
-				
-				// Return getting if instance is the primary instance
-				return instance.isPrimaryInstance().then(function(isPrimaryInstance) {
-				
-					// Check if instance is the primary instance
-					if(isPrimaryInstance === true)
-					
-						// Resolve
-						resolve();
-					
-					// Otherwise
-					else {
-					
-						// Check if is an extension
+						// Check if is an extesnion
 						if(Common.isExtension() === true) {
 						
 							// Set message
-							var message = Language.getDefaultTranslation('Only one instance of this extension can be open at once. Close all other instances to continue.');
+							var message = Message.createText(Language.getDefaultTranslation('Failed to determine the primary instance.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Restart this extension to try again.'));
 						}
 						
 						// Otherwise check if is an app
 						else if(Common.isApp() === true) {
 						
 							// Set message
-							var message = Language.getDefaultTranslation('Only one instance of this app can be open at once. Close all other instances to continue.');
+							var message = Message.createText(Language.getDefaultTranslation('Failed to determine the primary instance.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Restart this app to try again.'));
 						}
 						
 						// Otherwise
 						else {
 						
 							// Set message
-							var message = Language.getDefaultTranslation('Only one instance of this site can be open at once. Close all other instances to continue.');
+							var message = Message.createText(Language.getDefaultTranslation('Failed to determine the primary instance.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Refresh this site to try again.'));
 						}
 					
 						// Show message and allow showing messages
-						self.message.show(Language.getDefaultTranslation('Error'), Message.createText(message), false, function() {
+						self.message.show(Language.getDefaultTranslation('Error'), message, false, function() {
 						
 							// Hide loading
 							self.hideLoading();
@@ -6821,31 +6773,90 @@ class Application {
 							// Show language display
 							Language.showDisplay();
 						
+							// Hide loading display spinner
+							self.loadingDisplay.children("div.spinner").addClass("hide");
+						
 						}, Message.NO_BUTTON, Message.NO_BUTTON, true);
 						
-						// Instance is primary instance event
-						$(instance).one(Instance.IS_PRIMARY_INSTANCE_EVENT, function() {
-						
-							// Set timeout
-							setTimeout(function() {
-						
-								// Show loading
-								self.showLoading();
-								
-								// Prevent showing messages
-								self.message.prevent();
-							
-								// Hide message
-								self.message.hide().then(function() {
-								
-									// Resolve
-									resolve();
-								});
-							
-							}, Application.HIDE_PRIMARY_INSTANCE_MESSAGE_DELAY_MILLISECONDS);
-						});
+						// Return
+						return;
 					}
-				});
+					
+					// Return getting if instance is the primary instance
+					return instance.isPrimaryInstance().then(function(isPrimaryInstance) {
+					
+						// Check if instance is the primary instance
+						if(isPrimaryInstance === true)
+						
+							// Resolve
+							resolve();
+						
+						// Otherwise
+						else {
+						
+							// Check if is an extension
+							if(Common.isExtension() === true) {
+							
+								// Set message
+								var message = Language.getDefaultTranslation('Only one instance of this extension can be open at once. Close all other instances to continue.');
+							}
+							
+							// Otherwise check if is an app
+							else if(Common.isApp() === true) {
+							
+								// Set message
+								var message = Language.getDefaultTranslation('Only one instance of this app can be open at once. Close all other instances to continue.');
+							}
+							
+							// Otherwise
+							else {
+							
+								// Set message
+								var message = Language.getDefaultTranslation('Only one instance of this site can be open at once. Close all other instances to continue.');
+							}
+						
+							// Show message and allow showing messages
+							self.message.show(Language.getDefaultTranslation('Error'), Message.createText(message), false, function() {
+							
+								// Hide loading
+								self.hideLoading();
+							
+								// Show language display
+								Language.showDisplay();
+							
+							}, Message.NO_BUTTON, Message.NO_BUTTON, true);
+							
+							// Instance is primary instance event
+							$(instance).one(Instance.IS_PRIMARY_INSTANCE_EVENT, function() {
+							
+								// Set timeout
+								setTimeout(function() {
+							
+									// Show loading
+									self.showLoading();
+									
+									// Prevent showing messages
+									self.message.prevent();
+								
+									// Hide message
+									self.message.hide().then(function() {
+									
+										// Resolve
+										resolve();
+									});
+								
+								}, Application.HIDE_PRIMARY_INSTANCE_MESSAGE_DELAY_MILLISECONDS);
+							});
+						}
+					});
+				}
+				
+				// Otherwise
+				else {
+				
+					// Resolve
+					resolve();
+				}
 			});
 		}
 		
@@ -7106,6 +7117,13 @@ class Application {
 					
 					// Check if cookie acceptance was shown
 					if(self.cookieAcceptance.show() === true) {
+					
+						// Clear focus on input
+						focusOnInput = false;
+					}
+					
+					// Check if is a mobile app
+					if(Common.isMobileApp() === true) {
 					
 						// Clear focus on input
 						focusOnInput = false;
