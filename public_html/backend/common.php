@@ -10,7 +10,8 @@
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Various changes to make this site function as an Android app."
+		"Various changes to make this site function as an Android app.",
+		"Made connecting to hardware wallets via Bluetooth more reliable."
 	];
 	
 	// Maintenance start time

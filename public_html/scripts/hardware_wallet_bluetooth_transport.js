@@ -95,18 +95,49 @@ class HardwareWalletBluetoothTransport {
 			// Clear allow disconnect event
 			this.allowDisconnectEvent = false;
 			
-			// Check if connection is connected
-			if(this.connection["connected"] === true) {
-		
-				// Disconnect connection
-				this.connection.disconnect();
-			}
-		
+			// Set self
+			var self = this;
+			
 			// Return promise
 			return new Promise(function(resolve, reject) {
 			
-				// Resolve
-				resolve();
+				// Check if connection is connected
+				if(self.connection["connected"] === true) {
+			
+					// Return stopping notifications
+					return self.notifyCharacteristic.stopNotifications().then(function() {
+					
+						// Check if connection is connected
+						if(self.connection["connected"] === true) {
+						
+							// Disconnect connection
+							self.connection.disconnect();
+						}
+						
+						// Resolve
+						resolve();
+						
+					// Catch errors
+					}).catch(function(error) {
+					
+						// Check if connection is connected
+						if(self.connection["connected"] === true) {
+						
+							// Disconnect connection
+							self.connection.disconnect();
+						}
+						
+						// Resolve
+						resolve();
+					});
+				}
+				
+				// Otherwise
+				else {
+				
+					// Resolve
+					resolve();
+				}
 			});
 		}
 		
@@ -329,10 +360,17 @@ class HardwareWalletBluetoothTransport {
 							
 									// Disconnect connection
 									connection.disconnect();
+									
+									// Reject error
+									reject(new DOMException("", "NetworkError"));
 								}
 								
-								// Reject
-								reject();
+								// Otherwise
+								else {
+								
+									// Reject
+									reject();
+								}
 								
 							}, HardwareWalletBluetoothTransport.CONNECT_TIMEOUT_DURATION_MILLISECONDS);
 						
@@ -400,63 +438,55 @@ class HardwareWalletBluetoothTransport {
 																// Check if connection is connected
 																if(connection["connected"] === true) {
 																
-																	// Disconnected handler
-																	var disconnectedHandler = function() {
+																	// Send timeout
+																	var sendTimeout = setTimeout(function() {
 																	
-																		// Remove GATT server disconnected event
-																		device.removeEventListener("gattserverdisconnected", disconnectedHandler);
-																	
-																		// Stop notifications and catch errors
-																		notifyCharacteristic.stopNotifications().catch(function(error) {
-																		
-																		});
-																	};
-															
-																	// Device GATT server disconnected event
-																	device.addEventListener("gattserverdisconnected", disconnectedHandler);
-																	
-																	// Return getting MTU from the device
-																	return HardwareWalletBluetoothTransport.sendRequest(connection, writeCharacteristic, notifyCharacteristic, HardwareWalletBluetoothTransport.LEDGER_GET_MTU_COMMAND_TAG).then(function(response) {
+																		// Set timeout occurred
+																		timeoutOccurred = true;
 																	
 																		// Check if connection is connected
 																		if(connection["connected"] === true) {
 																		
-																			// Check if response is valid
-																			if(response["length"] === 1) {
-																
-																				// Get MTU from response
-																				var mtu = Math.min(response[0], HardwareWalletBluetoothTransport.MAXIMUM_MTU);
+																			// Stop notifications
+																			notifyCharacteristic.stopNotifications().then(function() {
+																			
+																				// Check if connection is connected
+																				if(connection["connected"] === true) {
 																				
-																				// Check if MTU is valid
-																				if(mtu >= HardwareWalletBluetoothTransport.MINIMUM_MTU) {
-																				
-																					// Create transport
-																					var transport = new HardwareWalletBluetoothTransport(connection, writeCharacteristic, notifyCharacteristic, mtu, HardwareWalletBluetoothTransport.DEVICES[deviceIndex]["Product Name"]);
+																					// Disconnect connection
+																					connection.disconnect();
 																					
-																					// Resolve transport
-																					resolve(transport);
+																					// Reject error
+																					reject(new DOMException("", "NetworkError"));
 																				}
 																				
 																				// Otherwise
 																				else {
 																				
-																					// Disconnect connection
-																					connection.disconnect();
-																					
 																					// Reject
 																					reject();
 																				}
-																			}
 																				
-																			// Otherwise
-																			else {
+																			// Catch errors
+																			}).catch(function(error) {
 																			
-																				// Disconnect connection
-																				connection.disconnect();
+																				// Check if connection is connected
+																				if(connection["connected"] === true) {
 																				
-																				// Reject
-																				reject();
-																			}
+																					// Disconnect connection
+																					connection.disconnect();
+																					
+																					// Reject error
+																					reject(new DOMException("", "NetworkError"));
+																				}
+																				
+																				// Otherwise
+																				else {
+																				
+																					// Reject
+																					reject();
+																				}
+																			});
 																		}
 																		
 																		// Otherwise
@@ -466,33 +496,163 @@ class HardwareWalletBluetoothTransport {
 																			reject();
 																		}
 																		
+																	}, HardwareWalletBluetoothTransport.SEND_TIMEOUT_DURATION_MILLISECONDS);
+																	
+																	// Return getting MTU from the device
+																	return HardwareWalletBluetoothTransport.sendRequest(connection, writeCharacteristic, notifyCharacteristic, HardwareWalletBluetoothTransport.LEDGER_GET_MTU_COMMAND_TAG).then(function(response) {
+																	
+																		// Check if a timeout didn't occur
+																		if(timeoutOccurred === false) {
+																	
+																			// Clear send timeout
+																			clearTimeout(sendTimeout);
+																		
+																			// Check if connection is connected
+																			if(connection["connected"] === true) {
+																			
+																				// Check if response is valid
+																				if(response["length"] === 1) {
+																	
+																					// Get MTU from response
+																					var mtu = Math.min(response[0], HardwareWalletBluetoothTransport.MAXIMUM_MTU);
+																					
+																					// Check if MTU is valid
+																					if(mtu >= HardwareWalletBluetoothTransport.MINIMUM_MTU) {
+																					
+																						// Create transport
+																						var transport = new HardwareWalletBluetoothTransport(connection, writeCharacteristic, notifyCharacteristic, mtu, HardwareWalletBluetoothTransport.DEVICES[deviceIndex]["Product Name"]);
+																						
+																						// Resolve transport
+																						resolve(transport);
+																					}
+																					
+																					// Otherwise
+																					else {
+																					
+																						// Return stopping notifications
+																						return notifyCharacteristic.stopNotifications().then(function() {
+																						
+																							// Check if connection is connected
+																							if(connection["connected"] === true) {
+																							
+																								// Disconnect connection
+																								connection.disconnect();
+																							}
+																							
+																							// Reject
+																							reject();
+																							
+																						// Catch errors
+																						}).catch(function(error) {
+																						
+																							// Check if connection is connected
+																							if(connection["connected"] === true) {
+																							
+																								// Disconnect connection
+																								connection.disconnect();
+																							}
+																							
+																							// Reject
+																							reject();
+																						});
+																					}
+																				}
+																					
+																				// Otherwise
+																				else {
+																				
+																					// Return stopping notifications
+																					return notifyCharacteristic.stopNotifications().then(function() {
+																					
+																						// Check if connection is connected
+																						if(connection["connected"] === true) {
+																						
+																							// Disconnect connection
+																							connection.disconnect();
+																						}
+																						
+																						// Reject
+																						reject();
+																						
+																					// Catch errors
+																					}).catch(function(error) {
+																					
+																						// Check if connection is connected
+																						if(connection["connected"] === true) {
+																						
+																							// Disconnect connection
+																							connection.disconnect();
+																						}
+																						
+																						// Reject
+																						reject();
+																					});
+																				}
+																			}
+																			
+																			// Otherwise
+																			else {
+																			
+																				// Reject
+																				reject();
+																			}
+																		}
+																		
 																	// Catch errors
 																	}).catch(function(error) {
 																	
-																		// Check if connection is connected
-																		if(connection["connected"] === true) {
+																		// Check if a timeout didn't occur
+																		if(timeoutOccurred === false) {
 																	
-																			// Disconnect connection
-																			connection.disconnect();
+																			// Clear send timeout
+																			clearTimeout(sendTimeout);
+																			
+																			// Check if connection is connected
+																			if(connection["connected"] === true) {
+																			
+																				// Return stopping notifications
+																				return notifyCharacteristic.stopNotifications().then(function() {
+																				
+																					// Check if connection is connected
+																					if(connection["connected"] === true) {
+																					
+																						// Disconnect connection
+																						connection.disconnect();
+																					}
+																					
+																					// Reject error
+																					reject(error);
+																					
+																				// Catch errors
+																				}).catch(function() {
+																				
+																					// Check if connection is connected
+																					if(connection["connected"] === true) {
+																					
+																						// Disconnect connection
+																						connection.disconnect();
+																					}
+																					
+																					// Reject error
+																					reject(error);
+																				});
+																			}
+																			
+																			// Otherwise
+																			else {
+																			
+																				// Reject error
+																				reject(error);
+																			}
 																		}
-																		
-																		// Reject error
-																		reject(error);
 																	});
 																}
 																
 																// Otherwise
 																else {
 																
-																	// Return stopping notifications and catch errors
-																	return notifyCharacteristic.stopNotifications().catch(function(error) {
-																	
-																	// Finally
-																	}).finally(function() {
-																	
-																		// Reject
-																		reject();
-																	});
+																	// Reject
+																	reject();
 																}
 																
 															// Catch errors
@@ -503,10 +663,17 @@ class HardwareWalletBluetoothTransport {
 															
 																	// Disconnect connection
 																	connection.disconnect();
+																	
+																	// Reject error
+																	reject(new DOMException("", "NetworkError"));
 																}
 																
-																// Reject error
-																reject(error);
+																// Otherwise
+																else {
+																
+																	// Reject error
+																	reject(error);
+																}
 															});
 														}
 														
@@ -525,10 +692,17 @@ class HardwareWalletBluetoothTransport {
 													
 															// Disconnect connection
 															connection.disconnect();
+															
+															// Reject error
+															reject(new DOMException("", "NetworkError"));
 														}
 														
-														// Reject error
-														reject(error);
+														// Otherwise
+														else {
+														
+															// Reject error
+															reject(error);
+														}
 													});
 												}
 												
@@ -547,10 +721,17 @@ class HardwareWalletBluetoothTransport {
 											
 													// Disconnect connection
 													connection.disconnect();
+													
+													// Reject error
+													reject(new DOMException("", "NetworkError"));
 												}
 												
-												// Reject error
-												reject(error);
+												// Otherwise
+												else {
+												
+													// Reject error
+													reject(error);
+												}
 											});
 										}
 										
@@ -1238,6 +1419,13 @@ class HardwareWalletBluetoothTransport {
 		static get CONNECT_TIMEOUT_DURATION_MILLISECONDS() {
 		
 			// Return connect timeout duration milliseconds
+			return 4000;
+		}
+		
+		// Send timeout duration milliseconds
+		static get SEND_TIMEOUT_DURATION_MILLISECONDS() {
+		
+			// Return send timeout duration milliseconds
 			return 4000;
 		}
 		
