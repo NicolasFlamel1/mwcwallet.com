@@ -3027,11 +3027,93 @@ class WalletSection extends Section {
 														// Break
 														break;
 													
+													// Invalid parameters error
+													case JsonRpc.INVALID_PARAMETERS_ERROR:
+													
+														// Check error message
+														switch(error["error"]["message"]) {
+														
+															// Decoding failed
+															case Language.getDefaultTranslation('Decoding failed'):
+															
+																// Set text
+																var text = Language.getDefaultTranslation('Decoding that file failed. It\'s either invalid or improperly formatted.');
+																
+																// Break
+																break;
+															
+															// Parsing failed
+															case Language.getDefaultTranslation('Parsing failed'):
+															
+																// Set text
+																var text = Language.getDefaultTranslation('Parsing that file failed. It\'s either invalid or contains unsupported features.');
+																
+																// Break
+																break;
+															
+															// Unsupported features
+															case Language.getDefaultTranslation('Unsupported features'):
+															
+																// Set text
+																var text = Language.getDefaultTranslation('That file contains unsupported features.');
+																
+																// Break
+																break;
+															
+															// No payment proof
+															case Language.getDefaultTranslation('No payment proof'):
+															
+																// Set text
+																var text = Language.getDefaultTranslation('That file doesn\'t have a payment proof.');
+																
+																// Break
+																break;
+															
+															// Expired transaction
+															case Language.getDefaultTranslation('Expired transaction'):
+															
+																// Set text
+																var text = Language.getDefaultTranslation('That file is expired.');
+																
+																// Break
+																break;
+															
+															// Incorrect recipient
+															case Language.getDefaultTranslation('Incorrect recipient'):
+															
+																// Set text
+																var text = Language.getDefaultTranslation('That file is for a different wallet.');
+																
+																// Break
+																break;
+															
+															// Duplicate transaction
+															case Language.getDefaultTranslation('Duplicate transaction'):
+															
+																// Set text
+																var text = Language.getDefaultTranslation('That file has already been used.');
+																
+																// Break
+																break;
+															
+															// Default
+															default:
+															
+																// Set text
+																var text = Language.getDefaultTranslation('That file is invalid.');
+																
+																// Break
+																break;
+														}
+														
+														// Break
+														break;
+													
 													// Default
 													default:
 													
 														// Set text
-														var text = Language.getDefaultTranslation('That file is invalid, contains unsupported features, or was already used.');
+														var text = Language.getDefaultTranslation('That file is invalid.');
 														
 														// Break
 														break;

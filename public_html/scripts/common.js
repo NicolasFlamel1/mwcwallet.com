@@ -1738,6 +1738,7 @@ if(typeof jQuery === "function") {
 	var TRANSITION_END_TIMEOUT_MILLISECONDS = 100;
 	
 	// Transition end or timeout
+	var body = $("body");
 	$["fn"].transitionEndOrTimeout = function(callback, property) {
 	
 		// Go through each element
@@ -1785,7 +1786,7 @@ if(typeof jQuery === "function") {
 				// Run callback
 				callback.bind(self)();
 				
-			}, timeout));
+			}, (body.hasClass("splashScreen") === true) ? 0 : timeout));
 			
 			// Self transition end transition end or timeout index event
 			self.one("transitionend.transitionEndOrTimeout" + index.toFixed(), function(event) {

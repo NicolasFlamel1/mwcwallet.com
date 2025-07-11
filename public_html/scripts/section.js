@@ -1458,6 +1458,13 @@ class Section {
 			
 				// Show navigation back button
 				this.display.find("div.navigation").find("button.back").removeClass("hide");
+				
+				// Check if is a mobile app
+				if(Common.isMobileApp() === true) {
+				
+					// Allow mobile app's back button
+					MobileApp.allowBackButton();
+				}
 			}
 			
 			// Otherwise
@@ -1465,6 +1472,13 @@ class Section {
 			
 				// Hide navigation back button
 				this.display.find("div.navigation").find("button.back").addClass("hide");
+				
+				// Check if is a mobile app
+				if(Common.isMobileApp() === true) {
+				
+					// Prevent mobile app's back button
+					MobileApp.preventBackButton();
+				}
 			}
 			
 			// Check if a next section exists

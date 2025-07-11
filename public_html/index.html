@@ -58,6 +58,7 @@
 		// Use strict
 		"use strict";
 		
+		
 		// Constants
 
 		// Index not found
@@ -538,7 +539,25 @@
 					// Hide loading display spinner
 					addClass(getElement(loadingDisplay, "div", "spinner"), "hide");
 				
-				}, SHOW_LOADING_DELAY_MILLISECONDS);
+					// Check if splash screen is showing
+					if(hasClass(body, "splashScreen") === true) {
+					
+						// Set timeout
+						setTimeout(function() {
+						
+							// Check if is a mobile app
+							if(isMobileApp() === true) {
+							
+								// Hide mobile app's splash screen
+								MobileApp.hideSplashScreen();
+							}
+							
+							// Allow transitions
+							removeClass(body, "splashScreen")
+						}, 0);
+					}
+				
+				}, (hasClass(body, "splashScreen") === true) ? 0 : SHOW_LOADING_DELAY_MILLISECONDS);
 				
 				// Check if history is supported and URL query string exists
 				if(typeof history === "object" && history !== null && typeof URL_QUERY_STRING !== "undefined") {
@@ -753,6 +772,10 @@
 		body.loading, body.loading * {
 			cursor: wait !important;
 		}
+		
+		body.splashScreen, body.splashScreen * {
+			transition: none !important;
+		}
 
 		body > div {
 			width: 100%;
@@ -823,7 +846,7 @@
 			transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
 		}
 
-		main > div > div > div.logo.hide {
+		body.splashScreen main > div > div > div.logo, main > div > div > div.logo.hide {
 			display: block;
 			visibility: hidden;
 			opacity: 0;

@@ -218,6 +218,7 @@ class HardwareWallet {
 												if("bluetooth" in navigator === true) {
 												
 													// Return connecting to any Bluetooth hardware wallet
+													var originalError = error;
 													return HardwareWalletBluetoothTransport.request().then(function(transport) {
 													
 														// Set connection type to Bluetooth connection type
@@ -242,16 +243,34 @@ class HardwareWallet {
 															// Otherwise
 															else {
 															
-																// Reject error
-																reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is connected.')));
+																// Check if is a mobile app
+																if(Common.isMobileApp() === true) {
+																
+																	// Reject error
+																	reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is connected or paired.')));
+																}
+																
+																// Otherwise
+																else {
+																
+																	// Reject error
+																	reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is connected.')));
+																}
 															}
 														}
 														
 														// Otherwise check if error was a connection error
 														else if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NETWORK_ERROR_CODE) || ("name" in error === true && error["name"] === "NetworkError"))) {
 														
-															// Check if is an extension
-															if(Common.isExtension() === true) {
+															// Check if is a mobile app
+															if(Common.isMobileApp() === true) {
+															
+																// Reject error
+																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')));
+															}
+															
+															// Otherwise check if is an extension
+															else if(Common.isExtension() === true) {
 														
 																// Reject error
 																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this extension can connect to it.')));
@@ -279,11 +298,51 @@ class HardwareWallet {
 															reject(Message.createText(Language.getDefaultTranslation('That hardware wallet is currently in use.')));
 														}
 														
+														// Otherwise check if error was a device state error
+														else if(typeof error === "object" && error !== null && "name" in error === true && error["name"] === "DeviceStateError") {
+														
+															// Check if original error is that user canceled action
+															if(typeof originalError === "object" && originalError !== null && (("code" in originalError === true && originalError["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in originalError === true && originalError["name"] === "NotFoundError"))) {
+															
+																// Reject error
+																reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
+															}
+															
+															// Otherwise
+															else {
+															
+																// Reject error
+																reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is connected.')));
+															}
+														}
+														
 														// Otherwise
 														else {
 														
-															// Reject error
-															reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')));
+															// Check if is a mobile app
+															if(Common.isMobileApp() === true) {
+															
+																// Check if original error is that user canceled action
+																if(typeof originalError === "object" && originalError !== null && (("code" in originalError === true && originalError["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in originalError === true && originalError["name"] === "NotFoundError"))) {
+																
+																	// Reject error
+																	reject(Message.createText(Language.getDefaultTranslation('No hardware wallet was selected.')) + ((Common.isPopup() === true) ? Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to open this extension in a tab or window if it\'s not able to connect to a hardware wallet.')) : ""));
+																}
+																
+																// Otherwise
+																else {
+																
+																	// Reject error
+																	reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is connected.')));
+																}
+															}
+															
+															// Otherwise
+															else {
+															
+																// Reject error
+																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')));
+															}
 														}
 													});
 												}
@@ -351,16 +410,34 @@ class HardwareWallet {
 												// Otherwise
 												else {
 												
-													// Reject error
-													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is connected.')));
+													// Check if is a mobile app
+													if(Common.isMobileApp() === true) {
+													
+														// Reject error
+														reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is paired.')));
+													}
+													
+													// Otherwise
+													else {
+													
+														// Reject error
+														reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is connected.')));
+													}
 												}
 											}
 											
 											// Otherwise check if error was a connection error
 											else if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NETWORK_ERROR_CODE) || ("name" in error === true && error["name"] === "NetworkError"))) {
 											
-												// Check if is an extension
-												if(Common.isExtension() === true) {
+												// Check if is a mobile app
+												if(Common.isMobileApp() === true) {
+												
+													// Reject error
+													reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')));
+												}
+												
+												// Otherwise check if is an extension
+												else if(Common.isExtension() === true) {
 											
 													// Reject error
 													reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')) + Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('You may need to be already paired with the device before this extension can connect to it.')));
@@ -388,11 +465,41 @@ class HardwareWallet {
 												reject(Message.createText(Language.getDefaultTranslation('That hardware wallet is currently in use.')));
 											}
 											
+											// Otherwise check if error was a device state error
+											else if(typeof error === "object" && error !== null && "name" in error === true && error["name"] === "DeviceStateError") {
+											
+												// Check if is a mobile app
+												if(Common.isMobileApp() === true) {
+												
+													// Reject error
+													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is paired.')));
+												}
+												
+												// Otherwise
+												else {
+												
+													
+													// Reject error
+													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is connected.')));
+												}
+											}
+											
 											// Otherwise
 											else {
 											
-												// Reject error
-												reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')));
+												// Check if is a mobile app
+												if(Common.isMobileApp() === true) {
+												
+													// Reject error
+													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is paired.')));
+												}
+												
+												// Otherwise
+												else {
+												
+													// Reject error
+													reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')));
+												}
 											}
 										});
 									}
@@ -420,7 +527,7 @@ class HardwareWallet {
 							});
 						};
 						
-						// Return gwetting hardware wallet transport
+						// Return getting hardware wallet transport
 						return getHardwareWalletTransport().then(function(transport) {
 						
 							// Set transport

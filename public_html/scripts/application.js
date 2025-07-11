@@ -141,6 +141,24 @@ class Application {
 			// Set self
 			var self = this;
 			
+			// Message shown event
+			$(this.message).one(Message.SHOW_EVENT, function() {
+			
+				// Check if splash screen is showing
+				if(self.bodyDisplay.hasClass("splashScreen") === true) {
+				
+					// Check if is a mobile app
+					if(Common.isMobileApp() === true) {
+					
+						// Hide mobile app's splash screen
+						MobileApp.hideSplashScreen();
+					}
+					
+					// Allow transitions
+					self.bodyDisplay.removeClass("splashScreen");
+				}
+			});
+			
 			// Once database is initialized
 			Database.onceInitialized(function() {
 			
@@ -7073,8 +7091,12 @@ class Application {
 			// Allow showing logo
 			this.logo.allowShowing();
 			
-			// Show logo
-			this.logo.show();
+			// Check if splash screen isn't showing
+			if(this.bodyDisplay.hasClass("splashScreen") === false) {
+			
+				// Show logo
+				this.logo.show();
+			}
 			
 			// Set self
 			var self = this;
@@ -7169,6 +7191,23 @@ class Application {
 						// Allow showing messages
 						self.message.allow();
 						
+						// Check if splash screen is showing
+						if(self.bodyDisplay.hasClass("splashScreen") === true) {
+						
+							// Check if is a mobile app
+							if(Common.isMobileApp() === true) {
+							
+								// Hide mobile app's splash screen
+								MobileApp.hideSplashScreen();
+							}
+							
+							// Allow transitions
+							self.bodyDisplay.removeClass("splashScreen");
+							
+							// Show logo
+							self.logo.show();
+						}
+						
 					}, "opacity");
 				}, 0);
 				
@@ -7189,6 +7228,13 @@ class Application {
 			
 			// Prevent automatic lock
 			this.automaticLock.prevent();
+			
+			// Check if is a mobile app
+			if(Common.isMobileApp() === true) {
+			
+				// Prevent mobile app's back button
+				MobileApp.preventBackButton();
+			}
 			
 			// Lock wallets
 			this.wallets.lock(this.unlockedAtLeastOnce === false);
@@ -7633,5 +7679,5 @@ $(function() {
 			new Application();
 		}
 	
-	}, Application.SHOW_LOADING_DELAY_MILLISECONDS);
+	}, ($("body").hasClass("splashScreen") === true) ? 0 : Application.SHOW_LOADING_DELAY_MILLISECONDS);
 });

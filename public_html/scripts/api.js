@@ -1616,7 +1616,7 @@ class Api {
 																								if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																								
 																									// Reject JSON-RPC invalid parameters error response
-																									reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																									reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Decoding failed')));
 																								}
 																								
 																								// Otherwise
@@ -1778,7 +1778,7 @@ class Api {
 																										else {
 																									
 																											// Reject JSON-RPC invalid parameters error response
-																											reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																											reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Decoding failed')));
 																										}
 																									}
 																									
@@ -1896,7 +1896,7 @@ class Api {
 																					if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																					
 																						// Reject JSON-RPC invalid parameters error response
-																						reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																						reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Decoding failed')));
 																					}
 																					
 																					// Otherwise
@@ -1928,7 +1928,7 @@ class Api {
 																			catch(error) {
 																			
 																				// Reject JSON-RPC invalid parameters error response
-																				reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																				reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Decoding failed')));
 																				
 																				// Return
 																				return;
@@ -1945,7 +1945,7 @@ class Api {
 																			else {
 																			
 																				// Reject JSON-RPC invalid parameters error response
-																				reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																				reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																			}
 																			
 																			// Break
@@ -1967,7 +1967,7 @@ class Api {
 																else {
 																
 																	// Reject JSON-RPC invalid parameters error response
-																	reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																	reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																}
 															}
 															
@@ -1996,7 +1996,7 @@ class Api {
 																	if(slate.getNumberOfParticipants().isEqualTo(Api.RECEIVE_TRANSACTION_EXPECTED_NUMBER_OF_SLATE_PARTICIPANTS) === false) {
 																	
 																		// Reject JSON-RPC invalid parameters error response
-																		reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																		reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																	}
 																	
 																	// Check if there's no room to add another participant to the slate
@@ -2024,7 +2024,7 @@ class Api {
 																	else if(slate.getKernels()["length"] !== Api.RECEIVE_TRANSACTION_EXPECTED_NUMBER_OF_SLATE_KERNELS) {
 																	
 																		// Reject JSON-RPC invalid parameters error response
-																		reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																		reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																	}
 																	
 																	// Otherwise check if slate's kernel is already complete
@@ -2045,7 +2045,7 @@ class Api {
 																	else if(self.requirePaymentProof === true && slate.hasPaymentProof() === false) {
 																	
 																		// Reject JSON-RPC invalid parameters error response
-																		reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																		reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('No payment proof')));
 																	}
 																	
 																	// Otherwise
@@ -2070,7 +2070,7 @@ class Api {
 																					if(slate.getSenderAddress() !== Tor.publicKeyToTorAddress(Slatepack.getSlatepackSenderPublicKey(data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX]))) {
 																					
 																						// Reject JSON-RPC invalid parameters error response
-																						reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																						reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																						
 																						// Return
 																						return;
@@ -2083,7 +2083,7 @@ class Api {
 																				default:
 																				
 																					// Reject JSON-RPC invalid parameters error response
-																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																					
 																					// Return
 																					return;
@@ -2105,7 +2105,7 @@ class Api {
 																					if(slate.getReceiverAddress() !== Tor.publicKeyToTorAddress(Slatepack.getSlatepackReceiverPublicKey(data["params"][Api.RECEIVE_TRANSACTION_SLATE_PARAMETER_INDEX]))) {
 																					
 																						// Reject JSON-RPC invalid parameters error response
-																						reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																						reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																						
 																						// Return
 																						return;
@@ -2118,7 +2118,7 @@ class Api {
 																				default:
 																				
 																					// Reject JSON-RPC invalid parameters error response
-																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																					
 																					// Return
 																					return;
@@ -2132,7 +2132,7 @@ class Api {
 																		if(slate.getTimeToLiveCutOffHeight() !== Slate.NO_TIME_TO_LIVE_CUT_OFF_HEIGHT && currentHeight !== Node.UNKNOWN_HEIGHT && currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false && slate.getTimeToLiveCutOffHeight().isLessThanOrEqualTo(currentHeight) === true) {
 																	
 																			// Reject JSON-RPC invalid parameters error response
-																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Expired transaction')));
 																		}
 																		
 																		// Otherwise
@@ -2434,7 +2434,7 @@ class Api {
 																																		default:
 																																		
 																																			// Reject JSON-RPC invalid parameters error response
-																																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																																			
 																																			// Break
 																																			break;
@@ -2480,7 +2480,7 @@ class Api {
 																																		default:
 																																		
 																																			// Reject JSON-RPC invalid parameters error response
-																																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																																			
 																																			// Break
 																																			break;
@@ -2526,7 +2526,7 @@ class Api {
 																																		default:
 																																		
 																																			// Reject JSON-RPC invalid parameters error response
-																																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																			reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																																			
 																																			// Break
 																																			break;
@@ -3118,7 +3118,7 @@ class Api {
 																																				default:
 																																				
 																																					// Reject JSON-RPC invalid parameters error response
-																																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																																					
 																																					// Break
 																																					break;
@@ -3272,7 +3272,7 @@ class Api {
 																																				default:
 																																				
 																																					// Reject JSON-RPC invalid parameters error response
-																																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																																					
 																																					// Break
 																																					break;
@@ -3426,7 +3426,7 @@ class Api {
 																																				default:
 																																				
 																																					// Reject JSON-RPC invalid parameters error response
-																																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																					reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																																					
 																																					// Break
 																																					break;
@@ -7013,7 +7013,7 @@ class Api {
 																																										default:
 																																										
 																																											// Reject JSON-RPC invalid parameters error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																																											
 																																											// Break
 																																											break;
@@ -7059,7 +7059,7 @@ class Api {
 																																										default:
 																																										
 																																											// Reject JSON-RPC invalid parameters error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																																											
 																																											// Break
 																																											break;
@@ -7105,7 +7105,7 @@ class Api {
 																																										default:
 																																										
 																																											// Reject JSON-RPC invalid parameters error response
-																																											reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																																											reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Unsupported features')));
 																																											
 																																											// Break
 																																											break;
@@ -7391,7 +7391,7 @@ class Api {
 																											else {
 																											
 																												// Reject JSON-RPC invalid parameters error response
-																												reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																												reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Incorrect recipient')));
 																											}
 																										}
 																												
@@ -7426,7 +7426,7 @@ class Api {
 																								else {
 																								
 																									// Reject JSON-RPC invalid parameters error response
-																									reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																									reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Duplicate transaction')));
 																								}
 																							}
 																							
@@ -7460,7 +7460,7 @@ class Api {
 																					else {
 																					
 																						// Reject JSON-RPC invalid parameters error response
-																						reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																						reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Duplicate transaction')));
 																					}
 																				}
 																				
@@ -7495,7 +7495,7 @@ class Api {
 																if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 															
 																	// Reject JSON-RPC invalid parameters error response
-																	reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data));
+																	reject(JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Parsing failed')));
 																}
 														
 																// Otherwise

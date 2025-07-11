@@ -346,10 +346,10 @@
 			"Checksum" => "dPusPRCnCmHd3HtU3too2Th76vqqKBE3ARrdf3SIhznOinyyBXyvn+xDw9PoMWITeGeD5XVkUTuvXzPSQN0oag=="
 		],
 		"./scripts/application.js" => [
-			"Version" => 106,
+			"Version" => 107,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "4/2zM+yfgNSKbpn/zp3znOfAkn5wugG9F/C5frOaxswvDtyrN2S6agSwGpeM27IkT5HyZZboufeh5y/G58hhIw=="
+			"Checksum" => "EF7t11wdheJyiEY995Nh8zDFNR5rjTEec13yepZsIuFE009/pSXkbEIOaS36LTro+6OhpGRkRYzvn9tA7QS50g=="
 		],
 		"./scripts/automatic_lock.js" => [
 			"Version" => 5,
@@ -460,16 +460,16 @@
 			"Checksum" => "1Dos1rNWtUlUuVq4ElvN9Twhy9SaeXeN3kTAGT7ND8tAPn3eskDtegm+zVMrxqH5iyN+Zk3cL7IbTKs23OtHKA=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 132,
+			"Version" => 133,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "pnl9/tMw9/HprsMMgX4QYh7TpxkHKabYQAVRLZl2LAeGGmZPXj+apwMc/BT9ojiK7/8ftgaHCK0aCTSydzXxpg=="
+			"Checksum" => "IS3rAZYoQz4++/EKSu+nMrRfSeL6WHt6inR6Q9/viTJdoE8NdVhqFfNlq6eniKYz26oQRu4PF8R9Fq2KyTQw2w=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 78,
+			"Version" => 79,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "FAj1u6impkBPMn6Ic0IDGMDaJgsuLEBmHQ+1DyzzqDWSE98MhVkKsUk++6ljqfY/LnZWcggnrqayKRHfo7GhSg=="
+			"Checksum" => "Ov7duXPk2f4ONi9wUgbyBzVd3N53AZoJXKQur+namKEYVhvfFXW3aX4ahqVSZcCPOEiqSW5JuBmdbScQZ8UOhA=="
 		],
 		"./scripts/hardware_wallet_usb_transport.js" => [
 			"Version" => 8,
@@ -478,10 +478,10 @@
 			"Checksum" => "2Mv5CXrHhE4o7KnPHwme4X/CjM7CYl4WHxJ6c/7FA6jmCRjwP6xKr1OjoRmCrhiKJAmryK0pHSnQgjfKmbRoxA=="
 		],
 		"./scripts/hardware_wallet_bluetooth_transport.js" => [
-			"Version" => 8,
+			"Version" => 9,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "btNPxYqBOouFkxCbzCuQWUoJqNvSXcsAF3IrNw1FpBQbLq1Ny3sIHj/Fqrz+c5C53JcGZ9Esgoffq9U5bMf23A=="
+			"Checksum" => "luBn2TDGkWWxWu8QRPVpRyMAVgsOp8pbF/Y+qCHVoyZmLhPgAfHiGoaIlnXrf8WEsTl32h4FNPft/0OVzWwBYw=="
 		],
 		"./scripts/hardware_wallet_definitions.js" => [
 			"Version" => 10,
@@ -568,13 +568,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 78,
+			"Version" => 79,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 145,
+			"Version" => 146,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -592,13 +592,13 @@
 			"Checksum" => "RFXyJdMBrFe0rBAKTOwmTVcZzI6V3Pf7HHizK+RQVHguh/pCOTPV0Jj+EB7cvP1/wpuUAyh1SnWVZ01qLg4emg=="
 		],
 		"./scripts/languages.js" => [
-			"Version" => 17,
+			"Version" => 18,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 73,
+			"Version" => 74,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -742,10 +742,10 @@
 			"Checksum" => "i4bS/hG2MrUZDC+XDvvpL76KyZAY25BOBwIwPl0McaJf4lYWtyk6OSMpMMLR3Y8khMUtZJx8UH4mGIGYl4YBYA=="
 		],
 		"./scripts/common.js" => [
-			"Version" => 102,
+			"Version" => 103,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "S7do2AAdhztN9N0iRS8HNFWVco1n6+xrMJQwmWdrIR/8v77BLeBmqo+sP2jowapMsI8SdcUlkQt5Y+wT33qpJA=="
+			"Checksum" => "JlM5N7wk48cJiB/lizjPPkIw4qIATZSdQL3gc1n7FQaopugkgf3dzkuiXmpGPn29UeAeTxtGccMPaD7N8TPzRg=="
 		],
 		"./scripts/bit_reader.js" => [
 			"Version" => 6,
@@ -844,10 +844,10 @@
 			"Checksum" => "VlwB5jd55CO2XVi+VBrYcXrEt65zFDs7IHn/pcrHebub8T79Rq9UE7FUnExUT5IAIeQSJJL/dctx3LRtQ/qjpA=="
 		],
 		"./scripts/section.js" => [
-			"Version" => 15,
+			"Version" => 16,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "FuRkoTy9wjnIhWFbbhyA5ZX65tehALL+qyvu4vX2Djub7PKBpU2DB+SM6ZqTlOpJK6SEZD/GD9IhQnDurylU8w=="
+			"Checksum" => "oLSChoSMQ3iXt6TDt+4+HHuP0HqkCjzM1ejVXDaNJApfwoWCt/7o9DH8qPidO1+zgBT6uF1QZTZpYX20icWT5w=="
 		],
 		"./scripts/settings_section.js" => [
 			"Version" => 25,
@@ -874,10 +874,10 @@
 			"Checksum" => "NYI6dt8F95YbVXNa9QMby6C4L1ME8Ta+80FEZg5X4YQEn9N69du4R8yuCKDa+WWXFuxjcjokJHAYuW6hTnRguA=="
 		],
 		"./scripts/wallet_section.js" => [
-			"Version" => 96,
+			"Version" => 97,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "BDkBXMCKEF+8BauGOSVJwhKaefh+IwGwX6X3BaepIxEuyPcs+49ngTFTuiLuTCxbs6PuRaAXAI8HIobxMMk0zw=="
+			"Checksum" => "c6BUoV94iC6wMZpSoWtd/HLEAb5UWGzzSgraVQZXDRoMdFRsjAL9gG8lsjYN9pvTibrc3QGqGTSNokzs1HDYQQ=="
 		],
 		"./scripts/send_payment_section.js" => [
 			"Version" => 107,
