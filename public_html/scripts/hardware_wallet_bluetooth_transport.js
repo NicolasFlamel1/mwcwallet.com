@@ -318,7 +318,7 @@ class HardwareWalletBluetoothTransport {
 								
 									// Check if connection is connected
 									if(connection["connected"] === true) {
-								
+									
 										// Resolve connection
 										resolve(connection);
 									}
@@ -745,8 +745,19 @@ class HardwareWalletBluetoothTransport {
 												connection.disconnect();
 											}
 											
-											// Reject
-											reject();
+											// Check if is a mobile app
+											if(Common.isMobileApp() === true) {
+											
+												// Reject error
+												reject(new DOMException("", "NetworkError"));
+											}
+											
+											// Otherwise
+											else {
+											
+												// Reject
+												reject();
+											}
 										}
 									}
 									
@@ -774,8 +785,8 @@ class HardwareWalletBluetoothTransport {
 										connection.disconnect();
 									}
 									
-									// Check if disconnected error occurred
-									if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWalletBluetoothTransport.NETWORK_ERROR_CODE) || ("name" in error === true && error["name"] === "NetworkError"))) {
+									// Check if not a mobile app and a disconnected error occurred
+									if(Common.isMobileApp() === false && typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWalletBluetoothTransport.NETWORK_ERROR_CODE) || ("name" in error === true && error["name"] === "NetworkError"))) {
 									
 										// Return requesting transport
 										return HardwareWalletBluetoothTransport.request(device).then(function(transport) {
