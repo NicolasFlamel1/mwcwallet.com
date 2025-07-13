@@ -243,8 +243,8 @@ class HardwareWallet {
 															// Otherwise
 															else {
 															
-																// Check if is a mobile app
-																if(Common.isMobileApp() === true) {
+																// Check if using the mobile app's Bluetooth implementation
+																if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === true) {
 																
 																	// Reject error
 																	reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is connected or paired.')));
@@ -262,8 +262,8 @@ class HardwareWallet {
 														// Otherwise check if error was a connection error
 														else if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NETWORK_ERROR_CODE) || ("name" in error === true && error["name"] === "NetworkError"))) {
 														
-															// Check if is a mobile app
-															if(Common.isMobileApp() === true) {
+															// Check if using the mobile app's Bluetooth implementation
+															if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === true) {
 															
 																// Reject error
 																reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')));
@@ -319,8 +319,8 @@ class HardwareWallet {
 														// Otherwise
 														else {
 														
-															// Check if is a mobile app
-															if(Common.isMobileApp() === true) {
+															// Check if using the mobile app's Bluetooth implementation
+															if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === true) {
 															
 																// Check if original error is that user canceled action
 																if(typeof originalError === "object" && originalError !== null && (("code" in originalError === true && originalError["code"] === HardwareWallet.NOT_FOUND_ERROR_CODE) || ("name" in originalError === true && originalError["name"] === "NotFoundError"))) {
@@ -410,8 +410,8 @@ class HardwareWallet {
 												// Otherwise
 												else {
 												
-													// Check if is a mobile app
-													if(Common.isMobileApp() === true) {
+													// Check if using the mobile app's Bluetooth implementation
+													if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === true) {
 													
 														// Reject error
 														reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is paired.')));
@@ -429,8 +429,8 @@ class HardwareWallet {
 											// Otherwise check if error was a connection error
 											else if(typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWallet.NETWORK_ERROR_CODE) || ("name" in error === true && error["name"] === "NetworkError"))) {
 											
-												// Check if is a mobile app
-												if(Common.isMobileApp() === true) {
+												// Check if using the mobile app's Bluetooth implementation
+												if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === true) {
 												
 													// Reject error
 													reject(Message.createText(Language.getDefaultTranslation('Connecting to that hardware wallet failed.')));
@@ -468,8 +468,8 @@ class HardwareWallet {
 											// Otherwise check if error was a device state error
 											else if(typeof error === "object" && error !== null && "name" in error === true && error["name"] === "DeviceStateError") {
 											
-												// Check if is a mobile app
-												if(Common.isMobileApp() === true) {
+												// Check if using the mobile app's Bluetooth implementation
+												if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === true) {
 												
 													// Reject error
 													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is paired.')));
@@ -487,8 +487,8 @@ class HardwareWallet {
 											// Otherwise
 											else {
 											
-												// Check if is a mobile app
-												if(Common.isMobileApp() === true) {
+												// Check if using the mobile app's Bluetooth implementation
+												if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === true) {
 												
 													// Reject error
 													reject(Message.createText(Language.getDefaultTranslation('No hardware wallet is paired.')));

@@ -745,8 +745,8 @@ class HardwareWalletBluetoothTransport {
 												connection.disconnect();
 											}
 											
-											// Check if is a mobile app
-											if(Common.isMobileApp() === true) {
+											// Check if using the mobile app's Bluetooth implementation
+											if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === true) {
 											
 												// Reject error
 												reject(new DOMException("", "NetworkError"));
@@ -785,8 +785,8 @@ class HardwareWalletBluetoothTransport {
 										connection.disconnect();
 									}
 									
-									// Check if not a mobile app and a disconnected error occurred
-									if(Common.isMobileApp() === false && typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWalletBluetoothTransport.NETWORK_ERROR_CODE) || ("name" in error === true && error["name"] === "NetworkError"))) {
+									// Check if not using the mobile app's Bluetooth implementation and a disconnected error occurred
+									if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === false && typeof error === "object" && error !== null && (("code" in error === true && error["code"] === HardwareWalletBluetoothTransport.NETWORK_ERROR_CODE) || ("name" in error === true && error["name"] === "NetworkError"))) {
 									
 										// Return requesting transport
 										return HardwareWalletBluetoothTransport.request(device).then(function(transport) {
@@ -1312,6 +1312,13 @@ class HardwareWalletBluetoothTransport {
 					reject(new DOMException("", "NetworkError"));
 				}
 			});
+		}
+		
+		// Is using mobile app Bluetooth implementation
+		static isUsingMobileAppBluetoothImplementation() {
+		
+			// Return if the Web Bluetooth implementation is the mobile app's
+			return "bluetooth" in navigator === true && typeof navigator["bluetooth"].isMobileAppImplementation !== "undefined";
 		}
 		
 		// Devices

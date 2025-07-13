@@ -346,10 +346,10 @@
 			"Checksum" => "dPusPRCnCmHd3HtU3too2Th76vqqKBE3ARrdf3SIhznOinyyBXyvn+xDw9PoMWITeGeD5XVkUTuvXzPSQN0oag=="
 		],
 		"./scripts/application.js" => [
-			"Version" => 107,
+			"Version" => 108,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "EF7t11wdheJyiEY995Nh8zDFNR5rjTEec13yepZsIuFE009/pSXkbEIOaS36LTro+6OhpGRkRYzvn9tA7QS50g=="
+			"Checksum" => "Plc34AGWsxc3I2JzZC+bOyVEdzX99IJ1YMoiLu278A9NofSzRMWrPMJY0Kw7VGo+5shJx1oiVqT3pmDnbRI9+A=="
 		],
 		"./scripts/automatic_lock.js" => [
 			"Version" => 5,
@@ -466,10 +466,10 @@
 			"Checksum" => "IS3rAZYoQz4++/EKSu+nMrRfSeL6WHt6inR6Q9/viTJdoE8NdVhqFfNlq6eniKYz26oQRu4PF8R9Fq2KyTQw2w=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 79,
+			"Version" => 80,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "Ov7duXPk2f4ONi9wUgbyBzVd3N53AZoJXKQur+namKEYVhvfFXW3aX4ahqVSZcCPOEiqSW5JuBmdbScQZ8UOhA=="
+			"Checksum" => "MWh5FYynnJsJ9PxEVaAM/jVP0C7hzL2LFe/8wqpL5IYi4KYBYocbQmVInUU/YteKkfT2anOdKPR5+OxK48cXHQ=="
 		],
 		"./scripts/hardware_wallet_usb_transport.js" => [
 			"Version" => 8,
@@ -478,10 +478,10 @@
 			"Checksum" => "2Mv5CXrHhE4o7KnPHwme4X/CjM7CYl4WHxJ6c/7FA6jmCRjwP6xKr1OjoRmCrhiKJAmryK0pHSnQgjfKmbRoxA=="
 		],
 		"./scripts/hardware_wallet_bluetooth_transport.js" => [
-			"Version" => 10,
+			"Version" => 11,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "iEMQaWkBQQk1P0yiwQFi8d2ukxiaWz/+i8wHF7+GAsUMT+PTFfTbqxlFasRodWI6Xmf8xQVb2yn8L+r5cBBBGw=="
+			"Checksum" => "81TqXxmOjDfWMpj5SRZFJnS0pM+Qxy5GHlNLEzUghGQLProo/ENFQkUINujbqGUqHLFRDpQLpWfR70xGFu4Aqw=="
 		],
 		"./scripts/hardware_wallet_definitions.js" => [
 			"Version" => 10,

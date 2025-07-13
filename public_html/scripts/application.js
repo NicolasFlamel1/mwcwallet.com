@@ -6010,6 +6010,12 @@ class Application {
 						// Throw error
 						throw "Event isn't supported.";
 					
+					// Otherwise check if Event Target isn't supported
+					else if(typeof EventTarget !== "function")
+					
+						// Throw error
+						throw "Event Target isn't supported.";
+					
 					// Otherwise check if Function isn't supported
 					else if(typeof Function !== "function")
 					
