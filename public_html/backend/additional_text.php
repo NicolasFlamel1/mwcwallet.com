@@ -26,6 +26,7 @@
 	getDefaultTranslation('Hardware wallet support');
 	
 	// Mobile app text
+	getDefaultTranslation('MWC Wallet');
 	getDefaultTranslation('File Chooser');
 	getDefaultTranslation('File saved');
 	getDefaultTranslation('%%1$s was saved to your downloads.');
@@ -33,4 +34,6 @@
 	getDefaultTranslation('Saving the file failed.');
 	getDefaultTranslation('Select USB device');
 	getDefaultTranslation('Select Bluetooth device');
+	getDefaultTranslation('OK');
+	getDefaultTranslation('Open downloads');
 ?>

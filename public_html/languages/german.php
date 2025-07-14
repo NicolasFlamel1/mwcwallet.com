@@ -411,6 +411,7 @@
 			'Only one instance of this extension can be open at once. Close all other instances to continue.' => 'Es kann immer nur eine Instanz dieser Erweiterung geöffnet sein. Schließen Sie alle anderen Instanzen, um fortzufahren.',
 			'Only one instance of this site can be open at once. Close all other instances to continue.' => 'Es kann immer nur eine Instanz dieser Seite geöffnet sein. Schließen Sie alle anderen Instanzen, um fortzufahren.',
 			/*TODO*///'Opening that file failed.' => '',
+			/*TODO*///'Open downloads' => '',
 			'Open in New Tab' => 'In neuem Tab öffnen',
 			'Open in New Window' => 'In einem neuen Fenster öffnen',
 			/*TODO*///'Open Response File' => '',

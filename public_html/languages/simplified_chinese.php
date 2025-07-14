@@ -408,6 +408,7 @@
 			'Only one instance of this extension can be open at once. Close all other instances to continue.' => '此扩展程序只能同时打开一个实例。关闭所有其他实例以继续。',
 			'Only one instance of this site can be open at once. Close all other instances to continue.' => '此站点只能同时打开一个实例。关闭所有其他实例以继续。',
 			/*TODO*///'Opening that file failed.' => '',
+			/*TODO*///'Open downloads' => '',
 			'Open in New Tab' => '在新标签页中打开',
 			'Open in New Window' => '在新窗口中打开',
 			/*TODO*///'Open Response File' => '',

@@ -411,6 +411,7 @@
 			'Only one instance of this extension can be open at once. Close all other instances to continue.' => 'Er kan maar een enkele instantie van deze extentie gelijktijdig geopend zijn. Sluit alle andere instanties om door te gaan.',
 			'Only one instance of this site can be open at once. Close all other instances to continue.' => 'Er kan maar een enkele instantie van deze site gelijktijdig geopend zijn. Sluit alle andere instanties om door te gaan',
 			/*TODO*///'Opening that file failed.' => '',
+			/*TODO*///'Open downloads' => '',
 			'Open in New Tab' => 'Open in Nieuw Tabblad',
 			'Open in New Window' => 'Open in Nieuw Window',
 			/*TODO*///'Open Response File' => '',

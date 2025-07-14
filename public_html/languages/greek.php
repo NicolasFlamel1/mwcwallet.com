@@ -411,6 +411,7 @@
 			'Only one instance of this extension can be open at once. Close all other instances to continue.' => 'Μόνο ένα intance αυτής της επέκτασης μπορεί να ανοίξει ταυτόχρονα. Κλείστε όλες τις υπόλοιπες για να συνεχίσετε.',
 			'Only one instance of this site can be open at once. Close all other instances to continue.' => 'Μόνο μία παρουσία αυτού του ιστότοπου μπορεί να ανοίξει ταυτόχρονα. Κλείστε όλες τις άλλες περιπτώσεις για να συνεχίσετε.',
 			/*TODO*///'Opening that file failed.' => '',
+			/*TODO*///'Open downloads' => '',
 			'Open in New Tab' => 'Άνοιγμα σε Νέα καρτέλα',
 			'Open in New Window' => 'Άνοιγμα σε νέο παράθυρο',
 			/*TODO*///'Open Response File' => '',

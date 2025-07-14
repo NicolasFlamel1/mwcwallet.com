@@ -411,6 +411,7 @@
 			'Only one instance of this extension can be open at once. Close all other instances to continue.' => 'Naráz může být otevřena pouze jedna instance tohoto rozšíření. Pro pokračování zavřete všechny ostatní instance.',
 			'Only one instance of this site can be open at once. Close all other instances to continue.' => 'Naráz může být otevřena pouze jedna instance této stránky. Pro pokračování zavřete všechny ostatní instance.',
 			/*TODO*///'Opening that file failed.' => '',
+			/*TODO*///'Open downloads' => '',
 			'Open in New Tab' => 'Otevřít v nové záložce',
 			'Open in New Window' => 'Otevřít v novém okně',
 			/*TODO*///'Open Response File' => '',

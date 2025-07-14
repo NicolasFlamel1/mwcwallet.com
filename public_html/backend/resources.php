@@ -592,7 +592,7 @@
 			"Checksum" => "RFXyJdMBrFe0rBAKTOwmTVcZzI6V3Pf7HHizK+RQVHguh/pCOTPV0Jj+EB7cvP1/wpuUAyh1SnWVZ01qLg4emg=="
 		],
 		"./scripts/languages.js" => [
-			"Version" => 18,
+			"Version" => 19,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -742,10 +742,10 @@
 			"Checksum" => "i4bS/hG2MrUZDC+XDvvpL76KyZAY25BOBwIwPl0McaJf4lYWtyk6OSMpMMLR3Y8khMUtZJx8UH4mGIGYl4YBYA=="
 		],
 		"./scripts/common.js" => [
-			"Version" => 103,
+			"Version" => 104,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "JlM5N7wk48cJiB/lizjPPkIw4qIATZSdQL3gc1n7FQaopugkgf3dzkuiXmpGPn29UeAeTxtGccMPaD7N8TPzRg=="
+			"Checksum" => "eusLp9i3sEz13xQzicQgvuMtgRkzB9romsg6CjfIOtiBP+Lf1cz4WmWdHDGH1H3+1lfHx5Hnqh4ofZHRxrRx9w=="
 		],
 		"./scripts/bit_reader.js" => [
 			"Version" => 6,

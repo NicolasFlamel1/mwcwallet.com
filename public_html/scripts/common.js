@@ -816,7 +816,7 @@ class Common {
 			if(Common.isMobileApp() === true) {
 			
 				// Save file using mobile app
-				MobileApp.saveFile(name, (new TextEncoder()).encode(contents));
+				MobileApp.saveFile(name, (typeof contents === "string") ? (new TextEncoder()).encode(contents) : contents);
 			}
 			
 			// Otherwise
