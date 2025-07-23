@@ -12,7 +12,8 @@
 	const VERSION_CHANGES = [
 		"Various changes to make this site function as an Android app.",
 		"Made connecting to hardware wallets via Bluetooth more reliable.",
-		"Displays better error messages when receiving a payment as file fails."
+		"Displays better error messages when receiving a payment as file fails.",
+		"Lowered default base fee for MWC transactions"
 	];
 	
 	// Maintenance start time

@@ -14655,7 +14655,7 @@ class Api {
 				case Consensus.MWC_WALLET_TYPE:
 		
 					// Return default base fee
-					return new BigNumber(Consensus.VALUE_NUMBER_BASE).dividedToIntegerBy(1000);
+					return new BigNumber(Consensus.VALUE_NUMBER_BASE).dividedToIntegerBy(1000).dividedToIntegerBy(1000);
 				
 				// GRIN wallet
 				case Consensus.GRIN_WALLET_TYPE:

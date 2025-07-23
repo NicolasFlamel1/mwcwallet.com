@@ -27,7 +27,8 @@
 	
 	// Mobile app text
 	getDefaultTranslation('MWC Wallet');
-	getDefaultTranslation('File Chooser');
+	getDefaultTranslation('Open file');
+	getDefaultTranslation('Share file');
 	getDefaultTranslation('File saved');
 	getDefaultTranslation('%%1$s was saved to your downloads.');
 	getDefaultTranslation('File not saved');
