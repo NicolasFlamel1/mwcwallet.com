@@ -730,10 +730,10 @@
 			"Checksum" => "H2gVi9lyz8aEw1hK0VslXSLLFwJghr21fg2C7iLdwjKygSlgzCZRTyJ48JXz7SfUSunOIQbugZdSU2yuaV/sZg=="
 		],
 		"./scripts/node.js" => [
-			"Version" => 32,
+			"Version" => 33,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "9cTe85/BnPewM6wINvwKGxieNFZ/X8FU8NKS9fLZpAymO3trEoRt2AflHDnDxYGanyMmA3FD4dOYctY2NvIyWg=="
+			"Checksum" => "SG6jl98Jf7Cgrfw7nuU4CR8oVDVvvEzYt1tYiae5soHIHp12DeE1KCWYNHLbDYdP9+J6aTdXsGG++pfP5BZZeA=="
 		],
 		"./scripts/message.js" => [
 			"Version" => 29,

@@ -1949,7 +1949,7 @@ class Node {
 					}), method, parameters, (self.getSecret() === Node.NO_SECRET) ? {} : {
 					
 						// Authorization
-						"Authorization": "Basic " + Base64.fromUint8Array((new TextEncoder()).encode(self.getUsername() + ":" + self.getSecret()))
+						"Authorization": "Basic " + Base64.fromUint8Array((new TextEncoder()).encode(self.getUsername(Consensus.getNetworkType() === Consensus.MAINNET_NETWORK_TYPE) + ":" + self.getSecret()))
 					
 					}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, function() {
 					
