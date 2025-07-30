@@ -424,10 +424,10 @@
 			"Checksum" => "PojnUykqdVTAwgBtx2yYUzZLawnNQZS1AtSTHvMeImMo1X+5IFTVSY6Xezl8CTywaVkJ0SyRIWogmrOPvAmHvA=="
 		],
 		"./scripts/consensus.js" => [
-			"Version" => 30,
+			"Version" => 32,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "n5ES3sazs7wZq1XqWZbRrk22pJ3r9fMQd9s4Z1J9HoWB5DV/OAS9PDK8qo8lgsLsar3aV9DTpf+RfIEfwN9lEQ=="
+			"Checksum" => "pjpr0hjbaKm0Kj8D4Ib/nbG6EQTPscvBc7VdGDbXcY7EHNpndqFgMenpX3QVms5Aok7pmds+Jr3Qk6kCWTXj/Q=="
 		],
 		"./scripts/transaction.js" => [
 			"Version" => 13,

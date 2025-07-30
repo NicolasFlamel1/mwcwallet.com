@@ -317,9 +317,93 @@ class Consensus {
 		
 			// Get block reward at height
 			var reward = Consensus.getBlockReward(isMainnet, height);
+			
+			// Check wallet type
+			switch(Consensus.getWalletType()) {
+			
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
 		
-			// Add fee to reward
-			reward = reward.plus(fees);
+					// Check if height is the first block height
+					if(height.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === true) {
+					
+						// Set dev tax to zero
+						var devTax = new BigNumber(0);
+					}
+					
+					// Otherwise check if height is in the first levy era
+					else if(height.isLessThanOrEqualTo(Consensus.FOUNDATION_LEVY_ERA_ONE) === true) {
+					
+						// Set dev tax to a ratio of the reward
+						var devTax = reward.multipliedBy(Consensus.FOUNDATION_LEVY[0]).dividedToIntegerBy(Consensus.FOUNDATION_LEVY_RATIO);
+					}
+					
+					// Otherwise
+					else {
+					
+						// Get levy index based on the height
+						var levyIndex = height.minus(Consensus.FOUNDATION_LEVY_ERA_ONE).minus(1).dividedToIntegerBy(Consensus.FOUNDATION_LEVY_ERA_TWO).plus(1);
+						
+						// Check if levy index exists
+						if(levyIndex < Consensus.FOUNDATION_LEVY["length"]) {
+						
+							// Set dev tax to a ratio of the reward
+							var devTax = reward.multipliedBy(Consensus.FOUNDATION_LEVY[levyIndex]).dividedToIntegerBy(Consensus.FOUNDATION_LEVY_RATIO);
+						}
+						
+						// Otherwise
+						else {
+						
+							// Set dev tax to zero
+							var devTax = new BigNumber(0);
+						}
+					}
+					
+					// Check if height is a foundation height
+					if(height.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false && height.modulo(Consensus.FOUNDATION_HEIGHT).isZero() === true && devTax.isZero() === false) {
+					
+						// Go through all heights in the current foundation
+						for(var currentHeight = height.minus(Consensus.FOUNDATION_HEIGHT).plus(1); currentHeight.isLessThanOrEqualTo(height) === true; currentHeight = currentHeight.plus(1)) {
+						
+							// Check if current height isn't the first block height
+							if(currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false) {
+							
+								// Check if current height is in the first levy era
+								if(currentHeight.isLessThanOrEqualTo(Consensus.FOUNDATION_LEVY_ERA_ONE) === true) {
+								
+									// Subtract a ratio of the reward at the current height from the dev tax
+									devTax = devTax.minus(Consensus.getBlockReward(isMainnet, currentHeight).multipliedBy(Consensus.FOUNDATION_LEVY[0]).dividedToIntegerBy(Consensus.FOUNDATION_LEVY_RATIO));
+								}
+								
+								// Otherwise
+								else {
+								
+									// Get levy index based on the current height
+									var levyIndex = currentHeight.minus(Consensus.FOUNDATION_LEVY_ERA_ONE).minus(1).dividedToIntegerBy(Consensus.FOUNDATION_LEVY_ERA_TWO).plus(1);
+									
+									// Check if levy index exists
+									if(levyIndex < Consensus.FOUNDATION_LEVY["length"]) {
+									
+										// Subtract a ratio of the reward at the current height from the dev tax
+										devTax = devTax.minus(Consensus.getBlockReward(isMainnet, currentHeight).multipliedBy(Consensus.FOUNDATION_LEVY[levyIndex]).dividedToIntegerBy(Consensus.FOUNDATION_LEVY_RATIO));
+									}
+								}
+							}
+						}
+					}
+					
+					// Break
+					break;
+				
+				// Default
+				default:
+				
+					// Set dev tax to zero
+					var devTax = new BigNumber(0);
+			}
+		
+			// Subtract dev tax from reward and add fee to reward
+			reward = reward.minus(devTax).plus(fees);
 			
 			// Return reward
 			return reward;
@@ -1401,6 +1485,76 @@ class Consensus {
 			
 					// Return maximum header version
 					return 5;
+			}
+		}
+		
+		// Foundation levy era one
+		static get FOUNDATION_LEVY_ERA_ONE() {
+		
+			// Check wallet type
+			switch(Consensus.getWalletType()) {
+			
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
+		
+					// Return foundation levy era one
+					return 120 * Consensus.BLOCK_HEIGHT_DAY;
+			}
+		}
+		
+		// Foundation levy era two
+		static get FOUNDATION_LEVY_ERA_TWO() {
+		
+			// Check wallet type
+			switch(Consensus.getWalletType()) {
+			
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
+		
+					// Return foundation levy era two
+					return 365 * Consensus.BLOCK_HEIGHT_DAY;
+			}
+		}
+		
+		// Foundation levy ratio
+		static get FOUNDATION_LEVY_RATIO() {
+		
+			// Check wallet type
+			switch(Consensus.getWalletType()) {
+			
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
+		
+					// Return foundation levy ratio
+					return 10000;
+			}
+		}
+		
+		// Foundation levy
+		static get FOUNDATION_LEVY() {
+		
+			// Check wallet type
+			switch(Consensus.getWalletType()) {
+			
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
+		
+					// Return foundation levy
+					return [888, 777, 666, 555, 444, 333, 222, 111, 111];
+			}
+		}
+		
+		// Foundation height
+		static get FOUNDATION_HEIGHT() {
+		
+			// Check wallet type
+			switch(Consensus.getWalletType()) {
+			
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
+		
+					// Return foundation height
+					return Consensus.BLOCK_HEIGHT_DAY;
 			}
 		}
 		
