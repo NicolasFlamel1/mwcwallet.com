@@ -460,10 +460,10 @@
 			"Checksum" => "1Dos1rNWtUlUuVq4ElvN9Twhy9SaeXeN3kTAGT7ND8tAPn3eskDtegm+zVMrxqH5iyN+Zk3cL7IbTKs23OtHKA=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 133,
+			"Version" => 134,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "IS3rAZYoQz4++/EKSu+nMrRfSeL6WHt6inR6Q9/viTJdoE8NdVhqFfNlq6eniKYz26oQRu4PF8R9Fq2KyTQw2w=="
+			"Checksum" => "1jiBQ6axVx+gx78RdUazXunIGDcHoQyXrggcOyYrvhRU/YJHADj8mWe2jgIw2Eh9ZIfS87OSxJiBabLeLETOCg=="
 		],
 		"./scripts/hardware_wallet.js" => [
 			"Version" => 80,

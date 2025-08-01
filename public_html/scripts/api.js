@@ -341,7 +341,7 @@ class Api {
 																			if(cancelOccurred === Common.NO_CANCEL_OCCURRED || cancelOccurred() === false) {
 																		
 																				// Get using provided identifier
-																				var usingProvidedIdentifier = identifier !== Identifier.NO_IDENTIFIER && wallet.getLastIdentifier().includesValue(identifier) === true;
+																				var usingProvidedIdentifier = identifier !== Identifier.NO_IDENTIFIER && wallet.getLastIdentifier() !== Wallet.NO_LAST_IDENTIFIER && wallet.getLastIdentifier().includesValue(identifier) === true;
 																				
 																				// Check if wallet isn't a hardware wallet
 																				if(wallet.getHardwareType() === Wallet.NO_HARDWARE_TYPE) {
