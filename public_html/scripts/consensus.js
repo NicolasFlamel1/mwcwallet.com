@@ -359,39 +359,6 @@ class Consensus {
 						}
 					}
 					
-					// Check if height is a foundation height
-					if(height.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false && height.modulo(Consensus.FOUNDATION_HEIGHT).isZero() === true && devTax.isZero() === false) {
-					
-						// Go through all heights in the current foundation
-						for(var currentHeight = height.minus(Consensus.FOUNDATION_HEIGHT).plus(1); currentHeight.isLessThanOrEqualTo(height) === true; currentHeight = currentHeight.plus(1)) {
-						
-							// Check if current height isn't the first block height
-							if(currentHeight.isEqualTo(Consensus.FIRST_BLOCK_HEIGHT) === false) {
-							
-								// Check if current height is in the first levy era
-								if(currentHeight.isLessThanOrEqualTo(Consensus.FOUNDATION_LEVY_ERA_ONE) === true) {
-								
-									// Subtract a ratio of the reward at the current height from the dev tax
-									devTax = devTax.minus(Consensus.getBlockReward(isMainnet, currentHeight).multipliedBy(Consensus.FOUNDATION_LEVY[0]).dividedToIntegerBy(Consensus.FOUNDATION_LEVY_RATIO));
-								}
-								
-								// Otherwise
-								else {
-								
-									// Get levy index based on the current height
-									var levyIndex = currentHeight.minus(Consensus.FOUNDATION_LEVY_ERA_ONE).minus(1).dividedToIntegerBy(Consensus.FOUNDATION_LEVY_ERA_TWO).plus(1);
-									
-									// Check if levy index exists
-									if(levyIndex < Consensus.FOUNDATION_LEVY["length"]) {
-									
-										// Subtract a ratio of the reward at the current height from the dev tax
-										devTax = devTax.minus(Consensus.getBlockReward(isMainnet, currentHeight).multipliedBy(Consensus.FOUNDATION_LEVY[levyIndex]).dividedToIntegerBy(Consensus.FOUNDATION_LEVY_RATIO));
-									}
-								}
-							}
-						}
-					}
-					
 					// Break
 					break;
 				
@@ -1541,20 +1508,6 @@ class Consensus {
 		
 					// Return foundation levy
 					return [888, 777, 666, 555, 444, 333, 222, 111, 111];
-			}
-		}
-		
-		// Foundation height
-		static get FOUNDATION_HEIGHT() {
-		
-			// Check wallet type
-			switch(Consensus.getWalletType()) {
-			
-				// EPIC wallet
-				case Consensus.EPIC_WALLET_TYPE:
-		
-					// Return foundation height
-					return Consensus.BLOCK_HEIGHT_DAY;
 			}
 		}
 		
