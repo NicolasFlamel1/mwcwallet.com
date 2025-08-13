@@ -563,7 +563,7 @@
 				if(typeof history === "object" && history !== null && typeof URL_QUERY_STRING !== "undefined") {
 				
 					// Change displayed URL to include the query string
-					history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"] + URL_QUERY_STRING);
+					history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:" || location["protocol"] === "content:") ? location["protocol"] + "//" : "") + location["pathname"] + URL_QUERY_STRING);
 				}
 			}
 		}
@@ -2668,7 +2668,7 @@
 			if(startupErrorOccurred() === false) {
 		
 				// Change displayed URL to remove query string
-				history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"]);
+				history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:" || location["protocol"] === "content:") ? location["protocol"] + "//" : "") + location["pathname"]);
 			}
 			
 			// Title language change event
@@ -2681,7 +2681,7 @@
 					if(startupErrorOccurred() === false) {
 				
 						// Change displayed URL to remove query string
-						history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:") ? location["protocol"] + "//" : "") + location["pathname"]);
+						history.replaceState(NO_STATE, document["title"], ((location["protocol"] === "file:" || location["protocol"] === "content:") ? location["protocol"] + "//" : "") + location["pathname"]);
 					}
 				}, 0);
 			});

@@ -223,7 +223,7 @@ class AboutSection extends Section {
 			}
 			
 			// Otherwise check if loading from file
-			else if(location["protocol"] === Common.FILE_PROTOCOL) {
+			else if(location["protocol"] === Common.FILE_PROTOCOL || location["protocol"] === Common.CONTENT_PROTOCOL) {
 			
 				// Set source code
 				var sourceCode = "https://github.com/NicolasFlamel1/MWC-Wallet-Standalone";

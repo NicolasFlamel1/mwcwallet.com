@@ -1127,6 +1127,13 @@ class Common {
 			return "file:";
 		}
 		
+		// Content protocol
+		static get CONTENT_PROTOCOL() {
+		
+			// Return content protocol
+			return "content:";
+		}
+		
 		// HTTP no response status
 		static get HTTP_NO_RESPONSE_STATUS() {
 		

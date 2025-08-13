@@ -6354,7 +6354,7 @@ class Application {
 				var thirdPartyCookiesMessageShown = localStorage.getItem(Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_LOCAL_STORAGE_NAME);
 				
 				// Check if third-party cookies message hasn't been shown and is an extension or loading from a file
-				if((thirdPartyCookiesMessageShown === Common.INVALID_LOCAL_STORAGE_ITEM || thirdPartyCookiesMessageShown !== Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_TRUE_VALUE) && (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL)) {
+				if((thirdPartyCookiesMessageShown === Common.INVALID_LOCAL_STORAGE_ITEM || thirdPartyCookiesMessageShown !== Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_TRUE_VALUE) && (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL || location["protocol"] === Common.CONTENT_PROTOCOL)) {
 				
 					// Check if browser is Safari
 					if(typeof navigator === "object" && navigator !== null && "userAgent" in navigator === true && navigator["userAgent"].toLowerCase().indexOf("safari") !== Common.INDEX_NOT_FOUND && navigator["userAgent"].toLowerCase().indexOf("chrome") === Common.INDEX_NOT_FOUND) {
@@ -7017,7 +7017,7 @@ class Application {
 			}
 			
 			// Otherwise check if loading from a file
-			else if(location["protocol"] === Common.FILE_PROTOCOL) {
+			else if(location["protocol"] === Common.FILE_PROTOCOL || location["protocol"] === Common.CONTENT_PROTOCOL) {
 			
 				// Set message
 				var message = Language.getDefaultTranslation('Make sure that you downloaded this file for free from MWC Wallet\'s official standalone releases at %1$m');

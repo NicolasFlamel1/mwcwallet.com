@@ -978,7 +978,7 @@ class Language {
 									var translatedTextArgumentIsBlob = textArguments[argumentIndex][Language.LINK_IS_BLOB_ARGUMENT_INDEX];
 									
 									// Check if loading from file and translated text argument URL is a relative path
-									if(location["protocol"] === Common.FILE_PROTOCOL && translatedTextArgumentUrl.substring(0, "./"["length"]) === "./") {
+									if((location["protocol"] === Common.FILE_PROTOCOL || location["protocol"] === Common.CONTENT_PROTOCOL) && translatedTextArgumentUrl.substring(0, "./"["length"]) === "./") {
 									
 										// Set translated text argument URL to be an absolute path
 										translatedTextArgumentUrl = HTTPS_SERVER_ADDRESS + translatedTextArgumentUrl.substring("."["length"]);
@@ -1000,7 +1000,7 @@ class Language {
 									var notTranslatedTextArgumentIsBlob = textArguments[argumentIndex][Language.LINK_IS_BLOB_ARGUMENT_INDEX];
 									
 									// Check if loading from file and not translated text argument URL is a relative path
-									if(location["protocol"] === Common.FILE_PROTOCOL && notTranslatedTextArgumentUrl.substring(0, "./"["length"]) === "./") {
+									if((location["protocol"] === Common.FILE_PROTOCOL || location["protocol"] === Common.CONTENT_PROTOCOL) && notTranslatedTextArgumentUrl.substring(0, "./"["length"]) === "./") {
 									
 										// Set not translated text argument URL to be an absolute path
 										notTranslatedTextArgumentUrl = HTTPS_SERVER_ADDRESS + notTranslatedTextArgumentUrl.substring("."["length"]);

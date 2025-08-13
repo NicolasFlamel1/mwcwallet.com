@@ -13,7 +13,7 @@ class Version {
 		constructor(application, message) {
 		
 			// Set version
-			this.version = (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL || Common.isMobileApp() === true) ? VERSION_NUMBER : Version.hash(JSON.stringify(FILES));
+			this.version = (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL || location["protocol"] === Common.CONTENT_PROTOCOL || Common.isMobileApp() === true) ? VERSION_NUMBER : Version.hash(JSON.stringify(FILES));
 			
 			// Set application
 			this.application = application;
