@@ -478,10 +478,10 @@
 			"Checksum" => "2Mv5CXrHhE4o7KnPHwme4X/CjM7CYl4WHxJ6c/7FA6jmCRjwP6xKr1OjoRmCrhiKJAmryK0pHSnQgjfKmbRoxA=="
 		],
 		"./scripts/hardware_wallet_bluetooth_transport.js" => [
-			"Version" => 11,
+			"Version" => 12,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "81TqXxmOjDfWMpj5SRZFJnS0pM+Qxy5GHlNLEzUghGQLProo/ENFQkUINujbqGUqHLFRDpQLpWfR70xGFu4Aqw=="
+			"Checksum" => "3uuaR28PEvV/wNrHTlPHIBAJRuuQPNphuNOE85jH/c2l9w4x0UCuJkJUeZru1mon3cTO70/0IGm9iFBTJvSWCw=="
 		],
 		"./scripts/hardware_wallet_definitions.js" => [
 			"Version" => 10,

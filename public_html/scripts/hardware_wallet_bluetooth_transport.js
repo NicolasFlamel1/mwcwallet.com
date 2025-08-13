@@ -1034,8 +1034,19 @@ class HardwareWalletBluetoothTransport {
 									// Clear first response packet
 									firstResponsePacket = false;
 									
-									// Get response size
-									responseSize = (responsePacket[Uint8Array["BYTES_PER_ELEMENT"] + Uint16Array["BYTES_PER_ELEMENT"]] << HardwareWalletBluetoothTransport.BITS_IN_A_BYTE) | responsePacket[Uint8Array["BYTES_PER_ELEMENT"] + Uint16Array["BYTES_PER_ELEMENT"] + 1];
+									// Check if response is for getting the MTU
+									if(tag === HardwareWalletBluetoothTransport.LEDGER_GET_MTU_COMMAND_TAG) {
+									
+										// Get response size
+										responseSize = responsePacket["length"] - HardwareWalletBluetoothTransport.LEDGER_FIRST_PACKET_HEADER_LENGTH;
+									}
+									
+									// Otherwise
+									else {
+									
+										// Get response size
+										responseSize = (responsePacket[Uint8Array["BYTES_PER_ELEMENT"] + Uint16Array["BYTES_PER_ELEMENT"]] << HardwareWalletBluetoothTransport.BITS_IN_A_BYTE) | responsePacket[Uint8Array["BYTES_PER_ELEMENT"] + Uint16Array["BYTES_PER_ELEMENT"] + 1];
+									}
 									
 									// Get response part
 									var responsePart = responsePacket.subarray(HardwareWalletBluetoothTransport.LEDGER_FIRST_PACKET_HEADER_LENGTH);
