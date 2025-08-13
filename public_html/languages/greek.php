@@ -431,6 +431,7 @@
 			'Payment Proof' => 'Απόδειξη πληρωμής',
 			'Payment Proof Address' => 'Διεύθυνση απόδειξης πληρωμής',
 			'Payment Received' => 'Η πληρωμή ελήφθη',
+			/*TODO*///'Payment rejected' => '',
 			/*TODO*///'Pin' => '',
 			'plain' => 'Απλή Μορφή',
 			'Previous' => 'Προηγούμενο',

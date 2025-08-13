@@ -1511,7 +1511,7 @@ class WalletSection extends Section {
 				var showGetPaymentProofAddressError = function(error) {
 				
 					// Show message immediately and allow showing messages
-					self.getMessage().show(Language.getDefaultTranslation('Get Payment Proof Address Error'), (typeof error === "string") ? Message.createText(error) : error, true, function() {
+					self.getMessage().show(Language.getDefaultTranslation('Get Payment Proof Address Error'), error, true, function() {
 					
 						// Hide loading
 						self.getApplication().hideLoading();
@@ -1550,7 +1550,7 @@ class WalletSection extends Section {
 				catch(error) {
 					
 					// Show get payment proof address error
-					showGetPaymentProofAddressError(error);
+					showGetPaymentProofAddressError(Message.createText(error));
 					
 					// Return
 					return;
@@ -1582,7 +1582,7 @@ class WalletSection extends Section {
 									}).catch(function(error) {
 									
 										// Reject error
-										reject(Language.getDefaultTranslation('Getting the payment proof address failed.'));
+										reject(Message.createText(Language.getDefaultTranslation('Getting the payment proof address failed.')));
 									});
 								
 								// GRIN wallet
@@ -1598,7 +1598,7 @@ class WalletSection extends Section {
 									}).catch(function(error) {
 									
 										// Reject error
-										reject(Language.getDefaultTranslation('Getting the payment proof address failed.'));
+										reject(Message.createText(Language.getDefaultTranslation('Getting the payment proof address failed.')));
 									});
 							}
 						}
@@ -1755,8 +1755,19 @@ class WalletSection extends Section {
 							// Catch errors
 							}).catch(function(error) {
 							
-								// Reject error
-								reject(error);
+								// Check if canceled
+								if(error === Common.CANCELED_ERROR) {
+								
+									// Reject error
+									reject(error);
+								}
+								
+								// Otherwise
+								else {
+								
+									// Reject error
+									reject(Message.createText(error));
+								}
 							});
 						}
 					});
@@ -2007,7 +2018,7 @@ class WalletSection extends Section {
 																	else if(error === HardwareWallet.USER_REJECTED_ERROR) {
 																	
 																		// Reject error
-																		reject(Language.getDefaultTranslation('Verifying the Tor address on the hardware wallet failed.'));
+																		reject(Message.createText(Language.getDefaultTranslation('Verifying the Tor address on the hardware wallet failed.')));
 																	}
 																	
 																	// Otherwise
@@ -2088,7 +2099,7 @@ class WalletSection extends Section {
 																	else if(error === HardwareWallet.USER_REJECTED_ERROR) {
 																	
 																		// Reject error
-																		reject(Language.getDefaultTranslation('Verifying the Slatepack address on the hardware wallet failed.'));
+																		reject(Message.createText(Language.getDefaultTranslation('Verifying the Slatepack address on the hardware wallet failed.')));
 																	}
 																	
 																	// Otherwise
@@ -2121,8 +2132,19 @@ class WalletSection extends Section {
 												// Catch errors
 												}).catch(function(error) {
 												
-													// Reject error
-													reject(error);
+													// Check if canceled
+													if(error === Common.CANCELED_ERROR) {
+													
+														// Reject error
+														reject(error);
+													}
+													
+													// Otherwise
+													else {
+													
+														// Reject error
+														reject(Message.createText(error));
+													}
 												});
 											});
 										};

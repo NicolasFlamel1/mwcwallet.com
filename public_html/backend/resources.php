@@ -340,10 +340,10 @@
 			"Checksum" => "AaYCKtIK3CfkZgJL+KjqGHbvK+urVTVK0Wagvfi9MQcrVy95oT6vmwR0lkjIA1gO89vuQ15jrW4vjLyLjUihfA=="
 		],
 		"./scripts/wallets.js" => [
-			"Version" => 73,
+			"Version" => 74,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "dPusPRCnCmHd3HtU3too2Th76vqqKBE3ARrdf3SIhznOinyyBXyvn+xDw9PoMWITeGeD5XVkUTuvXzPSQN0oag=="
+			"Checksum" => "aBb+eGKG4olnuh0AiQoMSbJGKRU9eOcvcS5svUAKAMT8jKeEuRT+qi14soSTx1i7su17oG/VREAuc+/ch5X2/Q=="
 		],
 		"./scripts/application.js" => [
 			"Version" => 109,
@@ -478,10 +478,10 @@
 			"Checksum" => "2Mv5CXrHhE4o7KnPHwme4X/CjM7CYl4WHxJ6c/7FA6jmCRjwP6xKr1OjoRmCrhiKJAmryK0pHSnQgjfKmbRoxA=="
 		],
 		"./scripts/hardware_wallet_bluetooth_transport.js" => [
-			"Version" => 12,
+			"Version" => 13,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "3uuaR28PEvV/wNrHTlPHIBAJRuuQPNphuNOE85jH/c2l9w4x0UCuJkJUeZru1mon3cTO70/0IGm9iFBTJvSWCw=="
+			"Checksum" => "rhDUXge2rSQ4DI/fTRxYf2flGZc9IIyk6awBXILBHN0w6zI74ZC3gOuHV0IQjmbcn6amKV6avOv3fsY+FHT18A=="
 		],
 		"./scripts/hardware_wallet_definitions.js" => [
 			"Version" => 10,
@@ -592,7 +592,7 @@
 			"Checksum" => "RFXyJdMBrFe0rBAKTOwmTVcZzI6V3Pf7HHizK+RQVHguh/pCOTPV0Jj+EB7cvP1/wpuUAyh1SnWVZ01qLg4emg=="
 		],
 		"./scripts/languages.js" => [
-			"Version" => 21,
+			"Version" => 22,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -874,10 +874,10 @@
 			"Checksum" => "NYI6dt8F95YbVXNa9QMby6C4L1ME8Ta+80FEZg5X4YQEn9N69du4R8yuCKDa+WWXFuxjcjokJHAYuW6hTnRguA=="
 		],
 		"./scripts/wallet_section.js" => [
-			"Version" => 99,
+			"Version" => 101,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "ZAEzyqieGnNBodP2srPHRIt2YaWxug0L9S+bmc1ZBpUcYtNTFsxXca3EqBbE3X0YJIvO8F1pPCgYhL5G1Ufn8w=="
+			"Checksum" => "pGRCeXtraLChL1Nl18caAW/odQJi/ZXXKaZaeL9tfqte8hOFzURNKzNyuv0qtFVfgxXiGod7lbW7+KPz9gBAKA=="
 		],
 		"./scripts/send_payment_section.js" => [
 			"Version" => 107,

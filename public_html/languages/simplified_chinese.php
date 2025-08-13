@@ -428,6 +428,7 @@
 			'Payment Proof' => '支付证明',
 			'Payment Proof Address' => '支付证明地址',
 			'Payment Received' => '已收到付款',
+			/*TODO*///'Payment rejected' => '',
 			/*TODO*///'Pin' => '',
 			'plain' => '纯文本',
 			'Previous' => '前一个',

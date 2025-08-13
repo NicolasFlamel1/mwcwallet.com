@@ -431,6 +431,7 @@
 			'Payment Proof' => 'Potvrzení o platbě',
 			'Payment Proof Address' => 'Adresa potvrzení o platbě',
 			'Payment Received' => 'Platba přijata',
+			/*TODO*///'Payment rejected' => '',
 			/*TODO*///'Pin' => '',
 			'plain' => 'plain',
 			'Previous' => 'Předchozí',

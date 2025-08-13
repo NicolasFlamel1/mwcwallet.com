@@ -456,15 +456,57 @@ class HardwareWalletBluetoothTransport {
 																					// Disconnect connection
 																					connection.disconnect();
 																					
-																					// Reject error
-																					reject(new DOMException("", "NetworkError"));
+																					// Check if not using the mobile app's Bluetooth implementation
+																					if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === false) {
+																					
+																						// Request transport
+																						HardwareWalletBluetoothTransport.request(device).then(function(transport) {
+																						
+																							// Resolve transport
+																							resolve(transport);
+																						
+																						// Catch errors
+																						}).catch(function(error) {
+																						
+																							// Reject error
+																							reject(error);
+																						});
+																					}
+																					
+																					// Otherwise
+																					else {
+																					
+																						// Reject error
+																						reject(new DOMException("", "NetworkError"));
+																					}
 																				}
 																				
 																				// Otherwise
 																				else {
 																				
-																					// Reject
-																					reject();
+																					// Check if not using the mobile app's Bluetooth implementation
+																					if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === false) {
+																					
+																						// Request transport
+																						HardwareWalletBluetoothTransport.request(device).then(function(transport) {
+																						
+																							// Resolve transport
+																							resolve(transport);
+																						
+																						// Catch errors
+																						}).catch(function(error) {
+																						
+																							// Reject error
+																							reject(error);
+																						});
+																					}
+																					
+																					// Otherwise
+																					else {
+																					
+																						// Reject
+																						reject();
+																					}
 																				}
 																				
 																			// Catch errors
@@ -476,15 +518,57 @@ class HardwareWalletBluetoothTransport {
 																					// Disconnect connection
 																					connection.disconnect();
 																					
-																					// Reject error
-																					reject(new DOMException("", "NetworkError"));
+																					// Check if not using the mobile app's Bluetooth implementation
+																					if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === false) {
+																					
+																						// Request transport
+																						HardwareWalletBluetoothTransport.request(device).then(function(transport) {
+																						
+																							// Resolve transport
+																							resolve(transport);
+																						
+																						// Catch errors
+																						}).catch(function(error) {
+																						
+																							// Reject error
+																							reject(error);
+																						});
+																					}
+																					
+																					// Otherwise
+																					else {
+																					
+																						// Reject error
+																						reject(new DOMException("", "NetworkError"));
+																					}
 																				}
 																				
 																				// Otherwise
 																				else {
 																				
-																					// Reject
-																					reject();
+																					// Check if not using the mobile app's Bluetooth implementation
+																					if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === false) {
+																					
+																						// Request transport
+																						HardwareWalletBluetoothTransport.request(device).then(function(transport) {
+																						
+																							// Resolve transport
+																							resolve(transport);
+																						
+																						// Catch errors
+																						}).catch(function(error) {
+																						
+																							// Reject error
+																							reject(error);
+																						});
+																					}
+																					
+																					// Otherwise
+																					else {
+																					
+																						// Reject
+																						reject();
+																					}
 																				}
 																			});
 																		}
@@ -492,8 +576,29 @@ class HardwareWalletBluetoothTransport {
 																		// Otherwise
 																		else {
 																		
-																			// Reject
-																			reject();
+																			// Check if not using the mobile app's Bluetooth implementation
+																			if(HardwareWalletBluetoothTransport.isUsingMobileAppBluetoothImplementation() === false) {
+																			
+																				// Request transport
+																				HardwareWalletBluetoothTransport.request(device).then(function(transport) {
+																				
+																					// Resolve transport
+																					resolve(transport);
+																				
+																				// Catch errors
+																				}).catch(function(error) {
+																				
+																					// Reject error
+																					reject(error);
+																				});
+																			}
+																			
+																			// Otherwise
+																			else {
+																			
+																				// Reject
+																				reject();
+																			}
 																		}
 																		
 																	}, HardwareWalletBluetoothTransport.SEND_TIMEOUT_DURATION_MILLISECONDS);

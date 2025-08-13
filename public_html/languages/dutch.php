@@ -431,6 +431,7 @@
 			'Payment Proof' => 'Betalingsbewijs',
 			'Payment Proof Address' => 'Betalingsbewijs Adres',
 			'Payment Received' => 'Betaling Ontvangen',
+			/*TODO*///'Payment rejected' => '',
 			/*TODO*///'Pin' => '',
 			'plain' => 'kaal',
 			'Previous' => 'Vorige',

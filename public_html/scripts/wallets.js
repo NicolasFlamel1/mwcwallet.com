@@ -1171,14 +1171,14 @@ class Wallets {
 									if(data instanceof Uint8Array === true) {
 								
 										// Set listener error to JSON-RPC internal error error response
-										var listenerError = JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, JSONBigNumber.parse((new TextDecoder("utf-8", {"fatal": true})).decode(data)));
+										var listenerError = JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, JSONBigNumber.parse((new TextDecoder("utf-8", {"fatal": true})).decode(data)), Language.getDefaultTranslation('Payment rejected'));
 									}
 									
 									// Otherwise
 									else {
 									
 										// Set listener error to JSON-RPC internal error error response
-										var listenerError = JsonRpc.createErrorResponse(JsonRpc.INTERNAL_ERROR_ERROR, data);
+										var listenerError = JsonRpc.createErrorResponse(JsonRpc.INVALID_PARAMETERS_ERROR, data, Language.getDefaultTranslation('Payment rejected'));
 									}
 								}
 								

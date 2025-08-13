@@ -431,6 +431,7 @@
 			'Payment Proof' => 'Zahlungs- Nachweis',
 			'Payment Proof Address' => 'Zahlungs- Nachweis Adresse',
 			'Payment Received' => 'Zahlung empfangen',
+			/*TODO*///'Payment rejected' => '',
 			/*TODO*///'Pin' => '',
 			'plain' => 'flach',
 			'Previous' => 'Vorherige',
