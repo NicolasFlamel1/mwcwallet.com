@@ -460,16 +460,16 @@
 			"Checksum" => "1Dos1rNWtUlUuVq4ElvN9Twhy9SaeXeN3kTAGT7ND8tAPn3eskDtegm+zVMrxqH5iyN+Zk3cL7IbTKs23OtHKA=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 134,
+			"Version" => 135,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "1jiBQ6axVx+gx78RdUazXunIGDcHoQyXrggcOyYrvhRU/YJHADj8mWe2jgIw2Eh9ZIfS87OSxJiBabLeLETOCg=="
+			"Checksum" => "/x8SPshJFDdcZd6NOpvXM9XNMo2zy80Vs3/UhqwN2rgk62IeoxHJ5HzF8FYqFENf/H5oi+sHbUj8jlWuXCPWYg=="
 		],
 		"./scripts/hardware_wallet.js" => [
-			"Version" => 80,
+			"Version" => 82,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "MWh5FYynnJsJ9PxEVaAM/jVP0C7hzL2LFe/8wqpL5IYi4KYBYocbQmVInUU/YteKkfT2anOdKPR5+OxK48cXHQ=="
+			"Checksum" => "hRBI7tj+xEzSl989tG5+ZpJJVfToexZxSXgTgzPG51r5UnWey4Ii6M5M74k71QqRVO5p//vmA8ub4nRHvt2W1Q=="
 		],
 		"./scripts/hardware_wallet_usb_transport.js" => [
 			"Version" => 8,
@@ -874,10 +874,10 @@
 			"Checksum" => "NYI6dt8F95YbVXNa9QMby6C4L1ME8Ta+80FEZg5X4YQEn9N69du4R8yuCKDa+WWXFuxjcjokJHAYuW6hTnRguA=="
 		],
 		"./scripts/wallet_section.js" => [
-			"Version" => 97,
+			"Version" => 98,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "c6BUoV94iC6wMZpSoWtd/HLEAb5UWGzzSgraVQZXDRoMdFRsjAL9gG8lsjYN9pvTibrc3QGqGTSNokzs1HDYQQ=="
+			"Checksum" => "mJQO0OkGYgcm7/8igt6zM6h/bYx41MWKHBhPx7jgP3nBs4Al/SDXhSfO3b1PYk1NFRhts7CHvNf3rf8XssQv9g=="
 		],
 		"./scripts/send_payment_section.js" => [
 			"Version" => 107,

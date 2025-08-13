@@ -9445,7 +9445,7 @@ class Api {
 																									else {
 																									
 																										// Reject error
-																										reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																										reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																									}
 																								}
 																								
@@ -9581,7 +9581,7 @@ class Api {
 																									else {
 																									
 																										// Reject error
-																										reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																										reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																									}
 																								}
 																								
@@ -9720,7 +9720,7 @@ class Api {
 																								else {
 																								
 																									// Reject error
-																									reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																									reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																								}
 																							}
 																							
@@ -9855,7 +9855,7 @@ class Api {
 																								else {
 																								
 																									// Reject error
-																									reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																									reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																								}
 																							}
 																							
@@ -10379,7 +10379,7 @@ class Api {
 																														else {
 																													
 																															// Reject error
-																															reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																															reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																														}
 																													}
 																													
@@ -11401,7 +11401,7 @@ class Api {
 																																														else {
 																																													
 																																															// Reject error
-																																															reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																																															reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																														}
 																																													}
 																																													
@@ -11470,7 +11470,7 @@ class Api {
 																																													else {
 																																												
 																																														// Reject error
-																																														reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																																														reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																													}
 																																												}
 																																												
@@ -11661,7 +11661,7 @@ class Api {
 																																											else {
 																																										
 																																												// Reject error
-																																												reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																																												reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																											}
 																																										}
 																																										
@@ -11730,7 +11730,7 @@ class Api {
 																																										else {
 																																									
 																																											// Reject error
-																																											reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																																											reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																										}
 																																									}
 																																									
@@ -11921,7 +11921,7 @@ class Api {
 																																								else {
 																																							
 																																									// Reject error
-																																									reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																																									reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																								}
 																																							}
 																																							
@@ -11990,7 +11990,7 @@ class Api {
 																																							else {
 																																						
 																																								// Reject error
-																																								reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																																								reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																							}
 																																						}
 																																						
@@ -12132,7 +12132,7 @@ class Api {
 																																				else {
 																																			
 																																					// Reject error
-																																					reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')));
+																																					reject(Message.createText(Language.getDefaultTranslation('Creating slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																				}
 																																			}
 																																			
@@ -13044,7 +13044,7 @@ class Api {
 																																																				else {
 																																																			
 																																																					// Reject error
-																																																					reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')));
+																																																					reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																																				}
 																																																			}
 																																																			
@@ -13120,7 +13120,7 @@ class Api {
 																																																			else {
 																																																		
 																																																				// Reject error
-																																																				reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')));
+																																																				reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																																			}
 																																																		}
 																																																		
@@ -13384,7 +13384,7 @@ class Api {
 																																															else {
 																																														
 																																																// Reject error
-																																																reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')));
+																																																reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																															}
 																																														}
 																																														
@@ -13453,7 +13453,7 @@ class Api {
 																																														else {
 																																													
 																																															// Reject error
-																																															reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')));
+																																															reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																														}
 																																													}
 																																													
@@ -13644,7 +13644,7 @@ class Api {
 																																												else {
 																																											
 																																													// Reject error
-																																													reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')));
+																																													reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																												}
 																																											}
 																																											
@@ -13713,7 +13713,7 @@ class Api {
 																																											else {
 																																										
 																																												// Reject error
-																																												reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')));
+																																												reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																											}
 																																										}
 																																										
@@ -13855,7 +13855,7 @@ class Api {
 																																								else {
 																																							
 																																									// Reject error
-																																									reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')));
+																																									reject(Message.createText(Language.getDefaultTranslation('Finalizing the slate failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																																								}
 																																							}
 																																							

@@ -5089,6 +5089,24 @@ class HardwareWallet {
 			return this.walletKeyPath;
 		}
 		
+		// Get generic troubleshooting text
+		getGenericTroubleshootingText() {
+		
+			// Check if hardware type is Ledger hardware type
+			if(this.hardwareType === HardwareWallet.LEDGER_HARDWARE_TYPE) {
+			
+				// Return generic troubleshooting text
+				return Message.createText(Language.getDefaultTranslation('(?<=.) ')) + Message.createText(Language.getDefaultTranslation('Make sure that the correct app is open on the hardware wallet.'));
+			}
+			
+			// Otherwise
+			else {
+			
+				// Return nothing
+				return "";
+			}
+		}
+		
 		// Get available hardware wallet descriptors
 		static getAvailableHardwareWalletDescriptors() {
 		

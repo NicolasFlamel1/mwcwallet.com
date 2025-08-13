@@ -1511,7 +1511,7 @@ class WalletSection extends Section {
 				var showGetPaymentProofAddressError = function(error) {
 				
 					// Show message immediately and allow showing messages
-					self.getMessage().show(Language.getDefaultTranslation('Get Payment Proof Address Error'), Message.createText(error), true, function() {
+					self.getMessage().show(Language.getDefaultTranslation('Get Payment Proof Address Error'), (typeof error === "string") ? Message.createText(error) : error, true, function() {
 					
 						// Hide loading
 						self.getApplication().hideLoading();
@@ -1678,7 +1678,7 @@ class WalletSection extends Section {
 											else {
 										
 												// Reject error
-												reject(Language.getDefaultTranslation('Getting the payment proof address failed.'));
+												reject(Message.createText(Language.getDefaultTranslation('Getting the payment proof address failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 											}
 										});
 									
@@ -1747,7 +1747,7 @@ class WalletSection extends Section {
 											else {
 										
 												// Reject error
-												reject(Language.getDefaultTranslation('Getting the payment proof address failed.'));
+												reject(Message.createText(Language.getDefaultTranslation('Getting the payment proof address failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 											}
 										});
 								}
@@ -2014,7 +2014,7 @@ class WalletSection extends Section {
 																	else {
 																
 																		// Reject error
-																		reject(Language.getDefaultTranslation('Verifying the payment proof address failed.'));
+																		reject(Message.createText(Language.getDefaultTranslation('Verifying the payment proof address failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																	}
 																});
 															
@@ -2095,7 +2095,7 @@ class WalletSection extends Section {
 																	else {
 																
 																		// Reject error
-																		reject(Language.getDefaultTranslation('Verifying the payment proof address failed.'));
+																		reject(Message.createText(Language.getDefaultTranslation('Verifying the payment proof address failed.')) + ((wallet.isHardwareConnected() === true) ? wallet.getHardwareWallet().getGenericTroubleshootingText() : ""));
 																	}
 																});
 														}
