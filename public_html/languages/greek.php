@@ -680,6 +680,7 @@
 			'Uses a custom listener instead of the default listener' => 'Χρησιμοποιεί ένα προσαρμοσμένο πρόγραμμα ακρόασης αντί του προεπιλεγμένου ακροατή',
 			'Uses a custom node instead of the default nodes' => 'Χρησιμοποιεί έναν προσαρμοσμένο κόμβο αντί για τους προεπιλεγμένους κόμβους',
 			'Uses a custom Tor proxy instead of the default Tor proxy' => 'Χρησιμοποιεί έναν προσαρμοσμένο διακομιστή μεσολάβησης Tor αντί του προεπιλεγμένου διακομιστή μεσολάβησης Tor',
+			/*TODO*///'Using this passphrase to access your funds from multiple wallets can cause your displayed balance to be out of sync.' => '',
 			'Utilities' => 'Βοηθητικά προγράμματα',
 			'Value:' => 'Αξία:',
 			'Value: %1$c' => 'Τιμή: %1$c',

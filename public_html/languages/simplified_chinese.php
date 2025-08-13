@@ -677,6 +677,7 @@
 			'Uses a custom listener instead of the default listener' => '使用自定义监听器而不是默认监听器',
 			'Uses a custom node instead of the default nodes' => '使用自定义节点而不是默认节点',
 			'Uses a custom Tor proxy instead of the default Tor proxy' => '使用自定义Tor代理而不是默认Tor代理',
+			/*TODO*///'Using this passphrase to access your funds from multiple wallets can cause your displayed balance to be out of sync.' => '',
 			'Utilities' => '实用工具',
 			'Value:' => '价值：',
 			'Value: %1$c' => '价值：%1$c',

@@ -680,6 +680,7 @@
 			'Uses a custom listener instead of the default listener' => 'Gebruikt een aangepaste luisteraar in plaats van de standaard luisteraar',
 			'Uses a custom node instead of the default nodes' => 'Gebruikt een aangepaste node in plaats van de standaard nodes',
 			'Uses a custom Tor proxy instead of the default Tor proxy' => 'Gebruikt een aangepaste Tor proxy in plaats van de standaard Tor proxy',
+			/*TODO*///'Using this passphrase to access your funds from multiple wallets can cause your displayed balance to be out of sync.' => '',
 			'Utilities' => 'Hulpmiddelen',
 			'Value:' => 'Waarde:',
 			'Value: %1$c' => 'Waarde: %1$c',

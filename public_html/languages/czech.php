@@ -680,6 +680,7 @@
 			'Uses a custom listener instead of the default listener' => 'Namísto defaultního listeneru použije vlastní',
 			'Uses a custom node instead of the default nodes' => 'Namísto defaultních uzlů použije vlastní',
 			'Uses a custom Tor proxy instead of the default Tor proxy' => 'Namísto defaultního Tor proxy použije vlastní',
+			/*TODO*///'Using this passphrase to access your funds from multiple wallets can cause your displayed balance to be out of sync.' => '',
 			'Utilities' => 'Nástroje',
 			'Value:' => 'Hodnota:',
 			'Value: %1$c' => 'Hodnota: %1$c',

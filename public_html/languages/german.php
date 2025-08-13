@@ -680,6 +680,7 @@
 			'Uses a custom listener instead of the default listener' => 'Verwendet einen benutzerdefinierten Listener anstelle des Standard-Listeners',
 			'Uses a custom node instead of the default nodes' => 'Verwendet einen benutzerdefinierten Knoten anstelle der Standardknoten',
 			'Uses a custom Tor proxy instead of the default Tor proxy' => 'Verwendet einen benutzerdefinierten Tor-Proxy anstelle des standardmäßigen Tor-Proxys',
+			/*TODO*///'Using this passphrase to access your funds from multiple wallets can cause your displayed balance to be out of sync.' => '',
 			'Utilities' => 'Dienstprogramme',
 			'Value:' => 'Wert:',
 			'Value: %1$c' => 'Wert: %1$c',
