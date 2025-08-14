@@ -1392,10 +1392,20 @@
 		function updateUrl(path) {
 		
 			// Check if history is supported
-			if(typeof history === "object" && history !== null)
+			if(typeof history === "object" && history !== null) {
 			
-				// Change displayed URL
-				history.replaceState(NO_STATE, Language.getTranslation('MWC Wallet'), path);
+				// Try
+				try {
+				
+					// Change displayed URL
+					history.replaceState(NO_STATE, Language.getTranslation('MWC Wallet'), path);
+				}
+				
+				// Catch errors
+				catch(error) {
+				
+				}
+			}
 		}
 		
 	</script><!--
