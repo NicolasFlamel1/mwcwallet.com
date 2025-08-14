@@ -265,8 +265,23 @@ class Message {
 						
 							// TODO Securely clear value
 						
-							// Trigger a fatal error
-							new FatalError(FatalError.UNKNOWN_ERROR);
+							// Set that copy button failed
+							copyButton.addClass("failed");
+							
+							// Set timeout
+							setTimeout(function() {
+							
+								// Check if loading wasn't shown before
+								if(loadingShown === false) {
+								
+									// Hide loading
+									self.application.hideLoading();
+								}
+							
+								// Set that copy button isn't clicked or failed
+								copyButton.removeClass("clicked failed");
+								
+							}, Message.FAILED_COPY_VALUE_TO_CLIPBOARD_AFTER_DELAY_MILLISECONDS);
 						});
 					
 					}, ("type" in event["originalEvent"] === true && event["originalEvent"]["type"] === "touchend") ? 0 : Message.COPY_VALUE_TO_CLIPBOARD_BEFORE_DELAY_MILLISECONDS);
@@ -1779,6 +1794,13 @@ class Message {
 		
 			// Return copy value to clipboard after delay milliseconds
 			return 100;
+		}
+		
+		// Failed copy value to clipboard after delay milliseconds
+		static get FAILED_COPY_VALUE_TO_CLIPBOARD_AFTER_DELAY_MILLISECONDS() {
+		
+			// Return failed copy value to clipboard after delay milliseconds
+			return 400;
 		}
 }
 

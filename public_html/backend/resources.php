@@ -736,10 +736,10 @@
 			"Checksum" => "SG6jl98Jf7Cgrfw7nuU4CR8oVDVvvEzYt1tYiae5soHIHp12DeE1KCWYNHLbDYdP9+J6aTdXsGG++pfP5BZZeA=="
 		],
 		"./scripts/message.js" => [
-			"Version" => 29,
+			"Version" => 30,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "i4bS/hG2MrUZDC+XDvvpL76KyZAY25BOBwIwPl0McaJf4lYWtyk6OSMpMMLR3Y8khMUtZJx8UH4mGIGYl4YBYA=="
+			"Checksum" => "L43RqoVqpc/9a4CxDwVuPDFrxRdsX9a5+M0dV5npuPK4b4VbdDtzkaP6I+RztydcpcBSo5OVbRcnPrdLF50QWA=="
 		],
 		"./scripts/common.js" => [
 			"Version" => 105,
@@ -1408,10 +1408,10 @@
 			"Checksum" => "VvrR6ya9WDBdsAObUtWoKmfydp7/TnmV6KaH4/uAmrcT34mgNBwzPky+uOTTUr5ub4X9SgaYPno7R9xXVlq9HQ=="
 		],
 		"./styles/message.css" => [
-			"Version" => 31,
+			"Version" => 32,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "GkBzHjQLqU4X7ExmRSqspH7MIwYW2LK6Jsuy5PAE4uxZhpHO3nhHJlF2Vwl6PrkZpA/siRvnBXlqodoyeCkgHQ=="
+			"Checksum" => "ddm6+I1rtZRvg0hfDOhAvJcG/LEMAHASQRrUl1DbP8ymk9g4iWukuNk0rTVbPG1uwKN3SYAJJIlio/wQq07I7g=="
 		],
 		"./styles/tetris.css" => [
 			"Version" => 3,

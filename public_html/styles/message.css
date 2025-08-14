@@ -503,12 +503,17 @@ aside.message > div > div > p > span.text span.copy {
 	display: inline;
 	cursor: copy;
 	line-height: 1em;
-	transition: opacity 0.1s ease-in-out;
+	transition: opacity 0.1s ease-in-out, color 0.1s ease-in-out;
 	position: absolute;
 }
 
 aside.message > div > div > p > span.text span.copy.clicked {
 	opacity: 0.6;
+}
+
+aside.message > div > div > p > span.text span.copy.failed {
+	opacity: 1;
+	color: #F00000;
 }
 
 aside.message > div > div > p > span.text span.copy::after {
