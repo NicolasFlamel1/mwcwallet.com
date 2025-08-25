@@ -1793,7 +1793,7 @@ class Message {
 		static get COPY_VALUE_TO_CLIPBOARD_AFTER_DELAY_MILLISECONDS() {
 		
 			// Return copy value to clipboard after delay milliseconds
-			return 100;
+			return 250;
 		}
 		
 		// Failed copy value to clipboard after delay milliseconds

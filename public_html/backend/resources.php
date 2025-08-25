@@ -303,6 +303,12 @@
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
+		"./apple-touch-icon.png" => [
+			"Version" => 0,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => NULL
+		],
 		"./sitemap.xml" => [
 			"Version" => 0,
 			"Cache" => FALSE,
@@ -736,10 +742,10 @@
 			"Checksum" => "SG6jl98Jf7Cgrfw7nuU4CR8oVDVvvEzYt1tYiae5soHIHp12DeE1KCWYNHLbDYdP9+J6aTdXsGG++pfP5BZZeA=="
 		],
 		"./scripts/message.js" => [
-			"Version" => 30,
+			"Version" => 31,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "L43RqoVqpc/9a4CxDwVuPDFrxRdsX9a5+M0dV5npuPK4b4VbdDtzkaP6I+RztydcpcBSo5OVbRcnPrdLF50QWA=="
+			"Checksum" => "uBLhlZi/5cLZID5Dhryv8uu2mU9qZMu6qSf3COW8m4lBrSgaWOVmAx9DWHkUZWnGJNiKsl32XVuV0N/SfaJB7w=="
 		],
 		"./scripts/common.js" => [
 			"Version" => 105,
