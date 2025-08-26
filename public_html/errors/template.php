@@ -851,7 +851,7 @@
 				if(count($touchIcon) !== count(TOUCH_ICON_PARTS))
 			
 					// Display touch icon
-					echo "<link rel=\"apple-touch-icon\" href=\"." . encodeString(getResource($touchIcon[0])) . "\">";
+					echo "<link rel=\"apple-touch-icon\" href=\"" . encodeString(mb_substr(getResource($touchIcon[0]), 1)) . "\">";
 				
 				// Otherwise
 				else

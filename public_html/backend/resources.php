@@ -85,7 +85,7 @@
 		[152, 152, "./images/touch_icons/touch_icon-152x152.png"],
 		[167, 167, "./images/touch_icons/touch_icon-167x167.png"],
 		[180, 180, "./images/touch_icons/touch_icon-180x180.png"],
-		["./images/touch_icons/touch_icon-180x180.png"]
+		["./apple-touch-icon.png"]
 	];
 	
 	// Tile image parts
