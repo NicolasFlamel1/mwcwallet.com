@@ -6,6 +6,7 @@
 	getDefaultTranslation('Ledger Nano S');
 	getDefaultTranslation('Ledger Nano X');
 	getDefaultTranslation('Ledger Nano S Plus');
+	getDefaultTranslation('Ledger Nano S+');
 	getDefaultTranslation('Ledger Stax');
 	getDefaultTranslation('Ledger Flex');
 	getDefaultTranslation('Trezor');

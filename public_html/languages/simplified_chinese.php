@@ -323,6 +323,7 @@
 			'Ledger Flex' => 'Ledger Flex',
 			'Ledger Nano S' => 'Ledger Nano S',
 			'Ledger Nano S Plus' => 'Ledger Nano S Plus',
+			'Ledger Nano S+' => 'Ledger Nano S+',
 			'Ledger Nano X' => 'Ledger Nano X',
 			'Ledger Stax' => 'Ledger Stax',
 			'Listener' => '监听器',
