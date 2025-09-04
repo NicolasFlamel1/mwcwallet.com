@@ -940,10 +940,10 @@
 			"Checksum" => "OA4SbseOEmVcPnIky32I8ZUCfD16z7CnRpym1AVwXWvHwF/EG2E8E4LnsM32YpMCiTM2due3JCbxDtJITdFcwg=="
 		],
 		"./scripts/slate.js" => [
-			"Version" => 105,
+			"Version" => 106,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "AOJ9sCUllwULVfkWphc4gFll4nj9wddhl9A0n9yPTIgrAiF9WjzwQ/AURoAMhVRsBaRkL5b5Dxqfm3Okiao1pQ=="
+			"Checksum" => "pNIqLYoZUtvD3ojqRkSnBzWvUKQPg9Yh+uhc73JgogkZQ1Y/IY/MjUg0v5XCHQNi2Lbogo7ktVnUeoJC4QteGA=="
 		],
 		"./scripts/slate_participant.js" => [
 			"Version" => 11,

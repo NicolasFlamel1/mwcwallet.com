@@ -2906,14 +2906,14 @@ class Slate {
 			// Check wallet type
 			switch(Consensus.getWalletType()) {
 			
-				// MWC or EPIC wallet
-				case Consensus.MWC_WALLET_TYPE:
+				// EPIC wallet
 				case Consensus.EPIC_WALLET_TYPE:
 		
 					// Return maximum fee
 					return Number.POSITIVE_INFINITY;
 				
-				// GRIN wallet
+				// MWC or GRIN wallet
+				case Consensus.MWC_WALLET_TYPE:
 				case Consensus.GRIN_WALLET_TYPE:
 				
 					// Return maximum fee
