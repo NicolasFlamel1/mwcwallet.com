@@ -1024,82 +1024,82 @@
 			"Checksum" => NULL
 		],
 		"./images/circle.svg" => [
-			"Version" => 3,
-			"Cache" => TRUE,
-			"Minified" => FALSE,
-			"Checksum" => "wyTgo5fmZYwVSdR9kPllluUfvPzUg/Zd7uRvNVPjaqJr7pDI1vNWHFBtfOqmsuBcNV9awXZpePut9gHVKMjCVA=="
-		],
-		"./images/down_arrow.svg" => [
-			"Version" => 3,
-			"Cache" => TRUE,
-			"Minified" => FALSE,
-			"Checksum" => "3b1PtmLda1UA6xh5WWstp67TGoV/ITmtQ8pcot0uocmGSHUvL46ABelYATKbLthfecI2snR5Ar3PgQqpfN5NDQ=="
-		],
-		"./images/usb.svg" => [
-			"Version" => 3,
-			"Cache" => TRUE,
-			"Minified" => FALSE,
-			"Checksum" => "fMph2Fc1GDBQ4oFcnEo4CH3DElezAPdDquywENXnu3iUTZyn8kHaMsgGFoF1HMwFo6/zlM7CGl0mmgqI5WbyuA=="
-		],
-		"./images/bluetooth.svg" => [
-			"Version" => 1,
-			"Cache" => TRUE,
-			"Minified" => FALSE,
-			"Checksum" => "esQ21VaSlM4oh9CkdibD5uTfG5fNzduVxx6tOiGQaEAT0rWoBphqIvxuc3YJmKzyK0K188lszHrhuJtBG1bgBA=="
-		],
-		"./images/whale.svg" => [
-			"Version" => 3,
-			"Cache" => TRUE,
-			"Minified" => FALSE,
-			"Checksum" => "gCcaLJJatAtW+DX14/LMR0/bJQ2+Tn4w007UlVD/n6UVq6hQ+aBhFBODeFuPE63y3ebHIA2OXmvU369Jl0+75A=="
-		],
-		"./images/ledger.svg" => [
-			"Version" => 3,
-			"Cache" => TRUE,
-			"Minified" => FALSE,
-			"Checksum" => "V7elNFHZZC5VVZcrj3xm6PztYGhhNyz5EDhvQIDaZHqW49D5/XRp16uPOOcmGcAEcRSpU3I59qzkjCexiM4giQ=="
-		],
-		"./images/trezor.svg" => [
-			"Version" => 2,
-			"Cache" => TRUE,
-			"Minified" => FALSE,
-			"Checksum" => "keEwhm7p0JcKUS+qpyTwCBWreAa4eXUf9x6alWBVx2hMe8B4GN5kEXwc8/zkoL8EGrmS1Wl73myh26hYgUoI1A=="
-		],
-		"./images/countries/america.svg" => [
 			"Version" => 4,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "6YsD9TAM6RKbXUBtqaqWUX9yme3VmqUpDgyXLX6GHvvOwhHja4CDBUJeTc9WQNYIMoImr5IGl6CajrDg52ylaQ=="
+			"Checksum" => "2Ru6GG2gZeLIUzP/EF9jdeNCuxG3sKNzGUqrEZDD8LOgImUjMKQuGRL+wobwqEsT5UCuOq1WoKbaf6DvVQQxBw=="
 		],
-		"./images/countries/china.svg" => [
+		"./images/down_arrow.svg" => [
+			"Version" => 4,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "GdHGE/Pyli51MhuCpUDMlzkewO/vzrfC9JOja9+xTr1DvluyID5miACh1P7vN3W2vL0zXY6T+kAEJ/vWcQpLVQ=="
+		],
+		"./images/usb.svg" => [
+			"Version" => 4,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "o85Xjon6AqcGl/NPYyiOcv8UVN9upwM1Pq0+olyXupVOH9LaPVZZL0R7bgUBeo3abbcnimmAdlxsQyOeb1+xlg=="
+		],
+		"./images/bluetooth.svg" => [
 			"Version" => 2,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "cW+hGTINEt40IUJmxVL33jY1NVh32p8tTB4UYaiZSx/NiIhnIy0ox+a1ioNWSUS43X+mTqHu9BaOeSxkZaB2zQ=="
+			"Checksum" => "94841XssBJq9DVGRBa04axuxfFo2XdvOM9lLBdI/btYXxTl06/P62zXly80BekA2GMWV58T6W3c/p0W/QgcGKQ=="
+		],
+		"./images/whale.svg" => [
+			"Version" => 4,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "lR2SeOhFospgxdHB/xLszjGV6DUNc6MH5dzcJll1u8vUkoDN9aCPJIY+3DRvgngBD55KJMzKtlqwhYJ5g/K3Qw=="
+		],
+		"./images/ledger.svg" => [
+			"Version" => 4,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "Z6Xja6esVwRJyA1rWoShMFT304Wz22IOzVSFJgiA+XOKH2owQ0CocFA2SGhl7PEknl1wk1kIeD7u9UFMlYqTmg=="
+		],
+		"./images/trezor.svg" => [
+			"Version" => 3,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "qeMdtaxinqO41x8j7xPmfeg0cGIAYt0rey0IDsdqqNoasv+6CtcX/rsBUpLiaUeSsZtov6zDBtmnXlotMRBsbg=="
+		],
+		"./images/countries/america.svg" => [
+			"Version" => 5,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "cLfzu/4ZkVvPgE9J4RqlZPWwIxIE0gYzJ91UUTr+B1Nt1EwzwTeqCdAQQG17jwdpEzC+p4BRO7XGt3sQeMjcJg=="
+		],
+		"./images/countries/china.svg" => [
+			"Version" => 3,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "vxFM95bcu/xEywGxFucToDpFXuTZ9IWW+gZrMLrpTZzQIjvJgOyYPkOk86BWRhccU36QuF4FtlFQOPFev9gYYw=="
 		],
 		"./images/countries/greece.svg" => [
-			"Version" => 1,
+			"Version" => 2,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "G77foDMhtN8Gh7XXBg/D5EJ9DwiWT//UvPqq9pfJcrj13u92Luwi2cYssnqqVwe4gRkRyoMOv8TX8iQniKN+aQ=="
+			"Checksum" => "ub4rA1YHL+CFaK66Dnv6W2fW49/P2lS4U54wvpAHR2W+fjuvlI/uMLJcg5FbfFwW0YV1fAupaZdPLptKJsczfA=="
 		],
 		"./images/countries/germany.svg" => [
-			"Version" => 1,
+			"Version" => 2,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "TKf6oGmstm1C2dJhgQYarPXKunanjax9M92Wk+FVTGc9ty7lB3UCLpBV2gqJmKk22COauKqa83vQg6+1lQ7FnQ=="
+			"Checksum" => "BJbqXe3MWh7Jtr40tC7Dl7qvKl9nqZOhSLgUBKku+73d/IgqcDWJLuRFW/J8xDqtMSWVTpxF+NRFKZSU3gX6Bg=="
 		],
 		"./images/countries/netherlands.svg" => [
-			"Version" => 1,
+			"Version" => 2,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "9Mlm0FJ9BE+0uNazl1mggjzqHviixc5LO0lKPbwKQcOaY7+tGvL2OCyPPQ6+XSWrrOq4dc8FUPCMF0BoJUikXw=="
+			"Checksum" => "gBoHbGKaBSr7jcDojDJElRlLoZaURVuErEgh+0rhGmbkee3stv/WewwKUu2sMIr2vUCV+zM14FqYEJybxgncGA=="
 		],
 		"./images/countries/czech_republic.svg" => [
-			"Version" => 1,
+			"Version" => 2,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "rLBl0FvuqHetz0DTr1ZnACgRfTjyWXFI7SG44HnSTgBi6Xem9P6ys84bf5rfq2xC6R/Fpo/6EzEAAGk6omJ8nQ=="
+			"Checksum" => "azKfxrKrhZyekuzxxDUMS2vFJcUoO/p2SOZ/0dGNW2qhSUv0OuXUk7wkovlsMPQsXHEEj/6J3+9URT3jVHpmlw=="
 		],
 		"./images/app_icons/app_icon-152x152.png" => [
 			"Version" => 4,
@@ -1156,10 +1156,10 @@
 			"Checksum" => "T/jsBMu4qPCAkCZSFalH2q51ckHyeHnAAh2a6WOe7I9ueagN8IA4J3hnxAZTUJILm3Jjkzp3Ixz3v57nOhGcCg=="
 		],
 		"./images/logo_small.svg" => [
-			"Version" => 3,
+			"Version" => 4,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "i7+n9MbIQCXdfta6ITG9x+NfvaXw1HtWgOFpZD5abJPC9/kwQzjgDPSdwNUegywCyfvZBbPqkkENuwRE0svQ+Q=="
+			"Checksum" => "rJbkkpimYFtsjtuPmVuGGCgWXkiquR7VQA7KVEie1VgUHv8gpaI/wDjvqrjfvgU0Bt/gmBFEZaQQv7KrvpjzlA=="
 		],
 		"./images/touch_icons/touch_icon-57x57.png" => [
 			"Version" => 6,
@@ -1198,10 +1198,10 @@
 			"Checksum" => "m5Yogh0xABSeFHkZBQGFUPfgSVYH7W7O3bhpN5YHpJyRAaOKRg+QXEMuZU3dpBWj/sikKNsGG6iZjBbfxLYWKA=="
 		],
 		"./images/app_icons/app_icon.svg" => [
-			"Version" => 4,
+			"Version" => 5,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "xMR6vmv2Kvv952moj7vWjAeajvSKmmkbDblSDEgzK0co3R4JbTI+53uLybJAteIQNiWGCcRopw+x2DF4d2EwDA=="
+			"Checksum" => "UIFodK/iNH0RWZ4ZM38+jgwy3Epr0zzsjB3bfvHn70Er90AADyhpSkepGEr4yPtAcRNlzej6ar/0Ca0PNVTA9g=="
 		],
 		"./images/app_icons/app_icon-256x256.png" => [
 			"Version" => 4,
@@ -1228,16 +1228,16 @@
 			"Checksum" => "8/eMVhg6nGzmzd+fkZ7mlyQaLLy6VvmkXnJyzBPDz87/RX+e7oXcZbqYER5ShFh3mgxTF1hNMsgbqtWa19x2RA=="
 		],
 		"./images/mask_images/mask_image.svg" => [
-			"Version" => 3,
+			"Version" => 4,
 			"Cache" => FALSE,
 			"Minified" => FALSE,
-			"Checksum" => "jX46GRxl03e1+FF+xvNiXa2roRnLfQjCZsmjFfFqWXhVpDA8qfdPVlOPysXMX2SXSzGISkH77MM1hbm2/E/qoQ=="
+			"Checksum" => "XcExTTHQjlrim2gzmQv1abEKWqfpyhpziSvFMSocH6kqpcwgv1q6W+A10TiYPfIuykKM3/IP1c0zsHdx/cflnw=="
 		],
 		"./images/logo_big.svg" => [
-			"Version" => 3,
+			"Version" => 4,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "cwWAMRY3P0swCMogiglMzxJaEx1mqJNsc7l7OtP0DleoM9WLggNLidZ681tbhBc1hJL844a+7lKd0k9JyMKhvw=="
+			"Checksum" => "IaNpPhqFb05ZL99m5IBX774TfKUav/8e6AodYC/gDADb/aFWaja/IBu3CJW9K/mt9D4OALdIxSOlUCev73iTiA=="
 		],
 		"./images/app_icons/app_icon-120x120.png" => [
 			"Version" => 4,
