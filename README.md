@@ -24,7 +24,7 @@ Compatibility for sending MWC from the MimbleWimble Coin web wallet to exchanges
 
 \* This table assumes that the MimbleWimble Coin web wallet is using its default settings.
 
-\* CORS issues can by bypassed by disabling CORS checks in your web browser, however this shouldn't be done without understanding the security implications of doing so.
+\* CORS issues can by bypassed by disabling CORS checks in your web browser, however this shouldn't be done without understanding the security implications of doing so. If you're using Chrome then you can install the [CORS Bypass](https://github.com/NicolasFlamel1/CORS-Bypass) browser extension to bypass your web browser's CORS restrictions.
 
 ### Receiving MWC From Exchanges Compatibility
 
