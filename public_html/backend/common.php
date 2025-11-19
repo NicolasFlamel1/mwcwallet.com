@@ -3,10 +3,10 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.6.2";
+	const VERSION_NUMBER = "2.7.0";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "02 Feb 2025 00:46:00 UTC";
+	const VERSION_RELEASE_DATE = "19 Nov 2025 00:00:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
@@ -14,7 +14,6 @@
 		"Made connecting to hardware wallets via Bluetooth more reliable.",
 		"Displays better error messages when receiving a payment as file fails.",
 		"Lowered default base fee for MWC transactions.",
-		"Fixed using Bluetooth to connected to Ledger hardware wallets with newer firmware versions.",
 		"Added support for Ledger Apex P hardware wallets."
 	];
 	
