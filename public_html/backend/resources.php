@@ -484,10 +484,10 @@
 			"Checksum" => "2Mv5CXrHhE4o7KnPHwme4X/CjM7CYl4WHxJ6c/7FA6jmCRjwP6xKr1OjoRmCrhiKJAmryK0pHSnQgjfKmbRoxA=="
 		],
 		"./scripts/hardware_wallet_bluetooth_transport.js" => [
-			"Version" => 14,
+			"Version" => 15,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "cOVspmWu/XPwh+KYgkkt2Dq2/LKXY9khSCnA8WOW2rHXr2k6XBCTgFEfQN060lbpLvIxpK5BeDRl3cs7mgOXlw=="
+			"Checksum" => "95+0uuSE4citmsr6DAinEFvuFqXFH91ODVEgPccCMDJfh+qV1BXBMj1C9EtB5J4GHX9jK7/0cDkYBEonbisvSA=="
 		],
 		"./scripts/hardware_wallet_definitions.js" => [
 			"Version" => 10,
@@ -598,7 +598,7 @@
 			"Checksum" => "RFXyJdMBrFe0rBAKTOwmTVcZzI6V3Pf7HHizK+RQVHguh/pCOTPV0Jj+EB7cvP1/wpuUAyh1SnWVZ01qLg4emg=="
 		],
 		"./scripts/languages.js" => [
-			"Version" => 22,
+			"Version" => 23,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
