@@ -3,18 +3,14 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.7.0";
+	const VERSION_NUMBER = "2.7.1";
 	
 	// Version release date
 	const VERSION_RELEASE_DATE = "19 Nov 2025 00:00:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Various changes to make this site function as an Android app.",
-		"Made connecting to hardware wallets via Bluetooth more reliable.",
-		"Displays better error messages when receiving a payment as file fails.",
-		"Lowered default base fee for MWC transactions.",
-		"Added support for Ledger Apex P hardware wallets."
+		"Added log messages when JSON RPC request fails."
 	];
 	
 	// Maintenance start time

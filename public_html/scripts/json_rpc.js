@@ -469,6 +469,19 @@ class JsonRpc {
 							// Catch errors
 							catch(error) {
 							
+								// Log info
+								try {
+									Log.logMessage("JsonRpc.sendData failed 1 - start");
+									Log.logMessage(JSONBigNumber.stringify(url));
+									Log.logMessage(JSONBigNumber.stringify(method));
+									Log.logMessage(JSONBigNumber.stringify(parameters));
+									Log.logMessage(JSONBigNumber.stringify(response));
+									Log.logMessage(JSONBigNumber.stringify(error));
+									Log.logMessage("JsonRpc.sendData failed 1 - end");
+								}
+								catch(error) {
+								}
+								
 								// Reject request's status
 								reject(request["status"]);
 								
@@ -477,28 +490,80 @@ class JsonRpc {
 							}
 							
 							// Check if response is invalid
-							if(Object.isObject(response) === false)
+							if(Object.isObject(response) === false) {
 							
+								// Log info
+								try {
+									Log.logMessage("JsonRpc.sendData failed 2 - start");
+									Log.logMessage(JSONBigNumber.stringify(url));
+									Log.logMessage(JSONBigNumber.stringify(method));
+									Log.logMessage(JSONBigNumber.stringify(parameters));
+									Log.logMessage(JSONBigNumber.stringify(response));
+									Log.logMessage("JsonRpc.sendData failed 2 - end");
+								}
+								catch(error) {
+								}
+								
 								// Reject request's status
 								reject(request["status"]);
+							}
 							
 							// Otherwise check if response contains an invalid version
-							else if("jsonrpc" in response === false || response["jsonrpc"] !== JsonRpc.VERSION)
+							else if("jsonrpc" in response === false || response["jsonrpc"] !== JsonRpc.VERSION) {
 							
+								// Log info
+								try {
+									Log.logMessage("JsonRpc.sendData failed 3 - start");
+									Log.logMessage(JSONBigNumber.stringify(url));
+									Log.logMessage(JSONBigNumber.stringify(method));
+									Log.logMessage(JSONBigNumber.stringify(parameters));
+									Log.logMessage(JSONBigNumber.stringify(response));
+									Log.logMessage("JsonRpc.sendData failed 3 - end");
+								}
+								catch(error) {
+								}
+								
 								// Reject request's status
 								reject(request["status"]);
+							}
 							
 							// Otherwise check if response contains an invalid ID
-							else if("id" in response === false || response["id"] instanceof BigNumber === false || response["id"].isInteger() === false || response["id"].isPositive() === false)
+							else if("id" in response === false || response["id"] instanceof BigNumber === false || response["id"].isInteger() === false || response["id"].isPositive() === false) {
 							
+								// Log info
+								try {
+									Log.logMessage("JsonRpc.sendData failed 4 - start");
+									Log.logMessage(JSONBigNumber.stringify(url));
+									Log.logMessage(JSONBigNumber.stringify(method));
+									Log.logMessage(JSONBigNumber.stringify(parameters));
+									Log.logMessage(JSONBigNumber.stringify(response));
+									Log.logMessage("JsonRpc.sendData failed 4 - end");
+								}
+								catch(error) {
+								}
+								
 								// Reject request's status
 								reject(request["status"]);
+							}
 							
 							// Otherwise check if response contains an invalid result
-							else if("error" in response === true || "result" in response === false)
+							else if("error" in response === true || "result" in response === false) {
 							
+								// Log info
+								try {
+									Log.logMessage("JsonRpc.sendData failed 5 - start");
+									Log.logMessage(JSONBigNumber.stringify(url));
+									Log.logMessage(JSONBigNumber.stringify(method));
+									Log.logMessage(JSONBigNumber.stringify(parameters));
+									Log.logMessage(JSONBigNumber.stringify(response));
+									Log.logMessage("JsonRpc.sendData failed 5 - end");
+								}
+								catch(error) {
+								}
+								
 								// Reject response's error or request's status
 								reject(("error" in response === true) ? response["error"] : request["status"]);
+							}
 							
 							// Otherwise
 							else
@@ -511,10 +576,23 @@ class JsonRpc {
 						else {
 						
 							// Check if a response exists
-							if(response["length"] !== 0)
+							if(response["length"] !== 0) {
 							
+								// Log info
+								try {
+									Log.logMessage("JsonRpc.sendData failed 6 - start");
+									Log.logMessage(JSONBigNumber.stringify(url));
+									Log.logMessage(JSONBigNumber.stringify(method));
+									Log.logMessage(JSONBigNumber.stringify(parameters));
+									Log.logMessage(JSONBigNumber.stringify(response));
+									Log.logMessage("JsonRpc.sendData failed 6 - end");
+								}
+								catch(error) {
+								}
+								
 								// Reject request's status
 								reject(request["status"]);
+							}
 							
 							// Otherwise
 							else
@@ -528,6 +606,18 @@ class JsonRpc {
 					
 						// Clear cancel allowed
 						cancelAllowed = false;
+						
+						// Log info
+						try {
+							Log.logMessage("JsonRpc.sendData failed 7 - start");
+							Log.logMessage(JSONBigNumber.stringify(url));
+							Log.logMessage(JSONBigNumber.stringify(method));
+							Log.logMessage(JSONBigNumber.stringify(parameters));
+							Log.logMessage(JSONBigNumber.stringify(request));
+							Log.logMessage("JsonRpc.sendData failed 7 - end");
+						}
+						catch(error) {
+						}
 					
 						// Reject request's status
 						reject(request["status"]);
@@ -537,6 +627,17 @@ class JsonRpc {
 				// Otherwise
 				else {
 				
+					// Log info
+					try {
+						Log.logMessage("JsonRpc.sendData failed 8 - start");
+						Log.logMessage(JSONBigNumber.stringify(url));
+						Log.logMessage(JSONBigNumber.stringify(method));
+						Log.logMessage(JSONBigNumber.stringify(parameters));
+						Log.logMessage("JsonRpc.sendData failed 8 - end");
+					}
+					catch(error) {
+					}
+					
 					// Reject HTTP no response status
 					reject(Common.HTTP_NO_RESPONSE_STATUS);
 				}

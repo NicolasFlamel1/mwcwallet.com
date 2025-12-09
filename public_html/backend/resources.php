@@ -658,10 +658,10 @@
 			"Checksum" => "53JqNBE9WxJ27yw3uyHCWE0kQ9DIxa9BMuY+JoTxImkqaxPD24y+FN3KNqL7johYZm/G5UQalzUJ/AvI7RBx2w=="
 		],
 		"./scripts/json_rpc.js" => [
-			"Version" => 16,
+			"Version" => 17,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "n/aCB9fqFv7lGcxhOGiowafXf2dy683JipYk5I+qFMZPdJbTsYxXUypLc1P/ELVSQHpvMX87dMy1C95AHBMsEQ=="
+			"Checksum" => "3QnTYHB9hXMOGZLajVUrMrHw/sbKeptUWfjGw+Ewf3vP7KLQ7RpDuP4N0E0FabOOxYSNmoPuYDgInL6zjcRjhA=="
 		],
 		"./scripts/tor.js" => [
 			"Version" => 12,
