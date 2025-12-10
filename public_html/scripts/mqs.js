@@ -622,7 +622,7 @@ class Mqs {
 													}
 											
 													// Check if message is invalid
-													if("from" in message === false || typeof message["from"] !== "string" || message["from"]["length"] < Mqs.ADDRESS_LENGTH || (message["from"]["length"] > Mqs.ADDRESS_LENGTH && message["from"][Mqs.ADDRESS_LENGTH] !== "@") || message["from"].substring(0, Mqs.ADDRESS_LENGTH) !== receiverAddress || "signature" in message === false || Common.isHexString(message["signature"]) === false || "str" in message === false || typeof message["str"] !== "string") {
+													if("from" in message === false || typeof message["from"] !== "string" || message["from"]["length"] < Mqs.ADDRESS_LENGTH || (message["from"]["length"] > Mqs.ADDRESS_LENGTH && message["from"][Mqs.ADDRESS_LENGTH] !== Mqs.ADDRESS_HOST_SEPARATOR) || message["from"].substring(0, Mqs.ADDRESS_LENGTH) !== receiverAddress || "signature" in message === false || Common.isHexString(message["signature"]) === false || "str" in message === false || typeof message["str"] !== "string") {
 													
 														// Disconnect and reject
 														disconnectAndReject(Message.createText(Language.getDefaultTranslation('Invalid message from the host.')));

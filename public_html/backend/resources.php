@@ -670,10 +670,10 @@
 			"Checksum" => "2doLx4ctfywCBI/Y2W696qSAgbTR8Kcv7ycYKJirBKlWkdZ4rrL0wHIrQoiBd/OOtnIsvEmurr4F/Mbb6h5K4g=="
 		],
 		"./scripts/mqs.js" => [
-			"Version" => 19,
+			"Version" => 20,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "k4yJTuv7LIOrBYHOgiMaNJPtvG6i8QVdCkfXiUgt8eRqcC4vElAwYTDS/ahAzhjT4jQgQQnICM1r1mAo/0U5Tw=="
+			"Checksum" => "H3kf+EO8jLLo4haKP6DJGrju/2SQnt2Wq4Eav/fq8JgAHOPC70h+ZtW5L0L9KfJLOQNdQHLzAxnGwRVNItpK6Q=="
 		],
 		"./scripts/slatepack.js" => [
 			"Version" => 19,
