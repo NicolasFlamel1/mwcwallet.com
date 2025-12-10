@@ -15713,19 +15713,54 @@ class Api {
 												// Set current slate send ID to the slate's ID
 												self.currentSlateSendId = slate.getId();
 												
+												// Check wallet type
+												switch(Consensus.getWalletType()) {
+												
+													// MWC or GRIN wallet
+													case Consensus.MWC_WALLET_TYPE:
+													case Consensus.GRIN_WALLET_TYPE:
+													
+														// Set parameters
+														var parameters = [
+												
+															// Slate
+															encodedSlate,
+															
+															// Destination account name
+															null,
+															
+															// Message or destination
+															null
+														];
+													
+														// Break
+														break;
+												
+													// EPIC wallet
+													case Consensus.EPIC_WALLET_TYPE:
+													
+														// Set parameters
+														var parameters = [
+												
+															// Slate
+															encodedSlate,
+															
+															// Destination account name
+															null,
+															
+															// Message
+															null,
+															
+															// Address from
+															null
+														];
+														
+														// Break
+														break;
+												}
+												
 												// Return sending JSON-RPC request to get slate response
-												return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.RECEIVE_TRANSACTION_METHOD, [
-												
-													// Slate
-													encodedSlate,
-													
-													// Destination account name
-													null,
-													
-													// Message
-													null,
-												
-												], {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
+												return JsonRpc.sendRequest(((proxyRequest === true) ? self.torProxy.getAddress() : "") + Common.removeTrailingSlashes(url) + Api.FOREIGN_API_URL, Api.RECEIVE_TRANSACTION_METHOD, parameters, {}, JsonRpc.DEFAULT_NUMBER_OF_ATTEMPTS, cancelOccurred).then(function(response) {
 												
 													// Set current slate send ID to no current slate send ID
 													self.currentSlateSendId = Api.NO_CURRENT_SLATE_SEND_ID;
@@ -17218,8 +17253,22 @@ class Api {
 		// Receive transaction parameters length
 		static get RECEIVE_TRANSACTION_PARAMETERS_LENGTH() {
 		
-			// Return receive transaction parameters length
-			return 3;
+			// Check wallet type
+			switch(Consensus.getWalletType()) {
+			
+				// MWC or GRIN wallet
+				case Consensus.MWC_WALLET_TYPE:
+				case Consensus.GRIN_WALLET_TYPE:
+				
+					// Return receive transaction parameters length
+					return 3;
+			
+				// EPIC wallet
+				case Consensus.EPIC_WALLET_TYPE:
+				
+					// Return receive transaction parameters length
+					return 4;
+			}
 		}
 		
 		// Receive transaction slate parameter

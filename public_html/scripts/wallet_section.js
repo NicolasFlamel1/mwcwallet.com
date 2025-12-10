@@ -2815,6 +2815,52 @@ class WalletSection extends Section {
 							return;
 						}
 						
+						// Check wallet's type
+						switch(wallet.getWalletType()) {
+						
+							// MWC or GRIN wallet
+							case Consensus.MWC_WALLET_TYPE:
+							case Consensus.GRIN_WALLET_TYPE:
+							
+								// Set parameters
+								var parameters = [
+							
+									// Slate
+									slate,
+									
+									// Destination account name
+									null,
+									
+									// Message or destination
+									null
+								];
+							
+								// Break
+								break;
+						
+							// EPIC wallet
+							case Consensus.EPIC_WALLET_TYPE:
+							
+								// Set parameters
+								var parameters = [
+							
+									// Slate
+									slate,
+									
+									// Destination account name
+									null,
+									
+									// Message
+									null,
+									
+									// Address from
+									null
+								];
+								
+								// Break
+								break;
+						}
+						
 						// Create interaction
 						var interaction = new Interaction(Interaction.NO_INDEX, wallet.getKeyPath(), Api.FOREIGN_API_URL, "application/json", {
 						
@@ -2828,17 +2874,7 @@ class WalletSection extends Section {
 							"method": Api.RECEIVE_TRANSACTION_METHOD,
 							
 							// Parameters
-							"params": [
-							
-								// Slate
-								slate,
-								
-								// Destination account name
-								null,
-								
-								// Message
-								null,
-							]
+							"params": parameters
 						});
 						
 						// Set timeout

@@ -191,7 +191,7 @@ class Mqs {
 							var postSlateRequested = false;
 							
 							// Create connection
-							var connection = new WebSocket(((port === Common.DEFAULT_HTTP_PORT) ? Common.WEBSOCKET_PROTOCOL : Common.WEBSOCKET_SECURE_PROTOCOL) + "//" + ((portIndex !== Common.INDEX_NOT_FOUND) ? host.substring(0, portIndex) : host));
+							var connection = new WebSocket(((port === Common.DEFAULT_HTTP_PORT) ? Common.WEBSOCKET_PROTOCOL : Common.WEBSOCKET_SECURE_PROTOCOL) + "//" + host);
 							
 							// Disconnect and reject
 							var disconnectAndReject = function(messageOrError) {
@@ -622,7 +622,7 @@ class Mqs {
 													}
 											
 													// Check if message is invalid
-													if("from" in message === false || message["from"] !== receiverAddress || "signature" in message === false || Common.isHexString(message["signature"]) === false || "str" in message === false || typeof message["str"] !== "string") {
+													if("from" in message === false || typeof message["from"] !== "string" || message["from"]["length"] < Mqs.ADDRESS_LENGTH || (message["from"]["length"] > Mqs.ADDRESS_LENGTH && message["from"][Mqs.ADDRESS_LENGTH] !== "@") || message["from"].substring(0, Mqs.ADDRESS_LENGTH) !== receiverAddress || "signature" in message === false || Common.isHexString(message["signature"]) === false || "str" in message === false || typeof message["str"] !== "string") {
 													
 														// Disconnect and reject
 														disconnectAndReject(Message.createText(Language.getDefaultTranslation('Invalid message from the host.')));
@@ -635,7 +635,7 @@ class Mqs {
 														try {
 														
 															// Get receiver public key
-															var receiverPublicKey = Mqs.mqsAddressToPublicKey(message["from"], isMainnet);
+															var receiverPublicKey = Mqs.mqsAddressToPublicKey(message["from"].substring(0, Mqs.ADDRESS_LENGTH), isMainnet);
 														}
 														
 														// Catch errors

@@ -466,10 +466,10 @@
 			"Checksum" => "1Dos1rNWtUlUuVq4ElvN9Twhy9SaeXeN3kTAGT7ND8tAPn3eskDtegm+zVMrxqH5iyN+Zk3cL7IbTKs23OtHKA=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 135,
+			"Version" => 136,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "/x8SPshJFDdcZd6NOpvXM9XNMo2zy80Vs3/UhqwN2rgk62IeoxHJ5HzF8FYqFENf/H5oi+sHbUj8jlWuXCPWYg=="
+			"Checksum" => "wzSuHgNvnTblkDU17iPVGUV40QsznPNHVKkBw02YM2fUkzu+bolzfdsHyivwlXu0NTbMQEy9AW5NMNRaHZEj/g=="
 		],
 		"./scripts/hardware_wallet.js" => [
 			"Version" => 82,
@@ -574,13 +574,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 80,
+			"Version" => 81,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 147,
+			"Version" => 148,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -604,7 +604,7 @@
 			"Checksum" => NULL
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 75,
+			"Version" => 76,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -670,10 +670,10 @@
 			"Checksum" => "2doLx4ctfywCBI/Y2W696qSAgbTR8Kcv7ycYKJirBKlWkdZ4rrL0wHIrQoiBd/OOtnIsvEmurr4F/Mbb6h5K4g=="
 		],
 		"./scripts/mqs.js" => [
-			"Version" => 18,
+			"Version" => 19,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "QT8pp0Gth3Be2c7uJElPTbxP0wv3o8ilgLkeO1tCoDfSh9ke5mPxRKkCDtP+OKJoZNgU8qb/iEqYaSrTOiJr6A=="
+			"Checksum" => "k4yJTuv7LIOrBYHOgiMaNJPtvG6i8QVdCkfXiUgt8eRqcC4vElAwYTDS/ahAzhjT4jQgQQnICM1r1mAo/0U5Tw=="
 		],
 		"./scripts/slatepack.js" => [
 			"Version" => 19,
@@ -880,10 +880,10 @@
 			"Checksum" => "NYI6dt8F95YbVXNa9QMby6C4L1ME8Ta+80FEZg5X4YQEn9N69du4R8yuCKDa+WWXFuxjcjokJHAYuW6hTnRguA=="
 		],
 		"./scripts/wallet_section.js" => [
-			"Version" => 101,
+			"Version" => 102,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "pGRCeXtraLChL1Nl18caAW/odQJi/ZXXKaZaeL9tfqte8hOFzURNKzNyuv0qtFVfgxXiGod7lbW7+KPz9gBAKA=="
+			"Checksum" => "nQhtP0b+50Nk0OyQkOoHbmLXdRNTCHlXwv3WJOwZFRABE+U/ZeiqsPwmFWyc4ImGkWCoMtezu+4kh8NNlz6gGw=="
 		],
 		"./scripts/send_payment_section.js" => [
 			"Version" => 107,
