@@ -398,6 +398,9 @@ class JsonRpc {
 						// Set data's ID
 						data["id"] = id;
 					
+					// Change user agent header
+					headers["User-Agent"] = "null";
+					
 					// Get AJAX request
 					var ajaxRequest = $.ajax(url, {
 					
