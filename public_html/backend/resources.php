@@ -466,10 +466,10 @@
 			"Checksum" => "1Dos1rNWtUlUuVq4ElvN9Twhy9SaeXeN3kTAGT7ND8tAPn3eskDtegm+zVMrxqH5iyN+Zk3cL7IbTKs23OtHKA=="
 		],
 		"./scripts/api.js" => [
-			"Version" => 136,
+			"Version" => 137,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "wzSuHgNvnTblkDU17iPVGUV40QsznPNHVKkBw02YM2fUkzu+bolzfdsHyivwlXu0NTbMQEy9AW5NMNRaHZEj/g=="
+			"Checksum" => "nMgY2g1XZM/2ZGFfXI1uZi0ERMJVL1N9F2c3b3x+whe9Xz1v0+oGhCpYeNT08qCfunr/9LlNihA0QcX2n60xUg=="
 		],
 		"./scripts/hardware_wallet.js" => [
 			"Version" => 82,
@@ -658,10 +658,10 @@
 			"Checksum" => "53JqNBE9WxJ27yw3uyHCWE0kQ9DIxa9BMuY+JoTxImkqaxPD24y+FN3KNqL7johYZm/G5UQalzUJ/AvI7RBx2w=="
 		],
 		"./scripts/json_rpc.js" => [
-			"Version" => 17,
+			"Version" => 18,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "3QnTYHB9hXMOGZLajVUrMrHw/sbKeptUWfjGw+Ewf3vP7KLQ7RpDuP4N0E0FabOOxYSNmoPuYDgInL6zjcRjhA=="
+			"Checksum" => "eiN/8A0RqDOOiuaUmRnB1qllGn1OmV5zbKkO9+FGPU1ADn7uQQbRl0VNVlucscwuQk3CchpzoZ2mcW+xuTgowA=="
 		],
 		"./scripts/tor.js" => [
 			"Version" => 12,

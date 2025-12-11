@@ -15774,6 +15774,27 @@ class Api {
 															// Resolve response's result
 															resolve(response["Ok"]);
 														}
+														
+														// Otherwise check if response contains an error message
+														else if(Object.isObject(response) === true && "Err" in response === true && Object.isObject(response["Err"]) === true) {
+														
+															// Check if error message is about the fee
+															if("Fee" in response["Err"] === true && typeof response["Err"]["Fee"] === "string" && response["Err"]["Fee"]["length"] !== 0) {
+														
+																// Get is raw data
+																var isRawData = Common.hasWhitespace(response["Err"]["Fee"]) === false;
+																
+																// Reject the response's error message
+																reject(Message.createText(Language.getDefaultTranslation('The recipient responded with the following invalid response.')) + Message.createLineBreak() + Message.createLineBreak() + "<span class=\"messageContainer\"><span class=\"message contextMenu" + ((isRawData === true) ? " rawData" : "") + "\">" + Message.createText(Language.escapeText(response["Err"]["Fee"])) + "</span>" + Language.createTranslatableContainer("<span>", Language.getDefaultTranslation('Copy'), [], "copy", true) + "</span>" + Message.createLineBreak());
+															}
+															
+															// Otherwise
+															else {
+															
+																// Reject invalid response
+																reject(Message.createText(Language.getDefaultTranslation('Invalid response from the recipient.')));
+															}
+														}
 													
 														// Otherwise
 														else {
