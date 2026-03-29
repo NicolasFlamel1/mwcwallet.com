@@ -738,10 +738,10 @@
 			"Checksum" => "E1RTUPkUVSZiCkdmsWz8sDOdRZNnIIK1BD+/I5oVdeNVchsw7n3I5dIirtwAsDLqu7nUVMT52kKCYl2m5XvtUw=="
 		],
 		"./scripts/node.js" => [
-			"Version" => 33,
+			"Version" => 34,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "SG6jl98Jf7Cgrfw7nuU4CR8oVDVvvEzYt1tYiae5soHIHp12DeE1KCWYNHLbDYdP9+J6aTdXsGG++pfP5BZZeA=="
+			"Checksum" => "yPJzeKQUw/VZwi7jgJtybtzyXQg6Ovw7wacSbnsOVLmx+mIqzpRgbgZ5DWQbMNNfNvohuRRa0Se91gTt1mDkHw=="
 		],
 		"./scripts/message.js" => [
 			"Version" => 31,

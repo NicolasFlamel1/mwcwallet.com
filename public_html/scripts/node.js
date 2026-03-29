@@ -509,7 +509,7 @@ class Node {
 							return [
 							
 								// Addresses
-								"https://grinnode.live:3413"
+								"https://api.grin.money"
 							];
 						}
 						
@@ -520,7 +520,7 @@ class Node {
 							return [
 							
 								// Addresses
-								"http://localhost:13413"
+								"https://testapi.grin.money"
 							];
 						}
 						
