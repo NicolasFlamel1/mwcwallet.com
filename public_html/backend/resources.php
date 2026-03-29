@@ -57,8 +57,10 @@
 		[192, 192, FALSE, TRUE, "./images/app_icons/app_icon-192x192-mobile.png"],
 		[256, 256, TRUE, FALSE, "./images/app_icons/app_icon-256x256.png"],
 		[256, 256, FALSE, TRUE, "./images/app_icons/app_icon-256x256-mobile.png"],
-		[384, 384, FALSE, NULL, "./images/app_icons/app_icon-384x384.png"],
-		[512, 512, FALSE, NULL, "./images/app_icons/app_icon-512x512.png"],
+		[384, 384, TRUE, FALSE, "./images/app_icons/app_icon-384x384.png"],
+		[384, 384, FALSE, TRUE, "./images/app_icons/app_icon-384x384-mobile.png"],
+		[512, 512, TRUE, FALSE, "./images/app_icons/app_icon-512x512.png"],
+		[512, 512, FALSE, TRUE, "./images/app_icons/app_icon-512x512-mobile.png"],
 		["./images/app_icons/app_icon.svg"]
 	];
 	
@@ -1186,13 +1188,25 @@
 			"Checksum" => "CEvrLz28mgcUdKxuzeeLL2FxVH/GryBSGhMkOEskjOMeQb0hTXbFjnzv37PybGitREzatLUH6EhwCySqENlRnA=="
 		],
 		"./images/app_icons/app_icon-384x384.png" => [
-			"Version" => 3,
+			"Version" => 4,
+			"Cache" => FALSE,
+			"Minified" => FALSE,
+			"Checksum" => "dFrb8fD7DINWDWAt9qWUamx3pqkA6+YYdy8+PIcK+0Fd+tv1j+0hLT9KDsUZCN/8eM0rWmv1/Ruic1cYgUnZ6A=="
+		],
+		"./images/app_icons/app_icon-384x384-mobile.png" => [
+			"Version" => 1,
 			"Cache" => FALSE,
 			"Minified" => FALSE,
 			"Checksum" => "brCLTAz5RA5lmdp8yeEadk1tVFZFvIEeeQoCeNZbOG4IgQLvQYm7GPov+FNiCElyflNPPRCRK24uGut1sEQoDg=="
 		],
 		"./images/app_icons/app_icon-512x512.png" => [
-			"Version" => 3,
+			"Version" => 4,
+			"Cache" => FALSE,
+			"Minified" => FALSE,
+			"Checksum" => "EwChkj55vZMd7xAtfPIcY2AT6Jx/BnWmpRMF4hxUPwf7bHMunBCh0mfJxlIwnAXyFipl3yGQcq6xR2RVabAtYg=="
+		],
+		"./images/app_icons/app_icon-512x512-mobile.png" => [
+			"Version" => 1,
 			"Cache" => FALSE,
 			"Minified" => FALSE,
 			"Checksum" => "m5Yogh0xABSeFHkZBQGFUPfgSVYH7W7O3bhpN5YHpJyRAaOKRg+QXEMuZU3dpBWj/sikKNsGG6iZjBbfxLYWKA=="
