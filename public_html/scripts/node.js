@@ -480,8 +480,7 @@ class Node {
 								"https://mwc7132.mwc.mw",
 								"https://mwc7133.mwc.mw",
 								"https://mwc7134.mwc.mw",
-								"https://mwc7135.mwc.mw",
-								"https://mwc7136.mwc.mw"
+								"https://mwc7135.mwc.mw"
 							];
 						}
 						
@@ -509,7 +508,9 @@ class Node {
 							return [
 							
 								// Addresses
-								"https://api.grin.money"
+								"https://api.grin.money",
+								"https://api.grinily.com",
+								"https://api.onlygrins.com"
 							];
 						}
 						
@@ -520,7 +521,9 @@ class Node {
 							return [
 							
 								// Addresses
-								"https://testapi.grin.money"
+								"https://testapi.grin.money",
+								"https://testapi.grinily.com",
+								"https://testapi.onlygrins.com"
 							];
 						}
 						
@@ -537,7 +540,8 @@ class Node {
 							return [
 							
 								// Addresses
-								"https://node.epiccash.com:3413"
+								"https://node.epiccash.com:3413",
+								"https://node.epicnet.us:3413"
 							];
 						}
 						
@@ -548,7 +552,8 @@ class Node {
 							return [
 							
 								// Addresses
-								"http://localhost:13413"
+								// TODO This node doesn't exist yet (https://github.com/EpicCash/epic/blob/master/servers/src/epic/seed.rs#L39)
+								"https://floonet.epiccash.com:13413"
 							];
 						}
 						
