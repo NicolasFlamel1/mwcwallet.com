@@ -350,6 +350,38 @@ class Common {
 			return typeof navigator === "object" && navigator !== null && "connection" in navigator === true && "type" in navigator["connection"] === true && navigator["connection"]["type"] === "cellular";
 		}
 		
+		// Is physical keyboard connected
+		static isPhysicalKeyboardConnected() {
+		
+			// Return promise
+			return new Promise(function(resolve, reject) {
+			
+				// Check if Keyboard API isn't supported
+				if(typeof navigator !== "object" || navigator === null || "keyboard" in navigator === false) {
+				
+					// Resolve true
+					resolve(true);
+				}
+				
+				// Otherwise
+				else {
+				
+					// Return getting keyboard's layout map
+					return navigator["keyboard"].getLayoutMap().then(function(layoutMap) {
+					
+						// Resolve if the layout map isn't empty
+						resolve(layoutMap["size"] !== 0);
+						
+					// Catch errors
+					}).catch(function(error) {
+					
+						// Resolve true
+						resolve(true);
+					});
+				}
+			});
+		}
+		
 		// Upgrade applicable insecure URL
 		static upgradeApplicableInsecureUrl(url) {
 		

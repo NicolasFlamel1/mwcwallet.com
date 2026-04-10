@@ -7125,96 +7125,93 @@ class Application {
 				// Set timeout
 				setTimeout(function() {
 				
-					// Trigger input on display to show's inputs
-					displayToShow.find("input:not(.hide)").trigger("input");
+					// Get if a physical keyboard is connected
+					Common.isPhysicalKeyboardConnected().then(function(physicalKeyboardConnected) {
 				
-					// Show display to show children
-					displayToShow.children().removeClass("hide");
+						// Trigger input on display to show's inputs
+						displayToShow.find("input:not(.hide)").trigger("input");
 					
-					// Show language display
-					Language.showDisplay(true);
-					
-					// Set info display
-					self.infoDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('%1$x/%2$x/v%3$v'), [Consensus.walletTypeToText(Consensus.getWalletType()), Consensus.networkTypeToText(Consensus.getNetworkType()), VERSION_NUMBER]));
-					
-					// Show info display
-					self.infoDisplay.removeClass("hide");
-					
-					// Initialize focus on input
-					var focusOnInput = true;
-					
-					// Check if cookie acceptance was shown
-					if(self.cookieAcceptance.show() === true) {
-					
-						// Clear focus on input
-						focusOnInput = false;
-					}
-					
-					// Check if is a mobile app
-					if(Common.isMobileApp() === true) {
-					
-						// Clear focus on input
-						focusOnInput = false;
-					}
-					
-					// Show maintenance notification
-					self.maintenanceNotification.show();
-					
-					// Display to show form transition end or timeout event
-					displayToShow.children("form").transitionEndOrTimeout(function() {
-					
-						// Set everything to transition at normal speed
-						self.mainDisplay.addClass("normalTransitionSpeed");
-					
-						// Enable tabbing to everything in display to show and enable everything in display to show
-						displayToShow.find("*").enableTab().enable();
+						// Show display to show children
+						displayToShow.children().removeClass("hide");
 						
-						// Check if focusing on input
-						if(focusOnInput === true) {
+						// Show language display
+						Language.showDisplay(true);
 						
-							// Get focus to display's first input
-							var firstInput = displayToShow.find("input:visible").first();
+						// Set info display
+						self.infoDisplay.append(Language.createTranslatableContainer("<p>", Language.getDefaultTranslation('%1$x/%2$x/v%3$v'), [Consensus.walletTypeToText(Consensus.getWalletType()), Consensus.networkTypeToText(Consensus.getNetworkType()), VERSION_NUMBER]));
+						
+						// Show info display
+						self.infoDisplay.removeClass("hide");
+						
+						// Set focus on input to if a physical keyboard is connected
+						var focusOnInput = physicalKeyboardConnected;
+						
+						// Check if cookie acceptance was shown
+						if(self.cookieAcceptance.show() === true) {
+						
+							// Clear focus on input
+							focusOnInput = false;
+						}
+						
+						// Show maintenance notification
+						self.maintenanceNotification.show();
+						
+						// Display to show form transition end or timeout event
+						displayToShow.children("form").transitionEndOrTimeout(function() {
+						
+							// Set everything to transition at normal speed
+							self.mainDisplay.addClass("normalTransitionSpeed");
+						
+							// Enable tabbing to everything in display to show and enable everything in display to show
+							displayToShow.find("*").enableTab().enable();
 							
-							// Try
-							try {
+							// Check if focusing on input
+							if(focusOnInput === true) {
 							
-								// Check if first input isn't autofilled in
-								if(firstInput.is(":-webkit-autofill") === false && firstInput.is(":autofill") === false) {
+								// Get focus to display's first input
+								var firstInput = displayToShow.find("input:visible").first();
+								
+								// Try
+								try {
+								
+									// Check if first input isn't autofilled in
+									if(firstInput.is(":-webkit-autofill") === false && firstInput.is(":autofill") === false) {
+									
+										// Focus on first input
+										firstInput.focus();
+									}
+								}
+								
+								// Catch errors
+								catch(error) {
 								
 									// Focus on first input
 									firstInput.focus();
 								}
 							}
 							
-							// Catch errors
-							catch(error) {
+							// Allow showing messages
+							self.message.allow();
 							
-								// Focus on first input
-								firstInput.focus();
+							// Check if splash screen is showing
+							if(self.bodyDisplay.hasClass("splashScreen") === true) {
+							
+								// Check if is a mobile app
+								if(Common.isMobileApp() === true) {
+								
+									// Hide mobile app's splash screen
+									MobileApp.hideSplashScreen();
+								}
+								
+								// Allow transitions
+								self.bodyDisplay.removeClass("splashScreen");
+								
+								// Show logo
+								self.logo.show();
 							}
-						}
-						
-						// Allow showing messages
-						self.message.allow();
-						
-						// Check if splash screen is showing
-						if(self.bodyDisplay.hasClass("splashScreen") === true) {
-						
-							// Check if is a mobile app
-							if(Common.isMobileApp() === true) {
 							
-								// Hide mobile app's splash screen
-								MobileApp.hideSplashScreen();
-							}
-							
-							// Allow transitions
-							self.bodyDisplay.removeClass("splashScreen");
-							
-							// Show logo
-							self.logo.show();
-						}
-						
-					}, "opacity");
+						}, "opacity");
+					});
 				}, 0);
 				
 			}, "opacity");
