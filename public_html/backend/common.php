@@ -11,7 +11,7 @@
 	// Version changes
 	const VERSION_CHANGES = [
 		"Added log messages when JSON RPC request fails.",
-		"Fixed sending Epic Cash to Epicbox and v4.0.0 wallets."
+		"Fixed sending Epic Cash v4.0.0 and newer wallets."
 	];
 	
 	// Maintenance start time

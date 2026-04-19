@@ -510,7 +510,9 @@ class Node {
 								// Addresses
 								"https://api.grin.money",
 								"https://api.grinily.com",
-								"https://api.onlygrins.com"
+								"https://api.onlygrins.com",
+								"https://main.gri.mw",
+								"https://mainnet.grinffindor.org"
 							];
 						}
 						
@@ -523,7 +525,9 @@ class Node {
 								// Addresses
 								"https://testapi.grin.money",
 								"https://testapi.grinily.com",
-								"https://testapi.onlygrins.com"
+								"https://testapi.onlygrins.com",
+								"https://test.gri.mw",
+								"https://testnet.grinffindor.org"
 							];
 						}
 						
