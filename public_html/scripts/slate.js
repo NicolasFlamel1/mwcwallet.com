@@ -4956,8 +4956,8 @@ class Slate {
 				// MWC wallet
 				case Consensus.MWC_WALLET_TYPE:
 		
-					// Check if version Slatepack is preferred and kernel features are plain
-					if((preferredVersions.indexOf(Slate.VERSION_SLATEPACK) !== Common.INDEX_NOT_FOUND || (preferredVersions["length"] === 0 && this.hasPaymentProof() === true)) && this.getKernelFeatures() === SlateKernel.PLAIN_FEATURES) {
+					// Check if version Slatepack is preferred, or no version is preferred and kernel features are plain
+					if((preferredVersions.indexOf(Slate.VERSION_SLATEPACK) !== Common.INDEX_NOT_FOUND || preferredVersions["length"] === 0) && this.getKernelFeatures() === SlateKernel.PLAIN_FEATURES) {
 					
 						// Return version Slatepack
 						return Slate.VERSION_SLATEPACK;

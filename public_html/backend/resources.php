@@ -576,13 +576,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 81,
+			"Version" => 82,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 148,
+			"Version" => 149,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -600,13 +600,13 @@
 			"Checksum" => "RFXyJdMBrFe0rBAKTOwmTVcZzI6V3Pf7HHizK+RQVHguh/pCOTPV0Jj+EB7cvP1/wpuUAyh1SnWVZ01qLg4emg=="
 		],
 		"./scripts/languages.js" => [
-			"Version" => 23,
+			"Version" => 24,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 76,
+			"Version" => 77,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -942,10 +942,10 @@
 			"Checksum" => "OA4SbseOEmVcPnIky32I8ZUCfD16z7CnRpym1AVwXWvHwF/EG2E8E4LnsM32YpMCiTM2due3JCbxDtJITdFcwg=="
 		],
 		"./scripts/slate.js" => [
-			"Version" => 106,
+			"Version" => 107,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "pNIqLYoZUtvD3ojqRkSnBzWvUKQPg9Yh+uhc73JgogkZQ1Y/IY/MjUg0v5XCHQNi2Lbogo7ktVnUeoJC4QteGA=="
+			"Checksum" => "7Ujks7Y5mf1WUu9ImHtNWiXetRb+FcOz30cirLrNArqNbr4pbWZz32I7IHMZaoRL14U0dARLvsmf5KvbHK8Qaw=="
 		],
 		"./scripts/slate_participant.js" => [
 			"Version" => 11,

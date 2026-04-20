@@ -11,7 +11,8 @@
 	// Version changes
 	const VERSION_CHANGES = [
 		"Added log messages when JSON RPC request fails.",
-		"Fixed sending Epic Cash v4.0.0 and newer wallets."
+		"Fixed sending Epic Cash to v4.0.0 and newer wallets.",
+		"Sending MWC via a file now uses Slatepack format by default."
 	];
 	
 	// Maintenance start time
