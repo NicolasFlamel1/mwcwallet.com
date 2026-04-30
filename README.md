@@ -60,7 +60,7 @@ This site can be ran from a local machine for development purposes. To do that, 
 This repo includes a self-signed certificate, `privkey.pem` and `fullchain.pem`, that will work for `https://mwcwallet.com` and `https://www.mwcwallet.com` if `fullchain.pem` is added to your browser's trusted certificate authorities.
 
 This site requires that the following are installed.
-* [Nginx](https://www.nginx.com/) >= 1.18.0
+* [Nginx](https://nginx.org/) >= 1.18.0
 * [PHP](https://www.php.net/) >= 7.4
 * [Tor](https://www.torproject.org/download/) >= 0.4.2.7
 * [Allow Headers Nginx module](https://github.com/NicolasFlamel1/Allow-Headers)
