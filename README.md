@@ -15,12 +15,12 @@ Compatibility for sending MWC from the MimbleWimble Coin web wallet to exchanges
 
 || [WhiteBIT](https://whitebit.com/trade/MWC-BTC) | [XT](https://www.xt.com/en/trade/mwc_btc) | [AscendEX](https://ascendex.com/en/cashtrade-spottrading/usdt/mwc) | [Coinstore](https://www.coinstore.com/spot/MWCUSDT) | [NonLogs](https://nonlogs.io/trade/MWC-USDT) |
 |-|-|-|-|-|-|
-| [MWC web wallet website](https://mwcwallet.com) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ | ✅ | ✅ | ✅ Requires version 2.7.1 or newer of the web wallet. |
-| [MWC web wallet Onion Service](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ | ✅ | ✅ | ✅ Requires version 2.7.1 or newer of the web wallet. |
-| MWC web wallet progressive web app version | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ | ✅ | ✅ | ✅ Requires version 2.7.1 or newer of the web wallet. |
-| [MWC web wallet browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) | ✅ | ✅ | ✅ | ✅ | ✅ Requires version 2.7.1 or newer of the web wallet. |
-| [MWC web wallet mobile app version](https://github.com/NicolasFlamel1/MWC-Wallet-Mobile-App) | ✅ | ✅ | ✅ | ✅ | ✅ Requires version 2.7.1 or newer of the web wallet. |
-| [MWC web wallet standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ | ✅ | ✅ | ✅ Requires version 2.7.1 or newer of the web wallet. |
+| [MWC web wallet website](https://mwcwallet.com) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ | ✅ | ✅ | ✅ Requires version 2.8.0 or newer of the web wallet. |
+| [MWC web wallet Onion Service](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ | ✅ | ✅ | ✅ Requires version 2.8.0 or newer of the web wallet. |
+| MWC web wallet progressive web app version | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ | ✅ | ✅ | ✅ Requires version 2.8.0 or newer of the web wallet. |
+| [MWC web wallet browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) | ✅ | ✅ | ✅ | ✅ | ✅ Requires version 2.8.0 or newer of the web wallet. |
+| [MWC web wallet mobile app version](https://github.com/NicolasFlamel1/MWC-Wallet-Mobile-App) | ✅ | ✅ | ✅ | ✅ | ✅ Requires version 2.8.0 or newer of the web wallet. |
+| [MWC web wallet standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ | ✅ | ✅ | ✅ Requires version 2.8.0 or newer of the web wallet. |
 
 \* This table assumes that the MimbleWimble Coin web wallet is using its default settings.
 

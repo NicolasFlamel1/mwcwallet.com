@@ -612,12 +612,16 @@ class JsonRpc {
 						
 						// Log info
 						try {
-							Log.logMessage("JsonRpc.sendData failed 7 - start");
-							Log.logMessage(JSONBigNumber.stringify(url));
-							Log.logMessage(JSONBigNumber.stringify(method));
-							Log.logMessage(JSONBigNumber.stringify(parameters));
-							Log.logMessage(JSONBigNumber.stringify(request));
-							Log.logMessage("JsonRpc.sendData failed 7 - end");
+						
+							if(request["status"] !== 0) {
+							
+								Log.logMessage("JsonRpc.sendData failed 7 - start");
+								Log.logMessage(JSONBigNumber.stringify(url));
+								Log.logMessage(JSONBigNumber.stringify(method));
+								Log.logMessage(JSONBigNumber.stringify(parameters));
+								Log.logMessage(JSONBigNumber.stringify(request));
+								Log.logMessage("JsonRpc.sendData failed 7 - end");
+							}
 						}
 						catch(error) {
 						}
