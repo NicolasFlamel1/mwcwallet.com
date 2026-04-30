@@ -4531,9 +4531,9 @@ class Wallets {
 								reject(Language.getDefaultTranslation('Expired transactions can\'t be canceled.'));
 							}
 							
-							// Otherwise check if transaction is broadcast and isn't a coinbase transaction
-							else if(transaction.getBroadcast() === true && transaction.getIsCoinbase() === false) {
-							
+							// Otherwise check if transaction is broadcast, isn't a coinbase transaction, and was sent
+							else if(transaction.getBroadcast() === true && transaction.getIsCoinbase() === false && transaction.getReceived() === false) {
+														
 								// Release wallet's exclusive transactions lock
 								self.transactions.releaseWalletsExclusiveTransactionsLock(walletKeyPath);
 							
