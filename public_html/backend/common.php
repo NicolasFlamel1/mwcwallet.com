@@ -3,18 +3,15 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.8.0";
+	const VERSION_NUMBER = "2.8.1";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "29 Apr 2026 05:19:00 UTC";
+	const VERSION_RELEASE_DATE = "30 Apr 2026 19:33:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Added log messages for when JSON-RPC requests fail.",
-		"Fixed sending Epic Cash to v4.0.0 and newer wallets.",
-		"Sending MWC via a file now uses Slatepack format by default.",
-		"Changed default Grin and Epic Cash nodes.",
-		"Fixed not being able to cancel certain received transactions."
+		"Fixed connecting to nodes with Firefox.",
+		"Updated default Grin nodes."
 	];
 	
 	// Maintenance start time

@@ -512,7 +512,8 @@ class Node {
 								"https://api.grinily.com",
 								"https://api.onlygrins.com",
 								"https://main.gri.mw",
-								"https://mainnet.grinffindor.org"
+								"https://mainnet.grinffindor.org",
+								"https://grincoin.org"
 							];
 						}
 						
@@ -527,7 +528,8 @@ class Node {
 								"https://testapi.grinily.com",
 								"https://testapi.onlygrins.com",
 								"https://test.gri.mw",
-								"https://testnet.grinffindor.org"
+								"https://testnet.grinffindor.org",
+								"https://testnet.grincoin.org"
 							];
 						}
 						

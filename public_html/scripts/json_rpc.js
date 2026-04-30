@@ -398,8 +398,12 @@ class JsonRpc {
 						// Set data's ID
 						data["id"] = id;
 					
-					// Change user agent header
-					headers["User-Agent"] = "null";
+					// Check if browser isn't Firefox or is an extension
+					if((typeof navigator !== "object" || navigator === null || "userAgent" in navigator === false || navigator["userAgent"].toLowerCase().indexOf("firefox") === Common.INDEX_NOT_FOUND) || Common.isExtension() === true) {
+					
+						// Change user agent header
+						headers["User-Agent"] = "null";
+					}
 					
 					// Get AJAX request
 					var ajaxRequest = $.ajax(url, {
