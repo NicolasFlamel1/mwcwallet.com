@@ -355,6 +355,7 @@
 			/*TODO*///'Make sure that you downloaded this file for free from MWC Wallet\'s official standalone releases at %1$m' => '',
 			/*TODO*///'Make sure that you installed this app for free from MWC Wallet\'s official site at %1$m' => '',
 			/*TODO*///'Make sure that you installed this extension for free from MWC Wallet\'s official browser extension listing on the Chrome Web Store at %1$m' => '',
+			/*TODO*///'Make sure that you installed this extension for free from MWC Wallet\'s official browser extension listing on the Edge Add-ons site at %1$m' => '',
 			/*TODO*///'Make sure that you installed this extension for free from MWC Wallet\'s official browser extension listing on the Firefox Add-ons site at %1$m' => '',
 			/*TODO*///'Make sure that you\'re accessing MWC Wallet for free from its official site at %1$m' => '',
 			'Manage your MimbleWimble Coin' => 'Beheer uw MimbleWimble Coin',

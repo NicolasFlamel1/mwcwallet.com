@@ -6901,10 +6901,10 @@ class Application {
 					
 						[
 							// Text
-							"https://addons.mozilla.org/en-US/firefox/addon/mwc-wallet/",
+							"https://addons.mozilla.org/en-US/firefox/addon/mwc-wallet",
 							
 							// URL
-							"https://addons.mozilla.org/en-US/firefox/addon/mwc-wallet/",
+							"https://addons.mozilla.org/en-US/firefox/addon/mwc-wallet",
 							
 							// Is external
 							true,
@@ -6930,6 +6930,31 @@ class Application {
 							
 							// URL
 							"https://chromewebstore.google.com/detail/mwc-wallet/ahhdnimkkpkmclgcnbchlgijhmieongp",
+							
+							// Is external
+							true,
+							
+							// Is blob
+							false
+						]
+					];
+				}
+				
+				// Otherwise check if using the Edge extension
+				else if(typeof chrome !== "undefined" && chrome["runtime"]["id"] === "nhfjkjhonhcjengnbaplabipoajnlmjm") {
+				
+					// Set message
+					var message = Language.getDefaultTranslation('Make sure that you installed this extension for free from MWC Wallet\'s official browser extension listing on the Edge Add-ons site at %1$m');
+					
+					// Set message arguments
+					var messageArguments = [
+					
+						[
+							// Text
+							"https://microsoftedge.microsoft.com/addons/detail/mwc-wallet/nhfjkjhonhcjengnbaplabipoajnlmjm",
+							
+							// URL
+							"https://microsoftedge.microsoft.com/addons/detail/mwc-wallet/nhfjkjhonhcjengnbaplabipoajnlmjm",
 							
 							// Is external
 							true,
