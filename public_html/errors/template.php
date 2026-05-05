@@ -192,7 +192,7 @@
 						echo "case \"" . escapeString($languageIdentifier) . "\":" .
 						
 						// Display available language's extension locale case if it exists
-						((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "") ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
+						((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "" && $extensionLocaleCode !== $languageIdentifier) ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
 						
 							// Set title to language's translation
 							"document[\"title\"] = \"" . escapeString(getTranslation($title, [getNumberTranslation($titleArgument)], $languageIdentifier)) . "\";" .
@@ -1166,7 +1166,7 @@
 											echo "case \"" . escapeString($languageIdentifier) . "\":" .
 											
 											// Display available language's extension locale case if it exists
-											((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "") ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
+											((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "" && $extensionLocaleCode !== $languageIdentifier) ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
 											
 												// Set message display header to language's translation
 												"messageDisplayHeader[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation($error, [getNumberTranslation($errorArgument)], $languageIdentifier)) . "\");" .
@@ -1237,7 +1237,7 @@
 													echo "case \"" . escapeString($languageIdentifier) . "\":" .
 													
 													// Display available language's extension locale case if it exists
-													((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "") ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "");
+													((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "" && $extensionLocaleCode !== $languageIdentifier) ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "");
 													
 														// Check if is generic error
 														if(isset($isGenericError) === TRUE) {

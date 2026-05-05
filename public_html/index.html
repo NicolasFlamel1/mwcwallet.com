@@ -689,7 +689,7 @@
 						echo "case \"" . escapeString($languageIdentifier) . "\":" .
 						
 						// Display available language's extension locale case if it exists
-						((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "") ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
+						((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "" && $extensionLocaleCode !== $languageIdentifier) ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
 						
 							// Set title to language's translation
 							"document[\"title\"] = \"" . escapeString(getTranslation('MWC Wallet', [], $languageIdentifier)) . "\";" .
@@ -1689,7 +1689,7 @@
 												echo "case \"" . escapeString($languageIdentifier) . "\":" .
 												
 												// Display available language's extension locale case if it exists
-												((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "") ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
+												((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "" && $extensionLocaleCode !== $languageIdentifier) ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
 												
 													// Set loading display text to language's translation
 													"loadingDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('Loading…', [], $languageIdentifier)) . "\");" .
