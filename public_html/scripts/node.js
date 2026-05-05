@@ -508,12 +508,12 @@ class Node {
 							return [
 							
 								// Addresses
+								"https://grincoin.org",
 								"https://api.grin.money",
 								"https://api.grinily.com",
 								"https://api.onlygrins.com",
 								"https://main.gri.mw",
-								"https://mainnet.grinffindor.org",
-								"https://grincoin.org"
+								"https://mainnet.grinffindor.org"
 							];
 						}
 						
@@ -524,12 +524,12 @@ class Node {
 							return [
 							
 								// Addresses
+								"https://testnet.grincoin.org",
 								"https://testapi.grin.money",
 								"https://testapi.grinily.com",
 								"https://testapi.onlygrins.com",
 								"https://test.gri.mw",
-								"https://testnet.grinffindor.org",
-								"https://testnet.grincoin.org"
+								"https://testnet.grinffindor.org"
 							];
 						}
 						
