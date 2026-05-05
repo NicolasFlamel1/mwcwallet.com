@@ -675,10 +675,10 @@
 		});
 		
 		// Check if is an extension or a mobile app
-		if((typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:" && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || typeof MobileApp !== "undefined") {
+		if((isExtension() === true && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || isMobileApp() === true) {
 		
 			// Check extension or device locale code
-			switch((typeof MobileApp !== "undefined") ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
+			switch((isMobileApp() === true) ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
 			
 				<?php
 				
@@ -1675,10 +1675,10 @@
 								var loadingDisplayText = getElement(getElement(document, "div", "loading"), "p", "translatable");
 								
 								// Check if is an extension or a mobile app
-								if((typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:" && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || typeof MobileApp !== "undefined") {
+								if((isExtension() === true && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || isMobileApp() === true) {
 								
 									// Check extension or device locale code
-									switch((typeof MobileApp !== "undefined") ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
+									switch((isMobileApp() === true) ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
 									
 										<?php
 										

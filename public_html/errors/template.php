@@ -146,6 +146,27 @@
 			return result;
 		}
 		
+		// Is extension
+		function isExtension() {
+		
+			// Return if extension
+			return typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:";
+		}
+		
+		// Is mobile app
+		function isMobileApp() {
+		
+			// Return if mobile app
+			return typeof MobileApp !== "undefined";
+		}
+		
+		// Is app
+		function isApp() {
+		
+			// Return if app
+			return isMobileApp() === true || (isExtension() === false && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true)));
+		}
+		
 		
 		// Main function
 		
@@ -157,10 +178,10 @@
 		document.createElement("section");
 		
 		// Check if is an extension or a mobile app
-		if((typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:" && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || typeof MobileApp !== "undefined") {
+		if((isExtension() === true && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || isMobileApp() === true) {
 		
 			// Check extension or device locale code
-			switch((typeof MobileApp !== "undefined") ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
+			switch((isMobileApp() === true) ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
 			
 				<?php
 				
@@ -1131,10 +1152,10 @@
 							var messageDisplayHeader = getElement(getElement(document, "aside", "message"), "h2", "translatable");
 							
 							// Check if is an extension or a mobile app
-							if((typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:" && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || typeof MobileApp !== "undefined") {
+							if((isExtension() === true && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || isMobileApp() === true) {
 							
 								// Check extension or device locale code
-								switch((typeof MobileApp !== "undefined") ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
+								switch((isMobileApp() === true) ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
 								
 									<?php
 									
@@ -1202,10 +1223,10 @@
 									var messageDisplayText = getElement(getElement(getElement(document, "aside", "message"), "span", "text"), "span", "translatable");
 									
 									// Check if is an extension or a mobile app
-									if((typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:" && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || typeof MobileApp !== "undefined") {
+									if((isExtension() === true && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || isMobileApp() === true) {
 									
 										// Check extension or device locale code
-										switch((typeof MobileApp !== "undefined") ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
+										switch((isMobileApp() === true) ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
 										
 											<?php
 											
@@ -1224,7 +1245,7 @@
 														?>
 														
 															// Check if is an app
-															if(typeof MobileApp !== "undefined" || ((typeof location === "undefined" || location["protocol"]["length"] <= "-extension:"["length"] || location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) !== "-extension:") && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true)))) {
+															if(isApp() === true) {
 															
 																// Set message display text to language's translation
 																<?= "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('An error has occurred. This app will automatically reload in a few seconds.', [], $languageIdentifier)) . "\");"; ?>
@@ -1247,7 +1268,7 @@
 														?>
 														
 															// Check if is an app
-															if(typeof MobileApp !== "undefined" || ((typeof location === "undefined" || location["protocol"]["length"] <= "-extension:"["length"] || location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) !== "-extension:") && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true)))) {
+															if(isApp() === true) {
 															
 																// Set message display text to language's translation
 																<?= "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('This app is currently down for maintenance.', [], $languageIdentifier)) . "\");"; ?>
@@ -1301,7 +1322,7 @@
 														?>
 														
 															// Check if is an app
-															if(typeof MobileApp !== "undefined" || ((typeof location === "undefined" || location["protocol"]["length"] <= "-extension:"["length"] || location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) !== "-extension:") && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true)))) {
+															if(isApp() === true) {
 															
 																// Set message display text to language's translation
 																<?= "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('An error has occurred. This app will automatically reload in a few seconds.', [], $languageIdentifier)) . "\");"; ?>
@@ -1324,7 +1345,7 @@
 														?>
 														
 															// Check if is an app
-															if(typeof MobileApp !== "undefined" || ((typeof location === "undefined" || location["protocol"]["length"] <= "-extension:"["length"] || location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) !== "-extension:") && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true)))) {
+															if(isApp() === true) {
 															
 																// Set message display text to language's translation
 																<?= "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('This app is currently down for maintenance.', [], $languageIdentifier)) . "\");"; ?>
