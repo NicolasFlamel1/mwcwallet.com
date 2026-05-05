@@ -5,7 +5,7 @@
 	
 		// Contributors
 		"Contributors" => [
-			"grincalf" => "https://twitter.com/@hhffnmkhgf"
+			"grincalf" => "https://x.com/hhffnmkhgf"
 		],
 		
 		// Constants

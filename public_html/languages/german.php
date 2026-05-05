@@ -5,7 +5,7 @@
 	
 		// Contributors
 		"Contributors" => [
-			"High ko XMR" => "https://twitter.com/@highkoXMR"
+			"High ko XMR" => "https://x.com/highkoXMR"
 		],
 		
 		// Constants

@@ -5,7 +5,7 @@
 	
 		// Contributors
 		"Contributors" => [
-			"NickTheG" => "https://twitter.com/@progressevakos"
+			"NickTheG" => "https://x.com/progressevakos"
 		],
 		
 		// Constants
