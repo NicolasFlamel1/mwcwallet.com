@@ -1680,58 +1680,62 @@
 								// Get loading display text
 								var loadingDisplayText = getElement(getElement(document, "div", "loading"), "p", "translatable");
 								
-								// Check if is an extension or a mobile app
-								if((isExtension() === true && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || isMobileApp() === true) {
+								// Check if loading display text isn't empty
+								if(loadingDisplayText["innerHTML"]["length"] !== 0) {
 								
-									// Check extension or device locale code
-									switch((isMobileApp() === true) ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
+									// Check if is an extension or a mobile app
+									if((isExtension() === true && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || isMobileApp() === true) {
 									
-										<?php
+										// Check extension or device locale code
+										switch((isMobileApp() === true) ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
 										
-											// Go through all available languages
-											foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
+											<?php
 											
-												// Display available language case
-												echo "case \"" . escapeString($languageIdentifier) . "\":" .
+												// Go through all available languages
+												foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
 												
-												// Display available language's extension locale case if it exists
-												((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "" && $extensionLocaleCode !== $languageIdentifier) ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
-												
-													// Set loading display text to language's translation
-													"loadingDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('Loading…', [], $languageIdentifier)) . "\");" .
+													// Display available language case
+													echo "case \"" . escapeString($languageIdentifier) . "\":" .
 													
-													// Break
-													"break;";
-											}
-										?>
-										
+													// Display available language's extension locale case if it exists
+													((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "" && $extensionLocaleCode !== $languageIdentifier) ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
+													
+														// Set loading display text to language's translation
+														"loadingDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('Loading…', [], $languageIdentifier)) . "\");" .
+														
+														// Break
+														"break;";
+												}
+											?>
+											
+										}
 									}
-								}
-								
-								// Check if language is saved in local storage
-								var savedLanguage = (typeof localStorage !== "undefined") ? localStorage.getItem(LANGUAGE_LOCAL_STORAGE_NAME) : INVALID_LOCAL_STORAGE_ITEM;
-								
-								if(savedLanguage !== INVALID_LOCAL_STORAGE_ITEM) {
-								
-									// Check saved language
-									switch(savedLanguage) {
 									
-										<?php
+									// Check if language is saved in local storage
+									var savedLanguage = (typeof localStorage !== "undefined") ? localStorage.getItem(LANGUAGE_LOCAL_STORAGE_NAME) : INVALID_LOCAL_STORAGE_ITEM;
+									
+									if(savedLanguage !== INVALID_LOCAL_STORAGE_ITEM) {
+									
+										// Check saved language
+										switch(savedLanguage) {
 										
-											// Go through all available languages
-											foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
+											<?php
 											
-												// Display available language case
-												echo "case \"" . escapeString($languageIdentifier) . "\":" .
+												// Go through all available languages
+												foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
 												
-													// Set loading display text to language's translation
-													"loadingDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('Loading…', [], $languageIdentifier)) . "\");" .
+													// Display available language case
+													echo "case \"" . escapeString($languageIdentifier) . "\":" .
 													
-													// Break
-													"break;";
-											}
-										?>
-										
+														// Set loading display text to language's translation
+														"loadingDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('Loading…', [], $languageIdentifier)) . "\");" .
+														
+														// Break
+														"break;";
+												}
+											?>
+											
+										}
 									}
 								}
 								
