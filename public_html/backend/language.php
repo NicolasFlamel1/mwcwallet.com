@@ -323,10 +323,14 @@
 	}
 	
 	// Get translated type value
-	function getTranslatedTypeValue($type, $value) {
+	function getTranslatedTypeValue($type, $value, $language = NULL) {
 	
-		// Get language
-		$language = getLanguage();
+		// Check if language isn't provided
+		if($language === NULL) {
+		
+			// Get language
+			$language = getLanguage();
+		}
 		
 		// Check if type is text and value is a standalone placeholder
 		if($type === "Text" && preg_match(PLACEHOLDER_PATTERN, $value) === 1) {
@@ -454,17 +458,17 @@
 	}
 	
 	// Get constant
-	function getConstant($constant) {
+	function getConstant($constant, $language = NULL) {
 	
 		// Return translation for the specified constant
-		return getTranslatedTypeValue("Constants", $constant)["Result"];
+		return getTranslatedTypeValue("Constants", $constant, $language)["Result"];
 	}
 	
 	// Get translation
-	function getTranslation($text, $arguments = []) {
+	function getTranslation($text, $arguments = [], $language = NULL) {
 	
 		// Get translated text
-		$translatedText = getTranslatedTypeValue("Text", $text);
+		$translatedText = getTranslatedTypeValue("Text", $text, $language);
 	
 		// Go through all arguments
 		foreach($arguments as &$argument) {

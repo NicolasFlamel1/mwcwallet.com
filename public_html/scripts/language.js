@@ -85,7 +85,7 @@ class Language {
 				// Otherwise check if is an extension or a mobile app
 				else if((Common.isExtension() === true && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || Common.isMobileApp() === true) {
 				
-					// Get extension or device's locale code
+					// Get extension or device locale code
 					var extensionOrDeviceLocaleCode = (Common.isMobileApp() === true) ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage());
 					
 					// Set language found to false
@@ -96,8 +96,8 @@ class Language {
 					
 						if(AVAILABLE_LANGUAGES.hasOwnProperty(availableLanguage) === true) {
 						
-							// Check if available language matches the device's or available language's extension locale code matches the extension's
-							if((Common.isMobileApp() === true && availableLanguage === extensionOrDeviceLocaleCode) || (Common.isExtension() === true && "Constants" in AVAILABLE_LANGUAGES[availableLanguage] === true && "Extension Locale Code" in AVAILABLE_LANGUAGES[availableLanguage]["Constants"] === true && AVAILABLE_LANGUAGES[availableLanguage]["Constants"]["Extension Locale Code"] === extensionOrDeviceLocaleCode)) {
+							// Check if available language or its extension locale code matches the extension or device locale code
+							if(availableLanguage === extensionOrDeviceLocaleCode || ("Constants" in AVAILABLE_LANGUAGES[availableLanguage] === true && "Extension Locale Code" in AVAILABLE_LANGUAGES[availableLanguage]["Constants"] === true && AVAILABLE_LANGUAGES[availableLanguage]["Constants"]["Extension Locale Code"] === extensionOrDeviceLocaleCode)) {
 							
 								// Set extension or device language
 								var extensionOrDeviceLanguage = availableLanguage;

@@ -32,12 +32,119 @@
 	<meta name="robots" content="none">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title class="translatable" data-text="<?= encodeString($title); ?>" data-arguments='<?= escapeData([sprintf("%.0F", $titleArgument)]); ?>'><?= encodeString(getTranslation($title, [getNumberTranslation($titleArgument)])); ?></title>
 	<base href="<?= "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]) . "/errors/"; ?>">
 	
 	<script>
 	
 		// Use strict
 		"use strict";
+		
+		
+		// Constants
+		
+		// Index not found
+		var INDEX_NOT_FOUND = -1;
+
+		// Language local storage name
+		var LANGUAGE_LOCAL_STORAGE_NAME = "Language";
+		
+		// Invalid local storage item
+		var INVALID_LOCAL_STORAGE_ITEM = null;
+		
+		
+		// Supporting function implementation
+		
+		// Array index
+		function arrayIndex(array, value) {
+		
+			// Go through all values in the array
+			for(var i = 0; i < array["length"]; ++i)
+			
+				// Check if array value matches the value
+				if(array[i] === value)
+				
+					// Return index
+					return i;
+			
+			// Return index not found
+			return INDEX_NOT_FOUND;
+		}
+		
+		// Has class
+		function hasClass(element, className) {
+		
+			// Check if element has classes
+			if(typeof element["className"] !== "undefined" && element["className"] !== null && element["className"]["length"] !== 0) {
+			
+				// Get all of the element's classes
+				var classes = element["className"].split(" ");
+				
+				// Check if element has the class
+				var classIndex = arrayIndex(classes, className);
+				if(classIndex !== INDEX_NOT_FOUND)
+				
+					// Return true
+					return true;
+			}
+			
+			// Return false
+			return false;
+		}
+		
+		// Get element
+		function getElement(parent, tagName, className) {
+		
+			// Get all elements with the tag name
+			var elements = parent.getElementsByTagName(tagName);
+			
+			// Go through all elements with the tag name
+			for(var i = 0; i < elements["length"]; ++i)
+			
+				// Check if element has the class
+				if(hasClass(elements[i], className) === true)
+				
+					// Return element
+					return elements[i];
+		}
+		
+		// Escape HTML
+		function escapeHtml(string) {
+
+			// Initialize result
+			var result = "";
+			
+			// Go through all characters in the string
+			for(var i = 0; i < string["length"]; ++i) {
+			
+				// Check if character is a less than
+				if(string.charAt(i) === "<")
+				
+					// Append less than HTML entity to result
+					result += "&lt;";
+				
+				// Otherwise check if character is a greater than
+				else if(string.charAt(i) === ">")
+				
+					// Append greater than HTML entity to result
+					result += "&gt;";
+				
+				// Otherwise check if character is an ampersand
+				else if(string.charAt(i) === "&")
+				
+					// Append ampersand HTML entity to result
+					result += "&amp;";
+				
+				// Otherwise
+				else
+				
+					// Append character to result
+					result += string.charAt(i);
+			}
+			
+			// Return result
+			return result;
+		}
 		
 		
 		// Main function
@@ -48,13 +155,71 @@
 		// Make older browsers aware of newer tags
 		document.createElement("aside");
 		document.createElement("section");
+		
+		// Check if is an extension or a mobile app
+		if((typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:" && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || typeof MobileApp !== "undefined") {
+		
+			// Check extension or device locale code
+			switch((typeof MobileApp !== "undefined") ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
+			
+				<?php
+				
+					// Go through all available languages
+					foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
+					
+						// Display available language case
+						echo "case \"" . escapeString($languageIdentifier) . "\":" .
+						
+						// Display available language's extension locale case if it exists
+						((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "") ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
+						
+							// Set title to language's translation
+							"document[\"title\"] = \"" . escapeString(getTranslation($title, [getNumberTranslation($titleArgument)], $languageIdentifier)) . "\";" .
+							
+							// Break
+							"break;";
+					}
+				?>
+				
+			}
+		}
+		
+		// Check if language is saved in local storage
+		var savedLanguage = (typeof localStorage !== "undefined") ? localStorage.getItem(LANGUAGE_LOCAL_STORAGE_NAME) : INVALID_LOCAL_STORAGE_ITEM;
+		
+		if(savedLanguage !== INVALID_LOCAL_STORAGE_ITEM) {
+		
+			// Check saved language
+			switch(savedLanguage) {
+			
+				<?php
+				
+					// Go through all available languages
+					foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
+					
+						// Display available language case
+						echo "case \"" . escapeString($languageIdentifier) . "\":" .
+						
+							// Set title to language's translation
+							"document[\"title\"] = \"" . escapeString(getTranslation($title, [getNumberTranslation($titleArgument)], $languageIdentifier)) . "\";" .
+							
+							// Break
+							"break;";
+					}
+				?>
+				
+			}
+		}
 	
 	</script>
 	
-	<link rel="preload" as="image" href=".<?= encodeString(getResource("./images/logo_big.svg")); ?>" type="image/svg+xml">
-	<link rel="preload" as="image" href=".<?= encodeString(getResource("./images/logo_small.svg")); ?>" type="image/svg+xml">
-	<link rel="preload" as="font" href=".<?= encodeString(getResource("./fonts/open_sans/open_sans-1.10.woff2")); ?>" type="font/woff2" crossorigin="anonymous">
-	<link rel="preload" as="font" href=".<?= encodeString(getResource("./fonts/open_sans/open_sans_semibold-1.10.woff2")); ?>" type="font/woff2" crossorigin="anonymous">
+	<link rel="preload" as="image" href=".<?= encodeString(getResource("./images/logo_big.svg")); ?>" type="image/svg+xml" fetchpriority="high">
+	<link rel="preload" as="image" href=".<?= encodeString(getResource("./images/logo_small.svg")); ?>" type="image/svg+xml" fetchpriority="high">
+	<link rel="preload" as="font" href=".<?= encodeString(getResource("./fonts/open_sans/open_sans-1.10.woff2")); ?>" type="font/woff2" fetchpriority="high" crossorigin="anonymous">
+	<link rel="preload" as="font" href=".<?= encodeString(getResource("./fonts/open_sans/open_sans_semibold-1.10.woff2")); ?>" type="font/woff2" fetchpriority="high" crossorigin="anonymous">
+	<link rel="preload" as="style" href=".<?= encodeString(getResource("./styles/normalize.css-8.0.1.css")); ?>" type="text/css" fetchpriority="high">
+	<link rel="preload" as="style" href=".<?= encodeString(getResource("./fonts/open_sans/open_sans.css")); ?>" type="text/css" fetchpriority="high">
+	<link rel="preload" as="style" href=".<?= encodeString(getResource("./fonts/font_awesome/font_awesome.css")); ?>" type="text/css" fetchpriority="high">
 	
 	<link rel="stylesheet" type="text/css" href=".<?= encodeString(getResource("./styles/normalize.css-8.0.1.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/normalize.css-8.0.1.css")); ?>">
 	<link rel="stylesheet" type="text/css" href=".<?= encodeString(getResource("./fonts/open_sans/open_sans.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/open_sans/open_sans.css")); ?>">
@@ -810,7 +975,6 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="default">
 	<meta name="msapplication-TileColor" content="<?= encodeString(BACKGROUND_COLOR); ?>">
 	<link rel="mask-icon" color="<?= encodeString(BACKGROUND_COLOR); ?>" href=".<?= encodeString(getResource(MASK_IMAGE)); ?>">
-	<title class="translatable" data-text="<?= encodeString($title); ?>" data-arguments='<?= escapeData([sprintf("%.0F", $titleArgument)]); ?>'><?= encodeString(getTranslation($title, [getNumberTranslation($titleArgument)])); ?></title>
 	<meta class="translatable" name="apple-mobile-web-app-title" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta class="translatable" name="application-name" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta class="translatable" name="msapplication-tooltip" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
@@ -955,10 +1119,244 @@
 				--><div class="message"><!--
 					--><div><!--
 						--><h2 class="translatable" data-text="<?= encodeString($error); ?>" data-arguments='<?= escapeData([sprintf("%.0F", $errorArgument)]); ?>'><?= encodeString(getTranslation($error, [getNumberTranslation($errorArgument)])); ?></h2><!--
+						--><script>
+							
+							// Use strict
+							"use strict";
+							
+							
+							// Main function
+							
+							// Get message display header
+							var messageDisplayHeader = getElement(getElement(document, "aside", "message"), "h2", "translatable");
+							
+							// Check if is an extension or a mobile app
+							if((typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:" && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || typeof MobileApp !== "undefined") {
+							
+								// Check extension or device locale code
+								switch((typeof MobileApp !== "undefined") ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
+								
+									<?php
+									
+										// Go through all available languages
+										foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
+										
+											// Display available language case
+											echo "case \"" . escapeString($languageIdentifier) . "\":" .
+											
+											// Display available language's extension locale case if it exists
+											((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "") ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
+											
+												// Set message display header to language's translation
+												"messageDisplayHeader[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation($error, [getNumberTranslation($errorArgument)], $languageIdentifier)) . "\");" .
+												
+												// Break
+												"break;";
+										}
+									?>
+									
+								}
+							}
+							
+							// Check if language is saved in local storage
+							var savedLanguage = (typeof localStorage !== "undefined") ? localStorage.getItem(LANGUAGE_LOCAL_STORAGE_NAME) : INVALID_LOCAL_STORAGE_ITEM;
+							
+							if(savedLanguage !== INVALID_LOCAL_STORAGE_ITEM) {
+							
+								// Check saved language
+								switch(savedLanguage) {
+								
+									<?php
+									
+										// Go through all available languages
+										foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
+										
+											// Display available language case
+											echo "case \"" . escapeString($languageIdentifier) . "\":" .
+											
+												// Set message display header to language's translation
+												"messageDisplayHeader[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation($error, [getNumberTranslation($errorArgument)], $languageIdentifier)) . "\");" .
+												
+												// Break
+												"break;";
+										}
+									?>
+									
+								}
+							}
+							
+						</script><!--
 						--><span class="upArrow"></span><!--
 						--><p class="scrollable"><!--
 							--><span class="text"><!--
 								--><span class="translatable" data-text="<?= encodeString($message); ?>"><?= encodeString(getTranslation($message)); ?></span><!--
+								--><script>
+							
+									// Use strict
+									"use strict";
+									
+									
+									// Main function
+									
+									// Get message display text
+									var messageDisplayText = getElement(getElement(getElement(document, "aside", "message"), "span", "text"), "span", "translatable");
+									
+									// Check if is an extension or a mobile app
+									if((typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:" && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || typeof MobileApp !== "undefined") {
+									
+										// Check extension or device locale code
+										switch((typeof MobileApp !== "undefined") ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
+										
+											<?php
+											
+												// Go through all available languages
+												foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
+												
+													// Display available language case
+													echo "case \"" . escapeString($languageIdentifier) . "\":" .
+													
+													// Display available language's extension locale case if it exists
+													((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "") ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "");
+													
+														// Check if is generic error
+														if(isset($isGenericError) === TRUE) {
+														
+														?>
+														
+															// Check if is an app
+															if(typeof MobileApp !== "undefined" || ((typeof location === "undefined" || location["protocol"]["length"] <= "-extension:"["length"] || location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) !== "-extension:") && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true)))) {
+															
+																// Set message display text to language's translation
+																<?= "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('An error has occurred. This app will automatically reload in a few seconds.', [], $languageIdentifier)) . "\");"; ?>
+															}
+															
+															// Otherwise
+															else {
+															
+																// Set message display text to language's translation
+																<?= "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('An error has occurred. This site will automatically reload in a few seconds.', [], $languageIdentifier)) . "\");"; ?>
+															}
+														
+														<?php
+														
+														}
+														
+														// Otherwise check if is maintenance error
+														else if(isset($isMaintenanceError) === TRUE) {
+														
+														?>
+														
+															// Check if is an app
+															if(typeof MobileApp !== "undefined" || ((typeof location === "undefined" || location["protocol"]["length"] <= "-extension:"["length"] || location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) !== "-extension:") && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true)))) {
+															
+																// Set message display text to language's translation
+																<?= "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('This app is currently down for maintenance.', [], $languageIdentifier)) . "\");"; ?>
+															}
+															
+															// Otherwise
+															else {
+															
+																// Set message display text to language's translation
+																<?= "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('This site is currently down for maintenance.', [], $languageIdentifier)) . "\");"; ?>
+															}
+														
+														<?php
+														
+														}
+														
+														// Otherwise
+														else {
+														
+															// Set message display text to language's translation
+															echo "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation($message, [], $languageIdentifier)) . "\");";
+														}
+														
+														// Break
+														echo "break;";
+												}
+											?>
+											
+										}
+									}
+									
+									// Check if language is saved in local storage
+									var savedLanguage = (typeof localStorage !== "undefined") ? localStorage.getItem(LANGUAGE_LOCAL_STORAGE_NAME) : INVALID_LOCAL_STORAGE_ITEM;
+									
+									if(savedLanguage !== INVALID_LOCAL_STORAGE_ITEM) {
+									
+										// Check saved language
+										switch(savedLanguage) {
+										
+											<?php
+											
+												// Go through all available languages
+												foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
+												
+													// Display available language case
+													echo "case \"" . escapeString($languageIdentifier) . "\":";
+													
+														// Check if is generic error
+														if(isset($isGenericError) === TRUE) {
+														
+														?>
+														
+															// Check if is an app
+															if(typeof MobileApp !== "undefined" || ((typeof location === "undefined" || location["protocol"]["length"] <= "-extension:"["length"] || location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) !== "-extension:") && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true)))) {
+															
+																// Set message display text to language's translation
+																<?= "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('An error has occurred. This app will automatically reload in a few seconds.', [], $languageIdentifier)) . "\");"; ?>
+															}
+															
+															// Otherwise
+															else {
+															
+																// Set message display text to language's translation
+																<?= "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('An error has occurred. This site will automatically reload in a few seconds.', [], $languageIdentifier)) . "\");"; ?>
+															}
+														
+														<?php
+														
+														}
+														
+														// Otherwise check if is maintenance error
+														else if(isset($isMaintenanceError) === TRUE) {
+														
+														?>
+														
+															// Check if is an app
+															if(typeof MobileApp !== "undefined" || ((typeof location === "undefined" || location["protocol"]["length"] <= "-extension:"["length"] || location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) !== "-extension:") && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true)))) {
+															
+																// Set message display text to language's translation
+																<?= "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('This app is currently down for maintenance.', [], $languageIdentifier)) . "\");"; ?>
+															}
+															
+															// Otherwise
+															else {
+															
+																// Set message display text to language's translation
+																<?= "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('This site is currently down for maintenance.', [], $languageIdentifier)) . "\");"; ?>
+															}
+														
+														<?php
+														
+														}
+														
+														// Otherwise
+														else {
+														
+															// Set message display text to language's translation
+															echo "messageDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation($message, [], $languageIdentifier)) . "\");";
+														}
+														
+														// Break
+														echo "break;";
+												}
+											?>
+											
+										}
+									}
+									
+								</script><!--
 							--></span><!--
 						--></p><!--
 						--><span class="downArrow"></span><!--
@@ -1009,9 +1407,6 @@
 		// Default language
 		var DEFAULT_LANGUAGE = "<?= escapeString(DEFAULT_LANGUAGE); ?>";
 		
-		// Index not found
-		var INDEX_NOT_FOUND = -1;
-		
 		// Scroll tolerance
 		var SCROLL_TOLERANCE = 2;
 		
@@ -1048,22 +1443,6 @@
 		
 			// Return resource with version
 			return ((file in FILES === true && FILES[file]["Minified"] === true) ? addMinifiedSuffix(file) : file) + ((file in FILES === true && FILES[file]["Version"] !== 0) ? "?" + FILES[file]["Version"] : "");
-		}
-		
-		// Array index
-		function arrayIndex(array, value) {
-		
-			// Go through all values in the array
-			for(var i = 0; i < array["length"]; ++i)
-			
-				// Check if array value matches the value
-				if(array[i] === value)
-				
-					// Return index
-					return i;
-			
-			// Return index not found
-			return INDEX_NOT_FOUND;
 		}
 		
 		// Add event
@@ -1125,43 +1504,6 @@
 					element["className"] = classes.join(" ");
 				}
 			}
-		}
-		
-		// Has class
-		function hasClass(element, className) {
-		
-			// Check if element has classes
-			if(typeof element["className"] !== "undefined" && element["className"] !== null && element["className"]["length"] !== 0) {
-			
-				// Get all of the element's classes
-				var classes = element["className"].split(" ");
-				
-				// Check if element has the class
-				var classIndex = arrayIndex(classes, className);
-				if(classIndex !== INDEX_NOT_FOUND)
-				
-					// Return true
-					return true;
-			}
-			
-			// Return false
-			return false;
-		}
-		
-		// Get element
-		function getElement(parent, tagName, className) {
-		
-			// Get all elements with the tag name
-			var elements = parent.getElementsByTagName(tagName);
-			
-			// Go through all elements with the tag name
-			for(var i = 0; i < elements["length"]; ++i)
-			
-				// Check if element has the class
-				if(hasClass(elements[i], className) === true)
-				
-					// Return element
-					return elements[i];
 		}
 		
 		// On resize
@@ -1455,12 +1797,9 @@
 	--><?php
 					
 		}
-	?><!--
-	
-	--><?php
 		
-		// Check if is maintenance error
-		if(isset($isMaintenanceError) === TRUE) {
+		// Otherwise check if is maintenance error
+		else if(isset($isMaintenanceError) === TRUE) {
 		
 	?><!--
 	

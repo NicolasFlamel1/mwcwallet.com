@@ -52,6 +52,7 @@
 	
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title class="translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>"><?= encodeString(getTranslation('MWC Wallet')); ?></title>
 	
 	<script>
 	
@@ -69,6 +70,12 @@
 
 		// Show loading delay milliseconds
 		var SHOW_LOADING_DELAY_MILLISECONDS = 100;
+		
+		// Language local storage name
+		var LANGUAGE_LOCAL_STORAGE_NAME = "Language";
+		
+		// Invalid local storage item
+		var INVALID_LOCAL_STORAGE_ITEM = null;
 
 
 		// Global variables
@@ -667,19 +674,77 @@
 			}
 		});
 		
+		// Check if is an extension or a mobile app
+		if((typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:" && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || typeof MobileApp !== "undefined") {
+		
+			// Check extension or device locale code
+			switch((typeof MobileApp !== "undefined") ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
+			
+				<?php
+				
+					// Go through all available languages
+					foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
+					
+						// Display available language case
+						echo "case \"" . escapeString($languageIdentifier) . "\":" .
+						
+						// Display available language's extension locale case if it exists
+						((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "") ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
+						
+							// Set title to language's translation
+							"document[\"title\"] = \"" . escapeString(getTranslation('MWC Wallet', [], $languageIdentifier)) . "\";" .
+							
+							// Break
+							"break;";
+					}
+				?>
+				
+			}
+		}
+		
+		// Check if language is saved in local storage
+		var savedLanguage = (typeof localStorage !== "undefined") ? localStorage.getItem(LANGUAGE_LOCAL_STORAGE_NAME) : INVALID_LOCAL_STORAGE_ITEM;
+		
+		if(savedLanguage !== INVALID_LOCAL_STORAGE_ITEM) {
+		
+			// Check saved language
+			switch(savedLanguage) {
+			
+				<?php
+				
+					// Go through all available languages
+					foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
+					
+						// Display available language case
+						echo "case \"" . escapeString($languageIdentifier) . "\":" .
+						
+							// Set title to language's translation
+							"document[\"title\"] = \"" . escapeString(getTranslation('MWC Wallet', [], $languageIdentifier)) . "\";" .
+							
+							// Break
+							"break;";
+					}
+				?>
+				
+			}
+		}
+		
 	</script>
 	
-	<link rel="preload" as="image" href="<?= encodeString(getResource("./images/logo_big.svg")); ?>" onerror="processLoadingError(this, true);" type="image/svg+xml">
-	<link rel="preload" as="image" href="<?= encodeString(getResource("./images/logo_small.svg")); ?>" onerror="processLoadingError(this, true);" type="image/svg+xml">
-	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/open_sans/open_sans-1.10.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
-	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/open_sans/open_sans_semibold-1.10.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
-	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/mwc/mwc.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
-	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/grin/grin.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
-	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/epic/epic.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
-	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/btc/btc.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
-	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/eth/eth.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" crossorigin="anonymous">
-	<link rel="preload" as="image" href="<?= encodeString(getResource("./images/circle.svg")); ?>" onerror="processLoadingError(this, true);" type="image/svg+xml">
-	<link rel="preload" as="image" href="<?= encodeString(getResource("./images/down_arrow.svg")); ?>" onerror="processLoadingError(this, true);" type="image/svg+xml">
+	<link rel="preload" as="image" href="<?= encodeString(getResource("./images/logo_big.svg")); ?>" onerror="processLoadingError(this, true);" type="image/svg+xml" fetchpriority="high">
+	<link rel="preload" as="image" href="<?= encodeString(getResource("./images/logo_small.svg")); ?>" onerror="processLoadingError(this, true);" type="image/svg+xml" fetchpriority="high">
+	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/open_sans/open_sans-1.10.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" fetchpriority="high" crossorigin="anonymous">
+	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/open_sans/open_sans_semibold-1.10.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" fetchpriority="high" crossorigin="anonymous">
+	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/mwc/mwc.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" fetchpriority="high" crossorigin="anonymous">
+	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/grin/grin.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" fetchpriority="high" crossorigin="anonymous">
+	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/epic/epic.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" fetchpriority="high" crossorigin="anonymous">
+	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/btc/btc.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" fetchpriority="high" crossorigin="anonymous">
+	<link rel="preload" as="font" href="<?= encodeString(getResource("./fonts/eth/eth.woff2")); ?>" onerror="processLoadingError(this, true);" type="font/woff2" fetchpriority="high" crossorigin="anonymous">
+	<link rel="preload" as="style" href="<?= encodeString(getResource("./styles/normalize.css-8.0.1.css")); ?>" onerror="processLoadingError(this, true);" type="text/css" fetchpriority="high">
+	<link rel="preload" as="style" href="<?= encodeString(getResource("./fonts/open_sans/open_sans.css")); ?>" onerror="processLoadingError(this, true);" type="text/css" fetchpriority="high">
+	<link rel="preload" as="style" href="<?= encodeString(getResource("./fonts/font_awesome/font_awesome.css")); ?>" onerror="processLoadingError(this, true);" type="text/css" fetchpriority="high">
+	<link rel="preload" as="image" href="<?= encodeString(getResource("./images/circle.svg")); ?>" onerror="processLoadingError(this, true);" type="image/svg+xml" fetchpriority="high">
+	<link rel="preload" as="image" href="<?= encodeString(getResource("./images/down_arrow.svg")); ?>" onerror="processLoadingError(this, true);" type="image/svg+xml" fetchpriority="high">
 	
 	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/normalize.css-8.0.1.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/normalize.css-8.0.1.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
 	<link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./fonts/open_sans/open_sans.css")); ?>" integrity="<?= encodeString(getChecksum("./fonts/open_sans/open_sans.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);">
@@ -1451,7 +1516,6 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="default">
 	<meta name="msapplication-TileColor" content="<?= encodeString(BACKGROUND_COLOR); ?>">
 	<link rel="mask-icon" color="<?= encodeString(BACKGROUND_COLOR); ?>" href="<?= encodeString(getResource(MASK_IMAGE)); ?>">
-	<title class="translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>"><?= encodeString(getTranslation('MWC Wallet')); ?></title>
 	<meta class="translatable" name="apple-mobile-web-app-title" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta class="translatable" name="application-name" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
 	<meta class="translatable" name="msapplication-tooltip" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>" content="<?= encodeString(getTranslation('MWC Wallet')); ?>">
@@ -1599,6 +1663,73 @@
 						--><div class="spinner"><!--
 							--><div class="noScriptHide"></div><!--
 							--><p class="noScriptHide translatable" data-text="<?= encodeString(getDefaultTranslation('Loading…')); ?>"><?= encodeString(getTranslation('Loading…')); ?></p><!--
+							--><script>
+							
+								// Use strict
+								"use strict";
+								
+								
+								// Main function
+								
+								// Get loading display text
+								var loadingDisplayText = getElement(getElement(document, "div", "loading"), "p", "translatable");
+								
+								// Check if is an extension or a mobile app
+								if((typeof location !== "undefined" && location["protocol"]["length"] > "-extension:"["length"] && location["protocol"].substring(location["protocol"]["length"] - "-extension:"["length"]) === "-extension:" && (typeof browser !== "undefined" || typeof chrome !== "undefined")) || typeof MobileApp !== "undefined") {
+								
+									// Check extension or device locale code
+									switch((typeof MobileApp !== "undefined") ? MobileApp.getLanguage() : ((typeof browser !== "undefined") ? browser["i18n"].getUILanguage() : chrome["i18n"].getUILanguage())) {
+									
+										<?php
+										
+											// Go through all available languages
+											foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
+											
+												// Display available language case
+												echo "case \"" . escapeString($languageIdentifier) . "\":" .
+												
+												// Display available language's extension locale case if it exists
+												((($extensionLocaleCode = getConstant("Extension Locale Code", $languageIdentifier)) !== "") ? "case \"" . escapeString($extensionLocaleCode) . "\":" : "") .
+												
+													// Set loading display text to language's translation
+													"loadingDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('Loading…', [], $languageIdentifier)) . "\");" .
+													
+													// Break
+													"break;";
+											}
+										?>
+										
+									}
+								}
+								
+								// Check if language is saved in local storage
+								var savedLanguage = (typeof localStorage !== "undefined") ? localStorage.getItem(LANGUAGE_LOCAL_STORAGE_NAME) : INVALID_LOCAL_STORAGE_ITEM;
+								
+								if(savedLanguage !== INVALID_LOCAL_STORAGE_ITEM) {
+								
+									// Check saved language
+									switch(savedLanguage) {
+									
+										<?php
+										
+											// Go through all available languages
+											foreach(getAvailableLanguages() as $languageIdentifier => $availableLanguage) {
+											
+												// Display available language case
+												echo "case \"" . escapeString($languageIdentifier) . "\":" .
+												
+													// Set loading display text to language's translation
+													"loadingDisplayText[\"innerHTML\"] = escapeHtml(\"" . escapeString(getTranslation('Loading…', [], $languageIdentifier)) . "\");" .
+													
+													// Break
+													"break;";
+											}
+										?>
+										
+									}
+								}
+								
+							</script><!--
 						--></div><!--
 					--></div><!--
 					--><div class="info hide"><!--
