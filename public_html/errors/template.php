@@ -539,6 +539,12 @@
 			font-family: "Open Sans", Arial, sans-serif;
 			font-size: 19pt;
 			padding-bottom: 0.2em;
+			transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
+		}
+		
+		div.loading > div.spinner > p:empty {
+			opacity: 0;
+			visibility: hidden;
 		}
 		
 		aside.message {
