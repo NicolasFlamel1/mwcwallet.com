@@ -3,14 +3,13 @@
 	// Constants
 	
 	// Version number
-	const VERSION_NUMBER = "2.8.1";
+	const VERSION_NUMBER = "2.8.2";
 	
 	// Version release date
-	const VERSION_RELEASE_DATE = "30 Apr 2026 19:33:00 UTC";
+	const VERSION_RELEASE_DATE = "08 May 2026 20:09:00 UTC";
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Fixed connecting to nodes with Firefox.",
 		"Updated default Grin nodes."
 	];
 	
