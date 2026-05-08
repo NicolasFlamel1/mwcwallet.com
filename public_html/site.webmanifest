@@ -13,7 +13,6 @@
 
 ?>{
 	"name": "<?= escapeString(getTranslation('MWC Wallet')); ?>",
-	"short_name": "<?= escapeString(getTranslation('MWC Wallet')); ?>",
 	"description": "<?= escapeString(getTranslation('A MimbleWimble Coin wallet.')); ?>",
 	"background_color": "<?= escapeString(BACKGROUND_COLOR); ?>",
 	"theme_color": "<?= escapeString(THEME_COLOR); ?>",
