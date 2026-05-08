@@ -6965,6 +6965,31 @@ class Application {
 					];
 				}
 				
+				// Otherwise check if using the Opera extension
+				else if(typeof chrome !== "undefined" && chrome["runtime"]["id"] === "iaagomomhleebihpbgbnlbbfaeomeoof") {
+				
+					// Set message
+					var message = Language.getDefaultTranslation('Make sure that you installed this extension for free from MWC Wallet\'s official browser extension listing on the Opera Addons Store at %1$m');
+					
+					// Set message arguments
+					var messageArguments = [
+					
+						[
+							// Text
+							"https://addons.opera.com/extensions/details/mwc-wallet",
+							
+							// URL
+							"https://addons.opera.com/extensions/details/mwc-wallet",
+							
+							// Is external
+							true,
+							
+							// Is blob
+							false
+						]
+					];
+				}
+				
 				// Otherwise
 				else {
 				
