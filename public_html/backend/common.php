@@ -10,7 +10,8 @@
 	
 	// Version changes
 	const VERSION_CHANGES = [
-		"Updated default Grin nodes."
+		"Updated default Grin nodes.",
+		"Fixes loading site with Brave browser."
 	];
 	
 	// Maintenance start time

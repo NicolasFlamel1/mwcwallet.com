@@ -6353,11 +6353,11 @@ class Application {
 				// Get if third-party cookies message has been shown
 				var thirdPartyCookiesMessageShown = localStorage.getItem(Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_LOCAL_STORAGE_NAME);
 				
-				// Check if third-party cookies message hasn't been shown and is an extension or loading from a file
-				if((thirdPartyCookiesMessageShown === Common.INVALID_LOCAL_STORAGE_ITEM || thirdPartyCookiesMessageShown !== Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_TRUE_VALUE) && (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL || location["protocol"] === Common.CONTENT_PROTOCOL)) {
+				// Check if third-party cookies message hasn't been shown
+				if(thirdPartyCookiesMessageShown === Common.INVALID_LOCAL_STORAGE_ITEM || thirdPartyCookiesMessageShown !== Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_TRUE_VALUE) {
 				
-					// Check if browser is Brave
-					if(typeof navigator === "object" && navigator !== null && "brave" in navigator === true) {
+					// Check if browser is Brave and loading from a file
+					if(typeof navigator === "object" && navigator !== null && "brave" in navigator === true && (location["protocol"] === Common.FILE_PROTOCOL || location["protocol"] === Common.CONTENT_PROTOCOL)) {
 					
 						// Initialize message button clicked
 						var messageButtonClicked = false;

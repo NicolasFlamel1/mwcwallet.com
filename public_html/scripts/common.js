@@ -357,7 +357,7 @@ class Common {
 			return new Promise(function(resolve, reject) {
 			
 				// Check if Keyboard API isn't supported
-				if(typeof navigator !== "object" || navigator === null || "keyboard" in navigator === false) {
+				if(typeof navigator !== "object" || navigator === null || "keyboard" in navigator === false || typeof navigator["keyboard"] !== "object" || navigator["keyboard"] === null) {
 				
 					// Resolve true
 					resolve(true);

@@ -354,10 +354,10 @@
 			"Checksum" => "LS/MPMvq/o1Cdrf5kZFgvroJmWYUcntrelndcKI6TXTL2YmursMJ92U5dsBkHoP6pOdRyl3C/iaX3lPt4uSd2A=="
 		],
 		"./scripts/application.js" => [
-			"Version" => 115,
+			"Version" => 116,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "/hc1OZozad8fgl6WOejWj7KMbkWhsmkRwoU6poNkmkkXqzCo6DpijfSAhUGZ3p2fQVp1VvC+RAs1uzQRmakQfA=="
+			"Checksum" => "1h7eEPMhfMJNjXaXMkVKbBcMvHYGL9Ad6g+k5CExa+nTcDkdiYupUYf64huyoIRzNkwCIjB5R0FhdnH+3Xm+kg=="
 		],
 		"./scripts/automatic_lock.js" => [
 			"Version" => 5,
@@ -750,10 +750,10 @@
 			"Checksum" => "uBLhlZi/5cLZID5Dhryv8uu2mU9qZMu6qSf3COW8m4lBrSgaWOVmAx9DWHkUZWnGJNiKsl32XVuV0N/SfaJB7w=="
 		],
 		"./scripts/common.js" => [
-			"Version" => 107,
+			"Version" => 108,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "0KHtElnrhxZ4sfyA30asLxd3s5Oz3rwVAjBwyEs7MhPYvwmns5U3uyTGFP3cOOzsPscrWFx7fxIZvIHjGFFeYw=="
+			"Checksum" => "vNXzqR27sn2YZlGa18Fo7GCw5Y2q/6kmHPa40YCPml39NEtl5jFXsA5ZR4mlKR+dV8yQGl4EoTWjq+OcakoFuw=="
 		],
 		"./scripts/bit_reader.js" => [
 			"Version" => 6,
