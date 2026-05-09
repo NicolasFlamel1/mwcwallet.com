@@ -398,8 +398,8 @@ class JsonRpc {
 						// Set data's ID
 						data["id"] = id;
 					
-					// Check if browser isn't Firefox or is an extension
-					if((typeof navigator !== "object" || navigator === null || "userAgent" in navigator === false || navigator["userAgent"].toLowerCase().indexOf("firefox") === Common.INDEX_NOT_FOUND) || Common.isExtension() === true) {
+					// Check if browser isn't Firefox and Safari or is an extension
+					if(((typeof navigator !== "object" || navigator === null || "userAgent" in navigator === false || navigator["userAgent"].toLowerCase().indexOf("firefox") === Common.INDEX_NOT_FOUND) && (typeof navigator !== "object" || navigator === null || "userAgent" in navigator === false || navigator["userAgent"].toLowerCase().indexOf("safari") === Common.INDEX_NOT_FOUND || navigator["userAgent"].toLowerCase().indexOf("chrome") !== Common.INDEX_NOT_FOUND)) || Common.isExtension() === true) {
 					
 						// Change user agent header
 						headers["User-Agent"] = "null";
