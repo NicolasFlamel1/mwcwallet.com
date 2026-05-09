@@ -6356,8 +6356,8 @@ class Application {
 				// Check if third-party cookies message hasn't been shown and is an extension or loading from a file
 				if((thirdPartyCookiesMessageShown === Common.INVALID_LOCAL_STORAGE_ITEM || thirdPartyCookiesMessageShown !== Application.THIRD_PARTY_COOKIES_MESSAGE_SHOWN_TRUE_VALUE) && (Common.isExtension() === true || location["protocol"] === Common.FILE_PROTOCOL || location["protocol"] === Common.CONTENT_PROTOCOL)) {
 				
-					// Check if browser is Safari
-					if(typeof navigator === "object" && navigator !== null && "userAgent" in navigator === true && navigator["userAgent"].toLowerCase().indexOf("safari") !== Common.INDEX_NOT_FOUND && navigator["userAgent"].toLowerCase().indexOf("chrome") === Common.INDEX_NOT_FOUND) {
+					// Check if browser is Brave
+					if(typeof navigator === "object" && navigator !== null && "brave" in navigator === true) {
 					
 						// Initialize message button clicked
 						var messageButtonClicked = false;
@@ -6969,7 +6969,7 @@ class Application {
 				else if(typeof chrome !== "undefined" && chrome["runtime"]["id"] === "iaagomomhleebihpbgbnlbbfaeomeoof") {
 				
 					// Set message
-					var message = Language.getDefaultTranslation('Make sure that you installed this extension for free from MWC Wallet\'s official browser extension listing on the Opera Addons Store at %1$m');
+					var message = Language.getDefaultTranslation('Make sure that you installed this extension for free from MWC Wallet\'s official browser extension listing on the Opera addons store at %1$m');
 					
 					// Set message arguments
 					var messageArguments = [
