@@ -61,13 +61,8 @@ class StartupImagesCreator {
 			// Scale context to the pixel ratio
 			context.scale(pixelRatio, pixelRatio);
 			
-			// Create gradient
-			var gradient = context.createLinearGradient(0, 0, width, 0);
-			gradient.addColorStop(0, StartupImagesCreator.BACKGROUND_GRADIENT_START_COLOR);
-			gradient.addColorStop(1, StartupImagesCreator.BACKGROUND_GRADIENT_END_COLOR);
-			
-			// Fill context with the gradient
-			context["fillStyle"] = gradient;
+			// Fill context with the background color
+			context["fillStyle"] = BACKGROUND_COLOR;
 			context.fillRect(0, 0, width, height);
 			
 			// Draw image in the middle of the context
@@ -83,20 +78,6 @@ class StartupImagesCreator {
 			
 			// Add link to document
 			document["head"].appendChild(link);
-		}
-		
-		// Background gradient start color
-		static get BACKGROUND_GRADIENT_START_COLOR() {
-		
-			// Return background gradient start color
-			return "#9E00E7";
-		}
-		
-		// Background gradient end color
-		static get BACKGROUND_GRADIENT_END_COLOR() {
-		
-			// Return background gradient end color
-			return "#3600C9";
 		}
 		
 		// Image scale factor

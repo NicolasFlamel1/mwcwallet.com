@@ -798,10 +798,10 @@
 			"Checksum" => "3vXtreIWfA4ZmF19S6v8GgBTBQKNIyWusog09bGqpbxT17E6Fj/uKUW8NW9jVS3tysjqu6D5c2M6UFmDA60Wtw=="
 		],
 		"./scripts/startup_images_creator.js" => [
-			"Version" => 5,
+			"Version" => 6,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "QNtKNG9TS2TfRgBAjPlLqCDIXv/UIcqDCTMi6tNwd3C7yxlKBkiErW/wtLpufToe46dfyTjUwbsBxkHAQilPBA=="
+			"Checksum" => "0QqUxBj2LSWZvrwmB0Dkx+hikQS3b9QeTs9KI9IV8oC60L/CzdUSF+O6jV1tk4AGxk/tMeb0kHDEsg/WztomNQ=="
 		],
 		"./scripts/extension.js" => [
 			"Version" => 8,

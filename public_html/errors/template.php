@@ -1496,6 +1496,9 @@
 		// Default language
 		var DEFAULT_LANGUAGE = "<?= escapeString(DEFAULT_LANGUAGE); ?>";
 		
+		// Background color
+		var BACKGROUND_COLOR = "<?= escapeString(BACKGROUND_COLOR); ?>";
+		
 		// Scroll tolerance
 		var SCROLL_TOLERANCE = 2;
 		
