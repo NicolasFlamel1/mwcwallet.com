@@ -4,11 +4,15 @@
 main > div.language {
 	position: fixed;
 	top: 0;
+	top: var(--safe-area-inset-top);
 	right: 0;
+	right: var(--safe-area-inset-right);
 	left: 0;
+	left: var(--safe-area-inset-left);
 	height: auto;
 	width: auto;
 	max-width: 100%;
+	max-width: calc(100% - var(--safe-area-inset-right) - var(--safe-area-inset-left));
 	max-height: calc(100% - 0.4em);
 	z-index: 7;
 	visibility: visible;

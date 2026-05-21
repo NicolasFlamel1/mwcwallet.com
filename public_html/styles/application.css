@@ -5,14 +5,18 @@ main > div > div.info {
 	color: white;
 	position: fixed;
 	top: 0;
+	top: calc(var(--safe-area-inset-bottom) * -1);
 	left: 0;
+	right: 0;
 	height: 100%;
-	margin: 0;
+	margin: 0 auto;
 	max-width: none;
 	transition: opacity 0.2s ease-in-out 0.05s, visibility 0.2s ease-in-out 0.05s;
 	justify-content: flex-end;
 	min-height: 350px;
 	min-width: 250px;
+	width: 100%;
+	width: calc(100% - var(--safe-area-inset-right) - var(--safe-area-inset-left));
 }
 
 main > div > div.info.hide {
@@ -369,9 +373,12 @@ main > div > div > form > button.clicked {
 main > div > div > div.deleteAllWallets {
 	position: fixed;
 	bottom: 0;
+	bottom: var(--safe-area-inset-bottom);
 	top: 0;
 	right: 0;
+	right: var(--safe-area-inset-right);
 	left: 0;
+	left: var(--safe-area-inset-left);
 	display: flex;
 	justify-content: flex-end;
 	margin: 0.4em;

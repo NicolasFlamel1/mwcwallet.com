@@ -51,7 +51,7 @@
 	<link rel="canonical" href="<?= "http" . ((array_key_exists("HTTPS", $_SERVER) === TRUE && $_SERVER["HTTPS"] === "on") ? "s" : "") . "://" . rawurlencode($_SERVER["SERVER_NAME"]) . "/" . (($language !== DEFAULT_LANGUAGE) ? "?" . urlencode("Language") . "=" . urlencode($language) : ""); ?>">
 	
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 	<title class="translatable" data-text="<?= encodeString(getDefaultTranslation('MWC Wallet')); ?>"><?= encodeString(getTranslation('MWC Wallet')); ?></title>
 	
 	<script>
@@ -752,6 +752,13 @@
 	
 	<style>
 	
+		:root {
+			--safe-area-inset-top: env(safe-area-inset-top, 0);
+			--safe-area-inset-right: env(safe-area-inset-right, 0);
+			--safe-area-inset-bottom: env(safe-area-inset-bottom, 0);
+			--safe-area-inset-left: env(safe-area-inset-left, 0);
+		}
+		
 		.hide {
 			display: none;
 		}
@@ -880,11 +887,14 @@
 		main {
 			height: 100%;
 			width: 100%;
+			width: calc(100% - var(--safe-area-inset-right) - var(--safe-area-inset-left));
 			overflow: hidden;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			position: relative;
+			margin: 0;
+			margin: var(--safe-area-inset-top) var(--safe-area-inset-right) var(--safe-area-inset-bottom) var(--safe-area-inset-left);
 		}
 		
 		main > div {
@@ -1048,6 +1058,7 @@
 			height: 4em;
 			animation: spin 1.3s linear infinite;
 			margin-top: 7em;
+			aspect-ratio: 1;
 		}
 		
 		@media only screen and (max-width: 350px) {
@@ -1115,11 +1126,13 @@
 			width: calc(100% - 4em);
 			margin: auto;
 			padding: 0 2em;
+			padding: var(--safe-area-inset-top) calc(2em + var(--safe-area-inset-right)) var(--safe-area-inset-bottom) calc(2em + var(--safe-area-inset-left));
 			display: table-cell;
 			vertical-align: middle;
 			display: flex;
 			max-width: 55em;
 			height: 100%;
+			height: calc(100% - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
 			align-items: center;
 			visibility: visible;
 			opacity: 1;
@@ -1140,6 +1153,7 @@
 			background: white;
 			box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.2);
 			width: 100%;
+			width: calc(100% - var(--safe-area-inset-right) - var(--safe-area-inset-left));
 			max-height: 70%;
 			max-width: 51em;
 			overflow: hidden;

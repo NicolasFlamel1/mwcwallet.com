@@ -15,6 +15,10 @@ section.maintenanceNotification {
 	min-width: 250px;
 	transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
 	z-index: 10;
+	padding-top: 0;
+	padding-top: var(--safe-area-inset-top);
+	margin: 0;
+	margin: 0 var(--safe-area-inset-right) 0 var(--safe-area-inset-left);
 }
 
 section.maintenanceNotification.hide {
