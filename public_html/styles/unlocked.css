@@ -998,8 +998,15 @@ main > div.unlocked > div > div.status {
 		border-radius: 0;
 	}
 	
-	main.languagesAvailable > div.unlocked > div {
-		margin-top: 2.56em
+	body.languagesAvailable main > div.unlocked > div {
+		margin-top: 2.56em;
+	}
+	
+	@media only screen and (display-mode: window-controls-overlay) {
+	
+		main > div.unlocked > div {
+			margin-top: calc(env(titlebar-area-y, 0) + env(titlebar-area-height, 0)) !important;
+		}
 	}
 	
 	main > div.unlocked > div > div.menu, main > div.unlocked > div > div.status {

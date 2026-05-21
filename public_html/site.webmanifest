@@ -43,6 +43,9 @@
 		
 	],
 	"display": "standalone",
+	"display_override": [
+		"window-controls-overlay"
+	],
 	"categories": [
 		"finance"
 	],

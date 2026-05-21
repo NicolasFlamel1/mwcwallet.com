@@ -23,6 +23,26 @@ main > div.language {
 	pointer-events: none;
 }
 
+@media only screen and (display-mode: window-controls-overlay) {
+
+	main > div.language {
+		width: calc(env(titlebar-area-width, 100%) + env(titlebar-area-x, 0) - 0.4em - 2px);
+		top: env(titlebar-area-y, 0);
+		margin-top: 2px;
+	}
+	
+	main > div.language > div > button {
+		height: calc(env(titlebar-area-height, auto) - 2px);
+	}
+	
+	@media only screen and (max-width: 500px), only screen and (max-height: 600px) {
+	
+		main > div.language > div > button {
+			height: calc(env(titlebar-area-height, auto) - 4px);
+		}
+	}
+}
+
 main > div.language.normalTransitionSpeed {
 	transition-duration: 0.15s;
 	transition-delay: 0s;

@@ -30,9 +30,15 @@ class Language {
 				// Get language display select
 				var languageDisplaySelect = languageDisplay.children().children("select");
 				
+				// Get controls bar mask
+				var controlsBarMask = bodyDisplay.children("span").children("span");
+				
 				// Update language display select's size
 				languageDisplaySelect.width(languageDisplayButton.width());
 				languageDisplaySelect.height(languageDisplayButton.height());
+				
+				// Make room for language display in controls bar
+				controlsBarMask.width(languageDisplayButton.width());
 				
 				// Check if language is saved in local storage and it is valid
 				var savedLanguage = localStorage.getItem(Language.LOCAL_STORAGE_NAME);
@@ -216,6 +222,9 @@ class Language {
 					// Update language display select's size
 					languageDisplaySelect.width(languageDisplayButton.width());
 					languageDisplaySelect.height(languageDisplayButton.height());
+					
+					// Make room for language display in controls bar
+					controlsBarMask.width(languageDisplayButton.width());
 				});
 				
 				// Language display focus out event
@@ -463,6 +472,9 @@ class Language {
 					// Update language display select's size
 					languageDisplaySelect.width(languageDisplayButton.width());
 					languageDisplaySelect.height(languageDisplayButton.height());
+					
+					// Make room for language display in controls bar
+					controlsBarMask.width(languageDisplayButton.width());
 				});
 			}
 		}
@@ -1194,7 +1206,7 @@ class Language {
 				$("div.language").removeClass("hide");
 				
 				// Make room for language display
-				$("main").addClass("languagesAvailable");
+				$("body").addClass("languagesAvailable");
 			}
 		}
 		

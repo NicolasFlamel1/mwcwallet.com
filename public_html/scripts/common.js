@@ -230,7 +230,7 @@ class Common {
 		static isApp() {
 		
 			// Return if app
-			return Common.isMobileApp() === true || (Common.isExtension() === false && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && matchMedia("(display-mode: standalone)")["matches"] === true)));
+			return Common.isMobileApp() === true || (Common.isExtension() === false && ((typeof navigator === "object" && navigator !== null && "standalone" in navigator === true && navigator["standalone"] === true) || (typeof matchMedia === "function" && (matchMedia("(display-mode: standalone)")["matches"] === true || matchMedia("(display-mode: window-controls-overlay)")["matches"] === true))));
 		}
 		
 		// HTML encode
