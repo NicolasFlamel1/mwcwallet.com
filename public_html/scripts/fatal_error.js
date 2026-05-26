@@ -112,12 +112,16 @@ globalThis["FatalError"] = FatalError;
 // Set fatal error error occurred
 FatalError.errorOccurred = false;
 
-// Window error event
-$(window).on("error", function() {
+// Check if jQuery exists
+if(typeof jQuery === "function") {
 
-	// Check if using application error handler
-	if(usingApplicationErrorHandler() === true)
+	// Window error event
+	$(window).on("error", function() {
 
-		// Trigger a fatal error
-		new FatalError(FatalError.UNKNOWN_ERROR);
-});
+		// Check if using application error handler
+		if(usingApplicationErrorHandler() === true)
+
+			// Trigger a fatal error
+			new FatalError(FatalError.UNKNOWN_ERROR);
+	});
+}

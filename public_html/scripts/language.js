@@ -12,8 +12,8 @@ class Language {
 		// Initialize
 		static initialize() {
 		
-			// Check if language hasn't already been initialized and available languages exist
-			if(typeof Language.currentLanguage === "undefined" && typeof AVAILABLE_LANGUAGES !== "undefined") {
+			// Check if language hasn't already been initialized, available languages exist, and jQuery and common exist
+			if(typeof Language.currentLanguage === "undefined" && typeof AVAILABLE_LANGUAGES !== "undefined" && typeof jQuery === "function" && typeof Common !== "undefined") {
 			
 				// Get language display
 				var languageDisplay = $("div.language");
@@ -297,12 +297,16 @@ class Language {
 							// Get new language
 							var newLanguage = button.attr(Common.DATA_ATTRIBUTE_PREFIX + "language");
 							
-							// Log message
-							Log.logMessage(Language.getDefaultTranslation('Language changed to %1$y.'), [
+							// Check if log exists
+							if(typeof Log !== "undefined") {
 							
-								// Language
-								AVAILABLE_LANGUAGES[newLanguage]["Constants"]["Language"]
-							]);
+								// Log message
+								Log.logMessage(Language.getDefaultTranslation('Language changed to %1$y.'), [
+								
+									// Language
+									AVAILABLE_LANGUAGES[newLanguage]["Constants"]["Language"]
+								]);
+							}
 					
 							// Change language
 							Language.changeLanguage(newLanguage);
@@ -352,12 +356,16 @@ class Language {
 						// Set timeout
 						setTimeout(function() {
 						
-							// Log message
-							Log.logMessage(Language.getDefaultTranslation('Language changed to %1$y.'), [
+							// Check if log exists
+							if(typeof Log !== "undefined") {
 							
-								// Language
-								AVAILABLE_LANGUAGES[newLanguage]["Constants"]["Language"]
-							]);
+								// Log message
+								Log.logMessage(Language.getDefaultTranslation('Language changed to %1$y.'), [
+								
+									// Language
+									AVAILABLE_LANGUAGES[newLanguage]["Constants"]["Language"]
+								]);
+							}
 					
 							// Change language
 							Language.changeLanguage(newLanguage);
@@ -433,12 +441,16 @@ class Language {
 					// Check if language was changed
 					if(event["originalEvent"]["key"] === Language.LOCAL_STORAGE_NAME && event["originalEvent"]["oldValue"] !== event["originalEvent"]["newValue"]) {
 					
-						// Log message
-						Log.logMessage(Language.getDefaultTranslation('Language changed to %1$y.'), [
+						// Check if log exists
+						if(typeof Log !== "undefined") {
 						
-							// Language
-							AVAILABLE_LANGUAGES[event["originalEvent"]["newValue"]]["Constants"]["Language"]
-						]);
+							// Log message
+							Log.logMessage(Language.getDefaultTranslation('Language changed to %1$y.'), [
+							
+								// Language
+								AVAILABLE_LANGUAGES[event["originalEvent"]["newValue"]]["Constants"]["Language"]
+							]);
+						}
 					
 						// Change language
 						Language.changeLanguage(event["originalEvent"]["newValue"]);
@@ -676,6 +688,13 @@ class Language {
 								// Currency
 								case Language.CURRENCY_PLACEHOLDER_TYPE:
 								
+									// Check if consensus or BigNumber doesn't exist
+									if(typeof Consensus === "undefined" || typeof BigNumber !== "function") {
+									
+										// Return empty string
+										return "";
+									}
+									
 									// Check if text argument is an array
 									if(Array.isArray(textArguments[argumentIndex]) === true) {
 									
@@ -1193,8 +1212,8 @@ class Language {
 		// Show display
 		static showDisplay(delayShow = false) {
 		
-			// Check if more than one language exists
-			if(typeof AVAILABLE_LANGUAGES !== "undefined" && Object.keys(AVAILABLE_LANGUAGES)["length"] > 1) {
+			// Check if more than one language exists and jQuery exists
+			if(typeof AVAILABLE_LANGUAGES !== "undefined" && Object.keys(AVAILABLE_LANGUAGES)["length"] > 1 && typeof jQuery === "function") {
 			
 				// Check if delay show
 				if(delayShow === true)

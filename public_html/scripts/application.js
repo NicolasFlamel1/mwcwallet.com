@@ -7716,21 +7716,25 @@ class Application {
 // Set global object's application
 globalThis["Application"] = Application;
 
-// Ready event
-$(function() {
+// Check if jQuery exists
+if(typeof jQuery === "function") {
 
-	// Set timeout
-	setTimeout(function() {
+	// Ready event
+	$(function() {
 
-		// Check if a startup error didn't occur
-		if(startupErrorOccurred() === false) {
+		// Set timeout
+		setTimeout(function() {
+
+			// Check if a startup error didn't occur
+			if(startupErrorOccurred() === false) {
+			
+				// Enable application error handler
+				enableApplicationErrorHandler();
 		
-			// Enable application error handler
-			enableApplicationErrorHandler();
-	
-			// Create application
-			new Application();
-		}
-	
-	}, ($("body").hasClass("splashScreen") === true) ? 0 : Application.SHOW_LOADING_DELAY_MILLISECONDS);
-});
+				// Create application
+				new Application();
+			}
+		
+		}, ($("body").hasClass("splashScreen") === true) ? 0 : Application.SHOW_LOADING_DELAY_MILLISECONDS);
+	});
+}

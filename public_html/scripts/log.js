@@ -134,9 +134,13 @@ class Log {
 // Set global object's log
 globalThis["Log"] = Log;
 
-// Ready event
-$(function() {
+// Check if jQuery exists
+if(typeof jQuery === "function") {
 
-	// Initialize log
-	Log.initialize();
-});
+	// Ready event
+	$(function() {
+
+		// Initialize log
+		Log.initialize();
+	});
+}

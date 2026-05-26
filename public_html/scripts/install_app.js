@@ -342,12 +342,16 @@ var installAppPrompt = InstallApp.NO_INSTALL_APP_PROMPT;
 // Set global object's install app
 globalThis["InstallApp"] = InstallApp;
 
-// Window before install prompt event
-$(window).on("beforeinstallprompt", function(event) {
+// Check if jQuery exists
+if(typeof jQuery === "function") {
 
-	// Prevent default
-	event.preventDefault();
-	
-	// Store install app prompt
-	installAppPrompt = event["originalEvent"];
-});
+	// Window before install prompt event
+	$(window).on("beforeinstallprompt", function(event) {
+
+		// Prevent default
+		event.preventDefault();
+		
+		// Store install app prompt
+		installAppPrompt = event["originalEvent"];
+	});
+}

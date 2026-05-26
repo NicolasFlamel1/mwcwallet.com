@@ -1743,8 +1743,12 @@
 						// Scroll to the top of message display text
 						messageDisplayText["scrollTop"] = 0;
 					
-					// Show language display
-					Language.showDisplay();
+					// Check if language exists
+					if(typeof Language !== "undefined") {
+					
+						// Show language display
+						Language.showDisplay();
+					}
 				}
 			}
 		});
@@ -1806,17 +1810,21 @@
 		
 			// Update URL
 			updateUrl(url["pathname"] + url["search"]);
-		
-			// Title language change event
-			$("title").on(Language.CHANGE_EVENT, function() {
 			
-				// Set timeout
-				setTimeout(function() {
+			// Check if jQuery and language exists
+			if(typeof jQuery === "function" && typeof Language !== "undefined") {
+		
+				// Title language change event
+				$("title").on(Language.CHANGE_EVENT, function() {
 				
-					// Update URL
-					updateUrl(url["pathname"] + url["search"]);
-				}, 0);
-			});
+					// Set timeout
+					setTimeout(function() {
+					
+						// Update URL
+						updateUrl(url["pathname"] + url["search"]);
+					}, 0);
+				});
+			}
 		}
 		
 		
@@ -1831,8 +1839,12 @@
 				// Try
 				try {
 				
-					// Change displayed URL
-					history.replaceState(NO_STATE, Language.getTranslation('MWC Wallet'), path);
+					// Check if language exists
+					if(typeof Language !== "undefined") {
+					
+						// Change displayed URL
+						history.replaceState(NO_STATE, Language.getTranslation('MWC Wallet'), path);
+					}
 				}
 				
 				// Catch errors
@@ -1864,25 +1876,29 @@
 		
 		// Main function
 		
-		// Get message text display
-		var messageTextDisplay = $("aside.message").find("p").children("span.text").children("span");
-	
-		// Check if is an app
-		if(Common.isApp() === true) {
+		// Check if jQuery, common, and language exists
+		if(typeof jQuery === "function" && typeof Common !== "undefined" && typeof Language !== "undefined") {
 		
-			// Set message
-			var message = Language.getDefaultTranslation('An error has occurred. This app will automatically reload in a few seconds.');
+			// Get message text display
+			var messageTextDisplay = $("aside.message").find("p").children("span.text").children("span");
+		
+			// Check if is an app
+			if(Common.isApp() === true) {
+			
+				// Set message
+				var message = Language.getDefaultTranslation('An error has occurred. This app will automatically reload in a few seconds.');
+			}
+			
+			// Otherwise
+			else {
+			
+				// Set message
+				var message = Language.getDefaultTranslation('An error has occurred. This site will automatically reload in a few seconds.');
+			}
+			
+			// Replace message text display
+			messageTextDisplay.replaceWith(Language.createTranslatableContainer("<span>", message));
 		}
-		
-		// Otherwise
-		else {
-		
-			// Set message
-			var message = Language.getDefaultTranslation('An error has occurred. This site will automatically reload in a few seconds.');
-		}
-		
-		// Replace message text display
-		messageTextDisplay.replaceWith(Language.createTranslatableContainer("<span>", message));
 		
 	</script><!--
 	
@@ -1903,25 +1919,29 @@
 		
 		// Main function
 		
-		// Get message text display
-		var messageTextDisplay = $("aside.message").find("p").children("span.text").children("span");
-	
-		// Check if is an app
-		if(Common.isApp() === true) {
+		// Check if jQuery, common, and language exists
+		if(typeof jQuery === "function" && typeof Common !== "undefined" && typeof Language !== "undefined") {
 		
-			// Set message
-			var message = Language.getDefaultTranslation('This app is currently down for maintenance.');
+			// Get message text display
+			var messageTextDisplay = $("aside.message").find("p").children("span.text").children("span");
+		
+			// Check if is an app
+			if(Common.isApp() === true) {
+			
+				// Set message
+				var message = Language.getDefaultTranslation('This app is currently down for maintenance.');
+			}
+			
+			// Otherwise
+			else {
+			
+				// Set message
+				var message = Language.getDefaultTranslation('This site is currently down for maintenance.');
+			}
+			
+			// Replace message text display
+			messageTextDisplay.replaceWith(Language.createTranslatableContainer("<span>", message));
 		}
-		
-		// Otherwise
-		else {
-		
-			// Set message
-			var message = Language.getDefaultTranslation('This site is currently down for maintenance.');
-		}
-		
-		// Replace message text display
-		messageTextDisplay.replaceWith(Language.createTranslatableContainer("<span>", message));
 		
 	</script><!--
 	

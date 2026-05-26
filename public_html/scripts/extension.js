@@ -101,183 +101,194 @@ class Extension {
 		// Process request
 		static processRequest(request, makeFirstRequest = false) {
 		
-			// Check request
-			switch(request["Request"]) {
+			// Check if language, common, section, send payment section, protocol handler, BigNumber, and jQuery exist
+			if(typeof Language !== "undefined" && typeof Common !== "undefined" && typeof Section !== "undefined" && typeof SendPaymentSection !== "undefined" && typeof ProtocolHandler !== "undefined" && typeof BigNumber === "function" && typeof jQuery === "function") {
 			
-				// Start transaction
-				case "Start Transaction":
+				// Check request
+				switch(request["Request"]) {
 				
-					// Check if recipient address isn't valid
-					if("Recipient Address" in request === false || typeof request["Recipient Address"] !== "string" || request["Recipient Address"]["length"] === 0) {
+					// Start transaction
+					case "Start Transaction":
 					
-						// Throw error
-						throw Language.getDefaultTranslation('Invalid recipient address.');
-					}
-					
-					// Otherwise check if amount isn't valid
-					else if("Amount" in request === true && request["Amount"] !== Extension.NO_TRANSACTION_AMOUNT && (Common.isNumberString(request["Amount"]) === false || Common.getNumberStringPrecision(request["Amount"]) > Extension.MAXIMUM_AMOUNT_PRECISION || parseFloat(Common.removeTrailingZeros(request["Amount"])) < Extension.MINIMUM_AMOUNT)) {
-					
-						// Throw error
-						throw Language.getDefaultTranslation('Invalid amount.');
-					}
-					
-					// Otherwise check if message isn't valid
-					else if("Message" in request === true && request["Message"] !== Extension.NO_TRANSACTION_MESSAGE && typeof request["Message"] !== "string") {
-					
-						// Throw error
-						throw Language.getDefaultTranslation('Invalid message.');
-					}
-					
-					// Otherwise
-					else {
-					
-						// Get request information
-						var requestInformation = {
-							
-							// Name
-							"Name": SendPaymentSection.NAME,
-							
-							// State
-							"State": {
-							
-								// Elements states
-								[Section.STATE_ELEMENTS_STATES_NAME]: [
-								
-									// Back
-									{
-										"Tag": "BUTTON",
-										"Focused": false,
-										"Value": Section.NO_VALUE
-									},
-									
-									// Forward
-									{
-										"Tag": "BUTTON",
-										"Focused": false,
-										"Value": Section.NO_VALUE
-									},
-									
-									// Recipient address
-									{
-										"Tag": "INPUT",
-										"Focused": false,
-										"Value": ProtocolHandler.standardizeUrlProtocol(request["Recipient Address"]),
-										"Selection Start": Section.NO_VALUE,
-										"Selection End": Section.NO_VALUE,
-										"Selection Direction": Section.NO_VALUE
-									},
-									
-									// Scan
-									{
-										"Tag": "BUTTON",
-										"Focused": false,
-										"Value": Section.NO_VALUE
-									},
-									
-									// Wallet
-									{
-										"Tag": "SELECT",
-										"Focused": false,
-										"Value": Section.NO_VALUE
-									},
-									
-									// Amount
-									{
-										"Tag": "INPUT",
-										"Focused": false,
-										"Value": ("Amount" in request === true && request["Amount"] !== Extension.NO_TRANSACTION_AMOUNT) ? (new BigNumber(request["Amount"])).toFixed() : Section.NO_VALUE,
-										"Selection Start": Section.NO_VALUE,
-										"Selection End": Section.NO_VALUE,
-										"Selection Direction": Section.NO_VALUE
-									},
-									
-									// All
-									{
-										"Tag": "BUTTON",
-										"Focused": false,
-										"Value": Section.NO_VALUE
-									},
-									
-									// Value
-									{
-										"Tag": "INPUT",
-										"Focused": false,
-										"Value": Section.NO_VALUE,
-										"Selection Start": Section.NO_VALUE,
-										"Selection End": Section.NO_VALUE,
-										"Selection Direction": Section.NO_VALUE
-									},
-									
-									// Base fee
-									{
-										"Tag": "INPUT",
-										"Focused": false,
-										"Value": Section.NO_VALUE,
-										"Selection Start": Section.NO_VALUE,
-										"Selection End": Section.NO_VALUE,
-										"Selection Direction": Section.NO_VALUE
-									},
-									
-									// Default base fee
-									{
-										"Tag": "BUTTON",
-										"Focused": false,
-										"Value": Section.NO_VALUE
-									},
-									
-									// Message
-									{
-										"Tag": "INPUT",
-										"Focused": false,
-										"Value": ("Message" in request === true && request["Message"] !== Extension.NO_TRANSACTION_MESSAGE) ? request["Message"] : Section.NO_VALUE,
-										"Selection Start": Section.NO_VALUE,
-										"Selection End": Section.NO_VALUE,
-										"Selection Direction": Section.NO_VALUE
-									},
-									
-									// Send
-									{
-										"Tag": "BUTTON",
-										"Focused": false,
-										"Value": Section.NO_VALUE
-									},
-									
-									// Cancel
-									{
-										"Tag": "BUTTON",
-										"Focused": false,
-										"Value": Section.NO_VALUE
-									}
-								]
-							}
-						};
+						// Check if recipient address isn't valid
+						if("Recipient Address" in request === false || typeof request["Recipient Address"] !== "string" || request["Recipient Address"]["length"] === 0) {
 						
-						// Check if making first request
-						if(makeFirstRequest === true) {
+							// Throw error
+							throw Language.getDefaultTranslation('Invalid recipient address.');
+						}
 						
-							// Add request information to beginning of list
-							Extension.requests.unshift(requestInformation);
+						// Otherwise check if amount isn't valid
+						else if("Amount" in request === true && request["Amount"] !== Extension.NO_TRANSACTION_AMOUNT && (Common.isNumberString(request["Amount"]) === false || Common.getNumberStringPrecision(request["Amount"]) > Extension.MAXIMUM_AMOUNT_PRECISION || parseFloat(Common.removeTrailingZeros(request["Amount"])) < Extension.MINIMUM_AMOUNT)) {
+						
+							// Throw error
+							throw Language.getDefaultTranslation('Invalid amount.');
+						}
+						
+						// Otherwise check if message isn't valid
+						else if("Message" in request === true && request["Message"] !== Extension.NO_TRANSACTION_MESSAGE && typeof request["Message"] !== "string") {
+						
+							// Throw error
+							throw Language.getDefaultTranslation('Invalid message.');
 						}
 						
 						// Otherwise
 						else {
-					
-							// Append request information to list
-							Extension.requests.push(requestInformation);
-						}
 						
-						// Trigger extension request receive event
-						$(document).trigger(Extension.REQUEST_RECEIVE_EVENT);
-					}
-				
-					// Break
-					break;
-				
-				// Default
-				default:
-				
-					// Throw error
-					throw Language.getDefaultTranslation('Invalid request.');
+							// Get request information
+							var requestInformation = {
+								
+								// Name
+								"Name": SendPaymentSection.NAME,
+								
+								// State
+								"State": {
+								
+									// Elements states
+									[Section.STATE_ELEMENTS_STATES_NAME]: [
+									
+										// Back
+										{
+											"Tag": "BUTTON",
+											"Focused": false,
+											"Value": Section.NO_VALUE
+										},
+										
+										// Forward
+										{
+											"Tag": "BUTTON",
+											"Focused": false,
+											"Value": Section.NO_VALUE
+										},
+										
+										// Recipient address
+										{
+											"Tag": "INPUT",
+											"Focused": false,
+											"Value": ProtocolHandler.standardizeUrlProtocol(request["Recipient Address"]),
+											"Selection Start": Section.NO_VALUE,
+											"Selection End": Section.NO_VALUE,
+											"Selection Direction": Section.NO_VALUE
+										},
+										
+										// Scan
+										{
+											"Tag": "BUTTON",
+											"Focused": false,
+											"Value": Section.NO_VALUE
+										},
+										
+										// Wallet
+										{
+											"Tag": "SELECT",
+											"Focused": false,
+											"Value": Section.NO_VALUE
+										},
+										
+										// Amount
+										{
+											"Tag": "INPUT",
+											"Focused": false,
+											"Value": ("Amount" in request === true && request["Amount"] !== Extension.NO_TRANSACTION_AMOUNT) ? (new BigNumber(request["Amount"])).toFixed() : Section.NO_VALUE,
+											"Selection Start": Section.NO_VALUE,
+											"Selection End": Section.NO_VALUE,
+											"Selection Direction": Section.NO_VALUE
+										},
+										
+										// All
+										{
+											"Tag": "BUTTON",
+											"Focused": false,
+											"Value": Section.NO_VALUE
+										},
+										
+										// Value
+										{
+											"Tag": "INPUT",
+											"Focused": false,
+											"Value": Section.NO_VALUE,
+											"Selection Start": Section.NO_VALUE,
+											"Selection End": Section.NO_VALUE,
+											"Selection Direction": Section.NO_VALUE
+										},
+										
+										// Base fee
+										{
+											"Tag": "INPUT",
+											"Focused": false,
+											"Value": Section.NO_VALUE,
+											"Selection Start": Section.NO_VALUE,
+											"Selection End": Section.NO_VALUE,
+											"Selection Direction": Section.NO_VALUE
+										},
+										
+										// Default base fee
+										{
+											"Tag": "BUTTON",
+											"Focused": false,
+											"Value": Section.NO_VALUE
+										},
+										
+										// Message
+										{
+											"Tag": "INPUT",
+											"Focused": false,
+											"Value": ("Message" in request === true && request["Message"] !== Extension.NO_TRANSACTION_MESSAGE) ? request["Message"] : Section.NO_VALUE,
+											"Selection Start": Section.NO_VALUE,
+											"Selection End": Section.NO_VALUE,
+											"Selection Direction": Section.NO_VALUE
+										},
+										
+										// Send
+										{
+											"Tag": "BUTTON",
+											"Focused": false,
+											"Value": Section.NO_VALUE
+										},
+										
+										// Cancel
+										{
+											"Tag": "BUTTON",
+											"Focused": false,
+											"Value": Section.NO_VALUE
+										}
+									]
+								}
+							};
+							
+							// Check if making first request
+							if(makeFirstRequest === true) {
+							
+								// Add request information to beginning of list
+								Extension.requests.unshift(requestInformation);
+							}
+							
+							// Otherwise
+							else {
+						
+								// Append request information to list
+								Extension.requests.push(requestInformation);
+							}
+							
+							// Trigger extension request receive event
+							$(document).trigger(Extension.REQUEST_RECEIVE_EVENT);
+						}
+					
+						// Break
+						break;
+					
+					// Default
+					default:
+					
+						// Throw error
+						throw Language.getDefaultTranslation('Invalid request.');
+				}
+			}
+			
+			// Otherwise
+			else {
+			
+				// Throw error
+				throw (typeof Language !== "undefined") ? Language.getDefaultTranslation('Internal error.') : "Internal error.";
 			}
 		}
 		
@@ -315,138 +326,146 @@ Extension.requests = [];
 // Initialize extension can interrupt close
 Extension.canInterruptClose = false;
 
-// Window before unload event
-$(window).on("beforeunload", function(event) {
+// Check if jQuery and language exists
+if(typeof jQuery === "function" && typeof Language !== "undefined") {
 
-	// Check if extension can interrupt close and extension requests exist
-	if(Extension.canInterruptClose === true && Extension.getRequests()["length"] !== 0) {
-	
-		// Try
-		try {
-	
-			// Prevent default
-			event.preventDefault();
-			
-			// Stop propagation
-			event.stopPropagation();
-			event.stopImmediatePropagation();
-			
-			// Check if one extension request exists
-			if(Extension.getRequests()["length"] === 1) {
-			
-				// Return message
-				return event["originalEvent"]["returnValue"] = Language.getTranslation('Are you sure you want to exit? There\'s a remaining transaction.');
+	// Window before unload event
+	$(window).on("beforeunload", function(event) {
+
+		// Check if extension can interrupt close and extension requests exist
+		if(Extension.canInterruptClose === true && Extension.getRequests()["length"] !== 0) {
+		
+			// Try
+			try {
+		
+				// Prevent default
+				event.preventDefault();
+				
+				// Stop propagation
+				event.stopPropagation();
+				event.stopImmediatePropagation();
+				
+				// Check if one extension request exists
+				if(Extension.getRequests()["length"] === 1) {
+				
+					// Return message
+					return event["originalEvent"]["returnValue"] = Language.getTranslation('Are you sure you want to exit? There\'s a remaining transaction.');
+				}
+				
+				// Otherwise
+				else {
+				
+					// Return message
+					return event["originalEvent"]["returnValue"] = Language.getTranslation('Are you sure you want to exit? There\'s remaining transactions.');
+				}
 			}
 			
-			// Otherwise
-			else {
+			// Catch errors
+			catch(error) {
 			
-				// Return message
-				return event["originalEvent"]["returnValue"] = Language.getTranslation('Are you sure you want to exit? There\'s remaining transactions.');
 			}
 		}
+	});
+}
+
+// Check if common and consensus exists
+if(typeof Common !== "undefined" && typeof Consensus !== "undefined") {
 		
-		// Catch errors
-		catch(error) {
+	// Check if is a Firefox or Safari extension
+	if(Common.isExtension() === true && typeof browser !== "undefined") {
+
+		// Message event
+		browser["runtime"]["onMessage"].addListener(function(request, sender, sendResponse) {
 		
-		}
+			// Check if request is from the content script
+			if(sender["id"] === browser["runtime"]["id"] && "frameId" in sender === true && typeof request === "object" && request !== null && "Wallet Type" in request === true && "Network Type" in request === true && "Request" in request === true) {
+			
+				// Check if request's wallet type is the current wallet type and network type is the current network type
+				if(request["Wallet Type"] === Consensus.walletTypeToText(Consensus.getWalletType()) && request["Network Type"] === Consensus.networkTypeToText(Consensus.getNetworkType())) {
+			
+					// Try
+					try {
+					
+						// Process extension request
+						Extension.processRequest(request);
+					}
+					
+					// Catch errors
+					catch(error) {
+					
+					}
+				}
+			}
+		});
 	}
-});
-		
-// Check if is a Firefox or Safari extension
-if(Common.isExtension() === true && typeof browser !== "undefined") {
 
-	// Message event
-	browser["runtime"]["onMessage"].addListener(function(request, sender, sendResponse) {
-	
-		// Check if request is from the content script
-		if(sender["id"] === browser["runtime"]["id"] && "frameId" in sender === true && typeof request === "object" && request !== null && "Wallet Type" in request === true && "Network Type" in request === true && "Request" in request === true) {
+	// Otherwise check if is a Chrome extension
+	else if(Common.isExtension() === true && typeof chrome !== "undefined") {
+
+		// Message event
+		chrome["runtime"]["onMessage"].addListener(function(request, sender, sendResponse) {
 		
-			// Check if request's wallet type is the current wallet type and network type is the current network type
-			if(request["Wallet Type"] === Consensus.walletTypeToText(Consensus.getWalletType()) && request["Network Type"] === Consensus.networkTypeToText(Consensus.getNetworkType())) {
-		
-				// Try
-				try {
-				
-					// Process extension request
-					Extension.processRequest(request);
-				}
-				
-				// Catch errors
-				catch(error) {
-				
+			// Check if request is from the content script
+			if(sender["id"] === chrome["runtime"]["id"] && "frameId" in sender === true && typeof request === "object" && request !== null && "Wallet Type" in request === true && "Network Type" in request === true && "Request" in request === true) {
+			
+				// Check if request's wallet type is the current wallet type and network type is the current network type
+				if(request["Wallet Type"] === Consensus.walletTypeToText(Consensus.getWalletType()) && request["Network Type"] === Consensus.networkTypeToText(Consensus.getNetworkType())) {
+			
+					// Try
+					try {
+					
+						// Process extension request
+						Extension.processRequest(request);
+					}
+					
+					// Catch errors
+					catch(error) {
+					
+					}
 				}
 			}
-		}
-	});
-}
+		});
+	}
 
-// Otherwise check if is a Chrome extension
-else if(Common.isExtension() === true && typeof chrome !== "undefined") {
+	// Otherwise check if is a mobile app and jQuery exists
+	else if(Common.isMobileApp() === true && typeof jQuery === "function") {
 
-	// Message event
-	chrome["runtime"]["onMessage"].addListener(function(request, sender, sendResponse) {
-	
-		// Check if request is from the content script
-		if(sender["id"] === chrome["runtime"]["id"] && "frameId" in sender === true && typeof request === "object" && request !== null && "Wallet Type" in request === true && "Network Type" in request === true && "Request" in request === true) {
+		// Window message event
+		$(window).on("message", function(event) {
 		
-			// Check if request's wallet type is the current wallet type and network type is the current network type
-			if(request["Wallet Type"] === Consensus.walletTypeToText(Consensus.getWalletType()) && request["Network Type"] === Consensus.networkTypeToText(Consensus.getNetworkType())) {
-		
-				// Try
-				try {
-				
-					// Process extension request
-					Extension.processRequest(request);
-				}
-				
-				// Catch errors
-				catch(error) {
-				
+			// Try
+			try {
+			
+				// Parse message as JSON
+				var request = JSON.parse(event["originalEvent"]["data"]);
+			}
+			
+			// Catch errors
+			catch(error) {
+			
+				// Return
+				return;
+			}
+			
+			// Check if message is a request
+			if(Object.isObject(request) === true && "Wallet Type" in request === true && "Network Type" in request === true && "Request" in request === true) {
+			
+				// Check if request's wallet type is the current wallet type and network type is the current network type
+				if(request["Wallet Type"] === Consensus.walletTypeToText(Consensus.getWalletType()) && request["Network Type"] === Consensus.networkTypeToText(Consensus.getNetworkType())) {
+			
+					// Try
+					try {
+					
+						// Process extension request
+						Extension.processRequest(request);
+					}
+					
+					// Catch errors
+					catch(error) {
+					
+					}
 				}
 			}
-		}
-	});
-}
-
-// Otherwise check if is a mobile app
-else if(Common.isMobileApp() === true) {
-
-	// Window message event
-	$(window).on("message", function(event) {
-	
-		// Try
-		try {
-		
-			// Parse message as JSON
-			var request = JSON.parse(event["originalEvent"]["data"]);
-		}
-		
-		// Catch errors
-		catch(error) {
-		
-			// Return
-			return;
-		}
-		
-		// Check if message is a request
-		if(Object.isObject(request) === true && "Wallet Type" in request === true && "Network Type" in request === true && "Request" in request === true) {
-		
-			// Check if request's wallet type is the current wallet type and network type is the current network type
-			if(request["Wallet Type"] === Consensus.walletTypeToText(Consensus.getWalletType()) && request["Network Type"] === Consensus.networkTypeToText(Consensus.getNetworkType())) {
-		
-				// Try
-				try {
-				
-					// Process extension request
-					Extension.processRequest(request);
-				}
-				
-				// Catch errors
-				catch(error) {
-				
-				}
-			}
-		}
-	});
+		});
+	}
 }

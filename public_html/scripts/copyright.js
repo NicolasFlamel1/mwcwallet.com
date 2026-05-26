@@ -92,9 +92,13 @@ class Copyright {
 // Set global object's copyright
 globalThis["Copyright"] = Copyright;
 
-// Ready event
-$(function() {
+// Check if jQuery exists
+if(typeof jQuery === "function") {
 
-	// Initialize copyright
-	Copyright.initialize();
-});
+	// Ready event
+	$(function() {
+
+		// Initialize copyright
+		Copyright.initialize();
+	});
+}

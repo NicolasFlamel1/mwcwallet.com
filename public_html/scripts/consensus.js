@@ -20,8 +20,8 @@ class Consensus {
 		// Get wallet type
 		static getWalletType() {
 		
-			// Check if consensus's wallet type doesn't exist
-			if(typeof Consensus.walletType === "undefined") {
+			// Check if consensus's wallet type doesn't exist and common exists
+			if(typeof Consensus.walletType === "undefined" && typeof Common !== "undefined") {
 			
 				// Check if not not a web worker and local storage is usable
 				if((typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) && typeof localStorage !== "undefined") {
@@ -127,8 +127,8 @@ class Consensus {
 		// Get network type
 		static getNetworkType() {
 		
-			// Check if consensus's network type doesn't exist
-			if(typeof Consensus.networkType === "undefined") {
+			// Check if consensus's network type doesn't exist and common exists
+			if(typeof Consensus.networkType === "undefined" && typeof Common !== "undefined") {
 			
 				// Check if not not a web worker and local storage is usable
 				if((typeof self === "undefined" || typeof WorkerGlobalScope === "undefined" || self instanceof WorkerGlobalScope === false) && typeof localStorage !== "undefined") {

@@ -115,9 +115,13 @@ class StartupImagesCreator {
 // Set global object's startup images creator
 globalThis["StartupImagesCreator"] = StartupImagesCreator;
 
-// Ready event
-$(function() {
+// Check if jQuery exists
+if(typeof jQuery === "function") {
 
-	// Initialize startup images creator
-	StartupImagesCreator.initialize();
-});
+	// Ready event
+	$(function() {
+
+		// Initialize startup images creator
+		StartupImagesCreator.initialize();
+	});
+}
