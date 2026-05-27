@@ -48,7 +48,7 @@ class LogSection extends Section {
 						var settings = [
 						
 							// Maximum number of messages setting
-							LogSection.SETTINGS_MAXIMUM_NUMBER_OF_MESSAGES_NAME,
+							LogSection.SETTINGS_MAXIMUM_NUMBER_OF_MESSAGES_NAME
 						];
 					
 						// Return getting settings' values

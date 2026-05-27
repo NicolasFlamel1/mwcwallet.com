@@ -1,0 +1,180 @@
+@charset "UTF-8";
+
+
+section.checkForUpdates {
+	display: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: white;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+	min-width: 250px;
+	transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+	z-index: 9;
+	padding-bottom: 0;
+	padding-bottom: var(--safe-area-inset-bottom);
+	margin: 0;
+	margin: 0 var(--safe-area-inset-right) 0 var(--safe-area-inset-left);
+}
+
+section.checkForUpdates.hide {
+	display: flex;
+	transform: translateY(100%);
+	box-shadow: none;
+}
+
+section.checkForUpdates.hide.noFocus {
+	visibility: hidden;
+}
+
+section.checkForUpdates * {
+	cursor: default !important;
+}
+
+section.checkForUpdates > div {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	padding: 1em 0;
+	align-items: center;
+}
+
+section.checkForUpdates > div > span {
+	height: 4em;
+	flex-shrink: 0;
+	margin-left: 1.5em;
+	width: 4em;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+section.checkForUpdates > div > span::after {
+	font-family: "Font Awesome";
+	font-weight: bold;
+	content: "\F2F1";
+	font-size: 3.5em;
+	color: rgba(12, 12, 13, 0.83);
+}
+
+@media only screen and (max-width: 350px) {
+
+	section.checkForUpdates > div > span {
+		display: none;
+	}
+}
+
+section.checkForUpdates > div > p {
+	font-size: 11.7pt;
+	line-height: 1.5em;
+	color: rgb(12, 12, 13);
+	flex-grow: 1;
+	flex-shrink: 1;
+	padding: 0 1em;
+	word-wrap: break-word;
+	min-width: 0;
+}
+
+@media only screen and (max-width: 350px) {
+
+	section.checkForUpdates > div > p {
+		padding: 0 1em 0 1.5em;
+		text-align: center;
+		min-width: 30%;
+	}
+}
+
+section.checkForUpdates > div > button {
+	margin: 0 1.5em 0 0;
+	flex-shrink: 1;
+	background: rgba(12, 12, 13, 0.1);
+	font-size: 11pt;
+	border-radius: 2px;
+	border: 0;
+	cursor: pointer !important;
+	color: rgb(12, 12, 13);
+	font-weight: bold;
+	text-transform: uppercase;
+	line-height: unset;
+	white-space: normal;
+	white-space: break-spaces;
+	font-family: Arial, sans-serif;
+	overflow: hidden;
+	line-height: 1.5em;
+	padding: 0.6em 1em 0.5em 1em;
+	min-width: calc(1em * 2 + 1.5em);
+	
+}
+
+@media only screen and (any-hover: hover) {
+
+	section.checkForUpdates > div > button:hover {
+		background: rgba(12, 12, 13, 0.2);
+		color: rgb(12, 12, 13);
+	}
+}
+
+section.checkForUpdates > div > button:focus {
+	background: rgba(12, 12, 13, 0.2);
+	color: rgb(12, 12, 13);
+	box-shadow: none;
+}
+
+section.checkForUpdates > div > button:active {
+	background: rgba(12, 12, 13, 0.3);
+	color: rgb(12, 12, 13);
+}
+
+section.checkForUpdates > div > button > span {
+	min-height: auto;
+	white-space: normal;
+	white-space: break-spaces;
+	cursor: pointer !important;
+	min-width: 2em;
+}
+
+@media only screen and (max-width: 700px) and (any-hover: hover) {
+
+	section.checkForUpdates > div > button.remindMeLater:hover {
+		color: rgb(12, 12, 13, 0.45);
+	}
+}
+
+@media only screen and (max-width: 700px) {
+
+	section.checkForUpdates > div > button.remindMeLater {
+		margin: 0;
+		padding: 0.1em 0.2em;
+		background: transparent;
+		line-height: unset;
+		position: absolute;
+		top: 0;
+		right: 0;
+		color: rgb(12, 12, 13, 0.3);
+		font-size: 14pt;
+		font-family: "Font Awesome";
+		font-weight: bold;
+		min-width: auto;
+	}
+
+	section.checkForUpdates > div > button.remindMeLater:focus {
+		color: rgb(12, 12, 13, 0.45);
+	}
+
+	section.checkForUpdates > div > button.remindMeLater:active {
+		color: rgb(12, 12, 13, 0.6);
+	}
+
+	section.checkForUpdates > div > button.remindMeLater::before {
+		content: "\F00D";
+	}
+	
+	section.checkForUpdates > div > button.remindMeLater > span {
+		display: none;
+	}
+}

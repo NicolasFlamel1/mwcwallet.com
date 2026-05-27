@@ -1,6 +1,10 @@
 @charset "UTF-8";
 
 
+main > div.unlocked > div > div > div.sections > div > div.settings > div > div.setting.hide {
+	display: none;
+}
+
 main > div.unlocked > div > div > div.sections > div > div.settings > div > div.setting > div.value[data-type="number"] {
 	max-width: none;
 	flex-shrink: 0;

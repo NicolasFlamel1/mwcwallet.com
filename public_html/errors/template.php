@@ -997,7 +997,7 @@
 					display: none;
 				}
 				
-				div.maintenanceNotification, div.cookieAcceptance, div.installApp {
+				div.maintenanceNotification, div.cookieAcceptance, div.installApp, div.checkForUpdates {
 					display: none;
 				}
 				

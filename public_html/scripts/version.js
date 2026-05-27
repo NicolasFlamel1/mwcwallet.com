@@ -20,6 +20,13 @@ class Version {
 			
 			// Set message
 			this.message = message;
+			
+			// Log message
+			Log.logMessage(Language.getDefaultTranslation('The wallet\'s version is %1$v.'), [
+			
+				// Version
+				VERSION_NUMBER
+			]);
 		}
 		
 		// Get version

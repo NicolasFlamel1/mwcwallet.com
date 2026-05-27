@@ -1534,7 +1534,7 @@
 					display: none;
 				}
 				
-				div.maintenanceNotification, div.cookieAcceptance, div.installApp {
+				div.maintenanceNotification, div.cookieAcceptance, div.installApp, div.checkForUpdates {
 					display: none;
 				}
 				
@@ -2399,6 +2399,17 @@
 													--><span></span><!--
 												--></div><!--
 											--></div><!--
+											--><div class="setting translatable" data-setting="<?= encodeString("Enable Checking For Updates"); ?>" data-text="<?= encodeString(getDefaultTranslation('Enables automatically checking for updates and displaying when a new version is available')); ?>" title="<?= encodeString(getTranslation('Enables automatically checking for updates and displaying when a new version is available')); ?>"><!--
+												--><p><!--
+													--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Automatically check for updates')); ?>"><?= encodeString(getTranslation('Automatically check for updates')); ?></span><!--
+												--></p><!--
+												--><span class="dots"></span><!--
+												--><div class="value" data-type="boolean"><!--
+													--><button data-private><!--
+														--><span></span><!--
+													--></button><!--
+												--></div><!--
+											--></div><!--
 											--><h3 class="translatable" data-text="<?= encodeString(getDefaultTranslation('Node Settings')); ?>"><?= encodeString(getTranslation('Node Settings')); ?></h3><!--
 											--><div class="setting translatable" data-setting="<?= encodeString("Use Custom Node"); ?>" data-text="<?= encodeString(getDefaultTranslation('Uses a custom node instead of the default nodes')); ?>" title="<?= encodeString(getTranslation('Uses a custom node instead of the default nodes')); ?>"><!--
 												--><p><!--
@@ -2774,6 +2785,17 @@
 					--></button><!--
 				--></div><!--
 			--></section><!--
+			--><section class="checkForUpdates hide noFocus"><!--
+				--><div class="checkForUpdates"><!--
+					--><span></span><!--
+					--><button class="downloadNow"><!--
+						--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Download Now')); ?>"><?= encodeString(getTranslation('Download Now')); ?></span><!--
+					--></button><!--
+					--><button class="remindMeLater translatable" data-text="<?= encodeString(getDefaultTranslation('Remind me later')); ?>" title="<?= encodeString(getTranslation('Remind me later')); ?>"><!--
+						--><span class="translatable" data-text="<?= encodeString(getDefaultTranslation('Remind me later')); ?>"><?= encodeString(getTranslation('Remind me later')); ?></span><!--
+					--></button><!--
+				--></div><!--
+			--></section><!--
 		--></div><!--
 	--></div><!--
 	--><span><!--
@@ -2803,6 +2825,7 @@
 	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/send_payment_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/send_payment_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
 	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/log_section.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/log_section.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
 	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/message.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/message.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
+	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/check_for_updates.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/check_for_updates.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
 	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/install_app.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/install_app.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
 	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/cookie_acceptance.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/cookie_acceptance.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
 	--><link rel="stylesheet" type="text/css" href="<?= encodeString(getResource("./styles/maintenance_notification.css")); ?>" integrity="<?= encodeString(getChecksum("./styles/maintenance_notification.css")); ?>" onerror="processLoadingError(this, true);" onload="processLoadingError(this);"><!--
@@ -3022,6 +3045,7 @@
 	--><script src="<?= encodeString(getResource("./scripts/wallets.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/wallets.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
 	--><script src="<?= encodeString(getResource("./scripts/listener.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/listener.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
 	--><script src="<?= encodeString(getResource("./scripts/interaction.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/interaction.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
+	--><script src="<?= encodeString(getResource("./scripts/check_for_updates.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/check_for_updates.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
 	--><script src="<?= encodeString(getResource("./scripts/install_app.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/install_app.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
 	--><script src="<?= encodeString(getResource("./scripts/focus.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/focus.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--
 	--><script src="<?= encodeString(getResource("./scripts/caps_lock.js")); ?>" integrity="<?= encodeString(getChecksum("./scripts/caps_lock.js")); ?>" type="application/javascript" charset="UTF-8" onerror="processLoadingError(this, true);" defer="true"></script><!--

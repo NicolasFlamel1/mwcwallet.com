@@ -261,6 +261,13 @@ class Common {
 			return string.replace(/[.*+?^${}()|[\]\\]/ug, "\\$&");
 		}
 		
+		// Escape string
+		static escapeString(string) {
+		
+			// Return string with double quotes and back slashes escaped
+			return string.replace(/(["\\])/ug, "\\$1");
+		}
+		
 		// Map
 		static map(value, inMin, inMax, outMin, outMax) {
 

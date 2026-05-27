@@ -105,6 +105,9 @@ class Application {
 			// Create unlocked
 			this.unlocked = new Unlocked(this, this.bodyDisplay, this.unlockedDisplay, this.settings, this.message, this.focus, this.wallets, this.node, this.listener, this.automaticLock, this.transactions, this.sections, this.scroll, this.wakeLock, this.clipboard, this.prices);
 			
+			// Create check for updates
+			this.checkForUpdates = new CheckForUpdates(this.unlocked, this.settings, this.cookieAcceptance);
+			
 			// Set node incompatible message shown
 			this.nodeIncompatibleMessageShown = false;
 			
@@ -7205,6 +7208,9 @@ class Application {
 						
 						// Show maintenance notification
 						self.maintenanceNotification.show();
+						
+						// Show check for updates
+						self.checkForUpdates.show();
 						
 						// Display to show form transition end or timeout event
 						displayToShow.children("form").transitionEndOrTimeout(function() {

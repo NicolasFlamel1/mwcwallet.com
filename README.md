@@ -57,9 +57,9 @@ Accessing this web wallet in this way will remove the need to trust the servers 
 ### Wallet Integration
 This wallet provides several ways to make it easier for services to accept receiving MimbleWimble Coin payments from those using this wallet. These are as follows:
 
-All versions of this wallet, aside from its [standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone), will attempt to associate themselves with the `web+mwc` URL protocol. This allows clicking on links with that protocol to automatically open the wallet to initiate sending a transaction to a provided recipient address. For example: `<a href="web+mwchttps://mwcwallet.com/donate/mwc">Send</a>`.
+All versions of this wallet, aside from its [standalone version](https://github.com/NicolasFlamel1/MWC-Wallet-Standalone), will attempt to associate themselves with the `web+mwc` URL protocol. This allows clicking on links with that protocol to automatically open the wallet to initiate sending a transaction to a provided recipient address. For example: `<a href="web+mwchttps://mwcwallet.com/donate/mwc">Send</a>`
 
-This wallet's [browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) injects a `MwcWallet` object into every site which allows those sites to automatically open the browser extension to initiate sending a transaction to a provided recipient address with an optionally provided amount and message. This is done using the [browser extension's start transaction API](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension#api). For example: `MwcWallet.startTransaction(MwcWallet.MWC_WALLET_TYPE, MwcWallet.MAINNET_NETWORK_TYPE, "https://mwcwallet.com/donate/mwc", "123.456", "Optional message")`.
+This wallet's [browser extension version](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension) injects a `MwcWallet` object into every site which allows those sites to automatically open the browser extension to initiate sending a transaction to a provided recipient address with an optionally provided amount and message. This is done using the [browser extension's start transaction API](https://github.com/NicolasFlamel1/MWC-Wallet-Browser-Extension#api). For example: `MwcWallet.startTransaction(MwcWallet.MWC_WALLET_TYPE, MwcWallet.MAINNET_NETWORK_TYPE, "https://mwcwallet.com/donate/mwc", "123.456", "Optional message")`
 
 The following JavaScript code demonstrates how to change clicking on a link to a recipient address to instead open this wallet's browser extension if its installed and, if not, add the `web+mwc` URL protocol to the link temporarily so that it will open this wallet. The URL protocol is immediately removed so that the user could still choose to copy and paste the link by right clicking on it instead.
 ```
@@ -99,7 +99,7 @@ document.getElementsByTagName("a")[0].addEventListener("click", (event) => {
 });
 ```
 
-This wallet's scan QR code feature when sending a payment will automatically fill in the transaction's details when sending a payment if the scanned QR code consists of a JSON object containing a recipient address and an optional amount and message. For example: `{"Recipient Address": "https://mwcwallet.com/donate/mwc", "Amount": "123.456", "Message": "Optional message"}`.
+This wallet's scan QR code feature when sending a payment will automatically fill in the transaction's details when sending a payment if the scanned QR code consists of a JSON object containing a recipient address and an optional amount and message. For example: `{"Recipient Address": "https://mwcwallet.com/donate/mwc", "Amount": "123.456", "Message": "Optional message"}`
 
 ### Develop
 This site can be ran from a local machine for development purposes. To do that, this repo's files are intended to reside at `/srv/mwcwallet.com`, but can be located anywhere as long as the `root` directive in the `nginx.conf` file correctly reflects the `public_html` folder's current location.
