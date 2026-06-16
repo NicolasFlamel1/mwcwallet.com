@@ -576,13 +576,13 @@
 			"Checksum" => "ig4BjvopYK4Oh7AtF9x5MntYRzW0oSh/n7BTqThp1DlC0vJCTyRJ+/mtOWtDdgC6U+5d4sJzMCBfmGm69sJNTQ=="
 		],
 		"./scripts/output_worker.js" => [
-			"Version" => 86,
+			"Version" => 87,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/slate_worker.js" => [
-			"Version" => 153,
+			"Version" => 154,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -600,13 +600,13 @@
 			"Checksum" => "RFXyJdMBrFe0rBAKTOwmTVcZzI6V3Pf7HHizK+RQVHguh/pCOTPV0Jj+EB7cvP1/wpuUAyh1SnWVZ01qLg4emg=="
 		],
 		"./scripts/languages.js" => [
-			"Version" => 28,
+			"Version" => 29,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
 		],
 		"./scripts/camera_worker.js" => [
-			"Version" => 81,
+			"Version" => 82,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
 			"Checksum" => NULL
@@ -653,11 +653,11 @@
 			"Minified" => FALSE,
 			"Checksum" => "FnKPFq1vQB0qyjsydpCBwfrPXAx8sC/ppUc/Xm3leT6rf4ei4tBiKOMoq76ilK/ZAHOKUmOzMA7GUin6IoN8sA=="
 		],
-		"./scripts/ChaCha-2.1.0.js" => [
-			"Version" => 6,
+		"./scripts/chacha20_poly1305.js" => [
+			"Version" => 1,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "53JqNBE9WxJ27yw3uyHCWE0kQ9DIxa9BMuY+JoTxImkqaxPD24y+FN3KNqL7johYZm/G5UQalzUJ/AvI7RBx2w=="
+			"Checksum" => "XWK4XaqbahQ8b0awghDBbzKprUWhBte6rOKYpf48PzzSBq95L/XvDB0gMHQO5gcbBVRLL63B+CjiFtCiw9j1IQ=="
 		],
 		"./scripts/json_rpc.js" => [
 			"Version" => 23,
@@ -672,16 +672,16 @@
 			"Checksum" => "2doLx4ctfywCBI/Y2W696qSAgbTR8Kcv7ycYKJirBKlWkdZ4rrL0wHIrQoiBd/OOtnIsvEmurr4F/Mbb6h5K4g=="
 		],
 		"./scripts/mqs.js" => [
+			"Version" => 21,
+			"Cache" => TRUE,
+			"Minified" => FALSE,
+			"Checksum" => "W/l1FoPiWZSm4CACmuMYOVYcjxZeFQedxDNAgRYytaNKgQbJv3MTCVc/BfSkaqiA+ffuNCowu1HBSCcCRbIg9g=="
+		],
+		"./scripts/slatepack.js" => [
 			"Version" => 20,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "H3kf+EO8jLLo4haKP6DJGrju/2SQnt2Wq4Eav/fq8JgAHOPC70h+ZtW5L0L9KfJLOQNdQHLzAxnGwRVNItpK6Q=="
-		],
-		"./scripts/slatepack.js" => [
-			"Version" => 19,
-			"Cache" => TRUE,
-			"Minified" => FALSE,
-			"Checksum" => "aXh+5wy+nrqJmC2Z6UCp8owWg2C7zrxOFveLY3QCIkdpv9zOFnizZswJTSYhfp78SpK7EGNCfMoTT+CZe/tc6Q=="
+			"Checksum" => "AWCUdN0w3mXxU6kfJ/OkjLmIoRcCJbPMOcBMBnIrBERaF4h1ARSgwQez6yaci4NDxvZS9TkWm2LOX0N09JR1Bw=="
 		],
 		"./scripts/JSONBigNumber-1.1.1.js" => [
 			"Version" => 5,
@@ -738,10 +738,10 @@
 			"Checksum" => "E1RTUPkUVSZiCkdmsWz8sDOdRZNnIIK1BD+/I5oVdeNVchsw7n3I5dIirtwAsDLqu7nUVMT52kKCYl2m5XvtUw=="
 		],
 		"./scripts/node.js" => [
-			"Version" => 39,
+			"Version" => 41,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "M6T1Tu5tbya3aCBUOe3I8SFOT8kV2bWYEPTzUCbfySKA5dKsvMjZELGALHALaHvTaFsNRcrBAXxL61jD3GzRQg=="
+			"Checksum" => "hVmiCvG+MwDS13ELqhZQdywTd2cOM87oASRI55AV0/8EZMyAwv0q2wXNihRDQYrSxp5O0tqcvdvEikUsfDICsg=="
 		],
 		"./scripts/message.js" => [
 			"Version" => 31,
@@ -750,10 +750,10 @@
 			"Checksum" => "uBLhlZi/5cLZID5Dhryv8uu2mU9qZMu6qSf3COW8m4lBrSgaWOVmAx9DWHkUZWnGJNiKsl32XVuV0N/SfaJB7w=="
 		],
 		"./scripts/common.js" => [
-			"Version" => 112,
+			"Version" => 113,
 			"Cache" => TRUE,
 			"Minified" => FALSE,
-			"Checksum" => "QTOYb22TTxs5XqImGPsmbi5JZVA3rKQzXTiQM/ye5Mj+BMwPN5kcAQUlCJDMddoJImtmEAxtDMPypPTJq4rYzQ=="
+			"Checksum" => "pSk8s6QZ9q+zItTS43siQqhVDVVbiHXggXpq4iSOykOyWxRY+/kgJlJMx7ixhNAiAIiDRK5BTJdKuTKleqkuBQ=="
 		],
 		"./scripts/bit_reader.js" => [
 			"Version" => 6,
@@ -1505,12 +1505,6 @@
 			"Minified" => FALSE,
 			"Checksum" => "AakMfPm2wq07yVmqIBnTO6Bj9zKALq7T+wRvLUPsBn1JZctun/MACmC0OxyLruV+GUX45DUxvBXG1Rcm6bd1XQ=="
 		],
-		"./scripts/ChaCha license.txt" => [
-			"Version" => 3,
-			"Cache" => TRUE,
-			"Minified" => FALSE,
-			"Checksum" => "1C7ZACZXUPp8Zy+0C43TlyPbOWrskOluiBLoI8yaoSKS/zV3I632A6T9NXyXbQdby220iysum6I/vr/FLgUwPA=="
-		],
 		"./images/countries/Country Flags license.txt" => [
 			"Version" => 3,
 			"Cache" => TRUE,
@@ -1665,11 +1659,6 @@
 		"bignumber.js" => [
 			"URL" => "https://github.com/MikeMcl/bignumber.js",
 			"License Path" => "./scripts/bignumber.js license.txt",
-			"License Type" => "MIT License"
-		],
-		"ChaCha" => [
-			"URL" => "https://github.com/calvinmetcalf/chacha20poly1305",
-			"License Path" => "./scripts/ChaCha license.txt",
 			"License Type" => "MIT License"
 		],
 		"Country Flags" => [
