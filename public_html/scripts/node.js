@@ -515,7 +515,12 @@ class Node {
 								"https://main.gri.mw",
 								"https://mainnet.grinffindor.org",
 								"https://main.grin.raubritter.org",
-								"http://main.grin.raubnojdvgifadsht4axhsifo2fbcyvtfjspvegoesw4dfr2aajbtyad.onion"
+								"https://api.grinnode.org",
+								"https://main.us-ea.st",
+								"https://mainnet.grin-coffee.com",
+								"http://main.grin.raubnojdvgifadsht4axhsifo2fbcyvtfjspvegoesw4dfr2aajbtyad.onion",
+								"http://main.grin.xx334eb2ym765dvf6nif2ielq7fmzzy5kb7clsuow4bq2rouhkysjvad.onion",
+								"http://gv4ztmpgq2jsx3oysigcgvfpdo5ggvbvb2tb63fxewjosiyksb7xksyd.onion"
 							];
 						}
 						
@@ -533,7 +538,11 @@ class Node {
 								"https://test.gri.mw",
 								"https://testnet.grinffindor.org",
 								"https://test.grin.raubritter.org",
-								"http://test.grin.raubnojdvgifadsht4axhsifo2fbcyvtfjspvegoesw4dfr2aajbtyad.onion"
+								"https://test.us-ea.st",
+								"https://testnet.grin-coffee.com",
+								"http://test.grin.raubnojdvgifadsht4axhsifo2fbcyvtfjspvegoesw4dfr2aajbtyad.onion",
+								"http://test.grin.bsddjjapdpdqo4a6e2utyaeicuxkffxytm3ssvli643gwtebqdvvx2ad.onion",
+								"http://5czizm7jlb7wf54e427l7str5jpkczcgxhqralicbybmouwdobvcwvid.onion"
 							];
 						}
 						
