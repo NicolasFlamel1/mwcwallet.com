@@ -988,44 +988,9 @@ class Mqs {
 										
 										crypto.getRandomValues(nonce);
 										
-										// Try
-										try {
-										
-											// Create cipher from raw key and nonce
-											var cipher = chacha.createCipher(rawKey, nonce);
-											
-											// Set cipher's AAD
-											cipher.setAAD(Mqs.AAD_VALUE);
-											
-											// Encrypt data with the cipher
-											var encryptedData = cipher.update(data);
-											
-											// Finish encrypting data
-											encryptedData = Common.mergeArrays([
-											
-												// Encrypted data
-												encryptedData,
-												
-												// Finish encrypting data
-												cipher.final()
-											]);
-											
-											// Get tag from the cipher
-											var tag = cipher.getAuthTag();
-											
-											// Append tag to the encrypted data
-											encryptedData = Common.mergeArrays([
-											
-												// Encrypted data
-												encryptedData,
-												
-												// Tag
-												tag
-											]);
-										}
-										
-										// Catch errors
-										catch(error) {
+										// Check if encrypting data with the raw key and nonce failed
+										var encryptedData = ChaCha20Poly1305.encrypt(rawKey, nonce, data, Mqs.AAD_VALUE);
+										if(encryptedData === false) {
 										
 											// Securely clear raw key
 											rawKey.fill(0);
@@ -1049,8 +1014,15 @@ class Mqs {
 											// Nonce
 											nonce,
 											
-											// Encrypted data
-											encryptedData
+											// Encrypted data and tag
+											Common.mergeArrays([
+											
+												// Encrypted data
+												encryptedData[ChaCha20Poly1305.ENCRYPTED_DATA_INDEX],
+												
+												// Tag
+												encryptedData[ChaCha20Poly1305.TAG_INDEX]
+											])
 										]);
 									}
 									
@@ -1188,35 +1160,10 @@ class Mqs {
 								
 									// Check if encrypted data is valid
 									if(encryptedData["length"] > Mqs.TAG_LENGTH) {
-								
-										// Try
-										try {
-										
-											// Create decipher from raw key and nonce
-											var decipher = chacha.createDecipher(rawKey, nonce);
-											
-											// Set decipher's AAD
-											decipher.setAAD(Mqs.AAD_VALUE);
-											
-											// Set decipher's tag
-											decipher.setAuthTag(encryptedData.subarray(encryptedData["length"] - Mqs.TAG_LENGTH));
-											
-											// Decrypt encrypted data with the decipher
-											var decryptedData = decipher.update(encryptedData.subarray(0, encryptedData["length"] - Mqs.TAG_LENGTH));
-											
-											// Finish decrypting data
-											decryptedData = Common.mergeArrays([
-											
-												// Decrypted data
-												decryptedData,
-												
-												// Finish decrypting data
-												decipher.final()
-											]);
-										}
-										
-										// Catch errors
-										catch(error) {
+									
+										// Check if decrypting data with the raw key and nonce failed
+										var decryptedData = ChaCha20Poly1305.decrypt(rawKey, nonce, encryptedData.subarray(0, encryptedData["length"] - Mqs.TAG_LENGTH), encryptedData.subarray(encryptedData["length"] - Mqs.TAG_LENGTH), Mqs.AAD_VALUE);
+										if(decryptedData === false) {
 										
 											// Securely clear raw key
 											rawKey.fill(0);

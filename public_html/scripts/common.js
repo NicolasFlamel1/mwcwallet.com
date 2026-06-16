@@ -1990,24 +1990,6 @@ if(typeof Object === "function") {
 	};
 }
 
-// Check if Uint8Array exist
-if(typeof Uint8Array === "function") {
-
-	// Read uint32 little endian
-	Uint8Array["prototype"].readUInt32LE = function(index) {
-	
-		// Return value at index as a uint32 in little endian
-		return this[index] | (this[index + 1] << Common.BITS_IN_A_BYTE) | (this[index + 2] << (Common.BITS_IN_A_BYTE * 2)) | (this[index + 3] << (Common.BITS_IN_A_BYTE * 3));
-	};
-	
-	// Read uint16 little endian
-	Uint8Array["prototype"].readUInt16LE = function(index) {
-	
-		// Return value at index as a uint16 in little endian
-		return this[index] | (this[index + 1] << Common.BITS_IN_A_BYTE);
-	};
-}
-
 // Check if cross-origin isolated doesn't exist
 if(typeof crossOriginIsolated === "undefined") {
 

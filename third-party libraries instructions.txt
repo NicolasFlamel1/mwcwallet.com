@@ -31,21 +31,13 @@ wget "https://github.com/NicolasFlamel1/BLAKE2b-WASM-Wrapper/releases/download/v
 unzip "./BLAKE2b-0.0.2.zip"
 sed -i 's/"BLAKE2b.wasm"/"." + getResource(".\/scripts\/BLAKE2b-0.0.2.wasm")/g' "./wasm/BLAKE2b.js"
 mv "./wasm/BLAKE2b.js" "./BLAKE2b-0.0.2.js"
-rm -rf "./BLAKE2b-0.0.2.zip" "./wasm" "./asm.js"
+rm -rf "./BLAKE2b-0.0.2.zip" "./wasm" "./asmjs"
 
 # How to build /public_html/scripts/BLAKE2b-0.0.2.wasm
 wget "https://github.com/NicolasFlamel1/BLAKE2b-WASM-Wrapper/releases/download/v0.0.2/BLAKE2b-0.0.2.zip"
 unzip "./BLAKE2b-0.0.2.zip"
 mv "./wasm/BLAKE2b.wasm" "./BLAKE2b-0.0.2.wasm"
-rm -rf "./BLAKE2b-0.0.2.zip" "./wasm" "./asm.js"
-
-# How to build /public_html/scripts/ChaCha-2.1.0.js
-wget "https://github.com/calvinmetcalf/chacha20poly1305/archive/refs/tags/v2.1.0.tar.gz"
-tar -xf "./v2.1.0.tar.gz"
-cd "./chacha20poly1305-2.1.0"
-browserify index.js --standalone chacha -o "../ChaCha-2.1.0.js"
-cd ..
-rm -rf "./v2.1.0.tar.gz" "./chacha20poly1305-2.1.0"
+rm -rf "./BLAKE2b-0.0.2.zip" "./wasm" "./asmjs"
 
 # How to build /public_html/scripts/crc32-1.2.0.js
 wget "https://github.com/SheetJS/js-crc32/archive/refs/tags/v1.2.0.tar.gz"
@@ -58,13 +50,13 @@ wget "https://github.com/NicolasFlamel1/Ed25519-WASM-Wrapper/releases/download/v
 unzip "./Ed25519-0.0.22.zip"
 sed -i 's/"Ed25519.wasm"/"." + getResource(".\/scripts\/Ed25519-0.0.22.wasm")/g' "./wasm/Ed25519.js"
 mv "./wasm/Ed25519.js" "./Ed25519-0.0.22.js"
-rm -rf "./Ed25519-0.0.22.zip" "./wasm" "./asm.js"
+rm -rf "./Ed25519-0.0.22.zip" "./wasm" "./asmjs"
 
 # How to build /public_html/scripts/Ed25519-0.0.22.wasm
 wget "https://github.com/NicolasFlamel1/Ed25519-WASM-Wrapper/releases/download/v0.0.22/Ed25519-0.0.22.zip"
 unzip "./Ed25519-0.0.22.zip"
 mv "./wasm/Ed25519.wasm" "./Ed25519-0.0.22.wasm"
-rm -rf "./Ed25519-0.0.22.zip" "./wasm" "./asm.js"
+rm -rf "./Ed25519-0.0.22.zip" "./wasm" "./asmjs"
 
 # How to build /public_html/scripts/glMatrix-3.4.1.js
 wget "https://github.com/toji/gl-matrix/archive/refs/tags/v3.4.1.tar.gz"
@@ -123,41 +115,41 @@ sed -i '0,/out.writeByte(0x00);/s//out.writeByte(13);/' "./qrcode-generator-js1.
 mv "./qrcode-generator-js1.4.4/js/qrcode.js" "./qrcode-generator-1.4.4.js"
 rm -rf "./js1.4.4.tar.gz" "./qrcode-generator-js1.4.4"
 
-# How to build /public_html/scripts/Secp256k1-zkp-0.0.29.js
+# How to build /public_html/scripts/secp256k1-zkp-0.0.29.js
 wget "https://github.com/NicolasFlamel1/Secp256k1-zkp-WASM-Wrapper/releases/download/v0.0.29/Secp256k1-zkp-0.0.29.zip"
 unzip "./Secp256k1-zkp-0.0.29.zip"
-sed -i 's/"secp256k1-zkp.wasm"/"." + getResource(".\/scripts\/Secp256k1-zkp-0.0.29.wasm")/g' "./wasm/secp256k1-zkp.js"
-mv "./wasm/secp256k1-zkp.js" "./Secp256k1-zkp-0.0.29.js"
-rm -rf "./Secp256k1-zkp-0.0.29.zip" "./wasm" "./asm.js"
+sed -i 's/"secp256k1-zkp.wasm"/"." + getResource(".\/scripts\/secp256k1-zkp-0.0.29.wasm")/g' "./wasm/secp256k1-zkp.js"
+mv "./wasm/secp256k1-zkp.js" "./secp256k1-zkp-0.0.29.js"
+rm -rf "./Secp256k1-zkp-0.0.29.zip" "./wasm" "./asmjs"
 
-# How to build /public_html/scripts/Secp256k1-zkp-0.0.29.wasm
+# How to build /public_html/scripts/secp256k1-zkp-0.0.29.wasm
 wget "https://github.com/NicolasFlamel1/Secp256k1-zkp-WASM-Wrapper/releases/download/v0.0.29/Secp256k1-zkp-0.0.29.zip"
 unzip "./Secp256k1-zkp-0.0.29.zip"
-mv "./wasm/secp256k1-zkp.wasm" "./Secp256k1-zkp-0.0.29.wasm"
-rm -rf "./Secp256k1-zkp-0.0.29.zip" "./wasm" "./asm.js"
+mv "./wasm/secp256k1-zkp.wasm" "./secp256k1-zkp-0.0.29.wasm"
+rm -rf "./Secp256k1-zkp-0.0.29.zip" "./wasm" "./asmjs"
 
 # How to build /public_html/scripts/SMAZ-0.0.31.js
 wget "https://github.com/NicolasFlamel1/SMAZ-WASM-Wrapper/releases/download/v0.0.31/SMAZ-0.0.31.zip"
 unzip "./SMAZ-0.0.31.zip"
 sed -i 's/"SMAZ.wasm"/"." + getResource(".\/scripts\/SMAZ-0.0.31.wasm")/g' "./wasm/SMAZ.js"
 mv "./wasm/SMAZ.js" "./SMAZ-0.0.31.js"
-rm -rf "./SMAZ-0.0.31.zip" "./wasm" "./asm.js"
+rm -rf "./SMAZ-0.0.31.zip" "./wasm" "./asmjs"
 
 # How to build /public_html/scripts/SMAZ-0.0.31.wasm
 wget "https://github.com/NicolasFlamel1/SMAZ-WASM-Wrapper/releases/download/v0.0.31/SMAZ-0.0.31.zip"
 unzip "./SMAZ-0.0.31.zip"
 mv "./wasm/SMAZ.wasm" "./SMAZ-0.0.31.wasm"
-rm -rf "./SMAZ-0.0.31.zip" "./wasm" "./asm.js"
+rm -rf "./SMAZ-0.0.31.zip" "./wasm" "./asmjs"
 
 # How to build /public_html/scripts/X25519-0.0.23.js
 wget "https://github.com/NicolasFlamel1/X25519-WASM-Wrapper/releases/download/v0.0.23/X25519-0.0.23.zip"
 unzip "./X25519-0.0.23.zip"
 sed -i 's/"X25519.wasm"/"." + getResource(".\/scripts\/X25519-0.0.23.wasm")/g' "./wasm/X25519.js"
 mv "./wasm/X25519.js" "./X25519-0.0.23.js"
-rm -rf "./X25519-0.0.23.zip" "./wasm" "./asm.js"
+rm -rf "./X25519-0.0.23.zip" "./wasm" "./asmjs"
 
 # How to build /public_html/scripts/X25519-0.0.23.wasm
 wget "https://github.com/NicolasFlamel1/X25519-WASM-Wrapper/releases/download/v0.0.23/X25519-0.0.23.zip"
 unzip "./X25519-0.0.23.zip"
 mv "./wasm/X25519.wasm" "./X25519-0.0.23.wasm"
-rm -rf "./X25519-0.0.23.zip" "./wasm" "./asm.js"
+rm -rf "./X25519-0.0.23.zip" "./wasm" "./asmjs"
