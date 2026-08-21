@@ -2894,7 +2894,7 @@ class Node {
 		static isNotFoundError(error) {
 		
 			// Return if error is that the value wasn't found
-			return Array.isArray(error) === true && error["length"] > Node.ERROR_RESPONSE_INDEX && error[Node.ERROR_TYPE_INDEX] === Node.INVALID_RESPONSE_ERROR && Object.isObject(error[Node.ERROR_RESPONSE_INDEX]) === true && "Err" in error[Node.ERROR_RESPONSE_INDEX] === true && ((Object.isObject(error[Node.ERROR_RESPONSE_INDEX]["Err"]) === true && "NotFound" in error[Node.ERROR_RESPONSE_INDEX]["Err"] === true) || error[Node.ERROR_RESPONSE_INDEX]["Err"] === "NotFound");
+			return Array.isArray(error) === true && error["length"] > Node.ERROR_RESPONSE_INDEX && error[Node.ERROR_TYPE_INDEX] === Node.INVALID_RESPONSE_ERROR && Object.isObject(error[Node.ERROR_RESPONSE_INDEX]) === true && "Err" in error[Node.ERROR_RESPONSE_INDEX] === true && ((Object.isObject(error[Node.ERROR_RESPONSE_INDEX]["Err"]) === true && "NotFound" in error[Node.ERROR_RESPONSE_INDEX]["Err"] === true) || error[Node.ERROR_RESPONSE_INDEX]["Err"] === "NotFound" || (typeof error[Node.ERROR_RESPONSE_INDEX]["Err"] === "string" && error[Node.ERROR_RESPONSE_INDEX]["Err"].indexOf("Not found") !== Common.INDEX_NOT_FOUND));
 		}
 		
 		// Is message error
