@@ -14,7 +14,7 @@ You can also use your own [node](https://github.com/mwcproject/mwc-node), [liste
 Compatibility for sending MWC from the MimbleWimble Coin web wallet to exchanges:
 
 || [WhiteBIT](https://whitebit.com/trade/MWC-BTC) | [XT](https://www.xt.com/en/trade/mwc_btc) | [Coinstore](https://www.coinstore.com/spot/MWCUSDT) |
-|-|-|-|-|-|
+|-|-|-|-|
 | [MWC web wallet website](https://mwcwallet.com) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ | ✅ |
 | [MWC web wallet Onion Service](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion) | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ | ✅ |
 | MWC web wallet progressive web app version | ❌ WhiteBIT doesn't support [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). | ✅ | ✅ |
@@ -31,7 +31,7 @@ Compatibility for sending MWC from the MimbleWimble Coin web wallet to exchanges
 Compatibility for receiving MWC from exchanges to the MimbleWimble Coin web wallet:
 
 || [WhiteBIT](https://whitebit.com/trade/MWC-BTC) | [XT](https://www.xt.com/en/trade/mwc_btc) | [Coinstore](https://www.coinstore.com/spot/MWCUSDT) |
-|-|-|-|-|-|
+|-|-|-|-|
 | [MWC web wallet website](https://mwcwallet.com) | ✅ | ✅ | ✅ |
 | [MWC web wallet Onion Service](http://mwcwalletmiq3gdkmfbqlytxunvlxyli4m6zrqozk7xjc353ewqb6bad.onion) | ✅ | ✅ | ✅ |
 | MWC web wallet progressive web app version | ✅ | ✅ | ✅ |
