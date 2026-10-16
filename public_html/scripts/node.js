@@ -560,7 +560,8 @@ class Node {
 							
 								// Addresses
 								"https://node.epiccash.com:3413",
-								"https://node.epicnet.us:3413"
+								"https://node.epicnet.us:3413",
+								"https://epic.stackwallet.com:3413"
 							];
 						}
 						

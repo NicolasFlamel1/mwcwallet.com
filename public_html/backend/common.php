@@ -12,7 +12,8 @@
 	const VERSION_CHANGES = [
 		"Updated default Grin nodes.",
 		"Fixes loading site with Brave browser.",
-		"Fixes parsing not found responses from newer MWC nodes."
+		"Fixes parsing not found responses from newer MWC nodes.",
+		"Fixes sending to epicbox addresses other than epicbox.epiccash.com."
 	];
 	
 	// Maintenance start time

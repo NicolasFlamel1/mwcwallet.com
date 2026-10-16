@@ -525,7 +525,7 @@ class Mqs {
 																			"type": "PostSlate",
 																			
 																			// From
-																			"from": senderAddress,
+																			"from": senderAddress + Mqs.ADDRESS_HOST_SEPARATOR + host,
 																			
 																			// To
 																			"to": receiverAddress,
